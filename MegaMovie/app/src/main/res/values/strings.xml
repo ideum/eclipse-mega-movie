@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MegaMovie</string>
     <string name="google_maps_key">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
+    <string name="title_activity_camera">CameraActivity</string>
 </resources>
