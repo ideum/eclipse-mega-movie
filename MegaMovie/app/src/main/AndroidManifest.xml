@@ -3,6 +3,8 @@
     package="ideum.com.megamovie">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera2.full"/>
 
     <application
         android:allowBackup="true"
@@ -22,10 +24,9 @@
         <activity android:name=".MapActivity">
 
         </activity>
-        <activity android:name=".CameraActivity">
+        <activity android:name=".CameraActivity" android:label="@string/title_activity_camera" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
