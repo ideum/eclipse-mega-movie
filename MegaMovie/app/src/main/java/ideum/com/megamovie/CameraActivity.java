@@ -4,6 +4,8 @@ import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -35,6 +37,7 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +67,7 @@ public class CameraActivity extends AppCompatActivity {
     private static final int ACTIVITY_START_CAMERA_APP = 0;
     private static final int STATE_PREVIEW = 0;
     private static final int STATE_WAIT_LOCK = 1;
+    private ImageView captureImageView;
     private int mState;
     private Size mPreviewSize;
     private String mCameraId;
@@ -124,8 +128,6 @@ public class CameraActivity extends AppCompatActivity {
                     Integer afState = result.get(CaptureResult.CONTROL_AF_STATE);
                     if (afState == CaptureRequest.CONTROL_AF_STATE_FOCUSED_LOCKED) {
                         captureStillImage();
-//                        unlockFocus();
-//                        Toast.makeText(getApplicationContext(),"Focus lock successful", Toast.LENGTH_SHORT).show();
                     }
             }
         }
@@ -196,11 +198,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-
-
     public void takePhoto(View view) {
-
-
         try {
             mImageFile = createImageFile();
         }catch (IOException e) {
@@ -209,11 +207,33 @@ public class CameraActivity extends AppCompatActivity {
         lockFocus();
     }
 
+    private void displayCapturedImage() {
+        captureImageView.setImageBitmap(getReducedSizeImageBitmap());
+    }
+
+    Bitmap getReducedSizeImageBitmap() {
+        int targetImageViewWidth = captureImageView.getWidth();
+        int targetImageViewHeight = captureImageView.getHeight();
+        String fileLocation = mImageFile.getAbsolutePath();
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(fileLocation,bmOptions);
+        int cameraImageWidth = bmOptions.outWidth;
+        int cameraImageHeight = bmOptions.outHeight;
+
+        int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth,cameraImageHeight/targetImageViewHeight);
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inJustDecodeBounds = false;
+
+      return BitmapFactory.decodeFile(fileLocation,bmOptions);
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         mTextureView = (TextureView) findViewById(R.id.preview_texture_view);
         mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+        captureImageView = (ImageView) findViewById(R.id.capturePhotoImageView);
     }
 
     @Override
@@ -407,6 +427,9 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void captureStillImage() {
+
+        Handler uiHandler = new Handler(getMainLooper());
+
         try {
             CaptureRequest.Builder captureStillBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
             captureStillBuilder.addTarget(mImageReader.getSurface());
@@ -420,12 +443,13 @@ public class CameraActivity extends AppCompatActivity {
                         public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                             super.onCaptureCompleted(session, request, result);
                             Toast.makeText(getApplicationContext(),"Image Captured!",Toast.LENGTH_SHORT).show();
+                            displayCapturedImage();
                             unlockFocus();
                         }
                     };
             mCameraCaptureSession.capture(captureStillBuilder.build(),
                     captureCallback,
-                    null);
+                    uiHandler);
 
         } catch (CameraAccessException e) {
             e.printStackTrace();
