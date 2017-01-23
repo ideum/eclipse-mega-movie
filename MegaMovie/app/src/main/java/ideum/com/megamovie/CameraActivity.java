@@ -68,6 +68,7 @@ public class CameraActivity extends AppCompatActivity {
     private static final int STATE_PREVIEW = 0;
     private static final int STATE_WAIT_LOCK = 1;
     private ImageView captureImageView;
+    private int mSensorOrientation;
     private int mState;
     private Size mPreviewSize;
     private String mCameraId;
@@ -287,11 +288,19 @@ public class CameraActivity extends AppCompatActivity {
 
                 mPreviewSize = getPreferredPreviewSize(map.getOutputSizes(SurfaceTexture.class),width,height);
                 mCameraId = cameraID;
+
+                mSensorOrientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
+
+
                 return;
             }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private int getOrientation(int rotation) {
+        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
     }
 
     private Size getPreferredPreviewSize(Size[] mapSizes, int width, int height) {
@@ -436,14 +445,14 @@ public class CameraActivity extends AppCompatActivity {
 
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureStillBuilder.set(CaptureRequest.JPEG_ORIENTATION,
-                    ORIENTATIONS.get(rotation));
+                    getOrientation(rotation));
             CameraCaptureSession.CaptureCallback captureCallback =
                     new CameraCaptureSession.CaptureCallback() {
                         @Override
                         public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                             super.onCaptureCompleted(session, request, result);
                             Toast.makeText(getApplicationContext(),"Image Captured!",Toast.LENGTH_SHORT).show();
-                            displayCapturedImage();
+//                            displayCapturedImage();
                             unlockFocus();
                         }
                     };
