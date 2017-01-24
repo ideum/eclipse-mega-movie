@@ -24,19 +24,20 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".Java.MapActivity" />
         <activity
-            android:name=".CameraActivityWithPreview"
+            android:name=".Java.CameraActivityWithPreview"
             android:label="@string/title_activity_camera"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".CameraActivity">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Java.CameraActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Java.UserInfoActivity" />
+        <activity android:name=".Java.ResultsActivity"></activity>
     </application>
 
 </manifest>

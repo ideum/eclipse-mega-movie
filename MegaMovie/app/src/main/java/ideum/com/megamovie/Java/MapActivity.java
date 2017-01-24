@@ -1,6 +1,7 @@
-package ideum.com.megamovie;
+package ideum.com.megamovie.Java;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -20,6 +22,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import ideum.com.megamovie.Java.CameraActivity;
+import ideum.com.megamovie.R;
 
 public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
@@ -37,6 +42,13 @@ public class MapActivity extends AppCompatActivity
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
     private GoogleMap mGoogleMap;
+
+    public void loadCameraActivity(View view) {
+        startActivity(new Intent(this,CameraActivity.class));
+    }
+    public void loadUserInfoActivity(View view) {
+        startActivity(new Intent(this,UserInfoActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

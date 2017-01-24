@@ -1,4 +1,4 @@
-package ideum.com.megamovie;
+package ideum.com.megamovie.Java;
 
 import android.Manifest;
 import android.content.Context;
@@ -45,6 +45,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import ideum.com.megamovie.R;
 
 public class CameraActivityWithPreview extends AppCompatActivity {
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();

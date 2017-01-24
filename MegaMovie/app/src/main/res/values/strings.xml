@@ -2,4 +2,12 @@
     <string name="app_name">MegaMovie</string>
     <string name="google_maps_key">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
     <string name="title_activity_camera">CameraActivity</string>
+    <string name="welcome_message">Welcome to the MegaMovie app.</string>
+    <string name="location_prompt">Where will you be viewing the eclipse?</string>
+    <string name="location_map">Choose location on map</string>
+    <string name="location_address">Enter Address</string>
+    <string name="location_GPS">Enter GPS Coordinates</string>
+    <string name="congratulations_message">Congratulations! You captured ** photos!.</string>
+    <string name="view_photos_button_text">View Photos</string>
+    <string name="share_photos_button_text">Share</string>
 </resources>

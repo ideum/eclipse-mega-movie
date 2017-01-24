@@ -1,18 +1,15 @@
-package ideum.com.megamovie;
+package ideum.com.megamovie.Java;
 
-import android.*;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.graphics.ImageFormat;
-import android.graphics.Paint;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
-import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.icu.text.SimpleDateFormat;
@@ -137,11 +134,18 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    public void loadMapActivity(View view) {
+
+        startActivity(new Intent(this,MapActivity.class));
+    }
+    public void loadResultsActivity(View view) {
+        startActivity(new Intent(this,ResultsActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(ideum.com.megamovie.R.layout.activity_camera);
 
         setUpCamera();
         openCamera();
