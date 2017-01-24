@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Camera;
 import android.graphics.ImageFormat;
+import android.graphics.Paint;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -59,11 +60,10 @@ public class CameraActivity extends AppCompatActivity {
     private CameraCaptureSession.CaptureCallback mCaptureSessionCallback =
             new CameraCaptureSession.CaptureCallback() {
 
-
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                   captureStillImage();
+//                   captureStillImage();
                 }
             };
 
@@ -172,14 +172,16 @@ public class CameraActivity extends AppCompatActivity {
 
     private void captureStillImage() {
         try {
-            mCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
+            mCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
             mCaptureRequestBuilder.addTarget(mImageReader.getSurface());
 
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             mCaptureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION,getOrientation(rotation));
+            mCaptureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,265);
+            mCaptureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, (long) 33333336);
             mCameraCaptureSession.capture(mCaptureRequestBuilder.build(),
                     mCaptureSessionCallback,
-                    null);
+                    mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -234,7 +236,7 @@ public class CameraActivity extends AppCompatActivity {
                     continue;
                 }
                 StreamConfigurationMap map = cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-                mImageSize = Collections.min(
+                mImageSize = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new Comparator<Size>() {
                             @Override
