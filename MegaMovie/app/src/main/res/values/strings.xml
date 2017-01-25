@@ -10,4 +10,7 @@
     <string name="congratulations_message">Congratulations! You captured ** photos!.</string>
     <string name="view_photos_button_text">View Photos</string>
     <string name="share_photos_button_text">Share</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

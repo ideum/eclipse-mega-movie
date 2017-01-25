@@ -15,6 +15,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.icu.text.SimpleDateFormat;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -38,6 +39,13 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class CameraActivity extends AppCompatActivity {
+    private static boolean USES_TIMER = true;
+    private static int TIMER_LENGTH = 5000;
+    private static int TIMER_INTERVAL = 500;
+    private static long SENSOR_EXPOSURE_TIME = 5*10000000;
+    private static int SENSOR_SENSITIVITY = 500;
+
+
     private int MY_PERMISSIONS_CAMERA;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
@@ -142,6 +150,19 @@ public class CameraActivity extends AppCompatActivity {
         startActivity(new Intent(this,ResultsActivity.class));
     }
 
+    private void startTimer() {
+        new CountDownTimer(TIMER_LENGTH, TIMER_INTERVAL) {
+
+            public void onTick(long millisUntilFinished) {
+                takePhoto();
+            }
+
+            public void onFinish() {
+                Toast.makeText(getApplicationContext(),"done!",Toast.LENGTH_SHORT).show();
+            }
+        }.start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,14 +185,17 @@ public class CameraActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    public void takePhoto(View view) {
+    public void takePhotoButtonPressed(View view) {
+        takePhoto();
+    }
+
+    public void takePhoto() {
         try {
             mImageFile = createImageFile();
         } catch(IOException e) {
             e.printStackTrace();
         }
         captureStillImage();
-
     }
 
     private void captureStillImage() {
@@ -181,8 +205,8 @@ public class CameraActivity extends AppCompatActivity {
 
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             mCaptureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION,getOrientation(rotation));
-            mCaptureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,265);
-            mCaptureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, (long) 33333336);
+            mCaptureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,SENSOR_SENSITIVITY);
+            mCaptureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, SENSOR_EXPOSURE_TIME);
             mCameraCaptureSession.capture(mCaptureRequestBuilder.build(),
                     mCaptureSessionCallback,
                     mBackgroundHandler);
@@ -199,6 +223,9 @@ public class CameraActivity extends AppCompatActivity {
                         @Override
                         public void onConfigured(CameraCaptureSession session) {
                             mCameraCaptureSession = session;
+                            if (USES_TIMER) {
+                                startTimer();
+                            }
                         }
                         @Override
                         public void onConfigureFailed(CameraCaptureSession session) {
@@ -240,7 +267,7 @@ public class CameraActivity extends AppCompatActivity {
                     continue;
                 }
                 StreamConfigurationMap map = cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-                mImageSize = Collections.max(
+                mImageSize = Collections.min(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new Comparator<Size>() {
                             @Override

@@ -17,7 +17,7 @@
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="takePhoto" />
+        android:onClick="takePhotoButtonPressed" />
 
     <Button android:id="@+id/go_to_map_button"
         android:layout_width="100dp"

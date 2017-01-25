@@ -37,7 +37,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Java.UserInfoActivity" />
-        <activity android:name=".Java.ResultsActivity"></activity>
+        <activity android:name=".Java.ResultsActivity" />
+        <activity android:name=".Java.TimerActivity"> </activity>
     </application>
 
 </manifest>
