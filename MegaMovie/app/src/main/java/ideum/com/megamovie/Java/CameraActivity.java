@@ -34,16 +34,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
 public class CameraActivity extends AppCompatActivity {
     private static boolean USES_TIMER = true;
-    private static int TIMER_LENGTH = 5000;
-    private static int TIMER_INTERVAL = 500;
-    private static long SENSOR_EXPOSURE_TIME = 5*10000000;
-    private static int SENSOR_SENSITIVITY = 500;
+    private static int TIMER_LENGTH = 2000;
+    private static int TIMER_INTERVAL = 100;
+    private static long SENSOR_EXPOSURE_TIME = 5*1000000;
+    private static int SENSOR_SENSITIVITY = 1000;
 
 
     private int MY_PERMISSIONS_CAMERA;
@@ -105,7 +106,8 @@ public class CameraActivity extends AppCompatActivity {
             new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
-                    mBackgroundHandler.post(new ImageSaver(mImageReader.acquireNextImage()));
+                        mBackgroundHandler.post(new ImageSaver(mImageReader.acquireNextImage()));
+
                 }
             };
     private static class ImageSaver implements Runnable {
@@ -280,7 +282,7 @@ public class CameraActivity extends AppCompatActivity {
                 mImageReader = ImageReader.newInstance(mImageSize.getWidth(),
                         mImageSize.getHeight(),
                         ImageFormat.JPEG,
-                        1);
+                        /*max images */5);
                 mImageReader.setOnImageAvailableListener(mOnImageAvailableListener,mBackgroundHandler);
                 mCameraID = cameraID;
                 mSensorOrientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
@@ -291,7 +293,8 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyMMdd_HHmmss").format(new Date());
+        Calendar calendar = Calendar.getInstance();
+        String timeStamp = String.valueOf(calendar.getTimeInMillis());
         String imageFileName = "IMAGE_" + timeStamp + "_";
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
