@@ -4,10 +4,13 @@
     android:layout_height="match_parent"
     tools:context="ideum.com.megamovie.Java.TimerFragment">
 
+
     <TextView android:id="@+id/timer_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="30dp"
+        android:gravity="center"
+        android:background="#cccccc"
          />
 
 </FrameLayout>

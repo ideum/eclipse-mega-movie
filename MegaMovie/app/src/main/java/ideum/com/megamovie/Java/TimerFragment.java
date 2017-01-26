@@ -16,13 +16,12 @@ import ideum.com.megamovie.R;
 
 
 public class TimerFragment extends Fragment {
-    private static long TIMER_DURATION = 1000*60*60*24*365;
+    // Default length of countdown timer is 1 year
+    private static long TIMER_DURATION = 1000 * 60 * 60 * 24 * 365;
+    // view for displaying countdown
     private TextView mTextView;
-    // The data we are counting down to.
+    // The date we are counting down to.
     private long targetDateMills;
-    public void setTargetDateMills(long mills) {
-        targetDateMills = mills;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,22 +30,33 @@ public class TimerFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_timer, container, false);
     }
 
-    private String getTime() {
-        Calendar rightNow = Calendar.getInstance();
-        int hour = rightNow.get(Calendar.HOUR);
-        int minute = rightNow.get(Calendar.MINUTE);
-        int second = rightNow.get(Calendar.SECOND);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mTextView = (TextView) view.findViewById(R.id.timer_text_view);
 
-        return String.valueOf(hour) + ":" + String.valueOf(minute) + ":" + String.valueOf(second);
+        new CountDownTimer(TIMER_DURATION, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                mTextView.setText(countdownString());
+            }
+
+            public void onFinish() {
+                mTextView.setText("done!");
+            }
+        }.start();
     }
 
-    private long millsecToTargetDate() {
+    public void setTargetDateMills(long mills) {
+        targetDateMills = mills;
+    }
+
+    private long millsToTargetDate() {
         Calendar rightNow = Calendar.getInstance();
-
-
         return targetDateMills - rightNow.getTimeInMillis();
     }
 
+    // Creates string representing time in mills in days, hours, minutes and seconds
     private String millsToDHMS(long mills) {
         long days = TimeUnit.MILLISECONDS.toDays(mills);
         mills -= TimeUnit.DAYS.toMillis(days);
@@ -57,48 +67,16 @@ public class TimerFragment extends Fragment {
         mills = mills - TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(mills);
 
-        String result = String.format("%02d",days);
-        result += ":" + String.format("%02d",hours) ;
-        result += ":" + String.format("%02d",minutes) ;
-        result += ":" + String.format("%02d",seconds) ;
+        String result = String.format("%02d", days);
+        result += ":" + String.format("%02d", hours);
+        result += ":" + String.format("%02d", minutes);
+        result += ":" + String.format("%02d", seconds);
 
         return result;
     }
 
-    private String timeToSunset() {
-        return millsToDHMS(millsecToTargetDate());
-    }
+    private String countdownString() {
 
-
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mTextView = (TextView) view.findViewById(R.id.timer_text_view);
-//        Calendar sunset = Calendar.getInstance();
-//        sunset.set(Calendar.HOUR,6);
-//        sunset.set(Calendar.MINUTE,0);
-//        sunset.set(Calendar.SECOND,0);
-//
-//        targetDateMills = sunset.getTimeInMillis();
-
-
-        new CountDownTimer(TIMER_DURATION, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                mTextView.setText("Time until leave work: " + timeToSunset());
-            }
-
-            public void onFinish() {
-                mTextView.setText("done!");
-            }
-        }.start();
-
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+        return millsToDHMS(millsToTargetDate());
     }
 }

@@ -10,37 +10,44 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ideum.com.megamovie.Java.MapActivity">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ideum.com.megamovie.Java.MapActivity" />
+        android:orientation="vertical">
 
-    <fragment android:name="ideum.com.megamovie.Java.TimerFragment"
-        android:id="@+id/timer_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        <fragment
+            android:id="@+id/timer_fragment"
+            android:name="ideum.com.megamovie.Java.TimerFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            tools:context="ideum.com.megamovie.Java.MapActivity" />
+    </LinearLayout>
 
     <Button
         android:layout_width="180dp"
-        android:layout_height="100dp"
-        android:text="Enter Capture Mode"
-        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:onClick="loadCameraActivity"
-        />
+        android:layout_marginBottom="20dp"
+        android:onClick="loadCalibrationActivity"
+        android:text="Calibration" />
+
     <Button
         android:layout_width="180dp"
-        android:layout_height="100dp"
-        android:text="Back"
-        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
         android:onClick="loadUserInfoActivity"
-        />
+        android:text="Back" />
 
 </RelativeLayout>

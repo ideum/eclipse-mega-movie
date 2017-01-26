@@ -8,9 +8,11 @@ import android.location.Location;
  */
 
 public class EclipseTimeCalculator {
-    public long calculateEclipseTimeInMills(Location location) {
+    public long calculateEclipseTimeInMills(double longitude,double latitude) {
         Calendar eclipse = Calendar.getInstance();
-        eclipse.set(Calendar.HOUR,6);
+        eclipse.set(Calendar.MONDAY,7);
+        eclipse.set(Calendar.DAY_OF_MONTH,21);
+        eclipse.set(Calendar.HOUR,0);
         eclipse.set(Calendar.MINUTE,0);
         eclipse.set(Calendar.SECOND,0);
 

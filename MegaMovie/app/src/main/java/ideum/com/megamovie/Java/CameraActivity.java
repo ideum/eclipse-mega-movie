@@ -140,9 +140,9 @@ public class CameraActivity extends AppCompatActivity {
                 }
             };
 
-    public void loadMapActivity(View view) {
+    public void loadCalibrationActivity(View view) {
 
-        startActivity(new Intent(this,MapActivity.class));
+        startActivity(new Intent(this,CalibrationActivity.class));
     }
     public void loadResultsActivity(View view) {
         startActivity(new Intent(this,ResultsActivity.class));

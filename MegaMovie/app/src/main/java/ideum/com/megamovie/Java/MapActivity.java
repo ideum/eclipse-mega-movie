@@ -1,16 +1,19 @@
 package ideum.com.megamovie.Java;
 
 import android.Manifest;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.icu.util.Calendar;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,7 +27,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import ideum.com.megamovie.Java.CameraActivity;
 import ideum.com.megamovie.R;
 
 public class MapActivity extends AppCompatActivity
@@ -46,11 +48,12 @@ public class MapActivity extends AppCompatActivity
     private Location mCurrentLocation;
     private GoogleMap mGoogleMap;
 
-    public void loadCameraActivity(View view) {
-        startActivity(new Intent(this,CameraActivity.class));
-    }
     public void loadUserInfoActivity(View view) {
         startActivity(new Intent(this,UserInfoActivity.class));
+    }
+
+    public void loadCalibrationActivity(View view) {
+        startActivity(new Intent(this,CalibrationActivity.class));
     }
 
     @Override
@@ -64,9 +67,8 @@ public class MapActivity extends AppCompatActivity
 
 
 
-
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
         mapFragment.getMapAsync(this);
 
         createLocationRequest();
@@ -97,6 +99,12 @@ public class MapActivity extends AppCompatActivity
         // Add a marker in Washington D.C.,
         // and move the map's camera to the same location
         mGoogleMap = googleMap;
+        mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng point) {
+              mGoogleMap.addMarker(new MarkerOptions().position(point));
+            }
+        });
 
     }
 
@@ -136,10 +144,11 @@ public class MapActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         if (mCurrentLocation != null) {
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(mCurrentLocation));
+
 
             double latitude = mCurrentLocation.getLatitude();
             double longitude = mCurrentLocation.getLongitude();
+            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(latitude,longitude));
             LatLng currentLocation = new LatLng(latitude, longitude);
             mGoogleMap.clear();
             mGoogleMap.addMarker(new MarkerOptions().position(currentLocation));
@@ -147,4 +156,14 @@ public class MapActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+
+        int action = MotionEventCompat.getActionMasked(event);
+        Toast.makeText(getApplicationContext(),"touch event",Toast.LENGTH_SHORT).show();
+
+        return super.onTouchEvent(event);
+
+
+    }
 }
