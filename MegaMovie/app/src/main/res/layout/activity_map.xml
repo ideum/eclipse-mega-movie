@@ -18,15 +18,10 @@
         android:layout_height="match_parent"
         tools:context="ideum.com.megamovie.Java.MapActivity" />
 
-    <TextView
-        android:text="Countdown Clock"
+    <fragment android:name="ideum.com.megamovie.Java.TimerFragment"
+        android:id="@+id/timer_fragment"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textAlignment="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/textView4"
-        android:background="#eeeeee"
+        android:layout_height="match_parent"
         />
 
     <Button

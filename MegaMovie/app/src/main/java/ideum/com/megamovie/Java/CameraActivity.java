@@ -46,7 +46,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CameraActivity extends AppCompatActivity {
-    private static boolean USES_TIMER = true;
+    private static boolean USES_TIMER = false;
     private static int TIMER_LENGTH = 1000;
     private static int TIMER_INTERVAL = 100;
     private static long SENSOR_EXPOSURE_TIME = 5*1000000;

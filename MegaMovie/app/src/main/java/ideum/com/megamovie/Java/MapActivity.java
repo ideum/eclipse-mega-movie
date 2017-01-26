@@ -3,6 +3,7 @@ package ideum.com.megamovie.Java;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -56,6 +57,16 @@ public class MapActivity extends AppCompatActivity
         setContentView(R.layout.activity_map);
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
+        TimerFragment fragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        Calendar sunset = Calendar.getInstance();
+        sunset.set(Calendar.HOUR,6);
+        sunset.set(Calendar.MINUTE,0);
+        sunset.set(Calendar.SECOND,0);
+
+        fragment.setTargetDateMills(sunset.getTimeInMillis());
+
+
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 

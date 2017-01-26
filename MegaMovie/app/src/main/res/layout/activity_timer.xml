@@ -10,6 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ideum.com.megamovie.Java.TimerActivity">
 <fragment android:name="ideum.com.megamovie.Java.TimerFragment"
+    android:id="@+id/timer_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     />
