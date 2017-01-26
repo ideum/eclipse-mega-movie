@@ -49,6 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CameraActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
+
     private static int TIMER_LENGTH = 300;
     private static int TIMER_INTERVAL = 100;
     private static long SENSOR_EXPOSURE_TIME = 5 * 1000000;
@@ -97,8 +98,14 @@ public class CameraActivity extends AppCompatActivity
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
 
                     String currentDataTime = generateTimeStamp();
-                    File jpegFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+
+                    File jpegRootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovie/JPEG");
+                    if(!jpegRootPath.exists()) {
+                        jpegRootPath.mkdirs();
+                    }
+                    File jpegFile = new File(jpegRootPath,
                             "JPEG_" + currentDataTime + ".jpg");
+
                     ImageSaver.ImageSaverBuilder jpegBuilder;
                     int requestId = (int) request.getTag();
                     jpegBuilder = mJpegResultQueue.get(requestId);
@@ -295,7 +302,6 @@ public class CameraActivity extends AppCompatActivity
         return true;
     }
 
-
     private void openCamera() {
 
         CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
@@ -352,22 +358,6 @@ public class CameraActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
-
-//    File createImageFile() throws IOException {
-//        Calendar calendar = Calendar.getInstance();
-//        String timeStamp = String.valueOf(calendar.getTimeInMillis());
-//        String imageFileName = "IMAGE_" + timeStamp + "_";
-//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
-//                    0);
-//        }
-//        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//
-//        File image = File.createTempFile(imageFileName,".jpg", storageDirectory);
-//
-//        return image;
-//    }
 
     private void openBackgroundThread() {
         mBackgroundThread = new HandlerThread("Camera2 background thread");
