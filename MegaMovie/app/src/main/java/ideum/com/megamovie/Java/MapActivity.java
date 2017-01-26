@@ -35,6 +35,7 @@ public class MapActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
 
+    private boolean cameraShouldMoveToCurrentLocation = true;
     private TimerFragment mTimerFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private static final String TAG = "Main Activity";
@@ -45,7 +46,8 @@ public class MapActivity extends AppCompatActivity
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private Location mCurrentLocation;
+    private LatLng mCurrentLocation;
+    private LatLng mPlannedLocation;
     private GoogleMap mGoogleMap;
 
     public void loadUserInfoActivity(View view) {
@@ -64,8 +66,6 @@ public class MapActivity extends AppCompatActivity
         // when the map is ready to be used.
         mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
-
-
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -102,10 +102,24 @@ public class MapActivity extends AppCompatActivity
         mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng point) {
-              mGoogleMap.addMarker(new MarkerOptions().position(point));
+              mPlannedLocation = point;
+                updateMarkers();
             }
         });
 
+    }
+
+    private void updateMarkers() {
+        mGoogleMap.clear();
+        if (mPlannedLocation != null) {
+            mGoogleMap.addMarker(new MarkerOptions().position(mPlannedLocation));
+        }
+        if (mCurrentLocation != null) {
+            mGoogleMap.addMarker(new MarkerOptions().position(mCurrentLocation));
+            if (cameraShouldMoveToCurrentLocation) {
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mCurrentLocation));
+            }
+        }
     }
 
     @Override
@@ -137,33 +151,18 @@ public class MapActivity extends AppCompatActivity
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        mCurrentLocation = location;
-        if (mCurrentLocation != null) {
-
-
-            double latitude = mCurrentLocation.getLatitude();
-            double longitude = mCurrentLocation.getLongitude();
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(latitude,longitude));
-            LatLng currentLocation = new LatLng(latitude, longitude);
-            mGoogleMap.clear();
-            mGoogleMap.addMarker(new MarkerOptions().position(currentLocation));
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event){
-
-        int action = MotionEventCompat.getActionMasked(event);
-        Toast.makeText(getApplicationContext(),"touch event",Toast.LENGTH_SHORT).show();
-
-        return super.onTouchEvent(event);
-
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        mCurrentLocation = new LatLng(latitude,longitude);
+        updateMarkers();
+        // We want camera to move to current position when it first finds gps coordinates
+        // but not to move automatically after that
+        cameraShouldMoveToCurrentLocation = false;
 
     }
+
 }

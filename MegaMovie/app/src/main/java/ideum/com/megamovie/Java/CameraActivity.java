@@ -46,7 +46,6 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CameraActivity extends AppCompatActivity {
-    private static boolean USES_TIMER = false;
     private static int TIMER_LENGTH = 1000;
     private static int TIMER_INTERVAL = 100;
     private static long SENSOR_EXPOSURE_TIME = 5*1000000;
@@ -184,15 +183,11 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     public void takePhotoButtonPressed(View view) {
-        takePhoto();
+        startTimer();
     }
 
     public void takePhoto() {
-//        try {
-//            mImageFile = createImageFile();
-//        } catch(IOException e) {
-//            e.printStackTrace();
-//        }
+
         captureStillImage();
     }
 
@@ -231,9 +226,7 @@ public class CameraActivity extends AppCompatActivity {
                         @Override
                         public void onConfigured(CameraCaptureSession session) {
                             mCameraCaptureSession = session;
-                            if (USES_TIMER) {
-                                startTimer();
-                            }
+
                         }
                         @Override
                         public void onConfigureFailed(CameraCaptureSession session) {
