@@ -1,5 +1,6 @@
 package ideum.com.megamovie.Java;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -45,15 +47,32 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CameraActivity extends AppCompatActivity {
-    private static int TIMER_LENGTH = 1000;
+public class CameraActivity extends AppCompatActivity
+        implements ActivityCompat.OnRequestPermissionsResultCallback {
+    private static int TIMER_LENGTH = 300;
     private static int TIMER_INTERVAL = 100;
-    private static long SENSOR_EXPOSURE_TIME = 5*1000000;
+    private static long SENSOR_EXPOSURE_TIME = 5 * 1000000;
     private static int SENSOR_SENSITIVITY = 1000;
 
+    private static final String TAG = "Camera Activity";
 
-    private int MY_PERMISSIONS_CAMERA;
+    /**
+     * Request code for camera permissions
+     */
+    private static final int REQUEST_CAMERA_PERMISSIONS = 1;
+
+    /**
+     * Permissions required to take a picture.
+     */
+    private static final String[] CAMERA_PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
+
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
@@ -71,7 +90,6 @@ public class CameraActivity extends AppCompatActivity {
     private final AtomicInteger mRequestCounter = new AtomicInteger();
     private CameraCaptureSession mCameraCaptureSession;
     private CameraCaptureSession.CaptureCallback mCaptureSessionCallback =
-
             new CameraCaptureSession.CaptureCallback() {
 
                 @Override
@@ -85,7 +103,7 @@ public class CameraActivity extends AppCompatActivity {
                     int requestId = (int) request.getTag();
                     jpegBuilder = mJpegResultQueue.get(requestId);
                     if (jpegBuilder != null) {
-                        jpegBuilder.setFile (jpegFile);
+                        jpegBuilder.setFile(jpegFile);
                     }
                 }
 
@@ -129,22 +147,41 @@ public class CameraActivity extends AppCompatActivity {
     private Handler mBackgroundHandler;
     private final TreeMap<Integer, ImageSaver.ImageSaverBuilder> mJpegResultQueue = new TreeMap<>();
 
-    private ImageReader mJpegReader;
+    private RefCountedAutoCloseable<ImageReader> mJpegReader;
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener =
             new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
-                        dequeueAndSaveImage(mJpegResultQueue,mJpegReader);
+                    dequeueAndSaveImage(mJpegResultQueue, mJpegReader);
 
                 }
             };
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA_PERMISSIONS) {
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    showMissingPermissionError();
+                    return;
+                }
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void showMissingPermissionError() {
+        Toast.makeText(this, "This app needs camera permissions.", Toast.LENGTH_SHORT).show();
+    }
+
     public void loadCalibrationActivity(View view) {
 
-        startActivity(new Intent(this,CalibrationActivity.class));
+        startActivity(new Intent(this, CalibrationActivity.class));
     }
+
     public void loadResultsActivity(View view) {
-        startActivity(new Intent(this,ResultsActivity.class));
+        startActivity(new Intent(this, ResultsActivity.class));
     }
 
     private void startTimer() {
@@ -155,7 +192,7 @@ public class CameraActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                Toast.makeText(getApplicationContext(),"done!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "done!", Toast.LENGTH_SHORT).show();
             }
         }.start();
     }
@@ -164,7 +201,9 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ideum.com.megamovie.R.layout.activity_camera);
-
+        while (!hasAllPermissionsGranted()) {
+            requestCameraPermissions();
+        }
         setUpCamera();
         openCamera();
     }
@@ -194,11 +233,11 @@ public class CameraActivity extends AppCompatActivity {
     private void captureStillImage() {
         try {
             final CaptureRequest.Builder captureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
-            captureRequestBuilder.addTarget(mJpegReader.getSurface());
+            captureRequestBuilder.addTarget(mJpegReader.get().getSurface());
 
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
-            captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION,getOrientation(rotation));
-            captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,SENSOR_SENSITIVITY);
+            captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
+            captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, SENSOR_SENSITIVITY);
             captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, SENSOR_EXPOSURE_TIME);
             captureRequestBuilder.setTag(mRequestCounter.getAndIncrement());
 
@@ -206,7 +245,7 @@ public class CameraActivity extends AppCompatActivity {
 
             ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
 
-            mJpegResultQueue.put((int) request.getTag(),jpegBuilder);
+            mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
 
             mCameraCaptureSession.capture(request,
                     mCaptureSessionCallback,
@@ -221,19 +260,20 @@ public class CameraActivity extends AppCompatActivity {
     private void createCameraSession() {
         try {
 
-            mCameraDevice.createCaptureSession(Arrays.asList(mJpegReader.getSurface()),
+            mCameraDevice.createCaptureSession(Arrays.asList(mJpegReader.get().getSurface()),
                     new CameraCaptureSession.StateCallback() {
                         @Override
                         public void onConfigured(CameraCaptureSession session) {
                             mCameraCaptureSession = session;
 
                         }
+
                         @Override
                         public void onConfigureFailed(CameraCaptureSession session) {
-                            Toast.makeText(getApplicationContext(),"create camera session failed",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "create camera session failed", Toast.LENGTH_SHORT).show();
                         }
 
-                    },null);
+                    }, null);
 
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -241,15 +281,31 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
-    private void openCamera() {
-        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.CAMERA},
-                    MY_PERMISSIONS_CAMERA);
+    private void requestCameraPermissions() {
+        ActivityCompat.requestPermissions(this, CAMERA_PERMISSIONS, REQUEST_CAMERA_PERMISSIONS);
+    }
+
+    private boolean hasAllPermissionsGranted() {
+        for (String permission : CAMERA_PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
         }
+        return true;
+    }
+
+
+    private void openCamera() {
+
+        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
         try {
-            cameraManager.openCamera(mCameraID,mCameraDeviceStateCallback,mBackgroundHandler);
+            try {
+                cameraManager.openCamera(mCameraID, mCameraDeviceStateCallback, mBackgroundHandler);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -279,15 +335,20 @@ public class CameraActivity extends AppCompatActivity {
                             }
                         }
                 );
-                mJpegReader = ImageReader.newInstance(mImageSize.getWidth(),
-                        mImageSize.getHeight(),
-                        ImageFormat.JPEG,
-                        /*max images */5);
-                mJpegReader.setOnImageAvailableListener(mOnImageAvailableListener,mBackgroundHandler);
+                if (mJpegReader == null || mJpegReader.getAndRetain() == null) {
+                    mJpegReader = new RefCountedAutoCloseable<>(
+                            ImageReader.newInstance(mImageSize.getWidth(),
+                                    mImageSize.getHeight(),
+                                    ImageFormat.JPEG,
+                        /*max images */5));
+
+                }
+
+                mJpegReader.get().setOnImageAvailableListener(mOnImageAvailableListener, mBackgroundHandler);
                 mCameraID = cameraID;
                 mSensorOrientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
             }
-        } catch(CameraAccessException e) {
+        } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
@@ -327,19 +388,30 @@ public class CameraActivity extends AppCompatActivity {
 
 
     private void dequeueAndSaveImage(TreeMap<Integer, ImageSaver.ImageSaverBuilder> pendingQueue,
-                                     ImageReader reader) {
+                                     RefCountedAutoCloseable<ImageReader> reader) {
         Map.Entry<Integer, ImageSaver.ImageSaverBuilder> entry = pendingQueue.firstEntry();
         ImageSaver.ImageSaverBuilder builder = entry.getValue();
 
+        // Increment reference count to prevent ImageReader from being closed while we
+        // are saving its Images in a background thread (otherwise their resources may
+        // be freed while we are writing to a file).
+        if (reader == null || reader.getAndRetain() == null) {
+            Log.e(TAG, "Paused the activity before we could save the image," +
+                    " ImageReader already closed.");
+            pendingQueue.remove(entry.getKey());
+            return;
+        }
+
+
         Image image;
         try {
-            image = reader.acquireNextImage();
-        } catch(IllegalStateException e) {
+            image = reader.get().acquireNextImage();
+        } catch (IllegalStateException e) {
             e.printStackTrace();
             return;
         }
-        builder.setReader(reader).setImage(image);
-        handleCompletionLocked(entry.getKey(),builder,pendingQueue);
+        builder.setRefCountedReader(reader).setImage(image);
+        handleCompletionLocked(entry.getKey(), builder, pendingQueue);
     }
 
     private void handleCompletionLocked(int requestId, ImageSaver.ImageSaverBuilder builder,
@@ -358,15 +430,15 @@ public class CameraActivity extends AppCompatActivity {
         private final File mFile;
         private final CaptureResult mCaptureResult;
         private final CameraCharacteristics mCharacteristics;
-        private final ImageReader mReader;
+        private final RefCountedAutoCloseable<ImageReader> mReader;
 
         private ImageSaver(Image image, File file, CaptureResult captureResult,
-                           CameraCharacteristics characteristics, ImageReader imageReader) {
+                           CameraCharacteristics characteristics, RefCountedAutoCloseable<ImageReader> reader) {
             mImage = image;
             mFile = file;
             mCaptureResult = captureResult;
             mCharacteristics = characteristics;
-            mReader = imageReader;
+            mReader = reader;
         }
 
         @Override
@@ -384,7 +456,7 @@ public class CameraActivity extends AppCompatActivity {
                 e.printStackTrace();
             } finally {
                 mImage.close();
-                if(fileOutputStream != null) {
+                if (fileOutputStream != null) {
                     try {
                         fileOutputStream.close();
                     } catch (IOException e) {
@@ -393,14 +465,15 @@ public class CameraActivity extends AppCompatActivity {
                 }
             }
         }
+
         public static class ImageSaverBuilder {
             private Image mImage;
             private File mFile;
             private CaptureResult mCaptureResult;
             private CameraCharacteristics mCharacteristics;
-            private ImageReader mReader;
+            private RefCountedAutoCloseable<ImageReader> mReader;
 
-            public synchronized ImageSaverBuilder setReader(ImageReader reader) {
+            public synchronized ImageSaverBuilder setRefCountedReader(RefCountedAutoCloseable<ImageReader> reader) {
                 if (reader == null) throw new NullPointerException();
                 mReader = reader;
                 return this;
@@ -431,7 +504,7 @@ public class CameraActivity extends AppCompatActivity {
             }
 
             public synchronized ImageSaver buildIfComplete() {
-                if(!isComplete()) {
+                if (!isComplete()) {
                     return null;
                 }
                 return new ImageSaver(mImage, mFile, mCaptureResult, mCharacteristics, mReader);
@@ -447,13 +520,71 @@ public class CameraActivity extends AppCompatActivity {
             }
 
         }
-
     }
 
-private static String generateTimeStamp() {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
-    return sdf.format(new Date());
-}
+    private static String generateTimeStamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
+        return sdf.format(new Date());
+    }
+    /**
+     * A wrapper for an {@link AutoCloseable} object that implements reference counting to allow
+     * for resource management.
+     */
+    public static class RefCountedAutoCloseable<T extends AutoCloseable> implements AutoCloseable {
+        private T mObject;
+        private long mRefCount = 0;
 
+        /**
+         * Wrap the given object.
+         *
+         * @param object an object to wrap.
+         */
+        public RefCountedAutoCloseable(T object) {
+            if (object == null) throw new NullPointerException();
+            mObject = object;
+        }
+
+        /**
+         * Increment the reference count and return the wrapped object.
+         *
+         * @return the wrapped object, or null if the object has been released.
+         */
+        public synchronized T getAndRetain() {
+            if (mRefCount < 0) {
+                return null;
+            }
+            mRefCount++;
+            return mObject;
+        }
+
+        /**
+         * Return the wrapped object.
+         *
+         * @return the wrapped object, or null if the object has been released.
+         */
+        public synchronized T get() {
+            return mObject;
+        }
+
+        /**
+         * Decrement the reference count and release the wrapped object if there are no other
+         * users retaining this object.
+         */
+        @Override
+        public synchronized void close() {
+            if (mRefCount >= 0) {
+                mRefCount--;
+                if (mRefCount < 0) {
+                    try {
+                        mObject.close();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    } finally {
+                        mObject = null;
+                    }
+                }
+            }
+        }
+    }
 
 }

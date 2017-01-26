@@ -42,7 +42,10 @@ public class MapActivity extends AppCompatActivity
     private static final long INTERVAL = 1000*10;
     private static final long FASTEST_INTERVAL = 1000*5;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
-    private int MY_PERMISSIONS_REQUEST_REQUEST_ACCESS_FINE_LOCATION;
+    /**
+     *  Request code for location permissions
+     */
+    private int REQUEST_LOCATION_PERMISSIONS = 1;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -62,10 +65,20 @@ public class MapActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        // Request permission to access location
+        while (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSIONS);
+        }
+
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
         mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
+        if (mTimerFragment != null) {
+            mTimerFragment.setTargetDateMills( mEclipseTimeCalculator.calculateEclipseTimeInMills(0, 0));
+        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -128,12 +141,12 @@ public class MapActivity extends AppCompatActivity
     }
 
     protected void startLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_REQUEST_ACCESS_FINE_LOCATION);
+        try {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest,this);
+        catch (SecurityException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -158,6 +171,10 @@ public class MapActivity extends AppCompatActivity
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         mCurrentLocation = new LatLng(latitude,longitude);
+        long targetDateMills = mEclipseTimeCalculator.calculateEclipseTimeInMills(latitude,longitude);
+        if (mTimerFragment !=null) {
+            mTimerFragment.setTargetDateMills(targetDateMills);
+        }
         updateMarkers();
         // We want camera to move to current position when it first finds gps coordinates
         // but not to move automatically after that
