@@ -33,6 +33,8 @@ public class MapActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
 
+    private TimerFragment mTimerFragment;
+    private EclipseTimeCalculator mEclipseTimeCalculator;
     private static final String TAG = "Main Activity";
     private static final long INTERVAL = 1000*10;
     private static final long FASTEST_INTERVAL = 1000*5;
@@ -57,13 +59,10 @@ public class MapActivity extends AppCompatActivity
         setContentView(R.layout.activity_map);
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
-        TimerFragment fragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
-        Calendar sunset = Calendar.getInstance();
-        sunset.set(Calendar.HOUR,6);
-        sunset.set(Calendar.MINUTE,0);
-        sunset.set(Calendar.SECOND,0);
+        mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        mEclipseTimeCalculator = new EclipseTimeCalculator();
 
-        fragment.setTargetDateMills(sunset.getTimeInMillis());
+
 
 
 
@@ -137,6 +136,8 @@ public class MapActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         if (mCurrentLocation != null) {
+            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(mCurrentLocation));
+
             double latitude = mCurrentLocation.getLatitude();
             double longitude = mCurrentLocation.getLongitude();
             LatLng currentLocation = new LatLng(latitude, longitude);
