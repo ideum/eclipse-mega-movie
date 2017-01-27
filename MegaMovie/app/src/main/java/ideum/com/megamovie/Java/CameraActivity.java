@@ -12,11 +12,13 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
+import android.hardware.camera2.DngCreator;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.icu.text.SimpleDateFormat;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -35,6 +37,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
@@ -109,6 +112,9 @@ public class CameraActivity extends AppCompatActivity
                             "JPEG_" + currentDataTime + ".jpg");
                     File rawFile = new File(rawRootPath,
                             "RAW_" + currentDataTime + ".dng");
+//                    // Initiate media scan and put the new things into the path array
+//                    // to make the scanner aware of the new files
+//                    MediaScannerConnection.scanFile(CameraActivity, new String[] {jpegFile.toString(),rawFile.toString()},null,null);
 
                     ImageSaver.ImageSaverBuilder jpegBuilder;
                     ImageSaver.ImageSaverBuilder rawBuilder;
@@ -369,7 +375,7 @@ public class CameraActivity extends AppCompatActivity
                         }
                 );
                 mRawImageSize = Collections.max(
-                        Arrays.asList(map.getOutputSizes(ImageFormat.RAW10)),
+                        Arrays.asList(map.getOutputSizes(ImageFormat.RAW_SENSOR)),
                         new Comparator<Size>() {
                             @Override
                             public int compare(Size lhs, Size rhs) {
@@ -393,7 +399,7 @@ public class CameraActivity extends AppCompatActivity
                     mRawImageReader = new RefCountedAutoCloseable<>(
                             ImageReader.newInstance(mRawImageSize.getWidth(),
                                     mRawImageSize.getHeight(),
-                                    ImageFormat.RAW10,
+                                    ImageFormat.RAW_SENSOR,
                         /*max images */5));
 
                 }
@@ -482,25 +488,45 @@ public class CameraActivity extends AppCompatActivity
 
         @Override
         public void run() {
-            ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[byteBuffer.remaining()];
-            byteBuffer.get(bytes);
 
-            FileOutputStream fileOutputStream = null;
+            int format = mImage.getFormat();
+            switch (format) {
+                case ImageFormat.JPEG: {
+                    ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
+                    byte[] bytes = new byte[byteBuffer.remaining()];
+                    byteBuffer.get(bytes);
 
-            try {
-                fileOutputStream = new FileOutputStream(mFile);
-                fileOutputStream.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mImage.close();
-                if (fileOutputStream != null) {
+                    FileOutputStream fileOutputStream = null;
+
                     try {
-                        fileOutputStream.close();
+                        fileOutputStream = new FileOutputStream(mFile);
+                        fileOutputStream.write(bytes);
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } finally {
+                        mImage.close();
+                        closeOutput(fileOutputStream);
                     }
+                }
+                break;
+                case ImageFormat.RAW_SENSOR: {
+                    DngCreator dngCreator = new DngCreator(mCharacteristics, mCaptureResult);
+                    FileOutputStream output = null;
+                    try {
+                        output = new FileOutputStream(mFile);
+                        dngCreator.writeImage(output, mImage);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        mImage.close();
+                        closeOutput(output);
+                    }
+                }
+                break;
+                default: {
+                    Log.e(TAG, "Cannot save image, unexpected image format:" + format);
+                    break;
                 }
             }
         }
@@ -560,7 +586,15 @@ public class CameraActivity extends AppCompatActivity
 
         }
     }
-
+    private static void closeOutput(OutputStream outputStream) {
+        if (null != outputStream) {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private static String generateTimeStamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
         return sdf.format(new Date());
