@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     tools:context="ideum.com.megamovie.Java.CameraPreviewFragment">
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:text="@string/hello_blank_fragment" />-->
+    <TextureView android:id="@+id/preview_texture_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/take_photo_button"
+        />
 
 </FrameLayout>

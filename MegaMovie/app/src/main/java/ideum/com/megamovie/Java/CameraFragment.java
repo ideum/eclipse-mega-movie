@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -54,8 +55,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CameraFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
 
-
-
     private static final String TAG = "Camera Activity";
 
     /**
@@ -71,7 +70,6 @@ public class CameraFragment extends android.app.Fragment
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
-
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 

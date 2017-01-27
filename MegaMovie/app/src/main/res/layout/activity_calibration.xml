@@ -30,16 +30,14 @@
         android:text="Contact Time Information"
         android:gravity="center"/>
 
-    <TextView
+    <fragment android:name="ideum.com.megamovie.Java.CameraPreviewFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
-        android:background="#cccccc"
+        android:layout_weight="9"
         android:gravity="center"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="CAMERA PREVIEW"
-        android:textSize="46dp" />
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
