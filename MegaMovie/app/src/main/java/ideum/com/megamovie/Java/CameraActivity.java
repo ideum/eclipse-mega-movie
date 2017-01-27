@@ -23,7 +23,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +37,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -103,14 +101,25 @@ public class CameraActivity extends AppCompatActivity
                     if(!jpegRootPath.exists()) {
                         jpegRootPath.mkdirs();
                     }
+                    File rawRootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovie/RAW");
+                    if(!rawRootPath.exists()) {
+                        rawRootPath.mkdirs();
+                    }
                     File jpegFile = new File(jpegRootPath,
                             "JPEG_" + currentDataTime + ".jpg");
+                    File rawFile = new File(rawRootPath,
+                            "RAW_" + currentDataTime + ".dng");
 
                     ImageSaver.ImageSaverBuilder jpegBuilder;
+                    ImageSaver.ImageSaverBuilder rawBuilder;
                     int requestId = (int) request.getTag();
                     jpegBuilder = mJpegResultQueue.get(requestId);
+                    rawBuilder = mRawResultQueue.get(requestId);
                     if (jpegBuilder != null) {
                         jpegBuilder.setFile(jpegFile);
+                    }
+                    if (rawBuilder != null) {
+                        rawBuilder.setFile(rawFile);
                     }
                 }
 
@@ -122,6 +131,10 @@ public class CameraActivity extends AppCompatActivity
                     ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
                     if (jpegBuilder != null) {
                         jpegBuilder.setResult(result);
+                    }
+                    ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
+                    if (rawBuilder != null) {
+                        rawBuilder.setResult(result);
                     }
                 }
             };
@@ -147,19 +160,30 @@ public class CameraActivity extends AppCompatActivity
                 }
             };
     private String mCameraID;
-    private Size mImageSize;
+    private Size mJpegImageSize;
+    private Size mRawImageSize;
     private int mSensorOrientation;
 
     private HandlerThread mBackgroundThread;
     private Handler mBackgroundHandler;
     private final TreeMap<Integer, ImageSaver.ImageSaverBuilder> mJpegResultQueue = new TreeMap<>();
+    private final TreeMap<Integer, ImageSaver.ImageSaverBuilder> mRawResultQueue = new TreeMap<>();
 
-    private RefCountedAutoCloseable<ImageReader> mJpegReader;
-    private final ImageReader.OnImageAvailableListener mOnImageAvailableListener =
+    private RefCountedAutoCloseable<ImageReader> mJpegImageReader;
+    private final ImageReader.OnImageAvailableListener mOnJpegImageAvailableListener =
             new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
-                    dequeueAndSaveImage(mJpegResultQueue, mJpegReader);
+                    dequeueAndSaveImage(mJpegResultQueue, mJpegImageReader);
+
+                }
+            };
+    private RefCountedAutoCloseable<ImageReader> mRawImageReader;
+    private final ImageReader.OnImageAvailableListener mOnRawImageAvailableListener =
+            new ImageReader.OnImageAvailableListener() {
+                @Override
+                public void onImageAvailable(ImageReader reader) {
+                    dequeueAndSaveImage(mRawResultQueue, mRawImageReader);
 
                 }
             };
@@ -240,7 +264,8 @@ public class CameraActivity extends AppCompatActivity
     private void captureStillImage() {
         try {
             final CaptureRequest.Builder captureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
-            captureRequestBuilder.addTarget(mJpegReader.get().getSurface());
+            captureRequestBuilder.addTarget(mJpegImageReader.get().getSurface());
+            captureRequestBuilder.addTarget(mRawImageReader.get().getSurface());
 
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
@@ -251,8 +276,10 @@ public class CameraActivity extends AppCompatActivity
             CaptureRequest request = captureRequestBuilder.build();
 
             ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
+            ImageSaver.ImageSaverBuilder rawBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
 
             mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
+            mRawResultQueue.put((int) request.getTag(), rawBuilder);
 
             mCameraCaptureSession.capture(request,
                     mCaptureSessionCallback,
@@ -266,8 +293,8 @@ public class CameraActivity extends AppCompatActivity
 
     private void createCameraSession() {
         try {
-
-            mCameraDevice.createCaptureSession(Arrays.asList(mJpegReader.get().getSurface()),
+            mCameraDevice.createCaptureSession(Arrays.asList(mJpegImageReader.get().getSurface(),
+                    mRawImageReader.get().getSurface()),
                     new CameraCaptureSession.StateCallback() {
                         @Override
                         public void onConfigured(CameraCaptureSession session) {
@@ -331,7 +358,7 @@ public class CameraActivity extends AppCompatActivity
                 }
                 mCharacteristics = cc;
                 StreamConfigurationMap map = cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-                mImageSize = Collections.max(
+                mJpegImageSize = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new Comparator<Size>() {
                             @Override
@@ -341,16 +368,38 @@ public class CameraActivity extends AppCompatActivity
                             }
                         }
                 );
-                if (mJpegReader == null || mJpegReader.getAndRetain() == null) {
-                    mJpegReader = new RefCountedAutoCloseable<>(
-                            ImageReader.newInstance(mImageSize.getWidth(),
-                                    mImageSize.getHeight(),
+                mRawImageSize = Collections.max(
+                        Arrays.asList(map.getOutputSizes(ImageFormat.RAW10)),
+                        new Comparator<Size>() {
+                            @Override
+                            public int compare(Size lhs, Size rhs) {
+                                return Long.signum(lhs.getWidth() * lhs.getHeight() -
+                                        rhs.getWidth() * rhs.getHeight());
+                            }
+                        }
+                );
+
+
+
+                if (mJpegImageReader == null || mJpegImageReader.getAndRetain() == null) {
+                    mJpegImageReader = new RefCountedAutoCloseable<>(
+                            ImageReader.newInstance(mJpegImageSize.getWidth(),
+                                    mJpegImageSize.getHeight(),
                                     ImageFormat.JPEG,
                         /*max images */5));
 
                 }
+                if (mRawImageReader == null || mRawImageReader.getAndRetain() == null) {
+                    mRawImageReader = new RefCountedAutoCloseable<>(
+                            ImageReader.newInstance(mRawImageSize.getWidth(),
+                                    mRawImageSize.getHeight(),
+                                    ImageFormat.RAW10,
+                        /*max images */5));
 
-                mJpegReader.get().setOnImageAvailableListener(mOnImageAvailableListener, mBackgroundHandler);
+                }
+
+                mJpegImageReader.get().setOnImageAvailableListener(mOnJpegImageAvailableListener, mBackgroundHandler);
+                mRawImageReader.get().setOnImageAvailableListener(mOnRawImageAvailableListener,mBackgroundHandler);
                 mCameraID = cameraID;
                 mSensorOrientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
             }
@@ -358,6 +407,7 @@ public class CameraActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
 
     private void openBackgroundThread() {
         mBackgroundThread = new HandlerThread("Camera2 background thread");
@@ -391,7 +441,6 @@ public class CameraActivity extends AppCompatActivity
             pendingQueue.remove(entry.getKey());
             return;
         }
-
 
         Image image;
         try {
