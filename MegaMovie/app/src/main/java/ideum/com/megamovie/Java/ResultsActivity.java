@@ -19,7 +19,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     public void back(View view) {
-        startActivity(new Intent(this,CameraActivity.class));
+        startActivity(new Intent(this,CaptureActivity.class));
     }
 
     @Override

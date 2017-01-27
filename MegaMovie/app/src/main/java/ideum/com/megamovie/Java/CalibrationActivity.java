@@ -15,8 +15,8 @@ public class CalibrationActivity extends AppCompatActivity {
     private Location mCurrentLocation;
 
 
-    public void loadCameraActivity(View view) {
-        startActivity(new Intent(this,CameraActivity.class));
+    public void loadCaptureActivity(View view) {
+        startActivity(new Intent(this,CaptureActivity.class));
     }
     public void loadMapActivity(View view) {
         startActivity(new Intent(this,MapActivity.class));

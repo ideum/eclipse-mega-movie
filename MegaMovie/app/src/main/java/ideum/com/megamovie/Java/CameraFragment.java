@@ -1,6 +1,7 @@
 package ideum.com.megamovie.Java;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,14 +19,15 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.icu.text.SimpleDateFormat;
 import android.media.Image;
 import android.media.ImageReader;
-import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -43,18 +45,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CameraActivity extends AppCompatActivity
-        implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class CameraFragment extends android.app.Fragment
+        implements FragmentCompat.OnRequestPermissionsResultCallback {
 
-    private static int TIMER_LENGTH = 300;
-    private static int TIMER_INTERVAL = 100;
-    private static long SENSOR_EXPOSURE_TIME = 5 * 1000000;
-    private static int SENSOR_SENSITIVITY = 1000;
+
 
     private static final String TAG = "Camera Activity";
 
@@ -112,7 +112,7 @@ public class CameraActivity extends AppCompatActivity
                             "JPEG_" + currentDataTime + ".jpg");
                     File rawFile = new File(rawRootPath,
                             "RAW_" + currentDataTime + ".dng");
-                    
+
                     ImageSaver.ImageSaverBuilder jpegBuilder;
                     ImageSaver.ImageSaverBuilder rawBuilder;
                     int requestId = (int) request.getTag();
@@ -206,35 +206,15 @@ public class CameraActivity extends AppCompatActivity
     }
 
     private void showMissingPermissionError() {
-        Toast.makeText(this, "This app needs camera permissions.", Toast.LENGTH_SHORT).show();
-    }
-
-    public void loadCalibrationActivity(View view) {
-
-        startActivity(new Intent(this, CalibrationActivity.class));
-    }
-
-    public void loadResultsActivity(View view) {
-        startActivity(new Intent(this, ResultsActivity.class));
-    }
-
-    private void startTimer() {
-        new CountDownTimer(TIMER_LENGTH, TIMER_INTERVAL) {
-
-            public void onTick(long millisUntilFinished) {
-                takePhoto();
-            }
-
-            public void onFinish() {
-                Toast.makeText(getApplicationContext(), "done!", Toast.LENGTH_SHORT).show();
-            }
-        }.start();
+        Activity activity = getActivity();
+        if (activity != null) {
+            Toast.makeText(activity, "This app needs camera permissions.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(ideum.com.megamovie.R.layout.activity_camera);
         while (!hasAllPermissionsGranted()) {
             requestCameraPermissions();
         }
@@ -255,25 +235,23 @@ public class CameraActivity extends AppCompatActivity
         super.onPause();
     }
 
-    public void takePhotoButtonPressed(View view) {
-        startTimer();
+
+    public void takePhoto(long duration,int sensitivity, float focus_distance) {
+
+        captureStillImage(duration, sensitivity, focus_distance);
     }
 
-    public void takePhoto() {
-
-        captureStillImage();
-    }
-
-    private void captureStillImage() {
+    private void captureStillImage(long duration, int sensitivity, float focusDistance ) {
         try {
             final CaptureRequest.Builder captureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
             captureRequestBuilder.addTarget(mJpegImageReader.get().getSurface());
             captureRequestBuilder.addTarget(mRawImageReader.get().getSurface());
 
-            int rotation = getWindowManager().getDefaultDisplay().getRotation();
+            int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
             captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
-            captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, SENSOR_SENSITIVITY);
-            captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, SENSOR_EXPOSURE_TIME);
+            captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, sensitivity);
+            captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, duration);
+            captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE,focusDistance);
             captureRequestBuilder.setTag(mRequestCounter.getAndIncrement());
 
             CaptureRequest request = captureRequestBuilder.build();
@@ -307,7 +285,7 @@ public class CameraActivity extends AppCompatActivity
 
                         @Override
                         public void onConfigureFailed(CameraCaptureSession session) {
-                            Toast.makeText(getApplicationContext(), "create camera session failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(), "create camera session failed", Toast.LENGTH_SHORT).show();
                         }
 
                     }, null);
@@ -319,12 +297,12 @@ public class CameraActivity extends AppCompatActivity
     }
 
     private void requestCameraPermissions() {
-        ActivityCompat.requestPermissions(this, CAMERA_PERMISSIONS, REQUEST_CAMERA_PERMISSIONS);
+        FragmentCompat.requestPermissions(this, CAMERA_PERMISSIONS, REQUEST_CAMERA_PERMISSIONS);
     }
 
     private boolean hasAllPermissionsGranted() {
         for (String permission : CAMERA_PERMISSIONS) {
-            if (ActivityCompat.checkSelfPermission(this, permission)
+            if (ActivityCompat.checkSelfPermission(getActivity(), permission)
                     != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
@@ -334,7 +312,7 @@ public class CameraActivity extends AppCompatActivity
 
     private void openCamera() {
 
-        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
 
         try {
             try {
@@ -352,7 +330,7 @@ public class CameraActivity extends AppCompatActivity
     }
 
     private void setUpCamera() {
-        mCameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        mCameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
             for (String cameraID : mCameraManager.getCameraIdList()) {
                 CameraCharacteristics cc = mCameraManager.getCameraCharacteristics(cameraID);
