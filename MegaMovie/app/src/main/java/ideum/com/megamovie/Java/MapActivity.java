@@ -45,7 +45,7 @@ public class MapActivity extends AppCompatActivity
     /**
      *  Request code for location permissions
      */
-    private int REQUEST_LOCATION_PERMISSIONS = 1;
+    private int REQUEST_LOCATION_PERMISSIONS = 0;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -66,7 +66,7 @@ public class MapActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         // Request permission to access location
-        while (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSIONS);
@@ -93,6 +93,12 @@ public class MapActivity extends AppCompatActivity
                     .addApi(LocationServices.API)
                     .build();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cameraShouldMoveToCurrentLocation = true;
     }
 
     @Override

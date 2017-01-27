@@ -3,9 +3,7 @@ package ideum.com.megamovie.Java;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -21,22 +19,17 @@ import android.icu.text.SimpleDateFormat;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.AsyncTask;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
-import android.view.View;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,7 +39,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -60,7 +52,7 @@ public class CameraFragment extends android.app.Fragment
     /**
      * Request code for camera permissions
      */
-    private static final int REQUEST_CAMERA_PERMISSIONS = 1;
+    private static final int REQUEST_CAMERA_PERMISSIONS = 2;
 
     /**
      * Permissions required to take a picture.
@@ -213,23 +205,22 @@ public class CameraFragment extends android.app.Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        while (!hasAllPermissionsGranted()) {
-            requestCameraPermissions();
-        }
+
         setUpCamera();
-        openCamera();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         openBackgroundThread();
+        setUpCamera();
+        openCamera();
     }
 
     @Override
     public void onPause() {
-        closeBackgroundThread();
         closeCamera();
+        closeBackgroundThread();
         super.onPause();
     }
 
@@ -311,7 +302,10 @@ public class CameraFragment extends android.app.Fragment
     private void openCamera() {
 
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
-
+        if (!hasAllPermissionsGranted()) {
+            requestCameraPermissions();
+            return;
+        }
         try {
             try {
                 cameraManager.openCamera(mCameraID, mCameraDeviceStateCallback, mBackgroundHandler);

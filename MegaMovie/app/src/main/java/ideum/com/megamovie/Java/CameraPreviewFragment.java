@@ -172,8 +172,8 @@ public class CameraPreviewFragment extends android.app.Fragment
 
     @Override
     public void onPause() {
-        closeBackgroundThread();
         closeCamera();
+        closeBackgroundThread();
         super.onPause();
     }
 
@@ -233,8 +233,9 @@ public class CameraPreviewFragment extends android.app.Fragment
 
     private void openCamera() {
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
-        while (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions();
+            return;
         }
         try {
             try {
