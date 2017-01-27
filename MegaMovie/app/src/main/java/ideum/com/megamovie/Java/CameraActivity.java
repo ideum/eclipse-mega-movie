@@ -112,10 +112,7 @@ public class CameraActivity extends AppCompatActivity
                             "JPEG_" + currentDataTime + ".jpg");
                     File rawFile = new File(rawRootPath,
                             "RAW_" + currentDataTime + ".dng");
-//                    // Initiate media scan and put the new things into the path array
-//                    // to make the scanner aware of the new files
-//                    MediaScannerConnection.scanFile(CameraActivity, new String[] {jpegFile.toString(),rawFile.toString()},null,null);
-
+                    
                     ImageSaver.ImageSaverBuilder jpegBuilder;
                     ImageSaver.ImageSaverBuilder rawBuilder;
                     int requestId = (int) request.getTag();
