@@ -9,11 +9,17 @@ import android.view.View;
 
 import ideum.com.megamovie.R;
 
-public class CalibrationActivity extends AppCompatActivity {
+public class CalibrationActivity extends AppCompatActivity
+implements MyTimer.MyTimerListener{
     private TimerFragment mTimerFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private Location mCurrentLocation;
+    private MyTimer mTimer;
 
+    @Override
+    public void onTick() {
+        mTimerFragment.updateDisplay();
+    }
 
     public void loadCaptureActivity(View view) {
         startActivity(new Intent(this,CaptureActivity.class));
@@ -30,7 +36,22 @@ public class CalibrationActivity extends AppCompatActivity {
         mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
+            mTimerFragment.isPrecise = true;
             mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(0, 0));
         }
     }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        mTimer = new MyTimer(this);
+        mTimer.startTicking();
+    }
+
+    @Override
+    protected void onPause() {
+        mTimer.cancel();
+        super.onPause();
+    }
 }
+

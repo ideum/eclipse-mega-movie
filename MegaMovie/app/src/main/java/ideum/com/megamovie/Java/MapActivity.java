@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,23 +28,26 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.concurrent.TimeUnit;
+
 import ideum.com.megamovie.R;
 
 public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        LocationListener,
+        MyTimer.MyTimerListener {
 
     private boolean cameraShouldMoveToCurrentLocation = true;
     private TimerFragment mTimerFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private static final String TAG = "Main Activity";
-    private static final long INTERVAL = 1000*10;
-    private static final long FASTEST_INTERVAL = 1000*5;
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     /**
-     *  Request code for location permissions
+     * Request code for location permissions
      */
     private int REQUEST_LOCATION_PERMISSIONS = 0;
 
@@ -53,12 +57,14 @@ public class MapActivity extends AppCompatActivity
     private LatLng mPlannedLocation;
     private GoogleMap mGoogleMap;
 
+    private MyTimer mTimer;
+
     public void loadUserInfoActivity(View view) {
-        startActivity(new Intent(this,UserInfoActivity.class));
+        startActivity(new Intent(this, UserInfoActivity.class));
     }
 
     public void loadCalibrationActivity(View view) {
-        startActivity(new Intent(this,CalibrationActivity.class));
+        startActivity(new Intent(this, CalibrationActivity.class));
     }
 
     @Override
@@ -77,8 +83,14 @@ public class MapActivity extends AppCompatActivity
         mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
-            mTimerFragment.setTargetDateMills( mEclipseTimeCalculator.calculateEclipseTimeInMills(0, 0));
+            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(0, 0));
+
+
+
+
+//
         }
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -99,7 +111,25 @@ public class MapActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         cameraShouldMoveToCurrentLocation = true;
+        mTimer = new MyTimer(this);
+        mTimer.startTicking();
+
     }
+
+    @Override
+    protected void onPause() {
+        mTimer.cancel();
+        super.onPause();
+    }
+
+    @Override
+    public void onTick() {
+        mTimerFragment.updateDisplay();
+        if (mTimerFragment.millsToTargetDate() <= 0) {
+            startActivity(new Intent(this, CalibrationActivity.class));
+        }
+    }
+
 
     @Override
     protected void onStart() {
@@ -121,7 +151,7 @@ public class MapActivity extends AppCompatActivity
         mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng point) {
-              mPlannedLocation = point;
+                mPlannedLocation = point;
                 updateMarkers();
             }
         });
@@ -149,8 +179,7 @@ public class MapActivity extends AppCompatActivity
     protected void startLocationUpdates() {
         try {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-        catch (SecurityException e) {
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
     }
@@ -176,9 +205,9 @@ public class MapActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-        mCurrentLocation = new LatLng(latitude,longitude);
-        long targetDateMills = mEclipseTimeCalculator.calculateEclipseTimeInMills(latitude,longitude);
-        if (mTimerFragment !=null) {
+        mCurrentLocation = new LatLng(latitude, longitude);
+        long targetDateMills = mEclipseTimeCalculator.calculateEclipseTimeInMills(latitude, longitude);
+        if (mTimerFragment != null) {
             mTimerFragment.setTargetDateMills(targetDateMills);
         }
         updateMarkers();

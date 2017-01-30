@@ -17,8 +17,8 @@ public class CaptureActivity extends AppCompatActivity {
     private final static String TAG = "CaptureActivity";
     private static int TIMER_LENGTH = 300;
     private static int TIMER_INTERVAL = 100;
-    private static long SENSOR_EXPOSURE_TIME = 5 * 1000000;
-    private static int SENSOR_SENSITIVITY = 1000;
+    private static long SENSOR_EXPOSURE_TIME = 9516;//5 * 1000000;
+    private static int SENSOR_SENSITIVITY = 60;
     private static float LENS_FOCUS_DISTANCE = 0;
     private CameraFragment mCameraFragment;
 
