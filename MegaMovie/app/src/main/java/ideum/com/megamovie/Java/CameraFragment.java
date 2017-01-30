@@ -186,7 +186,7 @@ public class CameraFragment extends android.app.Fragment
 
                 }
             };
-
+    //TODO: if user denies request, keep asking them until they say yes.
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSIONS) {
@@ -325,9 +325,23 @@ public class CameraFragment extends android.app.Fragment
             e.printStackTrace();
         }
     }
-
     private void closeCamera() {
-
+        if (mCameraCaptureSession != null) {
+            mCameraCaptureSession.close();
+            mCameraCaptureSession = null;
+        }
+        if (mCameraDevice != null) {
+            mCameraDevice.close();
+            mCameraDevice = null;
+        }
+        if (mJpegImageReader != null) {
+            mJpegImageReader.close();
+            mJpegImageReader = null;
+        }
+        if (mRawImageReader != null) {
+            mRawImageReader.close();
+            mRawImageReader = null;
+        }
     }
 
     private void setUpCamera() {
