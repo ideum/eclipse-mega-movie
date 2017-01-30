@@ -3,9 +3,6 @@ package ideum.com.megamovie.Java;
 import android.icu.util.Calendar;
 import android.location.Location;
 
-/**
- * Created by MT_User on 1/25/2017.
- */
 
 public class EclipseTimeCalculator {
     private Calendar eclipse;
@@ -21,8 +18,6 @@ public class EclipseTimeCalculator {
     }
 
     public long calculateEclipseTimeInMills(double longitude,double latitude) {
-
-
         return eclipse.getTimeInMillis();
     }
 }

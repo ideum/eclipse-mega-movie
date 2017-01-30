@@ -3,6 +3,7 @@ package ideum.com.megamovie.Java;
 import android.Manifest;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.CountDownTimer;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.concurrent.TimeUnit;
+import java.util.prefs.Preferences;
 
 import ideum.com.megamovie.R;
 
@@ -78,19 +80,18 @@ public class MapActivity extends AppCompatActivity
                     REQUEST_LOCATION_PERMISSIONS);
         }
 
-        // Get the SupportMapFragment and request notification
-        // when the map is ready to be used.
+        SharedPreferences preferences = getPreferences(getApplicationContext().MODE_PRIVATE);
+        double lat = (double)preferences.getFloat("PLANNED_LATITUDE",0);
+        double lon = (double)preferences.getFloat("PLANNED_LONGITUDE",0);
+        mPlannedLocation = new LatLng(lat,lon);
+
         mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
             mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(0, 0));
-
-
-
-
-//
         }
-
+        // Get the SupportMapFragment and request notification
+        // when the map is ready to be used.
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -153,6 +154,11 @@ public class MapActivity extends AppCompatActivity
             public void onMapLongClick(LatLng point) {
                 mPlannedLocation = point;
                 updateMarkers();
+                SharedPreferences preferences = getPreferences(getApplicationContext().MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putFloat("PLANNED_LATITUDE",(float) point.latitude);
+                editor.putFloat("PLANNED_LONGITUDE",(float) point.longitude);
+                editor.commit();
             }
         });
 

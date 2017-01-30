@@ -3,24 +3,39 @@ package ideum.com.megamovie.Java;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
 import ideum.com.megamovie.R;
 
-public class CaptureActivity extends AppCompatActivity {
+public class CaptureActivity extends AppCompatActivity
+implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
     private final static String TAG = "CaptureActivity";
     private static int TIMER_LENGTH = 300;
     private static int TIMER_INTERVAL = 100;
-    private static long SENSOR_EXPOSURE_TIME = 9516;//5 * 1000000;
+    private static long SENSOR_EXPOSURE_TIME = 9516;
     private static int SENSOR_SENSITIVITY = 60;
     private static float LENS_FOCUS_DISTANCE = 0;
     private CameraFragment mCameraFragment;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private Location mLocation;
 
     public void loadCalibrationActivity(View view) {
         startActivity(new Intent(this,CalibrationActivity.class));
@@ -37,7 +52,15 @@ public class CaptureActivity extends AppCompatActivity {
 
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mCameraFragment).commit();
-        Log.e(TAG,"Fragment added");
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+        createLocationRequest();
     }
 
     public void startCaptureSequence(View view) {
@@ -56,5 +79,55 @@ public class CaptureActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "done!", Toast.LENGTH_SHORT).show();
             }
         }.start();
+    }
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        startLocationUpdates();
+    }
+
+    protected void startLocationUpdates() {
+        try {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLocation = location;
+        mCameraFragment.setLocation(mLocation);
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
     }
 }

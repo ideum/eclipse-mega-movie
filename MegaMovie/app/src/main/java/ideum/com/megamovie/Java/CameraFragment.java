@@ -16,6 +16,7 @@ import android.hardware.camera2.DngCreator;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.icu.text.SimpleDateFormat;
+import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.AsyncTask;
@@ -74,6 +75,11 @@ public class CameraFragment extends android.app.Fragment
 
     private int getOrientation(int rotation) {
         return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
+    }
+
+    private Location mLocation;
+    public void setLocation(Location location) {
+        mLocation = location;
     }
 
     private CameraManager mCameraManager;
@@ -241,6 +247,9 @@ public class CameraFragment extends android.app.Fragment
             captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, sensitivity);
             captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, duration);
             captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE,focusDistance);
+            if (mLocation != null) {
+                captureRequestBuilder.set(CaptureRequest.JPEG_GPS_LOCATION,mLocation);
+            }
             captureRequestBuilder.setTag(mRequestCounter.getAndIncrement());
 
             CaptureRequest request = captureRequestBuilder.build();
