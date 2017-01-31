@@ -1,21 +1,16 @@
 package ideum.com.megamovie.Java;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,9 +23,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.concurrent.TimeUnit;
-import java.util.prefs.Preferences;
 
 import ideum.com.megamovie.R;
 
@@ -88,7 +80,7 @@ public class MapActivity extends AppCompatActivity
         mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(0, 0));
+            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseFirstContact(0, 0));
         }
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
@@ -212,7 +204,7 @@ public class MapActivity extends AppCompatActivity
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         mCurrentLocation = new LatLng(latitude, longitude);
-        long targetDateMills = mEclipseTimeCalculator.calculateEclipseTimeInMills(latitude, longitude);
+        long targetDateMills = mEclipseTimeCalculator.eclipseFirstContact(latitude, longitude);
         if (mTimerFragment != null) {
             mTimerFragment.setTargetDateMills(targetDateMills);
         }

@@ -1,7 +1,6 @@
 package ideum.com.megamovie.Java;
 
 import android.content.Intent;
-import android.icu.lang.UCharacterEnums;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,7 +36,7 @@ implements MyTimer.MyTimerListener{
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
             mTimerFragment.isPrecise = true;
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.calculateEclipseTimeInMills(0, 0));
+            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseFirstContact(0, 0));
         }
     }
 

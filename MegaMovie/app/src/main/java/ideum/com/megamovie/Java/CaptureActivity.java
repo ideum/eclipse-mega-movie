@@ -78,7 +78,7 @@ implements GoogleApiClient.ConnectionCallbacks,
         CaptureSequence.CaptureInterval captureInterval = new CaptureSequence.CaptureInterval(s, startTime, 10000, 2000);
         CaptureSequence sequence = new CaptureSequence(Arrays.asList(captureInterval));
         CaptureSequenceTimer cst = new CaptureSequenceTimer(mCameraFragment, sequence);
-        cst.startTimer();
+//        cst.startTimer();
     }
 
     private long getTime() {

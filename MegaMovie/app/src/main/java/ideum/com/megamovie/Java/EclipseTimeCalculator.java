@@ -1,7 +1,9 @@
 package ideum.com.megamovie.Java;
 
-import android.icu.util.Calendar;
+
 import android.location.Location;
+
+import java.util.Calendar;
 
 
 public class EclipseTimeCalculator {
@@ -17,7 +19,16 @@ public class EclipseTimeCalculator {
 
     }
 
-    public long calculateEclipseTimeInMills(double longitude,double latitude) {
+    public long eclipseFirstContact(double longitude, double latitude) {
         return eclipse.getTimeInMillis();
+    }
+    public long eclipseSecondContact(double longitude, double latitude) {
+        return eclipse.getTimeInMillis()+3000;
+    }
+    public long eclipseThirdContact(double longitude, double latitude) {
+        return eclipse.getTimeInMillis()+6000;
+    }
+    public long eclipseFourthContact(double longitude, double latitude) {
+        return eclipse.getTimeInMillis()+9000;
     }
 }

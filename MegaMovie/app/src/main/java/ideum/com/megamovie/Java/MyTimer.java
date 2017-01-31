@@ -27,7 +27,6 @@ public class MyTimer {
 
                 public void onTick(long millisUntilFinished) {
                     mListener.onTick();
-                    Log.e("MyTimer","Beep");
                 }
 
                 public void onFinish() {
