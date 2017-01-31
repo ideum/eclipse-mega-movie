@@ -15,7 +15,7 @@ import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.DngCreator;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
-import android.icu.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
 import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
@@ -228,6 +228,10 @@ public class CameraFragment extends android.app.Fragment
         closeCamera();
         closeBackgroundThread();
         super.onPause();
+    }
+
+    public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
+        captureStillImage(settings.getExposureTime(),settings.getSensitivity(),settings.getFocusDistance());
     }
 
 

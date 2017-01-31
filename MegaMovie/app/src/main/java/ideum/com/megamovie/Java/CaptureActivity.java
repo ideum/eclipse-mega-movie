@@ -19,6 +19,13 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import ideum.com.megamovie.R;
 
 public class CaptureActivity extends AppCompatActivity
@@ -36,6 +43,8 @@ implements GoogleApiClient.ConnectionCallbacks,
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mLocation;
+
+    private Calendar mCalendar;
 
     public void loadCalibrationActivity(View view) {
         startActivity(new Intent(this,CalibrationActivity.class));
@@ -61,12 +70,25 @@ implements GoogleApiClient.ConnectionCallbacks,
                     .build();
         }
         createLocationRequest();
+        mCalendar = Calendar.getInstance();
+
+        CaptureSequence.CaptureSettings s = new CaptureSequence.CaptureSettings(5000000, 100, 0);
+        long startTime = getTime();
+
+        CaptureSequence.CaptureInterval captureInterval = new CaptureSequence.CaptureInterval(s, startTime, 10000, 2000);
+        CaptureSequence sequence = new CaptureSequence(Arrays.asList(captureInterval));
+        CaptureSequenceTimer cst = new CaptureSequenceTimer(mCameraFragment, sequence);
+        cst.startTimer();
     }
 
+    private long getTime() {
+        return Calendar.getInstance().getTimeInMillis();
+    }
+
+    private HashMap<Long,CaptureSequence.CaptureSettings> mTimedRequests;
     public void startCaptureSequence(View view) {
         startTimer();
     }
-
 
     public void startTimer() {
         new CountDownTimer(TIMER_LENGTH, TIMER_INTERVAL) {
