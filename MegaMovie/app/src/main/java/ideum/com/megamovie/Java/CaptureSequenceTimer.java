@@ -37,6 +37,7 @@ public class CaptureSequenceTimer {
                     if (time <= getTime()) {
                         CaptureSequence.CaptureSettings s = (CaptureSequence.CaptureSettings) pair.getValue();
                         mCameraFragment.takePhotoWithSettings(s);
+                        Log.e("CaptureSequenceTimer","photo taken!");
                         it.remove();
                     }
                 }

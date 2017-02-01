@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.CountDownTimer;
+import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,11 +35,11 @@ implements GoogleApiClient.ConnectionCallbacks,
         LocationListener {
 
     private final static String TAG = "CaptureActivity";
-    private static int TIMER_LENGTH = 300;
-    private static int TIMER_INTERVAL = 100;
-    private static long SENSOR_EXPOSURE_TIME = 9516;
-    private static int SENSOR_SENSITIVITY = 60;
-    private static float LENS_FOCUS_DISTANCE = 0;
+    private static int TIMER_LENGTH = 10000;
+    private static int TIMER_INTERVAL = 500;
+    private static long SENSOR_EXPOSURE_TIME = 500000;
+    private static int SENSOR_SENSITIVITY = 720;
+    private static float LENS_FOCUS_DISTANCE = 3.0f;
     private CameraFragment mCameraFragment;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -75,8 +76,9 @@ implements GoogleApiClient.ConnectionCallbacks,
         CaptureSequence.CaptureSettings s = new CaptureSequence.CaptureSettings(5000000, 100, 0);
         long startTime = getTime();
 
-        CaptureSequence.CaptureInterval captureInterval = new CaptureSequence.CaptureInterval(s, startTime, 10000, 2000);
-        CaptureSequence sequence = new CaptureSequence(Arrays.asList(captureInterval));
+        EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0,0));
+
+        CaptureSequence sequence =  builder.buildSequence();
         CaptureSequenceTimer cst = new CaptureSequenceTimer(mCameraFragment, sequence);
 //        cst.startTimer();
     }
@@ -95,6 +97,7 @@ implements GoogleApiClient.ConnectionCallbacks,
 
             public void onTick(long millisUntilFinished) {
                 mCameraFragment.takePhoto(SENSOR_EXPOSURE_TIME,SENSOR_SENSITIVITY,LENS_FOCUS_DISTANCE);
+                Log.e(TAG,"Tick");
             }
 
             public void onFinish() {

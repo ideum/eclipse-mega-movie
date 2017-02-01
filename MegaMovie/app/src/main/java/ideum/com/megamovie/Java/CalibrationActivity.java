@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import ideum.com.megamovie.R;
 
 public class CalibrationActivity extends AppCompatActivity
@@ -36,7 +38,7 @@ implements MyTimer.MyTimerListener{
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
             mTimerFragment.isPrecise = true;
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseFirstContact(0, 0));
+            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Contact.CONTACT1,new LatLng(0,0)));
         }
     }
 

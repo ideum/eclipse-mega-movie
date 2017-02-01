@@ -1,19 +1,15 @@
 package ideum.com.megamovie.Java;
 
-import android.content.Context;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.CountDownTimer;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
+
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import ideum.com.megamovie.R;

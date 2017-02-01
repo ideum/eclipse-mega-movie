@@ -386,7 +386,7 @@ public class CameraFragment extends android.app.Fragment
                             ImageReader.newInstance(mJpegImageSize.getWidth(),
                                     mJpegImageSize.getHeight(),
                                     ImageFormat.JPEG,
-                        /*max images */5));
+                        /*max images */50));
 
                 }
                 if (mRawImageReader == null || mRawImageReader.getAndRetain() == null) {
@@ -394,7 +394,7 @@ public class CameraFragment extends android.app.Fragment
                             ImageReader.newInstance(mRawImageSize.getWidth(),
                                     mRawImageSize.getHeight(),
                                     ImageFormat.RAW_SENSOR,
-                        /*max images */5));
+                        /*max images */50));
 
                 }
 
