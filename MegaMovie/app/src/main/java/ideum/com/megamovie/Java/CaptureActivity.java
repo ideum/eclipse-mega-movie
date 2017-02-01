@@ -35,11 +35,13 @@ implements GoogleApiClient.ConnectionCallbacks,
         LocationListener {
 
     private final static String TAG = "CaptureActivity";
-    private static int TIMER_LENGTH = 10000;
-    private static int TIMER_INTERVAL = 500;
-    private static long SENSOR_EXPOSURE_TIME = 500000;
+    private static int TIMER_LENGTH = 15000;
+    private static int TIMER_INTERVAL = 300;
+
+    private static long SENSOR_EXPOSURE_TIME = 5000000;
     private static int SENSOR_SENSITIVITY = 720;
     private static float LENS_FOCUS_DISTANCE = 3.0f;
+
     private CameraFragment mCameraFragment;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -101,6 +103,8 @@ implements GoogleApiClient.ConnectionCallbacks,
             }
 
             public void onFinish() {
+                mCameraFragment.takePhoto(SENSOR_EXPOSURE_TIME,SENSOR_SENSITIVITY,LENS_FOCUS_DISTANCE);
+                Log.e(TAG,"Tick");
                     Toast.makeText(getApplicationContext(), "done!", Toast.LENGTH_SHORT).show();
             }
         }.start();

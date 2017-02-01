@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,6 +48,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CameraFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
+
+    private static final boolean SHOULD_SAVE_JPEG = false;
 
     private static final String TAG = "Camera Activity";
 
@@ -126,10 +129,16 @@ public class CameraFragment extends android.app.Fragment
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
 
+                    Log.e(TAG,"sensitivity: " + String.valueOf(result.get(CaptureResult.SENSOR_SENSITIVITY)));
+                    Log.e(TAG,"duration: " + String.valueOf(result.get(CaptureResult.SENSOR_EXPOSURE_TIME)));
+                    Log.e(TAG,"focus: " + String.valueOf(result.get(CaptureResult.LENS_FOCUS_DISTANCE)));
+
                     int requestId = (int) request.getTag();
-                    ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
-                    if (jpegBuilder != null) {
-                        jpegBuilder.setResult(result);
+                    if (SHOULD_SAVE_JPEG) {
+                        ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+                        if (jpegBuilder != null) {
+                            jpegBuilder.setResult(result);
+                        }
                     }
                     ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
                     if (rawBuilder != null) {
@@ -243,25 +252,29 @@ public class CameraFragment extends android.app.Fragment
     private void captureStillImage(long duration, int sensitivity, float focusDistance ) {
         try {
             final CaptureRequest.Builder captureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
-            captureRequestBuilder.addTarget(mJpegImageReader.get().getSurface());
+            if (SHOULD_SAVE_JPEG) {
+                captureRequestBuilder.addTarget(mJpegImageReader.get().getSurface());
+            }
             captureRequestBuilder.addTarget(mRawImageReader.get().getSurface());
 
             int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
-            captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
+            if (SHOULD_SAVE_JPEG) {
+                captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
+            }
             captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, sensitivity);
             captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, duration);
             captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE,focusDistance);
-            if (mLocation != null) {
-                captureRequestBuilder.set(CaptureRequest.JPEG_GPS_LOCATION,mLocation);
-            }
+
             captureRequestBuilder.setTag(mRequestCounter.getAndIncrement());
 
             CaptureRequest request = captureRequestBuilder.build();
+            if(SHOULD_SAVE_JPEG) {
+                ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
+                mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
 
-            ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
+            }
             ImageSaver.ImageSaverBuilder rawBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
 
-            mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
             mRawResultQueue.put((int) request.getTag(), rawBuilder);
 
             mCameraCaptureSession.capture(request,
@@ -276,8 +289,11 @@ public class CameraFragment extends android.app.Fragment
 
     private void createCameraSession() {
         try {
-            mCameraDevice.createCaptureSession(Arrays.asList(mJpegImageReader.get().getSurface(),
-                    mRawImageReader.get().getSurface()),
+            List<Surface> surfaces = Arrays.asList(mRawImageReader.get().getSurface());
+            if (SHOULD_SAVE_JPEG) {
+                surfaces.add(mJpegImageReader.get().getSurface());
+            }
+            mCameraDevice.createCaptureSession(surfaces,
                     new CameraCaptureSession.StateCallback() {
                         @Override
                         public void onConfigured(CameraCaptureSession session) {
@@ -380,14 +396,15 @@ public class CameraFragment extends android.app.Fragment
                 );
 
 
+                if (SHOULD_SAVE_JPEG) {
+                    if (mJpegImageReader == null || mJpegImageReader.getAndRetain() == null) {
+                        mJpegImageReader = new RefCountedAutoCloseable<>(
+                                ImageReader.newInstance(mJpegImageSize.getWidth(),
+                                        mJpegImageSize.getHeight(),
+                                        ImageFormat.JPEG,
+                        /*max images */75));
 
-                if (mJpegImageReader == null || mJpegImageReader.getAndRetain() == null) {
-                    mJpegImageReader = new RefCountedAutoCloseable<>(
-                            ImageReader.newInstance(mJpegImageSize.getWidth(),
-                                    mJpegImageSize.getHeight(),
-                                    ImageFormat.JPEG,
-                        /*max images */50));
-
+                    }
                 }
                 if (mRawImageReader == null || mRawImageReader.getAndRetain() == null) {
                     mRawImageReader = new RefCountedAutoCloseable<>(
@@ -397,8 +414,9 @@ public class CameraFragment extends android.app.Fragment
                         /*max images */50));
 
                 }
-
-                mJpegImageReader.get().setOnImageAvailableListener(mOnJpegImageAvailableListener, mBackgroundHandler);
+                if (SHOULD_SAVE_JPEG) {
+                    mJpegImageReader.get().setOnImageAvailableListener(mOnJpegImageAvailableListener, mBackgroundHandler);
+                }
                 mRawImageReader.get().setOnImageAvailableListener(mOnRawImageAvailableListener,mBackgroundHandler);
                 mCameraID = cameraID;
                 mSensorOrientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
