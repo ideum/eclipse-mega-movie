@@ -241,6 +241,8 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
                     if (rawBuilder != null) {
                         rawBuilder.setResult(result);
+                        CaptureMetadataWriter writer = new CaptureMetadataWriter(result,rawBuilder.getFileName());
+                        Log.e(TAG,writer.getXMLString());
                     }
                 }
             };
@@ -712,6 +714,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
 
             public synchronized String getSaveLocation() {
                 return (mFile == null) ? "Unknown" : mFile.toString();
+            }
+            public synchronized String getFileName() {
+                return (mFile == null) ? "Unknown" : mFile.getName();
             }
 
             public boolean isComplete() {

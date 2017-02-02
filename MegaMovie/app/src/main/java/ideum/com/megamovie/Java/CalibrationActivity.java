@@ -38,7 +38,7 @@ implements MyTimer.MyTimerListener{
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
             mTimerFragment.isPrecise = true;
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Contact.CONTACT1,new LatLng(0,0)));
+            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,new LatLng(0,0)));
         }
     }
 

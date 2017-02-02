@@ -7,49 +7,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EclipseCaptureSequenceBuilder {
-    // These are set as constants for now, to be read from config file eventually
-    public static final long EXPOSURE_TIME = 5000000;
-    public static final int SENSITIVITY = 100;
-    public static final float FOCUS_DISTANCE = 0;
-    public static final long BB_DURATION = 300;
-    public static final int[] NUMBER_CAPTURES = {2,2,2,2,2};
 
     private LatLng mLocation;
+    private ConfigParser mConfig;
 
-    public EclipseCaptureSequenceBuilder(LatLng location) {
+    public EclipseCaptureSequenceBuilder(LatLng location,ConfigParser config) {
         mLocation = location;
+        mConfig = config;
     }
 
     public CaptureSequence buildSequence() {
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(EXPOSURE_TIME,SENSITIVITY,FOCUS_DISTANCE);
+        CaptureSequence.CaptureSettings settings = mConfig.getSettings();
+        int[] spacings = mConfig.getCaptureSpacing();
 
         EclipseTimeCalculator eclipseTimeCalculator = new EclipseTimeCalculator();
-        long contact1 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Contact.CONTACT1,mLocation);
-        long contact2 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Contact.CONTACT2,mLocation);
-        long contact3 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Contact.CONTACT3,mLocation);
-        long contact4 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Contact.CONTACT4,mLocation);
+        long contact1 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1, mLocation);
+        long contact2 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT2, mLocation);
+        long contact2_end = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT2_END, mLocation);
+        long contact3 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT3, mLocation);
+        long contact3_end = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT3_END, mLocation);
+        long contact4 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT4, mLocation);
 
         List<CaptureSequence.CaptureInterval> intervals = new ArrayList<>();
 
         long duration1 = contact2 - contact1;
-        long frequency1 = NUMBER_CAPTURES[0]/duration1;
-        intervals.add(new CaptureSequence.CaptureInterval(settings, contact1,duration1,frequency1));
+        intervals.add(new CaptureSequence.CaptureInterval(settings, contact1,duration1,spacings[0],"first partial"));
 
-        long duration2 = BB_DURATION;
-        long frequency2 = NUMBER_CAPTURES[1]/duration2;
-        intervals.add(new CaptureSequence.CaptureInterval(settings,contact2,duration2,frequency2));
+        long duration2 = contact2_end - contact2;
+        intervals.add(new CaptureSequence.CaptureInterval(settings,contact2,duration2,spacings[1],"second contact"));
 
-        long duration3 = contact3 - contact1 - BB_DURATION;
-        long frequency3 = NUMBER_CAPTURES[2]/duration3;
-        intervals.add(new CaptureSequence.CaptureInterval(settings,contact2+BB_DURATION,duration3,frequency3));
+        long duration3 = contact3 - contact2_end;
+        intervals.add(new CaptureSequence.CaptureInterval(settings,contact2_end,duration3,spacings[2],"annular"));
 
-        long duration4 = BB_DURATION;
-        long frequency4 = NUMBER_CAPTURES[3]/duration4;
-        intervals.add(new CaptureSequence.CaptureInterval(settings,contact3,duration4,frequency4));
+        long duration4 = contact3_end - contact3;
+        intervals.add(new CaptureSequence.CaptureInterval(settings,contact3,duration4,spacings[3],"third contact"));
 
-        long duration5 = contact4 - contact3 - BB_DURATION;
-        long frequency5 = NUMBER_CAPTURES[4]/duration5;
-        intervals.add(new CaptureSequence.CaptureInterval(settings,contact4 + BB_DURATION,duration5,frequency5));
+        long duration5 = contact4 - contact3_end;
+        intervals.add(new CaptureSequence.CaptureInterval(settings,contact3_end,duration5,spacings[4],"second partial"));
 
         return new CaptureSequence(intervals);
 

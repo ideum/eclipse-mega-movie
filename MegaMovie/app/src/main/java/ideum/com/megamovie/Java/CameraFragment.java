@@ -97,7 +97,8 @@ public class CameraFragment extends android.app.Fragment
                 public void onCaptureStarted(CameraCaptureSession session, CaptureRequest request, long timestamp, long frameNumber) {
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
 
-                    String currentDataTime = generateTimeStamp();
+                    String currentDateTime = generateTimeStamp();
+                    Log.e(TAG,currentDateTime);
 
                     File jpegRootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovie/JPEG");
                     if(!jpegRootPath.exists()) {
@@ -108,9 +109,9 @@ public class CameraFragment extends android.app.Fragment
                         rawRootPath.mkdirs();
                     }
                     File jpegFile = new File(jpegRootPath,
-                            "JPEG_" + currentDataTime + ".jpg");
+                            "JPEG_" + currentDateTime + ".jpg");
                     File rawFile = new File(rawRootPath,
-                            "RAW_" + currentDataTime + ".dng");
+                            "RAW_" + currentDateTime + ".dng");
 
                     ImageSaver.ImageSaverBuilder jpegBuilder;
                     ImageSaver.ImageSaverBuilder rawBuilder;
@@ -128,10 +129,6 @@ public class CameraFragment extends android.app.Fragment
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-
-                    Log.e(TAG,"sensitivity: " + String.valueOf(result.get(CaptureResult.SENSOR_SENSITIVITY)));
-                    Log.e(TAG,"duration: " + String.valueOf(result.get(CaptureResult.SENSOR_EXPOSURE_TIME)));
-                    Log.e(TAG,"focus: " + String.valueOf(result.get(CaptureResult.LENS_FOCUS_DISTANCE)));
 
                     int requestId = (int) request.getTag();
                     if (SHOULD_SAVE_JPEG) {
@@ -589,6 +586,10 @@ public class CameraFragment extends android.app.Fragment
 
             public synchronized String getSaveLocation() {
                 return (mFile == null) ? "Unknown" : mFile.toString();
+            }
+
+            public synchronized String getFileName() {
+                return (mFile == null) ? "Unknown" : mFile.getName();
             }
 
             public boolean isComplete() {

@@ -10,25 +10,36 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConfigParser {
-    private XmlResourceParser parser;
+    private Map<String,String> configMap;
 
     public ConfigParser(XmlResourceParser parser) {
-        this.parser = parser;
+
+        configMap = parseMap(parser);
     }
-    public CaptureSequence.CaptureSettings parseCaptureSettings() {
-        Map<String,String> map = parseMap();
-        int sensitivity = Integer.parseInt(map.get("SENSOR_SENSITIVITY"));
-        long duration = Long.parseLong(map.get("SENSOR_EXPOSURE_TIME"));
-        float focus = Float.parseFloat(map.get("LENS_FOCUS_DISTANCE"));
+
+    public CaptureSequence.CaptureSettings getSettings() {
+        int sensitivity = Integer.parseInt(configMap.get("SENSOR_SENSITIVITY"));
+        long duration = Long.parseLong(configMap.get("SENSOR_EXPOSURE_TIME"));
+        float focus = Float.parseFloat(configMap.get("LENS_FOCUS_DISTANCE"));
 
         return new CaptureSequence.CaptureSettings(duration,sensitivity,focus);
     }
+    public int[] getCaptureSpacing() {
+        int num1 = Integer.parseInt(configMap.get("CAPTURE_SPACING_1"));
+        int num2 = Integer.parseInt(configMap.get("CAPTURE_SPACING_2"));
+        int num3 = Integer.parseInt(configMap.get("CAPTURE_SPACING_3"));
+        int num4 = Integer.parseInt(configMap.get("CAPTURE_SPACING_4"));
+        int num5 = Integer.parseInt(configMap.get("CAPTURE_SPACING_5"));
+
+        return new int[]{num1, num2, num3, num4, num5};
+    }
 
 
-    public Map<String,String> parseMap() {
+    public Map<String,String> parseMap(XmlResourceParser parser) {
         Map<String, String> map = new HashMap<>();
         String key = null, value = null;
         try {

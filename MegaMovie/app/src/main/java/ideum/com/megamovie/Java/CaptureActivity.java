@@ -1,13 +1,16 @@
 
 package ideum.com.megamovie.Java;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.location.Location;
 import android.os.CountDownTimer;
-import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,61 +24,57 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import ideum.com.megamovie.R;
 
 public class CaptureActivity extends AppCompatActivity
 implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        MyTimer.MyTimerListener{
 
     private final static String TAG = "CaptureActivity";
     private static int TIMER_LENGTH = 300;
     private static int TIMER_INTERVAL = 300;
 
-    private static long SENSOR_EXPOSURE_TIME = 5000000;
-    private static int SENSOR_SENSITIVITY = 720;
-    private static float LENS_FOCUS_DISTANCE = 3.0f;
-
     private long mSensorExposureTime;
     private int mSensorSensitivity;
     private float mLensFocusDistance;
 
+    private int REQUEST_LOCATION_PERMISSIONS = 0;
+
+
     private CameraFragment mCameraFragment;
+    private TimerFragment mTimerFragment;
+    private MyTimer mTimer;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mLocation;
 
     private Calendar mCalendar;
 
-    public void loadCalibrationActivity(View view) {
-        startActivity(new Intent(this,CalibrationActivity.class));
-    }
-    public void loadResultsActivity(View view) {
-        startActivity(new Intent(this,ResultsActivity.class));
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
 
-        Resources res = getResources();
-        ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
-        CaptureSequence.CaptureSettings settings = parser.parseCaptureSettings();
-        mSensorExposureTime = settings.getExposureTime();
-        mSensorSensitivity = settings.getSensitivity();
-        mLensFocusDistance = settings.getFocusDistance();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSIONS);
+        }
 
-
+        mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        EclipseTimeCalculator eclipseTimeCalculator = new EclipseTimeCalculator();
+        if (mTimerFragment != null) {
+            mTimerFragment.isPrecise = true;
+            mTimerFragment.setTargetDateMills(eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,new LatLng(0,0)));
+        }
         mCameraFragment = new CameraFragment();
-
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mCameraFragment).commit();
 
@@ -87,41 +86,42 @@ implements GoogleApiClient.ConnectionCallbacks,
                     .build();
         }
         createLocationRequest();
-        mCalendar = Calendar.getInstance();
 
-        CaptureSequence.CaptureSettings s = new CaptureSequence.CaptureSettings(5000000, 100, 0);
-        long startTime = getTime();
-
-        EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0,0));
-
-        CaptureSequence sequence =  builder.buildSequence();
-        CaptureSequenceTimer cst = new CaptureSequenceTimer(mCameraFragment, sequence);
-//        cst.startTimer();
+        Resources res = getResources();
+        ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
+        EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0,0),parser);
+        CaptureSequence sequence = builder.buildSequence();
+        CaptureSequenceTimer session = new CaptureSequenceTimer(mCameraFragment,sequence);
+        session.startTimer();
     }
 
-    private long getTime() {
-        return Calendar.getInstance().getTimeInMillis();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTimer = new MyTimer(this);
+        mTimer.startTicking();
     }
 
-    private HashMap<Long,CaptureSequence.CaptureSettings> mTimedRequests;
+    @Override
+    protected void onPause() {
+        mTimer.cancel();
+        super.onPause();
+    }
+
+    @Override
+    public void onTick() {
+        mTimerFragment.updateDisplay();
+    }
+
+    public void loadCalibrationActivity(View view) {
+        startActivity(new Intent(this,CalibrationActivity.class));
+    }
+    public void loadResultsActivity(View view) {
+        startActivity(new Intent(this,ResultsActivity.class));
+    }
+
     public void startCaptureSequence(View view) {
-        startTimer();
-    }
 
-    public void startTimer() {
-        new CountDownTimer(TIMER_LENGTH, TIMER_INTERVAL) {
-
-            public void onTick(long millisUntilFinished) {
-                mCameraFragment.takePhoto(mSensorExposureTime,mSensorSensitivity,mLensFocusDistance);
-                Log.e(TAG,"Tick");
-            }
-
-            public void onFinish() {
-                mCameraFragment.takePhoto(mSensorExposureTime,mSensorSensitivity,mLensFocusDistance);
-                Log.e(TAG,"Tick");
-                    Toast.makeText(getApplicationContext(), "done!", Toast.LENGTH_SHORT).show();
-            }
-        }.start();
     }
 
     @Override

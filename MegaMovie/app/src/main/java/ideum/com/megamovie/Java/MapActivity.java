@@ -80,7 +80,7 @@ public class MapActivity extends AppCompatActivity
         mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Contact.CONTACT1,new LatLng(0,0)));
+            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,new LatLng(0,0)));
         }
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
@@ -204,7 +204,7 @@ public class MapActivity extends AppCompatActivity
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         mCurrentLocation = new LatLng(latitude, longitude);
-        long targetDateMills = mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Contact.CONTACT1,mCurrentLocation);
+        long targetDateMills = mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,mCurrentLocation);
         if (mTimerFragment != null) {
             mTimerFragment.setTargetDateMills(targetDateMills);
         }

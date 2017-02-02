@@ -1,10 +1,8 @@
 package ideum.com.megamovie.Java;
 
-import android.hardware.camera2.CaptureRequest;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MT_User on 1/26/2017.
@@ -40,13 +38,15 @@ public class CaptureSequence {
         // length of capture interval in milliseconds
         private long mDuration;
         // frequency with which captures are taken
-        private long mFrequency;
+        private long spacing;
+        private String name;
 
-        public CaptureInterval(CaptureSettings settings,long startTime,long duration,long frequency) {
+        public CaptureInterval(CaptureSettings settings,long startTime,long duration,long spacing,String name) {
             mSettings = settings;
             mStartTime = startTime;
             mDuration = duration;
-            mFrequency = frequency;
+            this.spacing = spacing;
+            this.name = name;
         }
         public CaptureSettings getSettings() {
             return mSettings;
@@ -57,23 +57,26 @@ public class CaptureSequence {
         public long getDuration() {
             return mDuration;
         }
-        public long getFrequency() {
-            return mFrequency;
+        public double getFrequency() {
+            return spacing;
         }
+        public String getName() { return name; }
 
-        public HashMap<Long,CaptureSettings> getTimedRequests() {
+        public Map<Long,CaptureSettings> getTimedRequests() {
+
             HashMap<Long,CaptureSettings> map = new HashMap<>();
             long time = mStartTime;
-            while(time < mStartTime + mDuration) {
-                map.put(time,mSettings);
-                time = time + mFrequency;
+            if (spacing > 0) {
+                while (time < mStartTime + mDuration) {
+                    map.put(time, mSettings);
+                    time = time + spacing;
+                }
             }
             return map;
         }
-
     }
 
-    private List<CaptureInterval> mCaptureIntervals;
+    public List<CaptureInterval> mCaptureIntervals;
 
     public CaptureSequence(List<CaptureInterval> captureIntervals) {
         mCaptureIntervals = captureIntervals;
@@ -89,6 +92,14 @@ public class CaptureSequence {
             totalDuration += interval.getDuration();
         }
         return totalDuration;
+    }
+
+    public Map<Long,CaptureSettings> getTimedRequests() {
+        Map<Long,CaptureSettings> timedRequests = new HashMap<>();
+        for (CaptureInterval interval : mCaptureIntervals) {
+            timedRequests.putAll(interval.getTimedRequests());
+        }
+        return timedRequests;
     }
 
 

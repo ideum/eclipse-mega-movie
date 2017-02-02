@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class CaptureSequenceTimer {
+    public static final String TAG = "CaptureSequenceTimer";
     private CaptureSequence mCaptureSequence;
     private CameraFragment mCameraFragment;
 
@@ -24,10 +25,9 @@ public class CaptureSequenceTimer {
     }
 
     public void startTimer() {
-        final Map<Long,CaptureSequence.CaptureSettings> timedRequests = new HashMap<Long,CaptureSequence.CaptureSettings>();
-        for (CaptureSequence.CaptureInterval interval : mCaptureSequence.getIntervals()) {
-            timedRequests.putAll(interval.getTimedRequests());
-        }
+        Log.e(TAG,"Starting capture sequence");
+        final Map<Long,CaptureSequence.CaptureSettings> timedRequests = mCaptureSequence.getTimedRequests();
+
         new CountDownTimer(mCaptureSequence.getTotalDuration(), 10) {
             public void onTick(long millisUntilFinished) {
                 Iterator it = timedRequests.entrySet().iterator();
@@ -37,12 +37,13 @@ public class CaptureSequenceTimer {
                     if (time <= getTime()) {
                         CaptureSequence.CaptureSettings s = (CaptureSequence.CaptureSettings) pair.getValue();
                         mCameraFragment.takePhotoWithSettings(s);
-                        Log.e("CaptureSequenceTimer","photo taken!");
+                        Log.e(TAG,"photo taken!");
                         it.remove();
                     }
                 }
             }
             public void onFinish() {
+                Log.e(TAG,"Capture sequence completed!");
             }
         }.start();
 
