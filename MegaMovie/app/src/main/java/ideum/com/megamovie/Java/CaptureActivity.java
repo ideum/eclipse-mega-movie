@@ -3,6 +3,7 @@ package ideum.com.megamovie.Java;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.CountDownTimer;
 import android.support.annotation.FloatRange;
@@ -35,12 +36,16 @@ implements GoogleApiClient.ConnectionCallbacks,
         LocationListener {
 
     private final static String TAG = "CaptureActivity";
-    private static int TIMER_LENGTH = 15000;
+    private static int TIMER_LENGTH = 300;
     private static int TIMER_INTERVAL = 300;
 
     private static long SENSOR_EXPOSURE_TIME = 5000000;
     private static int SENSOR_SENSITIVITY = 720;
     private static float LENS_FOCUS_DISTANCE = 3.0f;
+
+    private long mSensorExposureTime;
+    private int mSensorSensitivity;
+    private float mLensFocusDistance;
 
     private CameraFragment mCameraFragment;
     private GoogleApiClient mGoogleApiClient;
@@ -60,6 +65,15 @@ implements GoogleApiClient.ConnectionCallbacks,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
+
+        Resources res = getResources();
+        ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
+        CaptureSequence.CaptureSettings settings = parser.parseCaptureSettings();
+        mSensorExposureTime = settings.getExposureTime();
+        mSensorSensitivity = settings.getSensitivity();
+        mLensFocusDistance = settings.getFocusDistance();
+
+
         mCameraFragment = new CameraFragment();
 
         getFragmentManager().beginTransaction().add(
@@ -98,12 +112,12 @@ implements GoogleApiClient.ConnectionCallbacks,
         new CountDownTimer(TIMER_LENGTH, TIMER_INTERVAL) {
 
             public void onTick(long millisUntilFinished) {
-                mCameraFragment.takePhoto(SENSOR_EXPOSURE_TIME,SENSOR_SENSITIVITY,LENS_FOCUS_DISTANCE);
+                mCameraFragment.takePhoto(mSensorExposureTime,mSensorSensitivity,mLensFocusDistance);
                 Log.e(TAG,"Tick");
             }
 
             public void onFinish() {
-                mCameraFragment.takePhoto(SENSOR_EXPOSURE_TIME,SENSOR_SENSITIVITY,LENS_FOCUS_DISTANCE);
+                mCameraFragment.takePhoto(mSensorExposureTime,mSensorSensitivity,mLensFocusDistance);
                 Log.e(TAG,"Tick");
                     Toast.makeText(getApplicationContext(), "done!", Toast.LENGTH_SHORT).show();
             }
