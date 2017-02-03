@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
+import android.graphics.Rect;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -36,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,7 +51,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CameraFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
 
-    private static final boolean SHOULD_SAVE_JPEG = false;
+    private static final boolean SHOULD_SAVE_JPEG = true;
+    private static final boolean SHOULD_SAVE_RAW = false;
 
     private static final String TAG = "Camera Activity";
 
@@ -137,9 +140,11 @@ public class CameraFragment extends android.app.Fragment
                             jpegBuilder.setResult(result);
                         }
                     }
-                    ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
-                    if (rawBuilder != null) {
-                        rawBuilder.setResult(result);
+                    if (SHOULD_SAVE_RAW) {
+                        ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
+                        if (rawBuilder != null) {
+                            rawBuilder.setResult(result);
+                        }
                     }
                 }
             };
@@ -252,8 +257,9 @@ public class CameraFragment extends android.app.Fragment
             if (SHOULD_SAVE_JPEG) {
                 captureRequestBuilder.addTarget(mJpegImageReader.get().getSurface());
             }
-            captureRequestBuilder.addTarget(mRawImageReader.get().getSurface());
-
+            if (SHOULD_SAVE_RAW) {
+                captureRequestBuilder.addTarget(mRawImageReader.get().getSurface());
+            }
             int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
             if (SHOULD_SAVE_JPEG) {
                 captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
@@ -270,10 +276,10 @@ public class CameraFragment extends android.app.Fragment
                 mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
 
             }
-            ImageSaver.ImageSaverBuilder rawBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
-
-            mRawResultQueue.put((int) request.getTag(), rawBuilder);
-
+            if (SHOULD_SAVE_RAW) {
+                ImageSaver.ImageSaverBuilder rawBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
+                mRawResultQueue.put((int) request.getTag(), rawBuilder);
+            }
             mCameraCaptureSession.capture(request,
                     mCaptureSessionCallback,
                     mBackgroundHandler);
@@ -286,9 +292,12 @@ public class CameraFragment extends android.app.Fragment
 
     private void createCameraSession() {
         try {
-            List<Surface> surfaces = Arrays.asList(mRawImageReader.get().getSurface());
+            List<Surface> surfaces = new ArrayList<>();
             if (SHOULD_SAVE_JPEG) {
                 surfaces.add(mJpegImageReader.get().getSurface());
+            }
+            if (SHOULD_SAVE_RAW){
+                Arrays.asList(mRawImageReader.get().getSurface());
             }
             mCameraDevice.createCaptureSession(surfaces,
                     new CameraCaptureSession.StateCallback() {
@@ -399,22 +408,25 @@ public class CameraFragment extends android.app.Fragment
                                 ImageReader.newInstance(mJpegImageSize.getWidth(),
                                         mJpegImageSize.getHeight(),
                                         ImageFormat.JPEG,
-                        /*max images */75));
+                        /*max images */50));
 
                     }
                 }
-                if (mRawImageReader == null || mRawImageReader.getAndRetain() == null) {
-                    mRawImageReader = new RefCountedAutoCloseable<>(
-                            ImageReader.newInstance(mRawImageSize.getWidth(),
-                                    mRawImageSize.getHeight(),
-                                    ImageFormat.RAW_SENSOR,
+                if(SHOULD_SAVE_RAW) {
+                    if (mRawImageReader == null || mRawImageReader.getAndRetain() == null) {
+                        mRawImageReader = new RefCountedAutoCloseable<>(
+                                ImageReader.newInstance(mRawImageSize.getWidth(),
+                                        mRawImageSize.getHeight(),
+                                        ImageFormat.RAW_SENSOR,
                         /*max images */50));
-
+                    }
                 }
                 if (SHOULD_SAVE_JPEG) {
                     mJpegImageReader.get().setOnImageAvailableListener(mOnJpegImageAvailableListener, mBackgroundHandler);
                 }
-                mRawImageReader.get().setOnImageAvailableListener(mOnRawImageAvailableListener,mBackgroundHandler);
+                if (SHOULD_SAVE_RAW) {
+                    mRawImageReader.get().setOnImageAvailableListener(mOnRawImageAvailableListener, mBackgroundHandler);
+                }
                 mCameraID = cameraID;
                 mSensorOrientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
             }
@@ -474,7 +486,8 @@ public class CameraFragment extends android.app.Fragment
         ImageSaver saver = builder.buildIfComplete();
         if (saver != null) {
             queue.remove(requestId);
-            AsyncTask.THREAD_POOL_EXECUTOR.execute(saver);
+//            AsyncTask.THREAD_POOL_EXECUTOR.execute(saver);
+            new Thread(saver).start();
         }
     }
 
@@ -499,6 +512,7 @@ public class CameraFragment extends android.app.Fragment
         public void run() {
 
             int format = mImage.getFormat();
+//            mImage.setCropRect(new Rect(0,0,-100,100));
             switch (format) {
                 case ImageFormat.JPEG: {
                     ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
@@ -523,6 +537,8 @@ public class CameraFragment extends android.app.Fragment
                     FileOutputStream output = null;
                     try {
                         output = new FileOutputStream(mFile);
+//                        ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+//                        dngCreator.writeByteBuffer(output,new Size(4080,3028), buffer,0);
                         dngCreator.writeImage(output, mImage);
 
                     } catch (IOException e) {

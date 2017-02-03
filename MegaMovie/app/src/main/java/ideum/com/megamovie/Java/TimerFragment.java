@@ -70,8 +70,8 @@ public class TimerFragment extends Fragment {
 
         return result;
     }
-    // Creates string representing time in mills in hours, minutes, seconds, and hundredths of seconds.
-    private String millstoHMSH(long mills) {
+    // Creates string representing time in mills in hours, minutes, seconds
+    private String millstoHMS(long mills) {
         long days = TimeUnit.MILLISECONDS.toDays(mills);
         mills -= TimeUnit.DAYS.toMillis(days);
 
@@ -80,14 +80,13 @@ public class TimerFragment extends Fragment {
         long minutes = TimeUnit.MILLISECONDS.toMinutes(mills);
         mills = mills - TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(mills);
-        mills = mills - TimeUnit.SECONDS.toMillis(seconds);
-        long hundredths = (long)(int)mills/10;
+
 
         String result = "";
         result += String.format("%02d", hours);
         result += ":" + String.format("%02d", minutes);
         result += ":" + String.format("%02d", seconds);
-        result += ":" + String.format("%02d", hundredths);
+//        result += ":" + String.format("%02d", hundredths);
 
         return result;
     }
@@ -98,6 +97,6 @@ public class TimerFragment extends Fragment {
     }
 
     private String hmshCountdownString() {
-        return millstoHMSH(millsToTargetDate());
+        return millstoHMS(millsToTargetDate());
     }
 }

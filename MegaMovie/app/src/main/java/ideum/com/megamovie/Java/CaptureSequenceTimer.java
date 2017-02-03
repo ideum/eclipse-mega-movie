@@ -27,8 +27,8 @@ public class CaptureSequenceTimer {
     public void startTimer() {
         Log.e(TAG,"Starting capture sequence");
         final Map<Long,CaptureSequence.CaptureSettings> timedRequests = mCaptureSequence.getTimedRequests();
-
-        new CountDownTimer(mCaptureSequence.getTotalDuration(), 10) {
+        Log.e(TAG, String.valueOf(timedRequests.keySet().size()));
+        new CountDownTimer(1000000, 10) {
             public void onTick(long millisUntilFinished) {
                 Iterator it = timedRequests.entrySet().iterator();
                 while (it.hasNext()) {
@@ -37,7 +37,6 @@ public class CaptureSequenceTimer {
                     if (time <= getTime()) {
                         CaptureSequence.CaptureSettings s = (CaptureSequence.CaptureSettings) pair.getValue();
                         mCameraFragment.takePhotoWithSettings(s);
-                        Log.e(TAG,"photo taken!");
                         it.remove();
                     }
                 }
