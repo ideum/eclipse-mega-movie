@@ -39,6 +39,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -46,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CameraFragment extends android.app.Fragment
@@ -83,9 +85,9 @@ public class CameraFragment extends android.app.Fragment
         return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
     }
 
-    private Location mLocation;
-    public void setLocation(Location location) {
-        mLocation = location;
+    private LocationProvider mLocationProvider;
+    public void setLocationProvider(LocationProvider locationProvider) {
+        mLocationProvider = locationProvider;
     }
 
     private CameraManager mCameraManager;
@@ -101,7 +103,7 @@ public class CameraFragment extends android.app.Fragment
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
 
                     String currentDateTime = generateTimeStamp();
-                    Log.e(TAG,currentDateTime);
+//                    Log.e(TAG,currentDateTime);
 
                     File jpegRootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovie/JPEG");
                     if(!jpegRootPath.exists()) {
@@ -297,7 +299,7 @@ public class CameraFragment extends android.app.Fragment
                 surfaces.add(mJpegImageReader.get().getSurface());
             }
             if (SHOULD_SAVE_RAW){
-                Arrays.asList(mRawImageReader.get().getSurface());
+                surfaces.add(mRawImageReader.get().getSurface());
             }
             mCameraDevice.createCaptureSession(surfaces,
                     new CameraCaptureSession.StateCallback() {
@@ -624,9 +626,29 @@ public class CameraFragment extends android.app.Fragment
             }
         }
     }
-    private static String generateTimeStamp() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
-        return sdf.format(new Date());
+    private  String generateTimeStamp() {
+        long mills = mLocationProvider.getLocation().getTime();
+        long days = TimeUnit.MILLISECONDS.toDays(mills);
+        mills -= TimeUnit.DAYS.toMillis(days);
+
+
+
+        long hours = TimeUnit.MILLISECONDS.toHours(mills);
+        mills = mills - TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(mills);
+        mills = mills - TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(mills);
+        mills = mills - TimeUnit.SECONDS.toMillis(seconds);
+
+        String result = "";
+        result += String.format("%02d", hours);
+        result += "_" + String.format("%02d", minutes);
+        result += "_" + String.format("%02d", seconds);
+        result += "_" + String.valueOf(mills);
+        return result;
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
+//        return sdf.format(new Date());
     }
     /**
      * A wrapper for an {@link AutoCloseable} object that implements reference counting to allow

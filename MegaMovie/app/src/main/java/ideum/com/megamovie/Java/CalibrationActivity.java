@@ -11,34 +11,35 @@ import com.google.android.gms.maps.model.LatLng;
 import ideum.com.megamovie.R;
 
 public class CalibrationActivity extends AppCompatActivity
-implements MyTimer.MyTimerListener{
-    private TimerFragment mTimerFragment;
+implements MyTimer.MyTimerListener,
+LocationProvider{
+    private CountdownFragment mTimerFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private Location mCurrentLocation;
     private MyTimer mTimer;
+
+    @Override
+    public Location getLocation() {
+        return mCurrentLocation;
+    }
 
     @Override
     public void onTick() {
         mTimerFragment.updateDisplay();
     }
 
-    public void loadCaptureActivity(View view) {
-        startActivity(new Intent(this,CaptureActivity.class));
-    }
-    public void loadMapActivity(View view) {
-        startActivity(new Intent(this,MapActivity.class));
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calibration);
 
-        mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        mTimerFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
         if (mTimerFragment != null) {
             mTimerFragment.isPrecise = true;
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,new LatLng(0,0)));
+            mTimerFragment.setLocationProvider(this);
         }
     }
 
@@ -53,6 +54,13 @@ implements MyTimer.MyTimerListener{
     protected void onPause() {
         mTimer.cancel();
         super.onPause();
+    }
+
+    public void loadCaptureActivity(View view) {
+        startActivity(new Intent(this,CaptureActivity.class));
+    }
+    public void loadMapActivity(View view) {
+        startActivity(new Intent(this,MapActivity.class));
     }
 }
 

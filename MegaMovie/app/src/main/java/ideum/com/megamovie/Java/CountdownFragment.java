@@ -1,5 +1,6 @@
 package ideum.com.megamovie.Java;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.app.Fragment;
 
@@ -9,20 +10,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import java.util.Calendar;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.concurrent.TimeUnit;
 
 import ideum.com.megamovie.R;
 
 
 
-public class TimerFragment extends Fragment {
+public class CountdownFragment extends Fragment {
     // view for displaying countdown
     private TextView mTextView;
-    // The date we are counting down to.
-    private long targetDateMills;
+    private EclipseTimeCalculator mEclipseTimeCalculator;
     public boolean isPrecise = false;
+    private LocationProvider mLocationProvider;
 
+    public void setLocationProvider(LocationProvider locationProvider) {
+        mLocationProvider = locationProvider;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,22 +39,37 @@ public class TimerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mTextView = (TextView) view.findViewById(R.id.timer_text_view);
     }
-
-    public void setTargetDateMills(long mills) {
-        targetDateMills = mills;
+    public void setEclipseTimeCalculator(EclipseTimeCalculator etc) {
+        mEclipseTimeCalculator = etc;
     }
+
+
+//    public void setTargetDateMills(long mills) {
+//        targetDateMills = mills;
+//    }
 
     public void updateDisplay() {
         if (isPrecise) {
-            mTextView.setText(hmshCountdownString());
+            mTextView.setText(hmsCountdownString());
         } else {
             mTextView.setText(dhmsCountdownString());
         }
     }
 
-    public long millsToTargetDate() {
-        Calendar rightNow = Calendar.getInstance();
-        return targetDateMills - rightNow.getTimeInMillis();
+    public Long millsToTargetDate() {
+        if ( mEclipseTimeCalculator == null || mLocationProvider == null) {
+            return null;
+        }
+
+        Location currentLocation = mLocationProvider.getLocation();
+        if (currentLocation == null) {
+            return null;
+        }
+        Long rightNow = currentLocation.getTime();
+
+
+        LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+        return mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,latLng) - rightNow;
     }
 
     // Creates string representing time in mills in days, hours, minutes and seconds
@@ -92,11 +112,16 @@ public class TimerFragment extends Fragment {
     }
 
     private String dhmsCountdownString() {
-
+        if (millsToTargetDate() == null) {
+            return "Can't access GPS";
+        }
         return millsToDHMS(millsToTargetDate());
     }
 
-    private String hmshCountdownString() {
+    private String hmsCountdownString() {
+        if (millsToTargetDate() == null) {
+            return "Can't access GPS";
+        }
         return millstoHMS(millsToTargetDate());
     }
 }

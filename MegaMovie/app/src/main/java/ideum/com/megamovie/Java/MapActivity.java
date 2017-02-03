@@ -34,7 +34,7 @@ public class MapActivity extends AppCompatActivity
         MyTimer.MyTimerListener {
 
     private boolean cameraShouldMoveToCurrentLocation = true;
-    private TimerFragment mTimerFragment;
+    private CountdownFragment mTimerFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private static final String TAG = "Main Activity";
     private static final long INTERVAL = 1000 * 10;
@@ -77,11 +77,11 @@ public class MapActivity extends AppCompatActivity
         double lon = (double)preferences.getFloat("PLANNED_LONGITUDE",0);
         mPlannedLocation = new LatLng(lat,lon);
 
-        mTimerFragment = (TimerFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        mTimerFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
-        if (mTimerFragment != null) {
-            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,new LatLng(0,0)));
-        }
+//        if (mTimerFragment != null) {
+//            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,new LatLng(0,0)));
+//        }
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
 
@@ -205,9 +205,9 @@ public class MapActivity extends AppCompatActivity
         double longitude = location.getLongitude();
         mCurrentLocation = new LatLng(latitude, longitude);
         long targetDateMills = mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,mCurrentLocation);
-        if (mTimerFragment != null) {
-            mTimerFragment.setTargetDateMills(targetDateMills);
-        }
+//        if (mTimerFragment != null) {
+//            mTimerFragment.setTargetDateMills(targetDateMills);
+//        }
         updateMarkers();
         // We want camera to move to current position when it first finds gps coordinates
         // but not to move automatically after that
