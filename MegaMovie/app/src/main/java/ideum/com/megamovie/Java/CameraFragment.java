@@ -103,7 +103,7 @@ public class CameraFragment extends android.app.Fragment
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
 
                     String currentDateTime = generateTimeStamp();
-//                    Log.e(TAG,currentDateTime);
+                    Log.e(TAG,currentDateTime);
 
                     File jpegRootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovie/JPEG");
                     if(!jpegRootPath.exists()) {

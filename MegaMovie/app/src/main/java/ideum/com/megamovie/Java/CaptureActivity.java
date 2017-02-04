@@ -26,19 +26,15 @@ public class CaptureActivity extends AppCompatActivity
 implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
-        MyTimer.MyTimerListener,
         LocationProvider {
 
     private final static String TAG = "CaptureActivity";
     private int REQUEST_LOCATION_PERMISSIONS = 0;
 
     private CameraFragment mCameraFragment;
-    private CountdownFragment mCountdownFragment;
-    private MyTimer mTimer;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mLocation;
-    private EclipseTimeCalculator mEclipseTimeCalculator;
 
 
     @Override
@@ -62,45 +58,29 @@ implements GoogleApiClient.ConnectionCallbacks,
         }
         createLocationRequest();
 
-           /* Set up Camera Fragment */
+        /* Set up Camera Fragment */
         mCameraFragment = new CameraFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mCameraFragment).commit();
         mCameraFragment.setLocationProvider(this);
 
-
-        mEclipseTimeCalculator = new EclipseTimeCalculator();
-        mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
-        mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
-        mCountdownFragment.setLocationProvider(this);
-        mCountdownFragment.isPrecise = true;
-
-
-        /* Set up capture sequence timer */
+        /* Set up capture sequence session */
         Resources res = getResources();
         ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
         EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0,0),parser);
         CaptureSequence sequence = builder.buildSequence();
         CaptureSequenceSession session = new CaptureSequenceSession(mCameraFragment,sequence,this);
-        session.startTimer();
+        session.startSession();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mTimer = new MyTimer(this);
-//        mTimer.startTicking();
     }
 
     @Override
     protected void onPause() {
-        mTimer.cancel();
         super.onPause();
-    }
-
-    @Override
-    public void onTick() {
-        mCountdownFragment.updateDisplay();
     }
 
     @Override

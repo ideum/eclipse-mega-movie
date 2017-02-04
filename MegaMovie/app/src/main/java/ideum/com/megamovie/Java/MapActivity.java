@@ -31,10 +31,10 @@ public class MapActivity extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
-        MyTimer.MyTimerListener {
+        LocationProvider {
 
     private boolean cameraShouldMoveToCurrentLocation = true;
-    private CountdownFragment mTimerFragment;
+    private CountdownFragment mCountdownFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private static final String TAG = "Main Activity";
     private static final long INTERVAL = 1000 * 10;
@@ -51,7 +51,6 @@ public class MapActivity extends AppCompatActivity
     private LatLng mPlannedLocation;
     private GoogleMap mGoogleMap;
 
-    private MyTimer mTimer;
 
     public void loadUserInfoActivity(View view) {
         startActivity(new Intent(this, UserInfoActivity.class));
@@ -60,6 +59,19 @@ public class MapActivity extends AppCompatActivity
     public void loadCalibrationActivity(View view) {
         startActivity(new Intent(this, CalibrationActivity.class));
     }
+
+    @Override
+    public Location getLocation() {
+        Location lastLocation = null;
+        try {
+            lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        if (lastLocation == null) {
+            return null;
+        }
+        return lastLocation;    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,15 +85,17 @@ public class MapActivity extends AppCompatActivity
         }
 
         SharedPreferences preferences = getPreferences(getApplicationContext().MODE_PRIVATE);
-        double lat = (double)preferences.getFloat("PLANNED_LATITUDE",0);
-        double lon = (double)preferences.getFloat("PLANNED_LONGITUDE",0);
-        mPlannedLocation = new LatLng(lat,lon);
+        double lat = (double) preferences.getFloat("PLANNED_LATITUDE", 0);
+        double lon = (double) preferences.getFloat("PLANNED_LONGITUDE", 0);
+        mPlannedLocation = new LatLng(lat, lon);
 
-        mTimerFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         mEclipseTimeCalculator = new EclipseTimeCalculator();
-//        if (mTimerFragment != null) {
-//            mTimerFragment.setTargetDateMills(mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,new LatLng(0,0)));
-//        }
+        if (mCountdownFragment != null) {
+            mCountdownFragment.isPrecise = true;
+            mCountdownFragment.setLocationProvider(this);
+            mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
+        }
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
 
@@ -104,25 +118,13 @@ public class MapActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         cameraShouldMoveToCurrentLocation = true;
-        mTimer = new MyTimer(this);
-        mTimer.startTicking();
 
     }
 
     @Override
     protected void onPause() {
-        mTimer.cancel();
         super.onPause();
     }
-
-    @Override
-    public void onTick() {
-        mTimerFragment.updateDisplay();
-        if (mTimerFragment.millsToTargetDate() <= 0) {
-            startActivity(new Intent(this, CalibrationActivity.class));
-        }
-    }
-
 
     @Override
     protected void onStart() {
@@ -148,8 +150,8 @@ public class MapActivity extends AppCompatActivity
                 updateMarkers();
                 SharedPreferences preferences = getPreferences(getApplicationContext().MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putFloat("PLANNED_LATITUDE",(float) point.latitude);
-                editor.putFloat("PLANNED_LONGITUDE",(float) point.longitude);
+                editor.putFloat("PLANNED_LATITUDE", (float) point.latitude);
+                editor.putFloat("PLANNED_LONGITUDE", (float) point.longitude);
                 editor.commit();
             }
         });
@@ -204,9 +206,9 @@ public class MapActivity extends AppCompatActivity
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         mCurrentLocation = new LatLng(latitude, longitude);
-        long targetDateMills = mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,mCurrentLocation);
-//        if (mTimerFragment != null) {
-//            mTimerFragment.setTargetDateMills(targetDateMills);
+        long targetDateMills = mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1, mCurrentLocation);
+//        if (mCountdownFragment != null) {
+//            mCountdownFragment.setTargetDateMills(targetDateMills);
 //        }
         updateMarkers();
         // We want camera to move to current position when it first finds gps coordinates

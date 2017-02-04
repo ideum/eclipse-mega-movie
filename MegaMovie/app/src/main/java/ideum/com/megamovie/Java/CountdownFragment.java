@@ -18,16 +18,30 @@ import ideum.com.megamovie.R;
 
 
 
-public class CountdownFragment extends Fragment {
+public class CountdownFragment extends Fragment
+implements MyTimer.MyTimerListener{
     // view for displaying countdown
     private TextView mTextView;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     public boolean isPrecise = false;
     private LocationProvider mLocationProvider;
+    private MyTimer mTimer;
+
+    @Override
+    public void onTick() {
+        updateDisplay();
+    }
 
     public void setLocationProvider(LocationProvider locationProvider) {
         mLocationProvider = locationProvider;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mTimer = new MyTimer(this);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,7 +52,22 @@ public class CountdownFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mTextView = (TextView) view.findViewById(R.id.timer_text_view);
+
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mTimer.startTicking();
+
+    }
+
+    @Override
+    public void onPause() {
+        mTimer.startTicking();
+        super.onPause();
+    }
+
     public void setEclipseTimeCalculator(EclipseTimeCalculator etc) {
         mEclipseTimeCalculator = etc;
     }
