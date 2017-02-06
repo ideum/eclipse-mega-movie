@@ -98,7 +98,7 @@ implements MyTimer.MyTimerListener{
 
 
         LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        return mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1,latLng) - rightNow;
+        return mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1,latLng) - rightNow;
     }
 
     // Creates string representing time in mills in days, hours, minutes and seconds

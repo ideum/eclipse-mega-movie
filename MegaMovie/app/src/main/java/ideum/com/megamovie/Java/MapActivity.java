@@ -24,6 +24,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+
 import ideum.com.megamovie.R;
 
 public class MapActivity extends AppCompatActivity
@@ -77,6 +79,7 @@ public class MapActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
         // Request permission to access location
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -90,7 +93,14 @@ public class MapActivity extends AppCompatActivity
         mPlannedLocation = new LatLng(lat, lon);
 
         mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
-        mEclipseTimeCalculator = new EclipseTimeCalculator();
+        try {
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext());
+            mEclipseTimeCalculator.getEclipseTime(new LatLng(45,70));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         if (mCountdownFragment != null) {
             mCountdownFragment.isPrecise = true;
             mCountdownFragment.setLocationProvider(this);
@@ -155,7 +165,6 @@ public class MapActivity extends AppCompatActivity
                 editor.commit();
             }
         });
-
     }
 
     private void updateMarkers() {
@@ -193,7 +202,6 @@ public class MapActivity extends AppCompatActivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
@@ -206,10 +214,7 @@ public class MapActivity extends AppCompatActivity
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         mCurrentLocation = new LatLng(latitude, longitude);
-        long targetDateMills = mEclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1, mCurrentLocation);
-//        if (mCountdownFragment != null) {
-//            mCountdownFragment.setTargetDateMills(targetDateMills);
-//        }
+
         updateMarkers();
         // We want camera to move to current position when it first finds gps coordinates
         // but not to move automatically after that

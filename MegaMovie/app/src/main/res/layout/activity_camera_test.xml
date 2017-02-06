@@ -32,14 +32,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="-"
             android:onClick="decreaseSensitivity"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="+"
             android:onClick="increaseSensitivity"/>
 
@@ -61,14 +61,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="-"
             android:onClick="decreaseFocusDistance"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="+"
             android:onClick="increaseFocusDistance"/>
 
@@ -90,14 +90,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="-"
             android:onClick="decreaseDuration"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="+"
             android:onClick="increaseDuration"/>
 
@@ -119,7 +119,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:text="Capture"
             android:onClick="captureImage"/>
 

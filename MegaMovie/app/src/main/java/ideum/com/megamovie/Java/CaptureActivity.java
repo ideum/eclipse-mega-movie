@@ -20,6 +20,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
+
 import ideum.com.megamovie.R;
 
 public class CaptureActivity extends AppCompatActivity
@@ -67,10 +69,15 @@ implements GoogleApiClient.ConnectionCallbacks,
         /* Set up capture sequence session */
         Resources res = getResources();
         ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
-        EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0,0),parser);
-        CaptureSequence sequence = builder.buildSequence();
-        CaptureSequenceSession session = new CaptureSequenceSession(mCameraFragment,sequence,this);
-        session.startSession();
+        try {
+            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext());
+            EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0, 0), parser, calculator);
+            CaptureSequence sequence = builder.buildSequence();
+            CaptureSequenceSession session = new CaptureSequenceSession(mCameraFragment, sequence, this);
+            session.startSession();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

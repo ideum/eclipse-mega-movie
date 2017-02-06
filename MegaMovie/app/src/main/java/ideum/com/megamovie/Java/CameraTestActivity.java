@@ -1,9 +1,11 @@
 package ideum.com.megamovie.Java;
 
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ideum.com.megamovie.R;
 
@@ -60,6 +62,20 @@ public class CameraTestActivity extends AppCompatActivity {
 
 
     public void captureImage(View view) {
+        new CountDownTimer(4000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+        }
+
+            public void onFinish() {
+                takePhoto();
+            }
+        }.start();
+    }
+
+    private void takePhoto() {
+        Toast.makeText(getApplicationContext(),"Photo taken!",Toast.LENGTH_SHORT).show();
         mCameraFragment.captureStillImage();
     }
 }
+

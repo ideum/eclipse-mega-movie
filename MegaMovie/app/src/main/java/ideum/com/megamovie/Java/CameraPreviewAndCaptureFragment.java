@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,7 +71,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     }
 
     public void decrementDuration(long deltaDuration) {
-        mDuration -= deltaDuration;
+        if (mDuration > 0) {
+            mDuration -= deltaDuration;
+        }
         setPreviewRequest();
     }
 
@@ -79,8 +82,10 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         setPreviewRequest();
     }
     public void decrementFocusDistance(float deltaDistance) {
-        mFocusDistance -= deltaDistance;
-        setPreviewRequest();
+        if (mFocusDistance > 0) {
+            mFocusDistance -= deltaDistance;
+            setPreviewRequest();
+        }
     }
 
     public void incrementSensitivity(int deltaSensitivity) {
@@ -89,8 +94,10 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     }
 
     public void decrementSensitivity(int deltaSensitivity) {
-        mSensorSensitivity -= deltaSensitivity;
-        setPreviewRequest();
+        if (mSensorSensitivity > 60) {
+            mSensorSensitivity -= deltaSensitivity;
+            setPreviewRequest();
+        }
     }
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -233,6 +240,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
 
+
                     int requestId = (int) request.getTag();
                     ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
                     if (jpegBuilder != null) {
@@ -242,7 +250,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     if (rawBuilder != null) {
                         rawBuilder.setResult(result);
                         CaptureMetadataWriter writer = new CaptureMetadataWriter(result,rawBuilder.getFileName());
+
                         Log.e(TAG,writer.getXMLString());
+
                     }
                 }
             };

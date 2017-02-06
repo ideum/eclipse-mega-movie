@@ -17,6 +17,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.IOException;
+
 import ideum.com.megamovie.R;
 
 public class CalibrationActivity extends AppCompatActivity
@@ -40,7 +42,11 @@ public class CalibrationActivity extends AppCompatActivity
         setContentView(R.layout.activity_calibration);
 
         mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
-        mEclipseTimeCalculator = new EclipseTimeCalculator();
+        try {
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (mCountdownFragment != null) {
             mCountdownFragment.isPrecise = true;
             mCountdownFragment.setLocationProvider(this);

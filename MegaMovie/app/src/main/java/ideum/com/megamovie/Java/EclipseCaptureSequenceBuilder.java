@@ -10,23 +10,25 @@ public class EclipseCaptureSequenceBuilder {
 
     private LatLng mLocation;
     private ConfigParser mConfig;
+    private EclipseTimeCalculator mEclipseTimeCalculator;
 
-    public EclipseCaptureSequenceBuilder(LatLng location,ConfigParser config) {
+    public EclipseCaptureSequenceBuilder(LatLng location,ConfigParser config,EclipseTimeCalculator eclipseTimeCalculator) {
         mLocation = location;
         mConfig = config;
+        mEclipseTimeCalculator = eclipseTimeCalculator;
     }
 
     public CaptureSequence buildSequence() {
         CaptureSequence.CaptureSettings settings = mConfig.getSettings();
         int[] spacings = mConfig.getCaptureSpacing();
 
-        EclipseTimeCalculator eclipseTimeCalculator = new EclipseTimeCalculator();
-        long contact1 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT1, mLocation);
-        long contact2 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT2, mLocation);
-        long contact2_end = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT2_END, mLocation);
-        long contact3 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT3, mLocation);
-        long contact3_end = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT3_END, mLocation);
-        long contact4 = eclipseTimeCalculator.eclipseTime(EclipseTimeCalculator.Event.CONTACT4, mLocation);
+
+        long contact1 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1, mLocation);
+        long contact2 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT2, mLocation);
+        long contact2_end = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT2_END, mLocation);
+        long contact3 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT3, mLocation);
+        long contact3_end = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT3_END, mLocation);
+        long contact4 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT4, mLocation);
 
         List<CaptureSequence.CaptureInterval> intervals = new ArrayList<>();
 
