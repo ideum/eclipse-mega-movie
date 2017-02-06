@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -250,9 +251,15 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     if (rawBuilder != null) {
                         rawBuilder.setResult(result);
                         CaptureMetadataWriter writer = new CaptureMetadataWriter(result,rawBuilder.getFileName());
-
-                        Log.e(TAG,writer.getXMLString());
-
+                        File rootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovieTest");
+                        File metadataFile = new File(rootPath,"metadata.txt");
+                        try {
+                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
+                            byte[] bytes = writer.getXMLString().getBytes();
+                            stream.write(bytes);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             };
