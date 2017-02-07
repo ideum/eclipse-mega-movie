@@ -14,10 +14,6 @@ public class ResultsActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"View Results", Toast.LENGTH_SHORT).show();
     }
 
-    public void shareResults(View view) {
-        Toast.makeText(getApplicationContext(),"Share Results", Toast.LENGTH_SHORT).show();
-    }
-
     public void back(View view) {
         startActivity(new Intent(this,CaptureActivity.class));
     }

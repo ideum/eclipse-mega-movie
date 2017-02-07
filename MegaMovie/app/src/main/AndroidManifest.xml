@@ -28,12 +28,11 @@
 
         <activity android:name=".Java.MapActivity">
 
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".Java.UserInfoActivity" />
         <activity android:name=".Java.ResultsActivity" />
         <activity android:name=".Java.CalibrationActivity">
 
@@ -45,19 +44,21 @@
         </activity>
         <activity android:name=".Java.CaptureActivity">
 
-        </activity>
-
-        <!--<intent-filter>-->
+            <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
 
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-        <!--</intent-filter>-->
+            <!--</intent-filter>-->
+
+        </activity>
+
         <activity android:name=".Java.CameraTestActivity">
 
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+
         </activity>
 
     </application>

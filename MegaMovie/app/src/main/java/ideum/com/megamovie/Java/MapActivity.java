@@ -30,10 +30,13 @@ import ideum.com.megamovie.R;
 
 public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
-        LocationProvider {
+        ActivityCompat.OnRequestPermissionsResultCallback{
+//        ,
+//        GoogleApiClient.ConnectionCallbacks,
+//        GoogleApiClient.OnConnectionFailedListener,
+//        LocationListener,
+//        LocationProvider {
 
     private boolean cameraShouldMoveToCurrentLocation = true;
     private CountdownFragment mCountdownFragment;
@@ -45,90 +48,86 @@ public class MapActivity extends AppCompatActivity
     /**
      * Request code for location permissions
      */
-    private int REQUEST_LOCATION_PERMISSIONS = 0;
+    /**
+     * Request code for camera permissions
+     */
+    private static final int REQUEST_PERMISSIONS = 2;
+
+    /**
+     * Permissions required to take a picture.
+     */
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private LatLng mCurrentLocation;
-    private LatLng mPlannedLocation;
     private GoogleMap mGoogleMap;
 
+    private GPSFragment mGPSFragment;
 
-    public void loadUserInfoActivity(View view) {
-        startActivity(new Intent(this, UserInfoActivity.class));
-    }
-
-    public void loadCalibrationActivity(View view) {
-        startActivity(new Intent(this, CalibrationActivity.class));
-    }
-
-    @Override
-    public Location getLocation() {
-        Location lastLocation = null;
-        try {
-            lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-        if (lastLocation == null) {
-            return null;
-        }
-        return lastLocation;    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        // Request permission to access location
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSIONS);
+        // request all permissions for later use
+        if (!hasAllPermissionsGranted()) {
+            requestAllPermissions();
         }
 
-        SharedPreferences preferences = getPreferences(getApplicationContext().MODE_PRIVATE);
-        double lat = (double) preferences.getFloat("PLANNED_LATITUDE", 0);
-        double lon = (double) preferences.getFloat("PLANNED_LONGITUDE", 0);
-        mPlannedLocation = new LatLng(lat, lon);
+        mGPSFragment = new GPSFragment();
+        getFragmentManager().beginTransaction().add(
+                android.R.id.content, mGPSFragment).commit();
 
-        mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        mGPSFragment.addLocationListener(this);
+
         try {
             mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext());
-            mEclipseTimeCalculator.getEclipseTime(new LatLng(45,70));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
 
         if (mCountdownFragment != null) {
             mCountdownFragment.isPrecise = true;
-            mCountdownFragment.setLocationProvider(this);
+            mCountdownFragment.setLocationProvider(mGPSFragment);
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         }
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-
         mapFragment.getMapAsync(this);
+    }
 
-        createLocationRequest();
-        // Create an instance of the GoogleApiClient
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
+    private void requestAllPermissions() {
+        ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSIONS);
+
+    }
+
+    private boolean hasAllPermissionsGranted() {
+        for (String permission : PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
         }
+        return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         cameraShouldMoveToCurrentLocation = true;
-
+        if (mGoogleMap == null) {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        }
     }
 
     @Override
@@ -136,77 +135,26 @@ public class MapActivity extends AppCompatActivity
         super.onPause();
     }
 
-    @Override
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Washington D.C.,
-        // and move the map's camera to the same location
         mGoogleMap = googleMap;
-        mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng point) {
-                mPlannedLocation = point;
-                updateMarkers();
-                SharedPreferences preferences = getPreferences(getApplicationContext().MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putFloat("PLANNED_LATITUDE", (float) point.latitude);
-                editor.putFloat("PLANNED_LONGITUDE", (float) point.longitude);
-                editor.commit();
-            }
-        });
     }
 
     private void updateMarkers() {
-        mGoogleMap.clear();
-        if (mPlannedLocation != null) {
-            mGoogleMap.addMarker(new MarkerOptions().position(mPlannedLocation));
+        if (mGoogleMap == null) {
+            return;
         }
+        mGoogleMap.clear();
         if (mCurrentLocation != null) {
             mGoogleMap.addMarker(new MarkerOptions().position(mCurrentLocation));
             if (cameraShouldMoveToCurrentLocation) {
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mCurrentLocation));
             }
         }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        startLocationUpdates();
-    }
-
-    protected void startLocationUpdates() {
-        try {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-    protected void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        // We want camera to move to current position when it first sets marker, but not after that
+        // but not to move automatically after that
+        cameraShouldMoveToCurrentLocation = false;
     }
 
     @Override
@@ -214,12 +162,11 @@ public class MapActivity extends AppCompatActivity
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         mCurrentLocation = new LatLng(latitude, longitude);
-
         updateMarkers();
-        // We want camera to move to current position when it first finds gps coordinates
-        // but not to move automatically after that
-        cameraShouldMoveToCurrentLocation = false;
+    }
 
+    public void loadCalibrationActivity(View view) {
+        startActivity(new Intent(this, CalibrationActivity.class));
     }
 
 }

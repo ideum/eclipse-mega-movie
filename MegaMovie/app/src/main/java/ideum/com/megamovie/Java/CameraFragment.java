@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
-import android.graphics.Rect;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -16,11 +15,8 @@ import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.DngCreator;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
-import java.text.SimpleDateFormat;
-import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -39,12 +35,9 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -55,6 +48,7 @@ public class CameraFragment extends android.app.Fragment
 
     private static final boolean SHOULD_SAVE_JPEG = true;
     private static final boolean SHOULD_SAVE_RAW = false;
+    private static final String METADATA_RAW_FILE_NAME = "metadata.txt";
 
     private static final String TAG = "Camera Activity";
 
@@ -146,6 +140,17 @@ public class CameraFragment extends android.app.Fragment
                         ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
                         if (rawBuilder != null) {
                             rawBuilder.setResult(result);
+
+                            File rootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovieTest");
+                            File metadataFile = new File(rootPath, METADATA_RAW_FILE_NAME);
+                            CaptureMetadataWriter writer = new CaptureMetadataWriter(result,rawBuilder.getFileName());
+                            try {
+                                FileOutputStream stream = new FileOutputStream(metadataFile, true);
+                                byte[] bytes = writer.getXMLString().getBytes();
+                                stream.write(bytes);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }

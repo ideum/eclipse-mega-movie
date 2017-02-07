@@ -345,7 +345,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                 mCameraId = cameraID;
                 mSensorOrientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
 
-                mJpegImageSize = Collections.min(
+                mJpegImageSize = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new Comparator<Size>() {
                             @Override
@@ -355,7 +355,8 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                             }
                         }
                 );
-                mRawImageSize = Collections.min(
+
+                mRawImageSize = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.RAW_SENSOR)),
                         new Comparator<Size>() {
                             @Override
