@@ -83,9 +83,9 @@ public class EclipseTimeCalculator {
         Calendar calendar = Calendar.getInstance();
 //        calendar.set(Calendar.MONTH,7);
 //        calendar.set(Calendar.DAY_OF_MONTH,21);
-        calendar.set(Calendar.HOUR,2);
-        calendar.set(Calendar.MINUTE,40);
-        calendar.set(Calendar.SECOND, 5);
+//        calendar.set(Calendar.HOUR,5);
+        calendar.set(Calendar.MINUTE,10);
+        calendar.set(Calendar.SECOND, 40);
 
         long startTime = calendar.getTimeInMillis();
         long contactTime = 0;

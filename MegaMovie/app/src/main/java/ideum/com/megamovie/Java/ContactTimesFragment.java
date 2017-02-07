@@ -12,5 +12,10 @@ import ideum.com.megamovie.R;
 
 
 public class ContactTimesFragment extends Fragment {
+    public ContactTimesFragment() {
+
+    }
+
+
 
 }

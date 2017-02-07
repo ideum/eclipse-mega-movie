@@ -69,10 +69,10 @@ implements MyTimer.MyTimerListener{
 
     @Override
     public void onTick() {
-//        if(isWithinTimeThreshold()) {
-//            mTimer.cancel();
-//            loadCaptureActivity();
-//        }
+        if(isWithinTimeThreshold()) {
+            mTimer.cancel();
+            loadCaptureActivity();
+        }
     }
 
     private void loadCaptureActivity() {

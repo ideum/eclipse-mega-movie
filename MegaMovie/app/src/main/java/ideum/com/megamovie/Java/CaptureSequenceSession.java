@@ -16,6 +16,7 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener{
     private CameraFragment mCameraFragment;
     private LocationProvider mLocationProvider;
     private Map<Long,CaptureSequence.CaptureSettings> timedRequests;
+    private MyTimer mMyTimer;
 
     public CaptureSequenceSession(CameraFragment cameraFragment, CaptureSequence captureSequence, LocationProvider locationProvider) {
         mCameraFragment = cameraFragment;
@@ -51,8 +52,15 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener{
     }
 
     public void startSession() {
+        cancelSession();
         MyTimer timer = new MyTimer(this);
         timer.startTicking();
     }
 
+    public void cancelSession() {
+        if (mMyTimer != null) {
+            mMyTimer.cancel();
+            mMyTimer = null;
+        }
+    }
 }

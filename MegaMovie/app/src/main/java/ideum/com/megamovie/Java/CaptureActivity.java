@@ -23,6 +23,7 @@ public class CaptureActivity extends AppCompatActivity
     private CameraFragment mCameraFragment;
     private TextView captureTextView;
     private Integer totalCaptures;
+    private CaptureSequenceSession session;
 
     @Override
     public void onCapture() {
@@ -50,22 +51,41 @@ public class CaptureActivity extends AppCompatActivity
         mCameraFragment.setLocationProvider(mGPSFragment);
         mCameraFragment.addCaptureListener(this);
 
+//        setUpCaptureSequenceSession();
 
-        /* Set up capture sequence session */
+    }
+
+    private void setUpCaptureSequenceSession() {
         Resources res = getResources();
         ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
         try {
             EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext());
             EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0, 0), parser, calculator);
             CaptureSequence sequence = builder.buildSequence();
-            CaptureSequenceSession session = new CaptureSequenceSession(mCameraFragment, sequence, mGPSFragment);
+            session = new CaptureSequenceSession(mCameraFragment, sequence, mGPSFragment);
             session.startSession();
-
             totalCaptures = sequence.getTimedRequests().size();
             updateCaptureTextView();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onPostResume();
+        if (session == null) {
+            setUpCaptureSequenceSession();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (session != null) {
+            session.cancelSession();
+            session = null;
+        }
+        super.onPause();
     }
 
     private void updateCaptureTextView() {

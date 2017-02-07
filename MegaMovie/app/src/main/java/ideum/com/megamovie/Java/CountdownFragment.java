@@ -64,7 +64,7 @@ implements MyTimer.MyTimerListener{
 
     @Override
     public void onPause() {
-        mTimer.startTicking();
+        mTimer.cancel();
         super.onPause();
     }
 

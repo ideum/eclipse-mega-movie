@@ -17,6 +17,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -519,8 +520,8 @@ public class CameraFragment extends android.app.Fragment
         ImageSaver saver = builder.buildIfComplete();
         if (saver != null) {
             queue.remove(requestId);
-//            AsyncTask.THREAD_POOL_EXECUTOR.execute(saver);
-            new Thread(saver).start();
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(saver);
+//            new Thread(saver).start();
         }
     }
 

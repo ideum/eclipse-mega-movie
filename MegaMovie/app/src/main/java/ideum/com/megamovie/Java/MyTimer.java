@@ -23,6 +23,9 @@ public class MyTimer {
     }
 
     public void startTicking() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
         mCountDownTimer = new CountDownTimer(COUNTDOWN_DURATION, TICK_INTERVAL) {
 
                 public void onTick(long millisUntilFinished) {
@@ -39,8 +42,4 @@ public class MyTimer {
             mCountDownTimer.cancel();
         }
     }
-
-
-
-
 }
