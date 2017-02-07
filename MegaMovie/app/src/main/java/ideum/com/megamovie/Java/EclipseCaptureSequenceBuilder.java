@@ -3,8 +3,12 @@ package ideum.com.megamovie.Java;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class EclipseCaptureSequenceBuilder {
 
@@ -49,6 +53,15 @@ public class EclipseCaptureSequenceBuilder {
 
         return new CaptureSequence(intervals);
 
+    }
+
+    private String dateFromMills(Long mills) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mills);
+
+        DateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US);
+
+        return formatter.format(calendar.getTime());
     }
 
 

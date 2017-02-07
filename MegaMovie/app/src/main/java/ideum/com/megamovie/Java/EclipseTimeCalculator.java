@@ -65,7 +65,6 @@ public class EclipseTimeCalculator {
     public EclipseTimeCalculator(Context context) throws IOException{
         eclipseTimeMap = parseTextFile(context);
     }
-
     public Double getEclipseTime(LatLng location) {
         double lat = location.latitude;
         double lng = location.longitude;
@@ -84,9 +83,9 @@ public class EclipseTimeCalculator {
         Calendar calendar = Calendar.getInstance();
 //        calendar.set(Calendar.MONTH,7);
 //        calendar.set(Calendar.DAY_OF_MONTH,21);
-//        calendar.set(Calendar.HOUR,0);
-        calendar.set(Calendar.MINUTE, 45);
-        calendar.set(Calendar.SECOND, 40);
+        calendar.set(Calendar.HOUR,2);
+        calendar.set(Calendar.MINUTE,40);
+        calendar.set(Calendar.SECOND, 5);
 
         long startTime = calendar.getTimeInMillis();
         long contactTime = 0;
@@ -96,19 +95,19 @@ public class EclipseTimeCalculator {
                 contactTime = startTime;
                 break;
             case CONTACT2:
-                contactTime = startTime + 5000;
+                contactTime = startTime + 10000;
                 break;
             case CONTACT2_END:
-                contactTime = startTime + 5000;
+                contactTime = startTime + 10000;
                 break;
             case CONTACT3:
-                contactTime = startTime + 5000;
+                contactTime = startTime + 10000;
                 break;
             case CONTACT3_END:
-                contactTime = startTime + 5000;
+                contactTime = startTime + 10000;
                 break;
             case CONTACT4:
-                contactTime = startTime + 5000;
+                contactTime = startTime + 10000;
                 break;
         }
         return contactTime;
@@ -134,8 +133,6 @@ public class EclipseTimeCalculator {
         }
         return map;
     }
-
-
 
     private ArrayList<Double> parseLine(String line) {
         String[] separated = line.split(" ");

@@ -8,7 +8,11 @@ public class CaptureMetadataWriter {
     private String mImageFileName;
 
     public static final CaptureResult.Key[] RESULT_KEYS =
-            new CaptureResult.Key[]{CaptureResult.SENSOR_SENSITIVITY, CaptureResult.SENSOR_EXPOSURE_TIME, CaptureResult.LENS_FOCUS_DISTANCE};
+            new CaptureResult.Key[]{
+                    CaptureResult.SENSOR_SENSITIVITY,
+                    CaptureResult.SENSOR_EXPOSURE_TIME,
+                    CaptureResult.LENS_FOCUS_DISTANCE,
+                    CaptureResult.JPEG_GPS_LOCATION};
 
     public CaptureMetadataWriter(CaptureResult captureResult,String imageFileName) {
         mCaptureResult = captureResult;
@@ -18,6 +22,9 @@ public class CaptureMetadataWriter {
     public String getXMLString() {
         String str = "<image fileName=\"" + mImageFileName + "\">\n";
         for (CaptureResult.Key key : RESULT_KEYS) {
+            if (mCaptureResult.get(key) == null) {
+                continue;
+            }
             str += "\t<";
             str += key.getName();
             str += ">";

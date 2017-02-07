@@ -3,7 +3,7 @@
     <entry key="SENSOR_SENSITIVITY">800</entry>
     <entry key="SENSOR_EXPOSURE_TIME">5000000</entry>
     <entry key="LENS_FOCUS_DISTANCE">3</entry>
-    <entry key="CAPTURE_SPACING_1">1000</entry>
+    <entry key="CAPTURE_SPACING_1">500</entry>
     <entry key="CAPTURE_SPACING_2">0</entry>
     <entry key="CAPTURE_SPACING_3">0</entry>
     <entry key="CAPTURE_SPACING_4">0</entry>

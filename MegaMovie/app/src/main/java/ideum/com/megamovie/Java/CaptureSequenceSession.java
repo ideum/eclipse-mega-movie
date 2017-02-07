@@ -11,7 +11,7 @@ import java.util.Map;
 public class CaptureSequenceSession implements MyTimer.MyTimerListener{
     public static final String TAG = "CaptureSequenceSession";
     private static final long TIMER_DURATION = 1000000;
-    private static final long TIMER_INTERVAL = 1;
+    private static final long TIMER_INTERVAL = 10;
     private CaptureSequence mCaptureSequence;
     private CameraFragment mCameraFragment;
     private LocationProvider mLocationProvider;
@@ -43,8 +43,6 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener{
                 continue;
             }
             if (time <= currentTime) {
-//                Log.e(TAG,"current: " + String.valueOf(currentTime));
-//                Log.e(TAG,"planned: " + String.valueOf(time));
                 CaptureSequence.CaptureSettings s = (CaptureSequence.CaptureSettings) pair.getValue();
                 mCameraFragment.takePhotoWithSettings(s);
                 it.remove();

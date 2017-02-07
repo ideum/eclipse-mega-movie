@@ -28,16 +28,21 @@ import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.widget.Toast;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -46,8 +51,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CameraFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
 
-    private static final boolean SHOULD_SAVE_JPEG = true;
-    private static final boolean SHOULD_SAVE_RAW = false;
+    public interface CaptureListener {
+        void onCapture();
+    }
+
+    private List<CaptureListener> listeners = new ArrayList<>();
+
+    public void addCaptureListener(CaptureListener listener) {
+        listeners.add(listener);
+    }
+
+    private static final boolean SHOULD_SAVE_JPEG = false;
+    private static final boolean SHOULD_SAVE_RAW = true;
     private static final String METADATA_RAW_FILE_NAME = "metadata.txt";
 
     private static final String TAG = "Camera Activity";
@@ -80,6 +95,7 @@ public class CameraFragment extends android.app.Fragment
     }
 
     private LocationProvider mLocationProvider;
+
     public void setLocationProvider(LocationProvider locationProvider) {
         mLocationProvider = locationProvider;
     }
@@ -87,7 +103,7 @@ public class CameraFragment extends android.app.Fragment
     private CameraManager mCameraManager;
     private CameraDevice mCameraDevice;
     private CameraCharacteristics mCharacteristics;
-    private final AtomicInteger mRequestCounter = new AtomicInteger();
+    public final AtomicInteger mRequestCounter = new AtomicInteger();
     private CameraCaptureSession mCameraCaptureSession;
     private CameraCaptureSession.CaptureCallback mCaptureSessionCallback =
             new CameraCaptureSession.CaptureCallback() {
@@ -97,14 +113,12 @@ public class CameraFragment extends android.app.Fragment
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
 
                     String currentDateTime = generateTimeStamp();
-                    Log.e(TAG,currentDateTime);
-
-                    File jpegRootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovie/JPEG");
-                    if(!jpegRootPath.exists()) {
+                    File jpegRootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie/JPEG");
+                    if (!jpegRootPath.exists()) {
                         jpegRootPath.mkdirs();
                     }
-                    File rawRootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovie/RAW");
-                    if(!rawRootPath.exists()) {
+                    File rawRootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie/RAW");
+                    if (!rawRootPath.exists()) {
                         rawRootPath.mkdirs();
                     }
                     File jpegFile = new File(jpegRootPath,
@@ -135,15 +149,25 @@ public class CameraFragment extends android.app.Fragment
                         if (jpegBuilder != null) {
                             jpegBuilder.setResult(result);
                         }
+                        CaptureMetadataWriter writer = new CaptureMetadataWriter(result, jpegBuilder.getFileName());
+                        File rootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie");
+                        File metadataFile = new File(rootPath, "metadata_jpeg.txt");
+                        try {
+                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
+                            byte[] bytes = writer.getXMLString().getBytes();
+                            stream.write(bytes);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (SHOULD_SAVE_RAW) {
                         ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
                         if (rawBuilder != null) {
                             rawBuilder.setResult(result);
 
-                            File rootPath = new File(Environment.getExternalStorageDirectory(),"MegaMovieTest");
-                            File metadataFile = new File(rootPath, METADATA_RAW_FILE_NAME);
-                            CaptureMetadataWriter writer = new CaptureMetadataWriter(result,rawBuilder.getFileName());
+                            CaptureMetadataWriter writer = new CaptureMetadataWriter(result, rawBuilder.getFileName());
+                            File rootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie");
+                            File metadataFile = new File(rootPath, "metadata_raw.txt");
                             try {
                                 FileOutputStream stream = new FileOutputStream(metadataFile, true);
                                 byte[] bytes = writer.getXMLString().getBytes();
@@ -204,6 +228,7 @@ public class CameraFragment extends android.app.Fragment
 
                 }
             };
+
     //TODO: if user denies request, keep asking them until they say yes.
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -249,16 +274,12 @@ public class CameraFragment extends android.app.Fragment
     }
 
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
-        captureStillImage(settings.getExposureTime(),settings.getSensitivity(),settings.getFocusDistance());
+
+        captureStillImage(settings.getExposureTime(), settings.getSensitivity(), settings.getFocusDistance());
     }
 
 
-    public void takePhoto(long duration,int sensitivity, float focus_distance) {
-
-        captureStillImage(duration, sensitivity, focus_distance);
-    }
-
-    private void captureStillImage(long duration, int sensitivity, float focusDistance ) {
+    private void captureStillImage(long duration, int sensitivity, float focusDistance) {
         try {
             final CaptureRequest.Builder captureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
             if (SHOULD_SAVE_JPEG) {
@@ -273,12 +294,16 @@ public class CameraFragment extends android.app.Fragment
             }
             captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, sensitivity);
             captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, duration);
-            captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE,focusDistance);
+            captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, focusDistance);
+            captureRequestBuilder.set(CaptureRequest.JPEG_GPS_LOCATION,mLocationProvider.getLocation());
 
             captureRequestBuilder.setTag(mRequestCounter.getAndIncrement());
+            for(CaptureListener listener : listeners) {
+                listener.onCapture();
+            }
 
             CaptureRequest request = captureRequestBuilder.build();
-            if(SHOULD_SAVE_JPEG) {
+            if (SHOULD_SAVE_JPEG) {
                 ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
                 mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
 
@@ -289,7 +314,7 @@ public class CameraFragment extends android.app.Fragment
             }
             mCameraCaptureSession.capture(request,
                     mCaptureSessionCallback,
-                    mBackgroundHandler);
+                    null);
 
 
         } catch (CameraAccessException e) {
@@ -303,7 +328,7 @@ public class CameraFragment extends android.app.Fragment
             if (SHOULD_SAVE_JPEG) {
                 surfaces.add(mJpegImageReader.get().getSurface());
             }
-            if (SHOULD_SAVE_RAW){
+            if (SHOULD_SAVE_RAW) {
                 surfaces.add(mRawImageReader.get().getSurface());
             }
             mCameraDevice.createCaptureSession(surfaces,
@@ -358,6 +383,7 @@ public class CameraFragment extends android.app.Fragment
             e.printStackTrace();
         }
     }
+
     private void closeCamera() {
         if (mCameraCaptureSession != null) {
             mCameraCaptureSession.close();
@@ -419,7 +445,7 @@ public class CameraFragment extends android.app.Fragment
 
                     }
                 }
-                if(SHOULD_SAVE_RAW) {
+                if (SHOULD_SAVE_RAW) {
                     if (mRawImageReader == null || mRawImageReader.getAndRetain() == null) {
                         mRawImageReader = new RefCountedAutoCloseable<>(
                                 ImageReader.newInstance(mRawImageSize.getWidth(),
@@ -622,6 +648,7 @@ public class CameraFragment extends android.app.Fragment
 
         }
     }
+
     private static void closeOutput(OutputStream outputStream) {
         if (null != outputStream) {
             try {
@@ -631,30 +658,18 @@ public class CameraFragment extends android.app.Fragment
             }
         }
     }
-    private  String generateTimeStamp() {
+
+    private String generateTimeStamp() {
         long mills = mLocationProvider.getLocation().getTime();
-        long days = TimeUnit.MILLISECONDS.toDays(mills);
-        mills -= TimeUnit.DAYS.toMillis(days);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mills);
 
+        DateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US);
 
+        return formatter.format(calendar.getTime());
 
-        long hours = TimeUnit.MILLISECONDS.toHours(mills);
-        mills = mills - TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(mills);
-        mills = mills - TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(mills);
-        mills = mills - TimeUnit.SECONDS.toMillis(seconds);
-
-        String result = "";
-        result += String.format("%02d", hours);
-        result += "_" + String.format("%02d", minutes);
-        result += "_" + String.format("%02d", seconds);
-        result += "_" + String.valueOf(mills);
-        return result;
-
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
-//        return sdf.format(new Date());
     }
+
     /**
      * A wrapper for an {@link AutoCloseable} object that implements reference counting to allow
      * for resource management.

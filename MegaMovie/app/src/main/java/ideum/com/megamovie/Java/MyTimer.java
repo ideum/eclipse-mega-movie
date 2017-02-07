@@ -11,7 +11,7 @@ import static java.util.concurrent.TimeUnit.*;
 
 public class MyTimer {
     private static long COUNTDOWN_DURATION = 100000000;
-    private static long TICK_INTERVAL = 100; //milliseconds
+    private static long TICK_INTERVAL = 10; //milliseconds
     public interface MyTimerListener {
          void onTick();
     }

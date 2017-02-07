@@ -11,6 +11,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ideum.com.megamovie.Java.CaptureActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    <TextView android:id="@+id/capture_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Images Captured: "/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,15 +42,15 @@
         android:onClick="loadCalibrationActivity"
         />
 
-    <Button
-        android:text="Results"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:onClick="loadResultsActivity"
-        />
+    <!--<Button-->
+        <!--android:text="Results"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:onClick="loadResultsActivity"-->
+        <!--/>-->
     </RelativeLayout>
 
 </LinearLayout>
