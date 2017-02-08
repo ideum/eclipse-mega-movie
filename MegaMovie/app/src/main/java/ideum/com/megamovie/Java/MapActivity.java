@@ -1,10 +1,15 @@
 package ideum.com.megamovie.Java;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,19 +37,13 @@ public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         LocationListener,
         ActivityCompat.OnRequestPermissionsResultCallback{
-//        ,
-//        GoogleApiClient.ConnectionCallbacks,
-//        GoogleApiClient.OnConnectionFailedListener,
-//        LocationListener,
-//        LocationProvider {
 
     private boolean cameraShouldMoveToCurrentLocation = true;
     private CountdownFragment mCountdownFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private static final String TAG = "Main Activity";
-    private static final long INTERVAL = 1000 * 10;
-    private static final long FASTEST_INTERVAL = 1000 * 5;
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private ContentResolver mContentResolver;
+
     /**
      * Request code for location permissions
      */
@@ -75,6 +74,19 @@ public class MapActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        // Allow app to control screen brightness to save power
+        mContentResolver = getContentResolver();
+
+        if (!checkSystemWritePermissions()) {
+            requestPermissionWriteSettings();
+        }
+        if (checkSystemWritePermissions()) {
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+        }
 
         // request all permissions for later use
         if (!hasAllPermissionsGranted()) {
@@ -135,7 +147,21 @@ public class MapActivity extends AppCompatActivity
         super.onPause();
     }
 
+    private boolean checkSystemWritePermissions() {
+        boolean permission = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permission = Settings.System.canWrite(this);
+        } else {
+            permission = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_DENIED;
+        }
+        return permission;
+    }
 
+    private void requestPermissionWriteSettings() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+        intent.setData(Uri.parse("package:" + getPackageName()));
+        startActivity(intent);
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;

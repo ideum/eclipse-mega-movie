@@ -62,6 +62,9 @@ public class CameraPreviewFragment extends android.app.Fragment
     private Size mPreviewSize;
     private String mCameraId;
     private TextureView mTextureView;
+
+
+
     /**
      * Request code for camera permissions
      */
@@ -270,7 +273,12 @@ public class CameraPreviewFragment extends android.app.Fragment
             SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
             surfaceTexture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
             Surface previewSurface = new Surface(surfaceTexture);
-            mPreviewCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            mPreviewCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
+            mPreviewCaptureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 150);
+            mPreviewCaptureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, 0.0f);
+            mPreviewCaptureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,(long)5000000);
+
+
             mPreviewCaptureRequestBuilder.addTarget(previewSurface);
             mCameraDevice.createCaptureSession(Arrays.asList(previewSurface),
                     new CameraCaptureSession.StateCallback() {

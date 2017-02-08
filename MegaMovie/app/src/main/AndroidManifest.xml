@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <uses-feature android:name="android.hardware.camera2.full" />
 
@@ -27,33 +28,37 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".Java.MapActivity">
+            android:screenOrientation="portrait"
+
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Java.ResultsActivity" />
+        <activity android:name=".Java.CalibrationActivity">
+            android:screenOrientation="portrait"
 
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
-        </activity>
-        <activity android:name=".Java.ResultsActivity" />
-        <activity android:name=".Java.CalibrationActivity">
-
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity android:name=".Java.CaptureActivity">
+            android:screenOrientation="portrait"
 
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
 
         </activity>
 
         <activity android:name=".Java.CameraTestActivity">
 
+            android:screenOrientation="portrait"
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->

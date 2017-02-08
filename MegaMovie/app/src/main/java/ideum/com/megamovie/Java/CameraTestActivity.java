@@ -1,5 +1,6 @@
 package ideum.com.megamovie.Java;
 
+import android.content.pm.ActivityInfo;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class CameraTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_test);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mCameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_test_fragment);
         mSensitivityTextView = (TextView) findViewById(R.id.sensitivity_text_view);
         mFocusDistanceTextView = (TextView) findViewById(R.id.focusDistance_text_view);
@@ -29,7 +31,7 @@ public class CameraTestActivity extends AppCompatActivity {
     private void updateTextViews(){
         mSensitivityTextView.setText("Sensitivity: " + String.valueOf(mCameraFragment.mSensorSensitivity));
         mFocusDistanceTextView.setText("Focus: " + String.valueOf(mCameraFragment.mFocusDistance));
-        mDurationTextView.setText("Duration: " + String.valueOf(mCameraFragment.mDuration));
+        mDurationTextView.setText("Duration: " + String.valueOf(mCameraFragment.mDuration/1000000));
     }
 
     public void increaseSensitivity(View view) {

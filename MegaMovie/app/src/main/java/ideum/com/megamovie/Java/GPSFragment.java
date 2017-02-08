@@ -1,18 +1,13 @@
 package ideum.com.megamovie.Java;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,8 +18,6 @@ import com.google.android.gms.location.LocationServices;
 import java.util.ArrayList;
 import java.util.List;
 
-import ideum.com.megamovie.R;
-
 
 public class GPSFragment extends Fragment
         implements GoogleApiClient.ConnectionCallbacks,
@@ -32,11 +25,14 @@ public class GPSFragment extends Fragment
         LocationListener,
         LocationProvider {
 
+    public  long gpsInterval = 1000 * 10;
+    public  long fastestGpsInterval = 1000 * 5;
+    public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
+
     private int REQUEST_LOCATION_PERMISSIONS = 0;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private List<LocationListener> locationListeners = new ArrayList<>();
-
 
     public void addLocationListener(LocationListener listener) {
         locationListeners.add(listener);
@@ -115,9 +111,9 @@ public class GPSFragment extends Fragment
     }
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(gpsInterval);
+        mLocationRequest.setFastestInterval(fastestGpsInterval);
+        mLocationRequest.setPriority(locationRequestPriority);
     }
 
     @Override

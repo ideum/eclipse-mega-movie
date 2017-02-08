@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <entry key="SENSOR_SENSITIVITY">800</entry>
+    <entry key="SENSOR_SENSITIVITY">150</entry>
     <entry key="SENSOR_EXPOSURE_TIME">5000000</entry>
     <entry key="LENS_FOCUS_DISTANCE">3</entry>
     <entry key="CAPTURE_SPACING_1">500</entry>

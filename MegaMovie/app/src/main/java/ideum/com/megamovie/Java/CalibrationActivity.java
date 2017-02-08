@@ -1,6 +1,8 @@
 package ideum.com.megamovie.Java;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,11 +26,13 @@ implements MyTimer.MyTimerListener{
     private static final long THRESHOLD_TIME_SECONDS = 15;
 
     private MyTimer mTimer;
+    private CameraPreviewAndCaptureFragment mPreviewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calibration);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
@@ -48,6 +52,13 @@ implements MyTimer.MyTimerListener{
 
          mTimer = new MyTimer(this);
          mTimer.startTicking();
+
+        mPreviewFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.preview_fragment);
+        Resources res = getResources();
+        ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
+        CaptureSequence.CaptureSettings settings = parser.getSettings();
+        mPreviewFragment.setCameraSettings(settings);
+
     }
 
     @Override
@@ -69,10 +80,10 @@ implements MyTimer.MyTimerListener{
 
     @Override
     public void onTick() {
-        if(isWithinTimeThreshold()) {
-            mTimer.cancel();
-            loadCaptureActivity();
-        }
+//        if(isWithinTimeThreshold()) {
+//            mTimer.cancel();
+//            loadCaptureActivity();
+//        }
     }
 
     private void loadCaptureActivity() {

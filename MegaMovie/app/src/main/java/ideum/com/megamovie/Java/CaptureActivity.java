@@ -1,11 +1,22 @@
 
 package ideum.com.megamovie.Java;
 
+import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -24,6 +35,10 @@ public class CaptureActivity extends AppCompatActivity
     private TextView captureTextView;
     private Integer totalCaptures;
     private CaptureSequenceSession session;
+    private static final int SETTINGS_PERMISSIONS_REQUEST_CODE = 5;
+    private static final String[] SETTINGS_PERMISSIONS = {Manifest.permission.WRITE_SETTINGS};
+    private int initialBrightness;
+    private ContentResolver mContentResolver;
 
     @Override
     public void onCapture() {
@@ -35,9 +50,12 @@ public class CaptureActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
 
+        // Allow app to control screen brightness to save power
+        mContentResolver = getContentResolver();
+
+
+        // Initial view showing number of completed captures
         captureTextView = (TextView) findViewById(R.id.capture_text);
-
-
 
         /* Add Gps */
         mGPSFragment = new GPSFragment();
@@ -53,6 +71,18 @@ public class CaptureActivity extends AppCompatActivity
 
 //        setUpCaptureSequenceSession();
 
+    }
+
+
+
+    private boolean checkSystemWritePermissions() {
+        boolean permission = true;
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+             permission = Settings.System.canWrite(this);
+         } else {
+             permission = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_DENIED;
+         }
+        return permission;
     }
 
     private void setUpCaptureSequenceSession() {
@@ -73,11 +103,13 @@ public class CaptureActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        super.onPostResume();
+        super.onResume();
         if (session == null) {
             setUpCaptureSequenceSession();
         }
+        setScreenBrightness(0);
     }
+
 
     @Override
     protected void onPause() {
@@ -85,7 +117,23 @@ public class CaptureActivity extends AppCompatActivity
             session.cancelSession();
             session = null;
         }
+        setScreenBrightness(initialBrightness);
         super.onPause();
+    }
+
+
+    private void setScreenBrightness(int brightness) {
+        if (!checkSystemWritePermissions()) {
+            return;
+        }
+        try {
+            initialBrightness = Settings.System.getInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.SCREEN_BRIGHTNESS,
+                    brightness);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateCaptureTextView() {
