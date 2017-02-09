@@ -82,10 +82,11 @@ public class EclipseTimeCalculator {
     public long dummyEclipseTime(Event event, LatLng location) {
         Calendar calendar = Calendar.getInstance();
 //        calendar.set(Calendar.MONTH,7);
-        calendar.set(Calendar.DAY_OF_MONTH,21);
-        calendar.set(Calendar.HOUR,5);
-        calendar.set(Calendar.MINUTE,10);
+//        calendar.set(Calendar.DAY_OF_MONTH,21);
+//        calendar.set(Calendar.HOUR,5);
+        calendar.set(Calendar.MINUTE,37);
         calendar.set(Calendar.SECOND, 40);
+        calendar.set(Calendar.MILLISECOND,0);
 
         long startTime = calendar.getTimeInMillis();
         long contactTime = 0;
@@ -95,19 +96,19 @@ public class EclipseTimeCalculator {
                 contactTime = startTime;
                 break;
             case CONTACT2:
-                contactTime = startTime + 10000;
+                contactTime = startTime + 3000;
                 break;
             case CONTACT2_END:
-                contactTime = startTime + 10000;
+                contactTime = startTime + 6000;
                 break;
             case CONTACT3:
-                contactTime = startTime + 10000;
+                contactTime = startTime + 9000;
                 break;
             case CONTACT3_END:
-                contactTime = startTime + 10000;
+                contactTime = startTime + 9000;
                 break;
             case CONTACT4:
-                contactTime = startTime + 10000;
+                contactTime = startTime + 9000;
                 break;
         }
         return contactTime;

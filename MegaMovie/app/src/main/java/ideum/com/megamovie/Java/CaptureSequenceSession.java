@@ -2,11 +2,15 @@ package ideum.com.megamovie.Java;
 
 
 import android.location.Location;
-import android.os.CountDownTimer;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
 
 public class CaptureSequenceSession implements MyTimer.MyTimerListener{
     public static final String TAG = "CaptureSequenceSession";
@@ -15,14 +19,15 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener{
     private CaptureSequence mCaptureSequence;
     private CameraFragment mCameraFragment;
     private LocationProvider mLocationProvider;
-    private Map<Long,CaptureSequence.CaptureSettings> timedRequests;
+    private Queue<CaptureSequence.TimedCaptureRequest> requestQueue;
     private MyTimer mMyTimer;
+    private CaptureSequence.TimedCaptureRequest nextRequest;
 
     public CaptureSequenceSession(CameraFragment cameraFragment, CaptureSequence captureSequence, LocationProvider locationProvider) {
         mCameraFragment = cameraFragment;
         mCaptureSequence = captureSequence;
         mLocationProvider = locationProvider;
-        timedRequests = captureSequence.getTimedRequests();
+        requestQueue = captureSequence.getRequestQueue();
     }
 
     private Long getTime() {
@@ -35,20 +40,35 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener{
 
     @Override
     public void onTick() {
-        Iterator it = timedRequests.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            Long time = (Long) pair.getKey();
+        if (nextRequest == null) {
+            nextRequest = requestQueue.poll();
+        }
+        if (nextRequest != null) {
+            Long requestTime = nextRequest.mTime;
             Long currentTime = getTime();
             if (currentTime == null) {
-                continue;
+                return;
             }
-            if (time <= currentTime) {
-                CaptureSequence.CaptureSettings s = (CaptureSequence.CaptureSettings) pair.getValue();
-                mCameraFragment.takePhotoWithSettings(s);
-                it.remove();
+            if (currentTime >= requestTime) {
+                mCameraFragment.takePhotoWithSettings(nextRequest.mSettings);
+                nextRequest = null;
             }
         }
+
+//        Iterator it = timedRequests.entrySet().iterator();
+//        while (it.hasNext()) {
+//            Map.Entry pair = (Map.Entry) it.next();
+//            Long time = (Long) pair.getKey();
+//            Long currentTime = getTime();
+//            if (currentTime == null) {
+//                continue;
+//            }
+//            if (time <= currentTime) {
+//                CaptureSequence.CaptureSettings s = (CaptureSequence.CaptureSettings) pair.getValue();
+////                mCameraFragment.takePhotoWithSettings(s);
+//                it.remove();
+//            }
+//        }
     }
 
     public void startSession() {
@@ -62,5 +82,15 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener{
             mMyTimer.cancel();
             mMyTimer = null;
         }
+    }
+
+    private String timeString(Long mills) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mills);
+
+        DateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US);
+
+        return formatter.format(calendar.getTime());
+
     }
 }

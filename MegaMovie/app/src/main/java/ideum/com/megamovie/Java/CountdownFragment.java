@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import ideum.com.megamovie.R;
@@ -26,9 +28,11 @@ implements MyTimer.MyTimerListener{
     public boolean isPrecise = false;
     private LocationProvider mLocationProvider;
     private MyTimer mTimer;
+    public static final String TAG = "CountdownFragment";
 
+    private int count = 0;
     @Override
-    public void onTick() {
+    public void  onTick() {
         updateDisplay();
     }
 
@@ -72,10 +76,6 @@ implements MyTimer.MyTimerListener{
         mEclipseTimeCalculator = etc;
     }
 
-
-//    public void setTargetDateMills(long mills) {
-//        targetDateMills = mills;
-//    }
 
     public void updateDisplay() {
         if (isPrecise) {

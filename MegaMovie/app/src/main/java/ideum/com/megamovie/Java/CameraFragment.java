@@ -114,6 +114,7 @@ public class CameraFragment extends android.app.Fragment
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
 
                     String currentDateTime = generateTimeStamp();
+
                     File jpegRootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie/JPEG");
                     if (!jpegRootPath.exists()) {
                         jpegRootPath.mkdirs();
@@ -143,7 +144,7 @@ public class CameraFragment extends android.app.Fragment
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-
+                    Log.e(TAG,"capture completed: " + generateTimeStamp());
                     int requestId = (int) request.getTag();
                     if (SHOULD_SAVE_JPEG) {
                         ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);

@@ -51,7 +51,7 @@ implements MyTimer.MyTimerListener{
         }
 
          mTimer = new MyTimer(this);
-         mTimer.startTicking();
+//         mTimer.startTicking();
 
         mPreviewFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.preview_fragment);
         Resources res = getResources();

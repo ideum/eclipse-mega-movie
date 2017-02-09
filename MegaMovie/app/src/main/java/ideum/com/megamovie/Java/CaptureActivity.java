@@ -6,17 +6,12 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -53,7 +48,6 @@ public class CaptureActivity extends AppCompatActivity
         // Allow app to control screen brightness to save power
         mContentResolver = getContentResolver();
 
-
         // Initial view showing number of completed captures
         captureTextView = (TextView) findViewById(R.id.capture_text);
 
@@ -69,11 +63,8 @@ public class CaptureActivity extends AppCompatActivity
         mCameraFragment.setLocationProvider(mGPSFragment);
         mCameraFragment.addCaptureListener(this);
 
-//        setUpCaptureSequenceSession();
-
+        setUpCaptureSequenceSession();
     }
-
-
 
     private boolean checkSystemWritePermissions() {
         boolean permission = true;
@@ -94,7 +85,7 @@ public class CaptureActivity extends AppCompatActivity
             CaptureSequence sequence = builder.buildSequence();
             session = new CaptureSequenceSession(mCameraFragment, sequence, mGPSFragment);
             session.startSession();
-            totalCaptures = sequence.getTimedRequests().size();
+            totalCaptures = sequence.getRequestQueue().size();
             updateCaptureTextView();
         } catch (IOException e) {
             e.printStackTrace();
@@ -104,10 +95,16 @@ public class CaptureActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        try {
+            initialBrightness = Settings.System.getInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+
         if (session == null) {
             setUpCaptureSequenceSession();
         }
-        setScreenBrightness(0);
+//        setScreenBrightness(5);
     }
 
 
@@ -117,7 +114,7 @@ public class CaptureActivity extends AppCompatActivity
             session.cancelSession();
             session = null;
         }
-        setScreenBrightness(initialBrightness);
+//        setScreenBrightness(initialBrightness);
         super.onPause();
     }
 
@@ -126,14 +123,9 @@ public class CaptureActivity extends AppCompatActivity
         if (!checkSystemWritePermissions()) {
             return;
         }
-        try {
-            initialBrightness = Settings.System.getInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS);
             Settings.System.putInt(mContentResolver,
                     Settings.System.SCREEN_BRIGHTNESS,
                     brightness);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     private void updateCaptureTextView() {

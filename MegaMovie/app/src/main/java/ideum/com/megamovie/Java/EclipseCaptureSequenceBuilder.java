@@ -1,17 +1,22 @@
 package ideum.com.megamovie.Java;
 
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Queue;
 
 public class EclipseCaptureSequenceBuilder {
 
+    public final static String TAG = "SequenceBuilder";
     private LatLng mLocation;
     private ConfigParser mConfig;
     private EclipseTimeCalculator mEclipseTimeCalculator;
@@ -34,7 +39,7 @@ public class EclipseCaptureSequenceBuilder {
         long contact3_end = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT3_END, mLocation);
         long contact4 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT4, mLocation);
 
-        List<CaptureSequence.CaptureInterval> intervals = new ArrayList<>();
+        Queue<CaptureSequence.CaptureInterval> intervals = new LinkedList<>();
 
         long duration1 = contact2 - contact1;
         intervals.add(new CaptureSequence.CaptureInterval(settings, contact1,duration1,spacings[0],"first partial"));
@@ -63,6 +68,14 @@ public class EclipseCaptureSequenceBuilder {
 
         return formatter.format(calendar.getTime());
     }
+    private String timeString(Long mills) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mills);
 
+        DateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US);
+
+        return formatter.format(calendar.getTime());
+
+    }
 
 }
