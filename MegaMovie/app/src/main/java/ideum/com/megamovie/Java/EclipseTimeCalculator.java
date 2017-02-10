@@ -1,6 +1,7 @@
 package ideum.com.megamovie.Java;
 
 import android.content.Context;
+import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -25,6 +26,7 @@ public class EclipseTimeCalculator {
     private static final Double LATLNG_INTERVAL = 0.01;
     private Map<MyKey,Double> eclipseTimeMap;
     private final static int TIMING_FILE_RESOURCE_ID = R.raw.c2_times;
+    private LocationProvider mLocationProvider;
 
     private class MyKey {
         final int x;
@@ -62,8 +64,9 @@ public class EclipseTimeCalculator {
         CONTACT4;
     }
 
-    public EclipseTimeCalculator(Context context) throws IOException{
+    public EclipseTimeCalculator(Context context, LocationProvider provider) throws IOException{
         eclipseTimeMap = parseTextFile(context);
+        mLocationProvider = provider;
     }
     public Double getEclipseTime(LatLng location) {
         double lat = location.latitude;
@@ -79,13 +82,13 @@ public class EclipseTimeCalculator {
     }
 
     // This method is just a stand-in for now
-    public long dummyEclipseTime(Event event, LatLng location) {
+    public long dummyEclipseTime(Event event) {
         Calendar calendar = Calendar.getInstance();
 //        calendar.set(Calendar.MONTH,7);
-//        calendar.set(Calendar.DAY_OF_MONTH,21);
+//        calendar.set(Calendar.DAY_OF_MONTH,11);
 //        calendar.set(Calendar.HOUR,5);
-        calendar.set(Calendar.MINUTE,37);
-        calendar.set(Calendar.SECOND, 40);
+        calendar.set(Calendar.MINUTE,46);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND,0);
 
         long startTime = calendar.getTimeInMillis();
@@ -96,19 +99,19 @@ public class EclipseTimeCalculator {
                 contactTime = startTime;
                 break;
             case CONTACT2:
-                contactTime = startTime + 3000;
+                contactTime = startTime + 5000;
                 break;
             case CONTACT2_END:
-                contactTime = startTime + 6000;
+                contactTime = startTime + 10000;
                 break;
             case CONTACT3:
-                contactTime = startTime + 9000;
+                contactTime = startTime + 15000;
                 break;
             case CONTACT3_END:
-                contactTime = startTime + 9000;
+                contactTime = startTime + 20000;
                 break;
             case CONTACT4:
-                contactTime = startTime + 9000;
+                contactTime = startTime + 25000;
                 break;
         }
         return contactTime;

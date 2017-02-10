@@ -36,12 +36,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,9 +61,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     public static final String TAG = "PreviewCapture";
 
     public void setCameraSettings(CaptureSequence.CaptureSettings settings) {
-        mSensorSensitivity = settings.getSensitivity();
-        mFocusDistance = settings.getFocusDistance();
-        mDuration = settings.getExposureTime();
+        mSensorSensitivity = settings.sensitivity;
+        mFocusDistance = settings.focusDistance;
+        mDuration = settings.exposureTime;
     }
 
     public int mSensorSensitivity = 300;
@@ -265,7 +263,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                         ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
                         if (rawBuilder != null) {
                             rawBuilder.setResult(result);
-                            CaptureMetadataWriter writer = new CaptureMetadataWriter(result, rawBuilder.getFileName());
+                            MetadataWriter writer = new MetadataWriter(result, rawBuilder.getFileName());
                             File rootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovieTest");
                             File metadataFile = new File(rootPath, "metadata.txt");
                             try {

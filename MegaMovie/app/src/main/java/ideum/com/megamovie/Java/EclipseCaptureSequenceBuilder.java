@@ -1,13 +1,13 @@
 package ideum.com.megamovie.Java;
 
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,39 +27,39 @@ public class EclipseCaptureSequenceBuilder {
         mEclipseTimeCalculator = eclipseTimeCalculator;
     }
 
-    public CaptureSequence buildSequence() {
-        CaptureSequence.CaptureSettings settings = mConfig.getSettings();
-        int[] spacings = mConfig.getCaptureSpacing();
+    public CaptureSequence buildSequence() throws IOException, XmlPullParserException {
+        List<CaptureSequence.IntervalProperties> iProperties = mConfig.getIntervalProperties();
 
 
-        long contact1 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1, mLocation);
-        long contact2 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT2, mLocation);
-        long contact2_end = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT2_END, mLocation);
-        long contact3 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT3, mLocation);
-        long contact3_end = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT3_END, mLocation);
-        long contact4 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT4, mLocation);
+        long contact1 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1);
+        long contact2 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT2);
+        long contact2_end = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT2_END);
+        long contact3 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT3);
+        long contact3_end = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT3_END);
+        long contact4 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT4);
 
         Queue<CaptureSequence.CaptureInterval> intervals = new LinkedList<>();
 
         long duration1 = contact2 - contact1;
-        intervals.add(new CaptureSequence.CaptureInterval(settings, contact1,duration1,spacings[0],"first partial"));
+        intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(0), contact1,duration1));
 
         long duration2 = contact2_end - contact2;
-        intervals.add(new CaptureSequence.CaptureInterval(settings,contact2,duration2,spacings[1],"second contact"));
+        intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(1),contact2,duration2));
 
         long duration3 = contact3 - contact2_end;
-        intervals.add(new CaptureSequence.CaptureInterval(settings,contact2_end,duration3,spacings[2],"annular"));
+        intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(2),contact2_end,duration3));
 
         long duration4 = contact3_end - contact3;
-        intervals.add(new CaptureSequence.CaptureInterval(settings,contact3,duration4,spacings[3],"third contact"));
+        intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(3),contact3,duration4));
 
         long duration5 = contact4 - contact3_end;
-        intervals.add(new CaptureSequence.CaptureInterval(settings,contact3_end,duration5,spacings[4],"second partial"));
+        intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(4),contact3_end,duration5));
 
         return new CaptureSequence(intervals);
 
     }
 
+    // Helper function used for debugging
     private String dateFromMills(Long mills) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);

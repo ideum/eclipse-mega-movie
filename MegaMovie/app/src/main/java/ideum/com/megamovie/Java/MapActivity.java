@@ -3,25 +3,21 @@ package ideum.com.megamovie.Java;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,7 +32,8 @@ import ideum.com.megamovie.R;
 public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         LocationListener,
-        ActivityCompat.OnRequestPermissionsResultCallback{
+        ActivityCompat.OnRequestPermissionsResultCallback,
+        LocationProvider {
 
     private boolean cameraShouldMoveToCurrentLocation = true;
     private CountdownFragment mCountdownFragment;
@@ -66,8 +63,8 @@ public class MapActivity extends AppCompatActivity
     private LocationRequest mLocationRequest;
     private LatLng mCurrentLocation;
     private GoogleMap mGoogleMap;
-
     private GPSFragment mGPSFragment;
+    private ContactTimesFragment mContactTimesFragment;
 
 
     @Override
@@ -96,25 +93,33 @@ public class MapActivity extends AppCompatActivity
         mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
-
         mGPSFragment.addLocationListener(this);
+        mGPSFragment.locationRequestPriority = LocationRequest.PRIORITY_LOW_POWER;
+
+        mContactTimesFragment = (ContactTimesFragment) getFragmentManager().findFragmentById(R.id.contact_times_fragment);
 
         try {
-            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext());
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(),this);
+            mContactTimesFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         } catch (IOException e) {
             e.printStackTrace();
         }
         mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
 
         if (mCountdownFragment != null) {
-            mCountdownFragment.isPrecise = true;
-            mCountdownFragment.setLocationProvider(mGPSFragment);
+            mCountdownFragment.includesDays = false;
+            mCountdownFragment.setLocationProvider(this);
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         }
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public Location getLocation() {
+        return mGPSFragment.getLocation();
     }
 
     private void requestAllPermissions() {
@@ -152,7 +157,7 @@ public class MapActivity extends AppCompatActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             permission = Settings.System.canWrite(this);
         } else {
-            permission = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_DENIED;
+            permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_DENIED;
         }
         return permission;
     }
@@ -162,6 +167,7 @@ public class MapActivity extends AppCompatActivity
         intent.setData(Uri.parse("package:" + getPackageName()));
         startActivity(intent);
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
@@ -185,6 +191,7 @@ public class MapActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
+        mContactTimesFragment.updateTextViews();
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         mCurrentLocation = new LatLng(latitude, longitude);

@@ -1,11 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <entry key="SENSOR_SENSITIVITY">150</entry>
-    <entry key="SENSOR_EXPOSURE_TIME">5000000</entry>
-    <entry key="LENS_FOCUS_DISTANCE">3</entry>
-    <entry key="CAPTURE_SPACING_1">1000</entry>
-    <entry key="CAPTURE_SPACING_2">0</entry>
-    <entry key="CAPTURE_SPACING_3">0</entry>
-    <entry key="CAPTURE_SPACING_4">0</entry>
-    <entry key="CAPTURE_SPACING_5">0</entry>
+    <interval_properties>
+        <spacing>1000</spacing>
+        <should_save_raw>false</should_save_raw>
+        <should_save_jpeg>true</should_save_jpeg>
+
+        <sensor_sensitivity>150</sensor_sensitivity>>
+        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <lens_focus_distance>3</lens_focus_distance>
+    </interval_properties>
+
+    <interval_properties>
+        <spacing>500</spacing>
+        <should_save_raw>true</should_save_raw>
+        <should_save_jpeg>false</should_save_jpeg>
+
+        <sensor_sensitivity>150</sensor_sensitivity>>
+        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <lens_focus_distance>3</lens_focus_distance>
+    </interval_properties>
+
+    <interval_properties>
+        <spacing>1000</spacing>
+        <should_save_raw>false</should_save_raw>
+        <should_save_jpeg>true</should_save_jpeg>
+
+        <sensor_sensitivity>150</sensor_sensitivity>>
+        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <lens_focus_distance>3</lens_focus_distance>
+    </interval_properties>
+
+    <interval_properties>
+        <spacing>500</spacing>
+        <should_save_raw>true</should_save_raw>
+        <should_save_jpeg>false</should_save_jpeg>
+
+        <sensor_sensitivity>150</sensor_sensitivity>>
+        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <lens_focus_distance>3</lens_focus_distance>
+    </interval_properties>
+
+    <interval_properties>
+        <spacing>2000</spacing>
+        <should_save_raw>false</should_save_raw>
+        <should_save_jpeg>true</should_save_jpeg>
+
+        <sensor_sensitivity>150</sensor_sensitivity>>
+        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <lens_focus_distance>3</lens_focus_distance>
+    </interval_properties>
 </resources>

@@ -1,16 +1,10 @@
 package ideum.com.megamovie.Java;
 
-import android.util.Log;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -19,25 +13,27 @@ import java.util.Queue;
 
 public class CaptureSequence {
     public static class CaptureSettings {
-        private long mExposureTime;
-        private int mSensitivity;
-        private float mFocusDistance;
+        public long exposureTime;
+        public int sensitivity;
+        public float focusDistance;
+        public boolean shouldSaveRaw;
+        public boolean shouldSaveJpeg;
         public static final String TAG = "CaptureSequence";
 
-        public CaptureSettings(long exposureTime,int sensitivity,float focusDistance) {
-            mExposureTime = exposureTime;
-            mSensitivity = sensitivity;
-            mFocusDistance = focusDistance;
+        public CaptureSettings(long exposureTime, int sensitivity, float focusDistance, boolean shouldSaveRaw, boolean shouldSaveJpeg) {
+            this.exposureTime = exposureTime;
+            this.sensitivity = sensitivity;
+            this.focusDistance = focusDistance;
+            this.shouldSaveJpeg = shouldSaveJpeg;
+            this.shouldSaveRaw = shouldSaveRaw;
         }
 
-        public long getExposureTime() {
-            return mExposureTime;
-        }
-        public int getSensitivity() {
-            return mSensitivity;
-        }
-        public float getFocusDistance() {
-            return mFocusDistance;
+        public CaptureSettings(IntervalProperties properties) {
+            this.exposureTime = properties.sensorExposureTime;
+            this.sensitivity = properties.sensorSensitivity;
+            this.focusDistance = properties.lensFocusDistance;
+            this.shouldSaveRaw = properties.shouldSaveRaw;
+            this.shouldSaveJpeg = properties.shouldSaveJpeg;
         }
     }
 
@@ -45,49 +41,65 @@ public class CaptureSequence {
         public long mTime;
         public CaptureSettings mSettings;
 
-        public TimedCaptureRequest(long time,CaptureSettings settings) {
+        public TimedCaptureRequest(long time, CaptureSettings settings) {
             mTime = time;
             mSettings = settings;
         }
     }
-    public static class CaptureInterval {
-        private CaptureSettings mSettings;
-        // start of interval in milliseconds
-        private long mStartTime;
-        // length of capture interval in milliseconds
-        private long mDuration;
-        // frequency with which captures are taken
-        private long spacing;
-        private String name;
 
-        public CaptureInterval(CaptureSettings settings,long startTime,long duration,long spacing,String name) {
-            mSettings = settings;
-            mStartTime = startTime;
-            mDuration = duration;
+    public static class IntervalProperties {
+        Integer sensorSensitivity;
+        Long sensorExposureTime;
+        Float lensFocusDistance;
+        Long spacing;
+        Boolean shouldSaveRaw;
+        Boolean shouldSaveJpeg;
+
+        public IntervalProperties(Integer sensorSensitivity, Long sensorExposureTime, Float lensFocusDistance,
+                                  Long spacing, Boolean shouldSaveRaw, Boolean shouldSaveJpeg) {
+            this.sensorSensitivity = sensorSensitivity;
+            this.sensorExposureTime = sensorExposureTime;
+            this.lensFocusDistance = lensFocusDistance;
             this.spacing = spacing;
-            this.name = name;
+            this.shouldSaveRaw = shouldSaveRaw;
+            this.shouldSaveJpeg = shouldSaveJpeg;
         }
-        public CaptureSettings getSettings() {
-            return mSettings;
+    }
+
+    public static class CaptureInterval {
+
+        public CaptureSettings settings;
+        // start of interval in milliseconds
+        public long startTime;
+        // length of capture interval in milliseconds
+        public long duration;
+        // frequency with which captures are taken
+
+        public long spacing;
+
+
+        public CaptureInterval(CaptureSettings settings, long spacing, long startTime, long duration) {
+            this.settings = settings;
+            this.spacing = spacing;
+            this.startTime = startTime;
+            this.duration = duration;
         }
-        public long getStartTime() {
-            return mStartTime;
+
+        public CaptureInterval(IntervalProperties properties, long startTime, long duration) {
+            this.settings = new CaptureSettings(properties);
+            spacing = properties.spacing;
+            this.startTime = startTime;
+            this.duration = duration;
+
         }
-        public long getDuration() {
-            return mDuration;
-        }
-        public double getFrequency() {
-            return spacing;
-        }
-        public String getName() { return name; }
 
         public Queue<TimedCaptureRequest> getTimedRequests() {
 
             Queue<TimedCaptureRequest> requests = new LinkedList<>();
-            long time = mStartTime;
+            long time = startTime;
             if (spacing > 0) {
-                while (time < mStartTime + mDuration) {
-                    requests.add(new TimedCaptureRequest(time,mSettings));
+                while (time < startTime + duration) {
+                    requests.add(new TimedCaptureRequest(time, settings));
                     time = time + spacing;
                 }
             }
@@ -107,8 +119,8 @@ public class CaptureSequence {
 
     public long getTotalDuration() {
         long totalDuration = 0;
-        for(CaptureInterval interval : mCaptureIntervals) {
-            totalDuration += interval.getDuration();
+        for (CaptureInterval interval : mCaptureIntervals) {
+            totalDuration += interval.duration;
         }
         return totalDuration;
     }
@@ -118,13 +130,11 @@ public class CaptureSequence {
         for (CaptureInterval interval : mCaptureIntervals) {
             queue.addAll(interval.getTimedRequests());
         }
-//        for(TimedCaptureRequest request : queue) {
-//            Log.e("CaptureSequence",String.valueOf(request.mTime));
-//        }
 
         return queue;
     }
 
+    // Helper method used for debugging
     private String timeString(Long mills) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);
@@ -134,7 +144,6 @@ public class CaptureSequence {
         return formatter.format(calendar.getTime());
 
     }
-
 
 
 }

@@ -3,9 +3,9 @@ package ideum.com.megamovie.Java;
 
 import android.hardware.camera2.CaptureResult;
 
-public class CaptureMetadataWriter {
+public class MetadataWriter {
     private CaptureResult mCaptureResult;
-    private String mImageFileName;
+    private String timeStamp;
 
     public static final CaptureResult.Key[] RESULT_KEYS =
             new CaptureResult.Key[]{
@@ -14,13 +14,18 @@ public class CaptureMetadataWriter {
                     CaptureResult.LENS_FOCUS_DISTANCE,
                     CaptureResult.JPEG_GPS_LOCATION};
 
-    public CaptureMetadataWriter(CaptureResult captureResult,String imageFileName) {
+    public MetadataWriter(CaptureResult captureResult, String timestamp) {
         mCaptureResult = captureResult;
-        mImageFileName = imageFileName;
+        timeStamp = timestamp;
     }
 
     public String getXMLString() {
-        String str = "<image fileName=\"" + mImageFileName + "\">\n";
+
+        String str = "<image time=\"";
+        if (timeStamp != null) {
+            str += timeStamp;
+        }
+        str += "\">\n";
         for (CaptureResult.Key key : RESULT_KEYS) {
             if (mCaptureResult.get(key) == null) {
                 continue;
@@ -33,7 +38,7 @@ public class CaptureMetadataWriter {
             str += key.getName();
             str += ">\n";
         }
-       str += "<\\image>";
+       str += "<\\image>\n";
 
 
         return str;

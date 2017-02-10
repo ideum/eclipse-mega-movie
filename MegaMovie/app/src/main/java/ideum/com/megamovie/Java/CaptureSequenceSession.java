@@ -17,17 +17,21 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener{
     private static final long TIMER_DURATION = 1000000;
     private static final long TIMER_INTERVAL = 10;
     private CaptureSequence mCaptureSequence;
-    private CameraFragment mCameraFragment;
     private LocationProvider mLocationProvider;
     private Queue<CaptureSequence.TimedCaptureRequest> requestQueue;
     private MyTimer mMyTimer;
     private CaptureSequence.TimedCaptureRequest nextRequest;
+    private CameraController mCameraController;
 
-    public CaptureSequenceSession(CameraFragment cameraFragment, CaptureSequence captureSequence, LocationProvider locationProvider) {
-        mCameraFragment = cameraFragment;
+    public interface CameraController {
+        void takePhotoWithSettings(CaptureSequence.CaptureSettings settings);
+    }
+
+    public CaptureSequenceSession(CaptureSequence captureSequence, LocationProvider locationProvider,CameraController controller) {
         mCaptureSequence = captureSequence;
         mLocationProvider = locationProvider;
         requestQueue = captureSequence.getRequestQueue();
+        mCameraController = controller;
     }
 
     private Long getTime() {
@@ -50,25 +54,10 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener{
                 return;
             }
             if (currentTime >= requestTime) {
-                mCameraFragment.takePhotoWithSettings(nextRequest.mSettings);
+                mCameraController.takePhotoWithSettings(nextRequest.mSettings);
                 nextRequest = null;
             }
         }
-
-//        Iterator it = timedRequests.entrySet().iterator();
-//        while (it.hasNext()) {
-//            Map.Entry pair = (Map.Entry) it.next();
-//            Long time = (Long) pair.getKey();
-//            Long currentTime = getTime();
-//            if (currentTime == null) {
-//                continue;
-//            }
-//            if (time <= currentTime) {
-//                CaptureSequence.CaptureSettings s = (CaptureSequence.CaptureSettings) pair.getValue();
-////                mCameraFragment.takePhotoWithSettings(s);
-//                it.remove();
-//            }
-//        }
     }
 
     public void startSession() {

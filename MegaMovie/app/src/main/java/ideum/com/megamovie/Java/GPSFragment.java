@@ -25,8 +25,8 @@ public class GPSFragment extends Fragment
         LocationListener,
         LocationProvider {
 
-    public  long gpsInterval = 1000 * 10;
-    public  long fastestGpsInterval = 1000 * 5;
+    public  long gpsInterval = 1000 * 60;
+    public  long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;

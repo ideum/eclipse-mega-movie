@@ -4,7 +4,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import ideum.com.megamovie.R;
@@ -25,7 +23,7 @@ implements MyTimer.MyTimerListener{
     // view for displaying countdown
     private TextView mTextView;
     private EclipseTimeCalculator mEclipseTimeCalculator;
-    public boolean isPrecise = false;
+    public boolean includesDays = false;
     private LocationProvider mLocationProvider;
     private MyTimer mTimer;
     public static final String TAG = "CountdownFragment";
@@ -78,10 +76,10 @@ implements MyTimer.MyTimerListener{
 
 
     public void updateDisplay() {
-        if (isPrecise) {
-            mTextView.setText(hmsCountdownString());
-        } else {
+        if (includesDays) {
             mTextView.setText(dhmsCountdownString());
+        } else {
+            mTextView.setText(hmsCountdownString());
         }
     }
 
@@ -98,7 +96,7 @@ implements MyTimer.MyTimerListener{
 
 
         LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        return mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1,latLng) - rightNow;
+        return mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1) - rightNow;
     }
 
     // Creates string representing time in mills in days, hours, minutes and seconds
@@ -121,8 +119,8 @@ implements MyTimer.MyTimerListener{
     }
     // Creates string representing time in mills in hours, minutes, seconds
     private String millstoHMS(long mills) {
-        long days = TimeUnit.MILLISECONDS.toDays(mills);
-        mills -= TimeUnit.DAYS.toMillis(days);
+//        long days = TimeUnit.MILLISECONDS.toDays(mills);
+//        mills -= TimeUnit.DAYS.toMillis(days);
 
         long hours = TimeUnit.MILLISECONDS.toHours(mills);
         mills = mills - TimeUnit.HOURS.toMillis(hours);

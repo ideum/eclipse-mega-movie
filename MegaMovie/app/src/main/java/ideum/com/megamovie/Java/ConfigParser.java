@@ -1,81 +1,134 @@
 package ideum.com.megamovie.Java;
 
 
+import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
-import android.support.annotation.XmlRes;
-import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ideum.com.megamovie.R;
+
 public class ConfigParser {
-    private Map<String,String> configMap;
+    //    private Map<String, String> configMap;
+    private Resources mResources;
 
-    public ConfigParser(XmlResourceParser parser) {
-
-        configMap = parseMap(parser);
+    public ConfigParser(Resources resources) {
+        mResources = resources;
+//        configMap = parseConfig(parser);
     }
 
-    public CaptureSequence.CaptureSettings getSettings() {
-        int sensitivity = Integer.parseInt(configMap.get("SENSOR_SENSITIVITY"));
-        long duration = Long.parseLong(configMap.get("SENSOR_EXPOSURE_TIME"));
-        float focus = Float.parseFloat(configMap.get("LENS_FOCUS_DISTANCE"));
-
-        return new CaptureSequence.CaptureSettings(duration,sensitivity,focus);
-    }
-    public int[] getCaptureSpacing() {
-        int num1 = Integer.parseInt(configMap.get("CAPTURE_SPACING_1"));
-        int num2 = Integer.parseInt(configMap.get("CAPTURE_SPACING_2"));
-        int num3 = Integer.parseInt(configMap.get("CAPTURE_SPACING_3"));
-        int num4 = Integer.parseInt(configMap.get("CAPTURE_SPACING_4"));
-        int num5 = Integer.parseInt(configMap.get("CAPTURE_SPACING_5"));
-
-        return new int[]{num1, num2, num3, num4, num5};
+    public List<CaptureSequence.IntervalProperties> getIntervalProperties() throws IOException, XmlPullParserException {
+        XmlResourceParser parser = mResources.getXml(R.xml.config);
+        return readIntervals(parser);
     }
 
 
-    public Map<String,String> parseMap(XmlResourceParser parser) {
-        Map<String, String> map = new HashMap<>();
-        String key = null, value = null;
-        try {
-            int eventType = parser.getEventType();
-
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                if (eventType == XmlPullParser.START_DOCUMENT) {
-                } else if (eventType == XmlPullParser.START_TAG) {
-                    if (parser.getName() != null && parser.getName().equals("entry")) {
-                        key = parser.getAttributeValue(null, "key");
-
-                        if (key == null) {
-                            parser.close();
-                        }
-                    }
-                } else if (eventType == XmlPullParser.TEXT) {
-                    if (key != null) {
-                        value = parser.getText();
-                    }
-                } else if (eventType == XmlPullParser.END_TAG) {
-                    if (parser.getName().equals("entry")) {
-                        map.put(key, value);
-                        key = null;
-                        value = null;
-                    }
-                }
-                try {
-                    eventType = parser.next();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    private List<CaptureSequence.IntervalProperties> readIntervals(XmlResourceParser parser) throws XmlPullParserException, IOException {
+        List<CaptureSequence.IntervalProperties> properties = new ArrayList<>();
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
             }
-
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            if (parser.getName().equals("interval_properties")) {
+                properties.add(readIntervalProperties(parser));
+            }
         }
-        return map;
+        return properties;
+    }
+
+    private CaptureSequence.IntervalProperties readIntervalProperties(XmlPullParser parser) throws IOException, XmlPullParserException {
+
+        parser.require(XmlPullParser.START_TAG, null, "interval_properties");
+        Integer sensitivity = null;
+        Long exposureTime = null;
+        Float focusDistance = null;
+        Long spacing = null;
+        Boolean shouldSaveRaw = null;
+        Boolean shouldSaveJpeg = null;
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            if (parser.getName().equals("sensor_sensitivity")) {
+                sensitivity = readInteger(parser);
+            }
+            if (parser.getName().equals("sensor_exposure_time")) {
+                exposureTime = readLong(parser);
+            }
+            if (parser.getName().equals("lens_focus_distance")) {
+                focusDistance = readFloat(parser);
+            }
+            if (parser.getName().equals("spacing")) {
+                spacing = readLong(parser);
+            }
+            if (parser.getName().equals("should_save_raw")) {
+                shouldSaveRaw = readBoolean(parser);
+            }
+            if (parser.getName().equals("should_save_jpeg")) {
+                shouldSaveJpeg = readBoolean(parser);
+            }
+        }
+        return new CaptureSequence.IntervalProperties(sensitivity,
+                exposureTime,
+                focusDistance,
+                spacing,
+                shouldSaveRaw,
+                shouldSaveJpeg);
+    }
+
+    private Integer readInteger(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String integerString = readText(parser);
+        return Integer.parseInt(integerString);
+    }
+
+    private Long readLong(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String longString = readText(parser);
+        return Long.parseLong(longString);
+    }
+
+    private Float readFloat(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String floatString = readText(parser);
+        return Float.parseFloat(floatString);
+    }
+
+    private Boolean readBoolean(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String booleanString = readText(parser);
+        return Boolean.parseBoolean(booleanString);
+    }
+
+
+    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String result = "";
+        if (parser.next() == XmlPullParser.TEXT) {
+            result = parser.getText();
+            parser.nextTag();
+        }
+        return result;
+    }
+
+
+    private StringPair readStringPair(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String key = parser.getAttributeValue(null, "key");
+        parser.next();
+        String value = parser.getText();
+        parser.next();
+        return new StringPair(key, value);
+    }
+
+    private static class StringPair {
+        public String key;
+        public String value;
+
+        public StringPair(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }

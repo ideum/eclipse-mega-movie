@@ -3,20 +3,22 @@ package ideum.com.megamovie.Java;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
-import com.google.android.gms.maps.model.LatLng;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import ideum.com.megamovie.R;
 
 public class CalibrationActivity extends AppCompatActivity
-implements MyTimer.MyTimerListener{
+implements MyTimer.MyTimerListener,
+        LocationProvider{
 
     public final static String TAG = "CALIBRATION_ACTIVITY";
     private GPSFragment mGPSFragment;
@@ -29,9 +31,18 @@ implements MyTimer.MyTimerListener{
     private CameraPreviewAndCaptureFragment mPreviewFragment;
 
     @Override
+    public Location getLocation() {
+        return mGPSFragment.getLocation();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calibration);
+
+        // Keep phone from going to sleep
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mGPSFragment = new GPSFragment();
@@ -40,29 +51,48 @@ implements MyTimer.MyTimerListener{
 
         mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
         try {
-            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext());
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(),this);
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (mCountdownFragment != null) {
-            mCountdownFragment.isPrecise = true;
-            mCountdownFragment.setLocationProvider(mGPSFragment);
+            mCountdownFragment.includesDays = false;
+            mCountdownFragment.setLocationProvider(this);
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         }
 
-         mTimer = new MyTimer(this);
-//         mTimer.startTicking();
 
         mPreviewFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.preview_fragment);
-        Resources res = getResources();
-        ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
-        CaptureSequence.CaptureSettings settings = parser.getSettings();
-        mPreviewFragment.setCameraSettings(settings);
-
+        Resources resources = getResources();
+        ConfigParser parser = new ConfigParser(resources);
+        CaptureSequence.CaptureSettings settings = null;
+        try {
+            settings = new CaptureSequence.CaptureSettings(parser.getIntervalProperties().get(0));
+            mPreviewFragment.setCameraSettings(settings);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        mTimer = new MyTimer(this);
+        mTimer.startTicking();
+    }
+
+
+
+    @Override
     protected void onPause() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+
         super.onPause();
     }
 
@@ -70,7 +100,7 @@ implements MyTimer.MyTimerListener{
         if (mGPSFragment.getLocation() == null) {
             return false;
         }
-        Long firstContactTime = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1,new LatLng(0,0));
+        Long firstContactTime = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1);
         Long currentTime = mGPSFragment.getLocation().getTime();
         Long delta_time_seconds = (firstContactTime - currentTime)/1000;
         Log.e(TAG,String.valueOf(delta_time_seconds));
@@ -80,10 +110,10 @@ implements MyTimer.MyTimerListener{
 
     @Override
     public void onTick() {
-//        if(isWithinTimeThreshold()) {
-//            mTimer.cancel();
-//            loadCaptureActivity();
-//        }
+        if(isWithinTimeThreshold()) {
+            mTimer.cancel();
+            loadCaptureActivity();
+        }
     }
 
     private void loadCaptureActivity() {

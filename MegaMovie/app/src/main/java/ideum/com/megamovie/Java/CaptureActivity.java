@@ -6,22 +6,28 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
 import ideum.com.megamovie.R;
 
 public class CaptureActivity extends AppCompatActivity
-        implements CameraFragment.CaptureListener {
+        implements CameraFragment.CaptureListener,
+        CaptureSequenceSession.CameraController,
+        LocationProvider{
 
     private final static String TAG = "CaptureActivity";
     private int REQUEST_LOCATION_PERMISSIONS = 0;
@@ -34,6 +40,8 @@ public class CaptureActivity extends AppCompatActivity
     private static final String[] SETTINGS_PERMISSIONS = {Manifest.permission.WRITE_SETTINGS};
     private int initialBrightness;
     private ContentResolver mContentResolver;
+    private static final int SCREEN_BRIGHTNESS_LOW = 5;
+    private static final boolean SHOULD_DIM_SCREEN = false;
 
     @Override
     public void onCapture() {
@@ -41,11 +49,22 @@ public class CaptureActivity extends AppCompatActivity
     }
 
     @Override
+    public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
+        mCameraFragment.takePhotoWithSettings(settings);
+    }
+
+    @Override
+    public Location getLocation() {
+        return mGPSFragment.getLocation();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
+        // Keep phone from going to sleep
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        // Allow app to control screen brightness to save power
         mContentResolver = getContentResolver();
 
         // Initial view showing number of completed captures
@@ -68,43 +87,48 @@ public class CaptureActivity extends AppCompatActivity
 
     private boolean checkSystemWritePermissions() {
         boolean permission = true;
-         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-             permission = Settings.System.canWrite(this);
-         } else {
-             permission = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_DENIED;
-         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permission = Settings.System.canWrite(this);
+        } else {
+            permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_DENIED;
+        }
         return permission;
     }
 
     private void setUpCaptureSequenceSession() {
-        Resources res = getResources();
-        ConfigParser parser = new ConfigParser(res.getXml(R.xml.config));
+        Resources resources = getResources();
+        ConfigParser parser = new ConfigParser(resources);
         try {
-            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext());
+            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(),this);
             EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0, 0), parser, calculator);
             CaptureSequence sequence = builder.buildSequence();
-            session = new CaptureSequenceSession(mCameraFragment, sequence, mGPSFragment);
+            session = new CaptureSequenceSession(sequence, this, this);
             session.startSession();
             totalCaptures = sequence.getRequestQueue().size();
             updateCaptureTextView();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
         }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            initialBrightness = Settings.System.getInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
+            try {
+                initialBrightness = Settings.System.getInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS);
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
 
         if (session == null) {
             setUpCaptureSequenceSession();
         }
-//        setScreenBrightness(5);
+        if (SHOULD_DIM_SCREEN) {
+            setScreenBrightness(SCREEN_BRIGHTNESS_LOW);
+        }
     }
 
 
@@ -114,7 +138,9 @@ public class CaptureActivity extends AppCompatActivity
             session.cancelSession();
             session = null;
         }
-//        setScreenBrightness(initialBrightness);
+        if (SHOULD_DIM_SCREEN) {
+            setScreenBrightness(initialBrightness);
+        }
         super.onPause();
     }
 
@@ -123,9 +149,9 @@ public class CaptureActivity extends AppCompatActivity
         if (!checkSystemWritePermissions()) {
             return;
         }
-            Settings.System.putInt(mContentResolver,
-                    Settings.System.SCREEN_BRIGHTNESS,
-                    brightness);
+        Settings.System.putInt(mContentResolver,
+                Settings.System.SCREEN_BRIGHTNESS,
+                brightness);
     }
 
     private void updateCaptureTextView() {
