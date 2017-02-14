@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -25,7 +27,7 @@ implements MyTimer.MyTimerListener,
     private CountdownFragment mCountdownFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     // switch to capture mode with 30 seconds until first contact
-    private static final long THRESHOLD_TIME_SECONDS = 15;
+    private static final long THRESHOLD_TIME_SECONDS = 30;
 
     private MyTimer mTimer;
     private CameraPreviewAndCaptureFragment mPreviewFragment;
@@ -100,20 +102,22 @@ implements MyTimer.MyTimerListener,
         if (mGPSFragment.getLocation() == null) {
             return false;
         }
-        Long firstContactTime = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1);
+
+        Location location = getLocation();
+        Long firstContactTime = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT1);
         Long currentTime = mGPSFragment.getLocation().getTime();
         Long delta_time_seconds = (firstContactTime - currentTime)/1000;
-        Log.e(TAG,String.valueOf(delta_time_seconds));
-        Log.e(TAG,String.valueOf(delta_time_seconds < THRESHOLD_TIME_SECONDS));
+//        Log.e(TAG,String.valueOf(delta_time_seconds));
+//        Log.e(TAG,String.valueOf(delta_time_seconds < THRESHOLD_TIME_SECONDS));
         return delta_time_seconds < THRESHOLD_TIME_SECONDS;
     }
 
     @Override
     public void onTick() {
-        if(isWithinTimeThreshold()) {
-            mTimer.cancel();
-            loadCaptureActivity();
-        }
+//        if(isWithinTimeThreshold()) {
+//            mTimer.cancel();
+//            loadCaptureActivity();
+//        }
     }
 
     private void loadCaptureActivity() {

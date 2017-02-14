@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -27,20 +28,20 @@ import ideum.com.megamovie.R;
 public class CaptureActivity extends AppCompatActivity
         implements CameraFragment.CaptureListener,
         CaptureSequenceSession.CameraController,
-        LocationProvider{
+        LocationProvider,
+        LocationListener{
 
     private final static String TAG = "CaptureActivity";
-    private int REQUEST_LOCATION_PERMISSIONS = 0;
     private GPSFragment mGPSFragment;
     private CameraFragment mCameraFragment;
     private TextView captureTextView;
     private Integer totalCaptures;
     private CaptureSequenceSession session;
-    private static final int SETTINGS_PERMISSIONS_REQUEST_CODE = 5;
     private static final String[] SETTINGS_PERMISSIONS = {Manifest.permission.WRITE_SETTINGS};
     private int initialBrightness;
     private ContentResolver mContentResolver;
     private static final int SCREEN_BRIGHTNESS_LOW = 5;
+    private Location mLocation;
     private static final boolean SHOULD_DIM_SCREEN = false;
 
     @Override
@@ -53,10 +54,6 @@ public class CaptureActivity extends AppCompatActivity
         mCameraFragment.takePhotoWithSettings(settings);
     }
 
-    @Override
-    public Location getLocation() {
-        return mGPSFragment.getLocation();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +71,7 @@ public class CaptureActivity extends AppCompatActivity
         mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
+        mGPSFragment.addLocationListener(this);
 
         /* Add Camera Fragment */
         mCameraFragment = new CameraFragment();
@@ -82,7 +80,6 @@ public class CaptureActivity extends AppCompatActivity
         mCameraFragment.setLocationProvider(mGPSFragment);
         mCameraFragment.addCaptureListener(this);
 
-        setUpCaptureSequenceSession();
     }
 
     private boolean checkSystemWritePermissions() {
@@ -100,7 +97,7 @@ public class CaptureActivity extends AppCompatActivity
         ConfigParser parser = new ConfigParser(resources);
         try {
             EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(),this);
-            EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(new LatLng(0, 0), parser, calculator);
+            EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(this, parser, calculator);
             CaptureSequence sequence = builder.buildSequence();
             session = new CaptureSequenceSession(sequence, this, this);
             session.startSession();
@@ -111,7 +108,6 @@ public class CaptureActivity extends AppCompatActivity
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -123,14 +119,10 @@ public class CaptureActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
-        if (session == null) {
-            setUpCaptureSequenceSession();
-        }
         if (SHOULD_DIM_SCREEN) {
             setScreenBrightness(SCREEN_BRIGHTNESS_LOW);
         }
     }
-
 
     @Override
     protected void onPause() {
@@ -144,6 +136,19 @@ public class CaptureActivity extends AppCompatActivity
         super.onPause();
     }
 
+
+    @Override
+    public Location getLocation() {
+        return mLocation;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (mLocation == null) {
+            mLocation = location;
+            setUpCaptureSequenceSession();
+        }
+    }
 
     private void setScreenBrightness(int brightness) {
         if (!checkSystemWritePermissions()) {
@@ -165,7 +170,4 @@ public class CaptureActivity extends AppCompatActivity
         startActivity(new Intent(this, CalibrationActivity.class));
     }
 
-    public void loadResultsActivity(View view) {
-        startActivity(new Intent(this, ResultsActivity.class));
-    }
 }

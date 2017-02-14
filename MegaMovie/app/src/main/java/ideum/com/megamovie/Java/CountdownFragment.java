@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import ideum.com.megamovie.R;
@@ -95,8 +100,11 @@ implements MyTimer.MyTimerListener{
         Long rightNow = currentLocation.getTime();
 
 
-        LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        return mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1) - rightNow;
+        Long contact2 = mEclipseTimeCalculator.getEclipseTime(currentLocation, EclipseTimeCalculator.Event.CONTACT2);
+        if (contact2 == null) {
+            return null;
+        }
+        return contact2 - rightNow;
     }
 
     // Creates string representing time in mills in days, hours, minutes and seconds
@@ -150,5 +158,16 @@ implements MyTimer.MyTimerListener{
             return "Can't access GPS";
         }
         return millstoHMS(millsToTargetDate());
+    }
+
+    private String timeOfDayString(Long mills) {
+        if (mills == null) {
+            return "";
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mills);
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
+
+        return formatter.format(calendar.getTime());
     }
 }

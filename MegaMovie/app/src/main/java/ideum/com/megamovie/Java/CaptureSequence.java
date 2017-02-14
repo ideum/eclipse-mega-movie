@@ -77,7 +77,6 @@ public class CaptureSequence {
 
         public long spacing;
 
-
         public CaptureInterval(CaptureSettings settings, long spacing, long startTime, long duration) {
             this.settings = settings;
             this.spacing = spacing;
@@ -90,7 +89,6 @@ public class CaptureSequence {
             spacing = properties.spacing;
             this.startTime = startTime;
             this.duration = duration;
-
         }
 
         public Queue<TimedCaptureRequest> getTimedRequests() {

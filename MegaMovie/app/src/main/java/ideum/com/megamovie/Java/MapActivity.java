@@ -97,7 +97,7 @@ public class MapActivity extends AppCompatActivity
         mGPSFragment.locationRequestPriority = LocationRequest.PRIORITY_LOW_POWER;
 
         mContactTimesFragment = (ContactTimesFragment) getFragmentManager().findFragmentById(R.id.contact_times_fragment);
-
+    mContactTimesFragment.setLocationProvider(this);
         try {
             mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(),this);
             mContactTimesFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);

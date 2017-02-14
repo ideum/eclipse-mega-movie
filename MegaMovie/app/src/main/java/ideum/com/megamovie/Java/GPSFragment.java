@@ -28,6 +28,10 @@ public class GPSFragment extends Fragment
     public  long gpsInterval = 1000 * 60;
     public  long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
+    private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
+    private static final long DUMMY_LATITUDE = -45;
+    private static final long DUMMY_LONGITUDE = -68;
+
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;
     private GoogleApiClient mGoogleApiClient;
@@ -75,7 +79,11 @@ public class GPSFragment extends Fragment
     }
 
     public Location getLocation() {
+        if (mGoogleApiClient == null) {
+            return null;
+        }
         Location lastLocation = null;
+
         try {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         } catch (SecurityException e) {
@@ -84,6 +92,11 @@ public class GPSFragment extends Fragment
         if (lastLocation == null) {
             return null;
         }
+        if (SHOULD_USE_DUMMY_LOCATION) {
+            lastLocation.setLatitude(DUMMY_LATITUDE);
+            lastLocation.setLongitude(DUMMY_LONGITUDE);
+        }
+
         return lastLocation;
     }
 
@@ -118,6 +131,11 @@ public class GPSFragment extends Fragment
 
     @Override
     public void onLocationChanged(Location location) {
+        if (SHOULD_USE_DUMMY_LOCATION) {
+            location.setLatitude(DUMMY_LATITUDE);
+            location.setLongitude(DUMMY_LONGITUDE);
+        }
+
         for(LocationListener listener: locationListeners) {
             listener.onLocationChanged(location);
         }

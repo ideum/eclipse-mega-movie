@@ -1,6 +1,7 @@
 package ideum.com.megamovie.Java;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,6 +27,11 @@ public class ContactTimesFragment extends Fragment {
     private TextView textViewContact2;
     private TextView textViewContact3;
     private TextView textViewContact4;
+    private LocationProvider mLocationProvider;
+
+    public void setLocationProvider(LocationProvider provider) {
+        mLocationProvider = provider;
+    }
 
     public ContactTimesFragment() {
         // Required empty public constructor
@@ -48,27 +56,42 @@ public class ContactTimesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        textViewContact1 = (TextView) view.findViewById(R.id.contact1);
+//        textViewContact1 = (TextView) view.findViewById(R.id.contact1);
         textViewContact2 = (TextView) view.findViewById(R.id.contact2);
         textViewContact3 = (TextView) view.findViewById(R.id.contact3);
-        textViewContact4 = (TextView) view.findViewById(R.id.contact4);
+//        textViewContact4 = (TextView) view.findViewById(R.id.contact4);
 
         updateTextViews();
     }
 
     public void updateTextViews() {
-        if (mEclipseTimeCalculator == null) {
+        if (mEclipseTimeCalculator == null || mLocationProvider == null) {
             return;
         }
-        long contact1 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT1);
-        long contact2 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT2);
-        long contact3 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT3);
-        long contact4 = mEclipseTimeCalculator.dummyEclipseTime(EclipseTimeCalculator.Event.CONTACT4);
 
-        textViewContact1.setText("C1: " + timeOfDayString(contact1));
-        textViewContact2.setText("C2: " + timeOfDayString(contact2));
-        textViewContact3.setText("C3: " + timeOfDayString(contact3));
-        textViewContact4.setText("C4: " + timeOfDayString(contact4));
+        Location location = mLocationProvider.getLocation();
+        if (location == null) {
+            return;
+        }
+//        long contact1 = mEclipseTimeCalculator.getEclipseTime(loc, EclipseTimeCalculator.Event.CONTACT1);
+        Long contact2 = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT2);
+        Long contact3 = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT3);
+//        long contact4 = mEclipseTimeCalculator.getEclipseTime(loc, EclipseTimeCalculator.Event.CONTACT4);
+
+//        textViewContact1.setText("C1: " + timeOfDayString(contact1));
+
+        String contact2String = "";
+        if (contact2 != null) {
+            contact2String = timeOfDayString(contact2);
+        }
+        String contact3String = "";
+        if (contact3 != null) {
+            contact3String = timeOfDayString(contact3);
+        }
+
+        textViewContact2.setText("C2: " + contact2String);
+        textViewContact3.setText("C3: " + contact3String);
+//        textViewContact4.setText("C4: " + timeOfDayString(contact4));
     }
 
     private String timeOfDayString(Long mills) {
