@@ -2,9 +2,6 @@ package ideum.com.megamovie.Java;
 
 import android.content.Context;
 import android.location.Location;
-
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,8 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -36,8 +32,11 @@ public class EclipseTimeCalculator {
 
     private final static int BASETIME_YEAR = 2017;
     private final static int BASETIME_MONTH = 01;
-    private final static int BASETIME_DAY = 26;
-    private final static int BASETIME_HOUR = 13;
+    private final static int BASETIME_DAY = 15;
+    private final static int BASETIME_HOUR = 15;
+    private final static int BASETIME_MINUTE = 45;
+
+    private final static boolean USE_DUMMY_ECLIPSE_TIME = true;
 
     private class MyKey {
         final int x;
@@ -89,6 +88,10 @@ public class EclipseTimeCalculator {
 //        if (location == null) {
 //            return null;
 //        }
+
+        if (USE_DUMMY_ECLIPSE_TIME) {
+            return dummyEclipseTime(event);
+        }
         double lat = location.getLatitude();
         double lng = location.getLongitude();
         int x = (int) ((lat - STARTING_LAT) / LATLNG_INTERVAL);
@@ -125,57 +128,46 @@ public class EclipseTimeCalculator {
         calendar.set(Calendar.MONTH, BASETIME_MONTH);
         calendar.set(Calendar.DAY_OF_MONTH, BASETIME_DAY);
         calendar.set(Calendar.HOUR, BASETIME_HOUR);
+        calendar.set(Calendar.MINUTE, BASETIME_MINUTE);
         return calendar.getTimeInMillis();
     }
 
-//    // This method is just a stand-in for now
-//    public long dummyEclipseTime(Event event) {
-//        Calendar calendar = Calendar.getInstance();
-////        calendar.set(Calendar.MONTH,7);
-////        calendar.set(Calendar.DAY_OF_MONTH,11);
-////        calendar.set(Calendar.HOUR,5);
-//        LatLng fakeLocation = new LatLng(45, 69);
-//        long c2 = getEclipseTime(fakeLocation, Event.CONTACT2);
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTimeInMillis(c2);
-//        Date c2_date = cal.getTime();
-//        DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
-//
-//        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-//
-//        String c2_date_string = formatter.format(c2_date);
-//
-//
-//
-//        calendar.set(Calendar.MINUTE, 57);
-//        calendar.set(Calendar.SECOND, 30);
-//        calendar.set(Calendar.MILLISECOND, 0);
-//
-//        long startTime = calendar.getTimeInMillis();
-//        long contactTime = 0;
-//
-//        switch (event) {
-//            case CONTACT1:
-//                contactTime = startTime;
-//                break;
-//            case CONTACT2:
-//                contactTime = startTime;
-//                break;
-//            case CONTACT2_END:
-//                contactTime = startTime;
-//                break;
-//            case CONTACT3:
-//                contactTime = startTime + 10000;
-//                break;
-//            case CONTACT3_END:
-//                contactTime = startTime + 10000;
-//                break;
-//            case CONTACT4:
-//                contactTime = startTime + 10000;
-//                break;
-//        }
-//        return contactTime;
-//    }
+    // This method is just a stand-in for now
+    public long dummyEclipseTime(Event event) {
+        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.MONTH,7);
+//        calendar.set(Calendar.DAY_OF_MONTH,11);
+//        calendar.set(Calendar.HOUR,5);
+
+        calendar.set(Calendar.MINUTE, 10);
+        calendar.set(Calendar.SECOND, 15);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        long startTime = calendar.getTimeInMillis();
+        long contactTime = 0;
+
+        switch (event) {
+            case CONTACT1:
+                contactTime = startTime;
+                break;
+            case CONTACT2:
+                contactTime = startTime;
+                break;
+            case CONTACT2_END:
+                contactTime = startTime;
+                break;
+            case CONTACT3:
+                contactTime = startTime + 30000;
+                break;
+            case CONTACT3_END:
+                contactTime = startTime + 30000;
+                break;
+            case CONTACT4:
+                contactTime = startTime + 30000;
+                break;
+        }
+        return contactTime;
+    }
 
     private Map<MyKey, Double> parseTextFile(Context context, int resource_file_id) throws IOException {
         InputStream inputStream = context.getResources().openRawResource(resource_file_id);

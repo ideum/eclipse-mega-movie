@@ -51,7 +51,7 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
             return;
         }
         if (nextRequest == null) {
-            nextRequest = requestQueue.poll();
+            seekToNextRequest();
         }
         if (nextRequest != null) {
             Long requestTime = nextRequest.mTime;
@@ -69,12 +69,33 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
 //
 //    }
 
+    /*
+    Sets nextRequest equal to first request whose timestamp is in the future
+     */
+    private void seekToNextRequest() {
+        nextRequest = requestQueue.poll();
+        if (nextRequest == null) {
+            return;
+        }
+        Long currentTime = getTime();
+        Long requestTime = nextRequest.mTime;
+        while (currentTime >= requestTime) {
+            nextRequest = requestQueue.poll();
+            if (nextRequest == null) {
+                return;
+            }
+            requestTime = nextRequest.mTime;
+        }
+
+    }
+
 
     public void startSession() {
         cancelSession();
         MyTimer timer = new MyTimer(this);
         timer.startTicking();
     }
+
 
     public void cancelSession() {
         if (mMyTimer != null) {

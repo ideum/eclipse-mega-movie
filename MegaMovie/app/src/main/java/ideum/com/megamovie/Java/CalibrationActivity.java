@@ -27,7 +27,7 @@ implements MyTimer.MyTimerListener,
     private CountdownFragment mCountdownFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     // switch to capture mode with 30 seconds until first contact
-    private static final long THRESHOLD_TIME_SECONDS = 30;
+    private static final long THRESHOLD_TIME_SECONDS = 15;
 
     private MyTimer mTimer;
     private CameraPreviewAndCaptureFragment mPreviewFragment;
@@ -58,7 +58,7 @@ implements MyTimer.MyTimerListener,
             e.printStackTrace();
         }
         if (mCountdownFragment != null) {
-            mCountdownFragment.includesDays = false;
+            mCountdownFragment.includesDays = true;
             mCountdownFragment.setLocationProvider(this);
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         }
@@ -104,7 +104,7 @@ implements MyTimer.MyTimerListener,
         }
 
         Location location = getLocation();
-        Long firstContactTime = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT1);
+        Long firstContactTime = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT2);
         Long currentTime = mGPSFragment.getLocation().getTime();
         Long delta_time_seconds = (firstContactTime - currentTime)/1000;
 //        Log.e(TAG,String.valueOf(delta_time_seconds));
@@ -114,10 +114,10 @@ implements MyTimer.MyTimerListener,
 
     @Override
     public void onTick() {
-//        if(isWithinTimeThreshold()) {
-//            mTimer.cancel();
-//            loadCaptureActivity();
-//        }
+        if(isWithinTimeThreshold()) {
+            mTimer.cancel();
+            loadCaptureActivity();
+        }
     }
 
     private void loadCaptureActivity() {

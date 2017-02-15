@@ -99,7 +99,7 @@ public class CaptureActivity extends AppCompatActivity
             EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(),this);
             EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(this, parser, calculator);
             CaptureSequence sequence = builder.buildSequence();
-            session = new CaptureSequenceSession(sequence, this, this);
+            session = new CaptureSequenceSession(sequence, mGPSFragment, this);
             session.startSession();
             totalCaptures = sequence.getRequestQueue().size();
             updateCaptureTextView();

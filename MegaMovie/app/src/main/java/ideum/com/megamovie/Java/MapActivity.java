@@ -97,9 +97,9 @@ public class MapActivity extends AppCompatActivity
         mGPSFragment.locationRequestPriority = LocationRequest.PRIORITY_LOW_POWER;
 
         mContactTimesFragment = (ContactTimesFragment) getFragmentManager().findFragmentById(R.id.contact_times_fragment);
-    mContactTimesFragment.setLocationProvider(this);
+        mContactTimesFragment.setLocationProvider(this);
         try {
-            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(),this);
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), this);
             mContactTimesFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,7 +107,7 @@ public class MapActivity extends AppCompatActivity
         mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
 
         if (mCountdownFragment != null) {
-            mCountdownFragment.includesDays = false;
+            mCountdownFragment.includesDays = true;
             mCountdownFragment.setLocationProvider(this);
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         }
