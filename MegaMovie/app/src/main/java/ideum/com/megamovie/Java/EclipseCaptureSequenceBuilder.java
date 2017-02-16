@@ -22,7 +22,7 @@ public class EclipseCaptureSequenceBuilder {
     private LocationProvider mLocationProvider;
     private ConfigParser mConfig;
     private EclipseTimeCalculator mEclipseTimeCalculator;
-    private static final long FIXED_INTERVAL_LENGTH = 5*1000;
+    private static final long FIXED_INTERVAL_LENGTH = 5*1000;//30*1000;
 
     public EclipseCaptureSequenceBuilder(LocationProvider provider,ConfigParser config,EclipseTimeCalculator eclipseTimeCalculator) {
         mLocationProvider = provider;

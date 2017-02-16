@@ -101,7 +101,7 @@ public class ContactTimesFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
-
+//        formatter.setTimeZone();
         return formatter.format(calendar.getTime());
     }
 

@@ -30,7 +30,7 @@ implements MyTimer.MyTimerListener{
     private EclipseTimeCalculator mEclipseTimeCalculator;
     public boolean includesDays = false;
     private LocationProvider mLocationProvider;
-    private MyTimer mTimer;
+//    private MyTimer mTimer;
     public static final String TAG = "CountdownFragment";
 
     private int count = 0;
@@ -46,7 +46,8 @@ implements MyTimer.MyTimerListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTimer = new MyTimer(this);
+//        mTimer = new MyTimer();
+//        mTimer.addListener(this);
     }
 
     @Override
@@ -65,13 +66,13 @@ implements MyTimer.MyTimerListener{
     @Override
     public void onResume() {
         super.onResume();
-        mTimer.startTicking();
+//        mTimer.startTicking();
 
     }
 
     @Override
     public void onPause() {
-        mTimer.cancel();
+//        mTimer.cancel();
         super.onPause();
     }
 
@@ -148,14 +149,14 @@ implements MyTimer.MyTimerListener{
 
     private String dhmsCountdownString() {
         if (millsToTargetDate() == null) {
-            return "Can't access GPS";
+            return "Contact times not available";
         }
         return millsToDHMS(millsToTargetDate());
     }
 
     private String hmsCountdownString() {
         if (millsToTargetDate() == null) {
-            return "Can't access GPS";
+            return "Contact times not available";
         }
         return millstoHMS(millsToTargetDate());
     }

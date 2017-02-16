@@ -2,7 +2,9 @@ package ideum.com.megamovie.Java;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,20 +16,26 @@ import static java.util.concurrent.TimeUnit.*;
 public class MyTimer {
     // Timer runs for one year
     private static long COUNTDOWN_DURATION = Long.MAX_VALUE;
-    private static long TICK_INTERVAL = 10; //milliseconds
+    private static long TICK_INTERVAL = 5; //milliseconds
     public static final String TAG = "MyTimer";
     public interface MyTimerListener {
          void onTick();
     }
     private CountDownTimer mCountDownTimer;
-    private MyTimerListener mListener;
+    private List<MyTimerListener> listeners = new ArrayList<>();
 
     private ScheduledExecutorService mService;
 
-    public MyTimer(MyTimerListener listener) {
-        mListener = listener;
+    public MyTimer(List<MyTimerListener> listeners) {
+        this.listeners = listeners;
         mService = Executors.newScheduledThreadPool(1);
     }
+
+    public void addListener(MyTimerListener listener) {
+        listeners.add(listener);
+    }
+
+    public MyTimer() {}
 
     public void startTicking() {
 //        mService = Executors.newScheduledThreadPool(1);
@@ -47,7 +55,8 @@ public class MyTimer {
         mCountDownTimer = new CountDownTimer(COUNTDOWN_DURATION, TICK_INTERVAL) {
 
                 public void onTick(long millisUntilFinished) {
-                    mListener.onTick();
+                    for(MyTimerListener l : listeners)
+                    l.onTick();
                 }
 
                 public void onFinish() {

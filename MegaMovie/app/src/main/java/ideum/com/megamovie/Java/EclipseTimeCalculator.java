@@ -32,9 +32,8 @@ public class EclipseTimeCalculator {
 
     private final static int BASETIME_YEAR = 2017;
     private final static int BASETIME_MONTH = 01;
-    private final static int BASETIME_DAY = 15;
-    private final static int BASETIME_HOUR = 15;
-    private final static int BASETIME_MINUTE = 45;
+    private final static int BASETIME_DAY = 26;
+    private final static int BASETIME_HOUR = 13;
 
     private final static boolean USE_DUMMY_ECLIPSE_TIME = true;
 
@@ -128,7 +127,6 @@ public class EclipseTimeCalculator {
         calendar.set(Calendar.MONTH, BASETIME_MONTH);
         calendar.set(Calendar.DAY_OF_MONTH, BASETIME_DAY);
         calendar.set(Calendar.HOUR, BASETIME_HOUR);
-        calendar.set(Calendar.MINUTE, BASETIME_MINUTE);
         return calendar.getTimeInMillis();
     }
 
@@ -139,8 +137,8 @@ public class EclipseTimeCalculator {
 //        calendar.set(Calendar.DAY_OF_MONTH,11);
 //        calendar.set(Calendar.HOUR,5);
 
-        calendar.set(Calendar.MINUTE, 10);
-        calendar.set(Calendar.SECOND, 15);
+        calendar.set(Calendar.MINUTE, 54);
+        calendar.set(Calendar.SECOND, 20);
         calendar.set(Calendar.MILLISECOND, 0);
 
         long startTime = calendar.getTimeInMillis();
@@ -157,13 +155,13 @@ public class EclipseTimeCalculator {
                 contactTime = startTime;
                 break;
             case CONTACT3:
-                contactTime = startTime + 30000;
+                contactTime = startTime + 10000;
                 break;
             case CONTACT3_END:
-                contactTime = startTime + 30000;
+                contactTime = startTime + 10000;
                 break;
             case CONTACT4:
-                contactTime = startTime + 30000;
+                contactTime = startTime + 10000;
                 break;
         }
         return contactTime;
@@ -211,5 +209,4 @@ public class EclipseTimeCalculator {
 
         return formatter.format(calendar.getTime());
     }
-
 }

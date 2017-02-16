@@ -33,12 +33,14 @@ public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         LocationListener,
         ActivityCompat.OnRequestPermissionsResultCallback,
-        LocationProvider {
+        LocationProvider,
+        MyTimer.MyTimerListener{
 
     private boolean cameraShouldMoveToCurrentLocation = true;
     private CountdownFragment mCountdownFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private static final String TAG = "Main Activity";
+    private static final long THRESHOLD_TIME_SECONDS = 20;
     private ContentResolver mContentResolver;
 
     /**
@@ -65,6 +67,7 @@ public class MapActivity extends AppCompatActivity
     private GoogleMap mGoogleMap;
     private GPSFragment mGPSFragment;
     private ContactTimesFragment mContactTimesFragment;
+    private MyTimer mTimer;
 
 
     @Override
@@ -122,6 +125,14 @@ public class MapActivity extends AppCompatActivity
         return mGPSFragment.getLocation();
     }
 
+    @Override
+    public void onTick() {
+        if(isWithinTimeThreshold()) {
+            mTimer.cancel();
+            loadCaptureActivity();
+        }
+    }
+
     private void requestAllPermissions() {
         ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSIONS);
 
@@ -140,6 +151,11 @@ public class MapActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        mTimer = new MyTimer();
+        mTimer.addListener(mCountdownFragment);
+        mTimer.addListener(this);
+        mTimer.startTicking();
+
         cameraShouldMoveToCurrentLocation = true;
         if (mGoogleMap == null) {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -149,7 +165,19 @@ public class MapActivity extends AppCompatActivity
 
     @Override
     protected void onPause() {
+        mTimer.cancel();
         super.onPause();
+    }
+
+    private boolean isWithinTimeThreshold() {
+        if (mGPSFragment.getLocation() == null) {
+            return false;
+        }
+        Location location = getLocation();
+        Long firstContactTime = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT2);
+        Long currentTime = mGPSFragment.getLocation().getTime();
+        Long delta_time_seconds = (firstContactTime - currentTime)/1000;
+        return delta_time_seconds < THRESHOLD_TIME_SECONDS;
     }
 
     private boolean checkSystemWritePermissions() {
@@ -200,6 +228,11 @@ public class MapActivity extends AppCompatActivity
 
     public void loadCalibrationActivity(View view) {
         startActivity(new Intent(this, CalibrationActivity.class));
+    }
+
+    private void loadCaptureActivity() {
+        startActivity(new Intent(this, CaptureActivity.class));
+
     }
 
 }

@@ -7,10 +7,8 @@
     <string name="location_map">Choose location on map</string>
     <string name="location_address">Enter Address</string>
     <string name="location_GPS">Enter GPS Coordinates</string>
-    <string name="congratulations_message">Congratulations! You captured ** photos!.</string>
+    <string name="congratulations_message">The eclipse is complete.</string>
     <string name="view_photos_button_text">View Photos</string>
     <string name="share_photos_button_text">Share</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -20,22 +20,19 @@ import ideum.com.megamovie.R;
 
 public class CalibrationActivity extends AppCompatActivity
 implements MyTimer.MyTimerListener,
-        LocationProvider{
+            LocationProvider{
 
     public final static String TAG = "CALIBRATION_ACTIVITY";
     private GPSFragment mGPSFragment;
     private CountdownFragment mCountdownFragment;
-    private EclipseTimeCalculator mEclipseTimeCalculator;
-    // switch to capture mode with 30 seconds until first contact
-    private static final long THRESHOLD_TIME_SECONDS = 15;
-
-    private MyTimer mTimer;
     private CameraPreviewAndCaptureFragment mPreviewFragment;
+    private EclipseTimeCalculator mEclipseTimeCalculator;
+    private MyTimer mTimer;
+    // switch to capture mode with 20 seconds until first contact
+    private static final long THRESHOLD_TIME_SECONDS = 20;
 
-    @Override
-    public Location getLocation() {
-        return mGPSFragment.getLocation();
-    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +79,16 @@ implements MyTimer.MyTimerListener,
     protected void onResume() {
         super.onResume();
 
-        mTimer = new MyTimer(this);
+        mTimer = new MyTimer();
+        mTimer.addListener(this);
+        mTimer.addListener(mCountdownFragment);
         mTimer.startTicking();
     }
-
-
 
     @Override
     protected void onPause() {
         if (mTimer != null) {
+
             mTimer.cancel();
             mTimer = null;
         }
@@ -98,17 +96,19 @@ implements MyTimer.MyTimerListener,
         super.onPause();
     }
 
+    @Override
+    public Location getLocation() {
+        return mGPSFragment.getLocation();
+    }
+
     private boolean isWithinTimeThreshold() {
         if (mGPSFragment.getLocation() == null) {
             return false;
         }
-
         Location location = getLocation();
         Long firstContactTime = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT2);
         Long currentTime = mGPSFragment.getLocation().getTime();
         Long delta_time_seconds = (firstContactTime - currentTime)/1000;
-//        Log.e(TAG,String.valueOf(delta_time_seconds));
-//        Log.e(TAG,String.valueOf(delta_time_seconds < THRESHOLD_TIME_SECONDS));
         return delta_time_seconds < THRESHOLD_TIME_SECONDS;
     }
 

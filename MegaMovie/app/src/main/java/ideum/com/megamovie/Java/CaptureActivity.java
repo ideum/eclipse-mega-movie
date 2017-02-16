@@ -29,7 +29,7 @@ public class CaptureActivity extends AppCompatActivity
         implements CameraFragment.CaptureListener,
         CaptureSequenceSession.CameraController,
         LocationProvider,
-        LocationListener{
+        LocationListener {
 
     private final static String TAG = "CaptureActivity";
     private GPSFragment mGPSFragment;
@@ -43,6 +43,7 @@ public class CaptureActivity extends AppCompatActivity
     private static final int SCREEN_BRIGHTNESS_LOW = 5;
     private Location mLocation;
     private static final boolean SHOULD_DIM_SCREEN = false;
+    private MyTimer mTimer;
 
     @Override
     public void onCapture() {
@@ -93,6 +94,7 @@ public class CaptureActivity extends AppCompatActivity
     }
 
     private void setUpCaptureSequenceSession() {
+        mTimer = new MyTimer();
         Resources resources = getResources();
         ConfigParser parser = new ConfigParser(resources);
         try {
@@ -100,7 +102,8 @@ public class CaptureActivity extends AppCompatActivity
             EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(this, parser, calculator);
             CaptureSequence sequence = builder.buildSequence();
             session = new CaptureSequenceSession(sequence, mGPSFragment, this);
-            session.startSession();
+            mTimer.addListener(session);
+            mTimer.startTicking();
             totalCaptures = sequence.getRequestQueue().size();
             updateCaptureTextView();
         } catch (IOException e) {
@@ -126,9 +129,8 @@ public class CaptureActivity extends AppCompatActivity
 
     @Override
     protected void onPause() {
-        if (session != null) {
-            session.cancelSession();
-            session = null;
+        if (mTimer != null) {
+            mTimer.cancel();
         }
         if (SHOULD_DIM_SCREEN) {
             setScreenBrightness(initialBrightness);
@@ -168,6 +170,10 @@ public class CaptureActivity extends AppCompatActivity
 
     public void loadCalibrationActivity(View view) {
         startActivity(new Intent(this, CalibrationActivity.class));
+    }
+
+    public void loadResultsActivity() {
+        startActivity(new Intent(this, ResultsActivity.class));
     }
 
 }
