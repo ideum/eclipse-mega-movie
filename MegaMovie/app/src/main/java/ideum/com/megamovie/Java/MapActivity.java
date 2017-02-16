@@ -33,27 +33,32 @@ public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         LocationListener,
         ActivityCompat.OnRequestPermissionsResultCallback,
-        LocationProvider,
-        MyTimer.MyTimerListener{
+        MyTimer.MyTimerListener {
 
-    private boolean cameraShouldMoveToCurrentLocation = true;
+    private GoogleMap mGoogleMap;
+    private GPSFragment mGPSFragment;
+    private ContactTimesFragment mContactTimesFragment;
     private CountdownFragment mCountdownFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
+    private MyTimer mTimer;
+    private Location mLocation;
     private static final String TAG = "Main Activity";
+
+    /**
+     * Switch to capture mode with 20 seconds until first contact
+     */
     private static final long THRESHOLD_TIME_SECONDS = 20;
+    /**
+     * Resolver is used to interact with system settings to be able
+     * to control screen brightness
+     */
     private ContentResolver mContentResolver;
 
     /**
-     * Request code for location permissions
+     * Request code for permissions
      */
-    /**
-     * Request code for camera permissions
-     */
-    private static final int REQUEST_PERMISSIONS = 2;
+    private static final int REQUEST_PERMISSIONS = 0;
 
-    /**
-     * Permissions required to take a picture.
-     */
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -61,22 +66,19 @@ public class MapActivity extends AppCompatActivity
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private LatLng mCurrentLocation;
-    private GoogleMap mGoogleMap;
-    private GPSFragment mGPSFragment;
-    private ContactTimesFragment mContactTimesFragment;
-    private MyTimer mTimer;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        /**
+         * Keep activity in portrait mode
+         */
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        // Allow app to control screen brightness to save power
+        /**
+         * Allow app to control screen brightness to save power
+         */
         mContentResolver = getContentResolver();
 
         if (!checkSystemWritePermissions()) {
@@ -88,46 +90,55 @@ public class MapActivity extends AppCompatActivity
                     Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
         }
 
-        // request all permissions for later use
+        /**
+         * Request all permissions for later use
+         */
         if (!hasAllPermissionsGranted()) {
             requestAllPermissions();
         }
-
+        /**
+         * Set up gps
+         */
         mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
         mGPSFragment.addLocationListener(this);
         mGPSFragment.locationRequestPriority = LocationRequest.PRIORITY_LOW_POWER;
 
+        /**
+         * Set up eclipse time calculator and the fragment displaying contact times
+         */
         mContactTimesFragment = (ContactTimesFragment) getFragmentManager().findFragmentById(R.id.contact_times_fragment);
-        mContactTimesFragment.setLocationProvider(this);
+        mContactTimesFragment.setLocationProvider(mGPSFragment);
         try {
-            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), this);
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment);
             mContactTimesFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        /**
+         * Set up countdown fragment
+         */
         mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
 
         if (mCountdownFragment != null) {
             mCountdownFragment.includesDays = true;
-            mCountdownFragment.setLocationProvider(this);
+            mCountdownFragment.setLocationProvider(mGPSFragment);
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         }
-        // Get the SupportMapFragment and request notification
-        // when the map is ready to be used.
+
+        /**
+         * Get the SupportMapFragment and request notification
+         * when the map is ready to be used.
+         */
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
-    public Location getLocation() {
-        return mGPSFragment.getLocation();
-    }
-
-    @Override
     public void onTick() {
-        if(isWithinTimeThreshold()) {
+        if (isWithinTimeThreshold()) {
             mTimer.cancel();
             loadCaptureActivity();
         }
@@ -153,30 +164,34 @@ public class MapActivity extends AppCompatActivity
         super.onResume();
         mTimer = new MyTimer();
         mTimer.addListener(mCountdownFragment);
+
+        /**
+         * Listen to timer to determine when to switch to capture mode
+         */
         mTimer.addListener(this);
         mTimer.startTicking();
-
-        cameraShouldMoveToCurrentLocation = true;
-        if (mGoogleMap == null) {
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-        }
     }
 
     @Override
     protected void onPause() {
-        mTimer.cancel();
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
         super.onPause();
     }
 
     private boolean isWithinTimeThreshold() {
-        if (mGPSFragment.getLocation() == null) {
+        Location location = mGPSFragment.getLocation();
+        if (location == null) {
             return false;
         }
-        Location location = getLocation();
+
         Long firstContactTime = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT2);
+        if (firstContactTime == null) {
+            return false;
+        }
         Long currentTime = mGPSFragment.getLocation().getTime();
-        Long delta_time_seconds = (firstContactTime - currentTime)/1000;
+        Long delta_time_seconds = (firstContactTime - currentTime) / 1000;
         return delta_time_seconds < THRESHOLD_TIME_SECONDS;
     }
 
@@ -201,29 +216,25 @@ public class MapActivity extends AppCompatActivity
         mGoogleMap = googleMap;
     }
 
-    private void updateMarkers() {
-        if (mGoogleMap == null) {
-            return;
-        }
-        mGoogleMap.clear();
-        if (mCurrentLocation != null) {
-            mGoogleMap.addMarker(new MarkerOptions().position(mCurrentLocation));
-            if (cameraShouldMoveToCurrentLocation) {
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mCurrentLocation));
-            }
-        }
-        // We want camera to move to current position when it first sets marker, but not after that
-        // but not to move automatically after that
-        cameraShouldMoveToCurrentLocation = false;
-    }
 
     @Override
     public void onLocationChanged(Location location) {
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        LatLng currentLocation = new LatLng(lat, lng);
+        mGoogleMap.clear();
+        mGoogleMap.addMarker(new MarkerOptions().position(currentLocation));
+
+        /**
+         * When first get gps coordinates move camera to current location
+         */
+        if (mLocation == null) {
+            mLocation = location;
+
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        }
+
         mContactTimesFragment.updateTextViews();
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        mCurrentLocation = new LatLng(latitude, longitude);
-        updateMarkers();
     }
 
     public void loadCalibrationActivity(View view) {
@@ -232,7 +243,6 @@ public class MapActivity extends AppCompatActivity
 
     private void loadCaptureActivity() {
         startActivity(new Intent(this, CaptureActivity.class));
-
     }
 
 }

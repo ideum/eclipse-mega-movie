@@ -28,22 +28,38 @@ import ideum.com.megamovie.R;
 public class CaptureActivity extends AppCompatActivity
         implements CameraFragment.CaptureListener,
         CaptureSequenceSession.CameraController,
-        LocationProvider,
         LocationListener {
 
     private final static String TAG = "CaptureActivity";
     private GPSFragment mGPSFragment;
     private CameraFragment mCameraFragment;
+    private MyTimer mTimer;
+    private CaptureSequenceSession session;
     private TextView captureTextView;
     private Integer totalCaptures;
-    private CaptureSequenceSession session;
     private static final String[] SETTINGS_PERMISSIONS = {Manifest.permission.WRITE_SETTINGS};
-    private int initialBrightness;
+
+    /**
+     * Resolver used for interacting with system settings to adjust screen brightness
+     */
     private ContentResolver mContentResolver;
-    private static final int SCREEN_BRIGHTNESS_LOW = 5;
-    private Location mLocation;
+
+    /**
+     * Whether to dim screen to save battery power
+     */
     private static final boolean SHOULD_DIM_SCREEN = false;
-    private MyTimer mTimer;
+
+    /**
+     * Screen brightness saved before dimming
+     */
+    private int initialBrightness;
+
+    /**
+     * Brightness after dimming to save power
+     */
+    private static final int SCREEN_BRIGHTNESS_LOW = 5;
+
+    private Location mLocation;
 
     @Override
     public void onCapture() {
@@ -60,27 +76,34 @@ public class CaptureActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
-        // Keep phone from going to sleep
+
+        /**
+         *  Keep phone from going to sleep
+         */
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mContentResolver = getContentResolver();
 
-        // Initial view showing number of completed captures
+        /**
+         * Initial view showing number of completed captures
+         */
         captureTextView = (TextView) findViewById(R.id.capture_text);
-
-        /* Add Gps */
+        /**
+         * Add Gps
+         */
         mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
         mGPSFragment.addLocationListener(this);
 
-        /* Add Camera Fragment */
+        /**
+         * Add Camera Fragment
+         */
         mCameraFragment = new CameraFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mCameraFragment).commit();
         mCameraFragment.setLocationProvider(mGPSFragment);
         mCameraFragment.addCaptureListener(this);
-
     }
 
     private boolean checkSystemWritePermissions() {
@@ -94,18 +117,24 @@ public class CaptureActivity extends AppCompatActivity
     }
 
     private void setUpCaptureSequenceSession() {
-        mTimer = new MyTimer();
-        Resources resources = getResources();
-        ConfigParser parser = new ConfigParser(resources);
         try {
-            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(),this);
-            EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(this, parser, calculator);
+            Resources resources = getResources();
+            ConfigParser parser = new ConfigParser(resources);
+            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment);
+            EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(mGPSFragment, parser, calculator);
             CaptureSequence sequence = builder.buildSequence();
-            session = new CaptureSequenceSession(sequence, mGPSFragment, this);
-            mTimer.addListener(session);
-            mTimer.startTicking();
+
             totalCaptures = sequence.getRequestQueue().size();
             updateCaptureTextView();
+
+            /**
+             * Create and start the capture sequence session
+             */
+            session = new CaptureSequenceSession(sequence, mGPSFragment, this);
+            mTimer = new MyTimer();
+            mTimer.addListener(session);
+            mTimer.startTicking();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {
@@ -116,11 +145,15 @@ public class CaptureActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-            try {
-                initialBrightness = Settings.System.getInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS);
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-            }
+
+        /**
+         * Save the current brightness then dim the screen
+         */
+        try {
+            initialBrightness = Settings.System.getInt(mContentResolver, Settings.System.SCREEN_BRIGHTNESS);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
 
         if (SHOULD_DIM_SCREEN) {
             setScreenBrightness(SCREEN_BRIGHTNESS_LOW);
@@ -131,6 +164,7 @@ public class CaptureActivity extends AppCompatActivity
     protected void onPause() {
         if (mTimer != null) {
             mTimer.cancel();
+            mTimer = null;
         }
         if (SHOULD_DIM_SCREEN) {
             setScreenBrightness(initialBrightness);
@@ -140,12 +174,11 @@ public class CaptureActivity extends AppCompatActivity
 
 
     @Override
-    public Location getLocation() {
-        return mLocation;
-    }
-
-    @Override
     public void onLocationChanged(Location location) {
+
+        /**
+         * The first time the gps coordinates are available, create the capture sequence session
+         */
         if (mLocation == null) {
             mLocation = location;
             setUpCaptureSequenceSession();
@@ -171,9 +204,4 @@ public class CaptureActivity extends AppCompatActivity
     public void loadCalibrationActivity(View view) {
         startActivity(new Intent(this, CalibrationActivity.class));
     }
-
-    public void loadResultsActivity() {
-        startActivity(new Intent(this, ResultsActivity.class));
-    }
-
 }

@@ -8,7 +8,8 @@ import java.util.Locale;
 import java.util.Queue;
 
 /**
- * Created by MT_User on 1/26/2017.
+ * Classes for specifying sequence of camera captures. A sequence consists of a collection of intervals,
+ * during which the camera settings and frequency of captures are fixed.
  */
 
 public class CaptureSequence {
@@ -109,18 +110,6 @@ public class CaptureSequence {
 
     public CaptureSequence(Queue<CaptureInterval> captureIntervals) {
         mCaptureIntervals = captureIntervals;
-    }
-
-    public Queue<CaptureInterval> getIntervals() {
-        return mCaptureIntervals;
-    }
-
-    public long getTotalDuration() {
-        long totalDuration = 0;
-        for (CaptureInterval interval : mCaptureIntervals) {
-            totalDuration += interval.duration;
-        }
-        return totalDuration;
     }
 
     public Queue<TimedCaptureRequest> getRequestQueue() {

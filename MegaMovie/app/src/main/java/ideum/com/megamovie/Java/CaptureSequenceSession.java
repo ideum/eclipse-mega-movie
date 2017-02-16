@@ -6,43 +6,25 @@ import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Queue;
 
 public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public static final String TAG = "CaptureSequenceSession";
-    private static final long TIMER_DURATION = 1000000;
-    private static final long TIMER_INTERVAL = 10;
-    //    private CaptureSequence mCaptureSequence;
     private LocationProvider mLocationProvider;
     private Queue<CaptureSequence.TimedCaptureRequest> requestQueue;
-//    private MyTimer mMyTimer;
     private CaptureSequence.TimedCaptureRequest nextRequest;
     private CameraController mCameraController;
-    private List<CaptureSessionCompletionListener> listeners  = new ArrayList<>();
 
-    public void addCompletionListener(CaptureSessionCompletionListener listener) {
-        listeners.add(listener);
-    }
-
-    public interface CaptureSessionCompletionListener {
-        void onSessionComplete();
-    }
 
     public interface CameraController {
         void takePhotoWithSettings(CaptureSequence.CaptureSettings settings);
     }
 
     public CaptureSequenceSession(CaptureSequence captureSequence, LocationProvider locationProvider, CameraController controller) {
-//        mCaptureSequence = captureSequence;
         mLocationProvider = locationProvider;
         requestQueue = captureSequence.getRequestQueue();
-//        cullRequestQueue();
         mCameraController = controller;
     }
 
@@ -75,17 +57,11 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
         }
     }
 
-//    private CaptureSequence.TimedCaptureRequest getNextRequest() {
-//        nextRequest = requestQueue.poll();
-//
-//    }
-
-    /*
-    Sets nextRequest equal to first request whose timestamp is in the future
+    /**
+     * Sets nextRequest equal to first request whose timestamp is in the future
      */
     private void seekToNextRequest() {
         if (requestQueue.size() == 0) {
-            notifyCompletionListeners();
             return;
         }
         nextRequest = requestQueue.poll();
@@ -101,30 +77,12 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
             }
             requestTime = nextRequest.mTime;
         }
-
     }
 
-    private void notifyCompletionListeners() {
-        for (CaptureSessionCompletionListener listener : listeners) {
-            listener.onSessionComplete();
-        }
-    }
 
-//    public void startSession() {
-//        cancelSession();
-//        MyTimer timer = new MyTimer();
-//        timer.addListener(this);
-//        timer.startTicking();
-//    }
-//
-//
-//    public void cancelSession() {
-//        if (mMyTimer != null) {
-//            mMyTimer.cancel();
-//            mMyTimer = null;
-//        }
-//    }
-
+    /**
+     * Helper method used for debugging
+     */
     private String timeString(Long mills) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);

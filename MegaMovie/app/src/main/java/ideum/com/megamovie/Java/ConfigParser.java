@@ -1,5 +1,7 @@
 package ideum.com.megamovie.Java;
-
+/**
+ * Parses config xml file to create queue of timed capture requests
+ */
 
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
@@ -9,19 +11,15 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ideum.com.megamovie.R;
 
 public class ConfigParser {
-    //    private Map<String, String> configMap;
     private Resources mResources;
 
     public ConfigParser(Resources resources) {
         mResources = resources;
-//        configMap = parseConfig(parser);
     }
 
     public List<CaptureSequence.IntervalProperties> getIntervalProperties() throws IOException, XmlPullParserException {
@@ -111,24 +109,5 @@ public class ConfigParser {
             parser.nextTag();
         }
         return result;
-    }
-
-
-    private StringPair readStringPair(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String key = parser.getAttributeValue(null, "key");
-        parser.next();
-        String value = parser.getText();
-        parser.next();
-        return new StringPair(key, value);
-    }
-
-    private static class StringPair {
-        public String key;
-        public String value;
-
-        public StringPair(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
     }
 }

@@ -29,8 +29,8 @@ public class GPSFragment extends Fragment
     public  long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
-    private static final long DUMMY_LATITUDE = -45;
-    private static final long DUMMY_LONGITUDE = -68;
+    private static final double DUMMY_LATITUDE = -45;
+    private static final double DUMMY_LONGITUDE = -68;
 
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;
