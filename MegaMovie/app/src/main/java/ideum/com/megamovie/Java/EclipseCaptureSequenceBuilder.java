@@ -8,6 +8,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,9 +21,9 @@ public class EclipseCaptureSequenceBuilder {
     private LocationProvider mLocationProvider;
     private ConfigParser mConfig;
     private EclipseTimeCalculator mEclipseTimeCalculator;
-    private static final long INTERVAL_LENGTH = 5 * 1000;//30*1000;
+    private static final long INTERVAL_LENGTH = 30 * 1000;//30*1000;
     /**
-     * How long before each contact to start recording images
+     * How long before each contact to start recording images, in milliseconds
      */
     private static final long INTERVAL_STARTING_OFFSET = 5 * 1000;
 
@@ -35,20 +36,41 @@ public class EclipseCaptureSequenceBuilder {
     public CaptureSequence buildSequence() throws IOException, XmlPullParserException {
         List<CaptureSequence.IntervalProperties> iProperties = mConfig.getIntervalProperties();
 
-        Queue<CaptureSequence.CaptureInterval> intervals = new LinkedList<>();
+        List<CaptureSequence.CaptureInterval> intervals = new ArrayList<>();
 
         Location currentLocation = mLocationProvider.getLocation();
 
         Long contact2 = mEclipseTimeCalculator.getEclipseTime(currentLocation, EclipseTimeCalculator.Event.CONTACT2);
         if (contact2 != null) {
-            long startingTime2 = contact2 - INTERVAL_STARTING_OFFSET;
+            Long startingTime2 = contact2 - INTERVAL_STARTING_OFFSET;
             intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(0), startingTime2, INTERVAL_LENGTH));
         }
         Long contact3 = mEclipseTimeCalculator.getEclipseTime(currentLocation, EclipseTimeCalculator.Event.CONTACT3);
+        /**
+         * Make sure intervals don't overlap
+         */
+        if (contact2 != null) {
+            contact3 = Math.max(contact3,contact2 + INTERVAL_LENGTH);
+        }
 
         if (contact3 != null) {
             long startingTime3 = contact3 - INTERVAL_STARTING_OFFSET;
             intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(1), startingTime3, INTERVAL_LENGTH));
+        }
+
+        return new CaptureSequence(intervals);
+    }
+
+    /**
+     * method used for testing
+     */
+    public CaptureSequence buildSequenceAtTime(Long contact2) throws IOException, XmlPullParserException {
+        List<CaptureSequence.IntervalProperties> iProperties = mConfig.getIntervalProperties();
+
+        List<CaptureSequence.CaptureInterval> intervals = new ArrayList<>();
+
+        if (contact2 != null) {
+            intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(0), contact2, INTERVAL_LENGTH));
         }
 
         return new CaptureSequence(intervals);

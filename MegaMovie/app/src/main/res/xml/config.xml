@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <interval_properties>
-        <spacing>500</spacing>
-        <should_save_raw>true</should_save_raw>
+        <spacing>200</spacing>
+        <should_save_raw>false</should_save_raw>
         <should_save_jpeg>true</should_save_jpeg>
 
         <sensor_sensitivity>150</sensor_sensitivity>>
@@ -11,8 +11,8 @@
     </interval_properties>
 
     <interval_properties>
-        <spacing>500</spacing>
-        <should_save_raw>true</should_save_raw>
+        <spacing>200</spacing>
+        <should_save_raw>false</should_save_raw>
         <should_save_jpeg>true</should_save_jpeg>
 
         <sensor_sensitivity>150</sensor_sensitivity>>

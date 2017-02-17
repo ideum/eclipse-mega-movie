@@ -15,6 +15,7 @@ import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.DngCreator;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.AsyncTask;
@@ -45,6 +46,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -61,16 +63,23 @@ public class CameraFragment extends android.app.Fragment
         listeners.add(listener);
     }
 
+    /**
+     * Determines whether camera session sends image data to surfaces
+     * which handle JPEG/RAW images, respectively
+     */
     private static final boolean CAN_SAVE_JPEG = true;
-    private static final boolean CAN_SAVE_RAW = true;
-    private static final String METADATA_RAW_FILE_NAME = "metadata.txt";
+    private static final boolean CAN_SAVE_RAW = false;
+
+    private static final String RAW_METADATA_FILENAME = "metadata_raw.txt";
+    private static final String JPEG_METADATA_FILENAME = "metadata_jpeg.txt";
+    private static final String DATA_DIRECTORY_NAME = "MegaMovie";
 
     private static final String TAG = "Camera Activity";
 
     /**
      * Request code for camera permissions
      */
-    private static final int REQUEST_CAMERA_PERMISSIONS = 2;
+    private static final int REQUEST_CAMERA_PERMISSIONS = 0;
 
     /**
      * Permissions required to take a picture.
@@ -80,6 +89,9 @@ public class CameraFragment extends android.app.Fragment
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
+    /**
+     * Used to get correct orientation for saving JPEG images
+     */
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -94,6 +106,9 @@ public class CameraFragment extends android.app.Fragment
         return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
     }
 
+    /**
+     * Location provider is queried when writing image metadata
+     */
     private LocationProvider mLocationProvider;
 
     public void setLocationProvider(LocationProvider locationProvider) {
@@ -111,89 +126,90 @@ public class CameraFragment extends android.app.Fragment
                 @Override
                 public void onCaptureStarted(CameraCaptureSession session, CaptureRequest request, long timestamp, long frameNumber) {
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
+
                     int requestId = (int) request.getTag();
+
                     String currentDateTime = generateTimeStamp();
 
-                    // Setup jpegBuilder for request
-                    File jpegRootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie/JPEG");
+                    /**
+                     * Set up jpegBuild for request
+                     */
+                    ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+
+                    File jpegRootPath = new File(Environment.getExternalStorageDirectory(), DATA_DIRECTORY_NAME + "/JPEG");
                     if (!jpegRootPath.exists()) {
                         jpegRootPath.mkdirs();
                     }
 
                     File jpegFile = new File(jpegRootPath,
                             "JPEG_" + currentDateTime + ".jpg");
-                    ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
 
                     if (jpegBuilder != null) {
                         jpegBuilder.setFile(jpegFile);
                     }
 
+                    /**
+                     * Set up rawBuilder for request
+                     */
+                    ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
 
-                    // Set up rawBuilder for request
-                    File rawRootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie/RAW");
+                    File rawRootPath = new File(Environment.getExternalStorageDirectory(), DATA_DIRECTORY_NAME + "/RAW");
                     if (!rawRootPath.exists()) {
                         rawRootPath.mkdirs();
                     }
                     File rawFile = new File(rawRootPath,
                             "RAW_" + currentDateTime + ".dng");
 
-                    ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
-
                     if (rawBuilder != null) {
                         rawBuilder.setFile(rawFile);
                     }
                 }
-
 
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
 
-                    String currentDateTime = generateTimeStamp();
                     int requestId = (int) request.getTag();
 
-                    // Add file name and result to jpegBuilder
-                    File jpegRootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie/JPEG");
-                    if (!jpegRootPath.exists()) {
-                        jpegRootPath.mkdirs();
-                    }
-
-                    File jpegFile = new File(jpegRootPath,
-                            "JPEG_" + currentDateTime + ".jpg");
                     ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
-
                     if (jpegBuilder != null) {
-                        jpegBuilder.setFile(jpegFile);
                         jpegBuilder.setResult(result);
+                        /**
+                         * Write metadata to file
+                         */
+                        String fileName = jpegBuilder.getFileName();
+                        MetadataWriter writer = new MetadataWriter(result, fileName);
+                        File rootPath = new File(Environment.getExternalStorageDirectory(), DATA_DIRECTORY_NAME);
+                        File metadataFile = new File(rootPath, JPEG_METADATA_FILENAME);
+                        try {
+                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
+                            byte[] bytes = writer.getXMLString().getBytes();
+                            stream.write(bytes);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-
-                    // Add file name and result to rawBuilder
-                    File rawRootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie/RAW");
-                    if (!rawRootPath.exists()) {
-                        rawRootPath.mkdirs();
-                    }
-                    File rawFile = new File(rawRootPath,
-                            "RAW_" + currentDateTime + ".dng");
 
                     ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
                     if (rawBuilder != null) {
-                        rawBuilder.setFile(rawFile);
                         rawBuilder.setResult(result);
-                    }
 
-                    // Write metadata to file
-                    MetadataWriter writer = new MetadataWriter(result, currentDateTime);
-                    File rootPath = new File(Environment.getExternalStorageDirectory(), "MegaMovie");
-                    File metadataFile = new File(rootPath, "metadata.txt");
-                    try {
-                        FileOutputStream stream = new FileOutputStream(metadataFile, true);
-                        byte[] bytes = writer.getXMLString().getBytes();
-                        stream.write(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        /**
+                         * Write metadata to file
+                         */
+                        String fileName = rawBuilder.getFileName();
+                        MetadataWriter writer = new MetadataWriter(result, fileName);
+                        File rootPath = new File(Environment.getExternalStorageDirectory(), DATA_DIRECTORY_NAME);
+                        File metadataFile = new File(rootPath, RAW_METADATA_FILENAME);
+                        try {
+                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
+                            byte[] bytes = writer.getXMLString().getBytes();
+                            stream.write(bytes);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-
             };
 
     private CameraDevice.StateCallback mCameraDeviceStateCallback =
@@ -270,8 +286,6 @@ public class CameraFragment extends android.app.Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setUpCamera();
     }
 
     @Override
@@ -303,18 +317,19 @@ public class CameraFragment extends android.app.Fragment
             final CaptureRequest.Builder captureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
             if (shouldSaveJpeg) {
                 captureRequestBuilder.addTarget(mJpegImageReader.get().getSurface());
+                int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
+                captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
             }
+
             if (shouldSaveRaw) {
                 captureRequestBuilder.addTarget(mRawImageReader.get().getSurface());
             }
-            int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
-            if (shouldSaveJpeg) {
-                captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
-            }
+
             captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, sensitivity);
             captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, duration);
             captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, focusDistance);
             captureRequestBuilder.set(CaptureRequest.JPEG_GPS_LOCATION, mLocationProvider.getLocation());
+
 
             captureRequestBuilder.setTag(mRequestCounter.getAndIncrement());
             for (CaptureListener listener : listeners) {
@@ -344,8 +359,12 @@ public class CameraFragment extends android.app.Fragment
     private void createCameraSession() {
         try {
             List<Surface> surfaces = new ArrayList<>();
-            surfaces.add(mJpegImageReader.get().getSurface());
-            surfaces.add(mRawImageReader.get().getSurface());
+            if (CAN_SAVE_JPEG) {
+                surfaces.add(mJpegImageReader.get().getSurface());
+            }
+            if (CAN_SAVE_RAW) {
+                surfaces.add(mRawImageReader.get().getSurface());
+            }
             mCameraDevice.createCaptureSession(surfaces,
                     new CameraCaptureSession.StateCallback() {
                         @Override
@@ -482,7 +501,6 @@ public class CameraFragment extends android.app.Fragment
             e.printStackTrace();
         }
     }
-
 
     private void openBackgroundThread() {
         mBackgroundThread = new HandlerThread("Camera2 background thread");
@@ -675,12 +693,25 @@ public class CameraFragment extends android.app.Fragment
     }
 
     private String generateTimeStamp() {
-        long mills = mLocationProvider.getLocation().getTime();
+
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(mills);
+        if (mLocationProvider != null) {
+            Location location = mLocationProvider.getLocation();
+            if (location != null) {
+                long mills = mLocationProvider.getLocation().getTime();
+                calendar.setTimeInMillis(mills);
+
+            }
+            else {
+                Log.e(TAG,"location was null");
+            }
+        }
+        else {
+            Log.e(TAG,"location provider is null!");
+        }
 
         DateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US);
-
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         return formatter.format(calendar.getTime());
 
     }

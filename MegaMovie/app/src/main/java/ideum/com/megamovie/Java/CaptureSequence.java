@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
@@ -106,9 +107,9 @@ public class CaptureSequence {
         }
     }
 
-    public Queue<CaptureInterval> mCaptureIntervals;
+    public List<CaptureInterval> mCaptureIntervals;
 
-    public CaptureSequence(Queue<CaptureInterval> captureIntervals) {
+    public CaptureSequence(List<CaptureInterval> captureIntervals) {
         mCaptureIntervals = captureIntervals;
     }
 
@@ -117,9 +118,9 @@ public class CaptureSequence {
         for (CaptureInterval interval : mCaptureIntervals) {
             queue.addAll(interval.getTimedRequests());
         }
-
         return queue;
     }
+
 
     // Helper method used for debugging
     private String timeString(Long mills) {

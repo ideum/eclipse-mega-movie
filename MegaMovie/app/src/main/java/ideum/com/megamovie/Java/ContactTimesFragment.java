@@ -16,6 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import ideum.com.megamovie.R;
 
@@ -89,8 +90,8 @@ public class ContactTimesFragment extends Fragment {
             contact3String = timeOfDayString(contact3);
         }
 
-        textViewContact2.setText("C2: " + contact2String);
-        textViewContact3.setText("C3: " + contact3String);
+        textViewContact2.setText("Contact2: " + contact2String);
+        textViewContact3.setText("Contact3: " + contact3String);
 //        textViewContact4.setText("C4: " + timeOfDayString(contact4));
     }
 
@@ -101,7 +102,8 @@ public class ContactTimesFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
-//        formatter.setTimeZone();
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         return formatter.format(calendar.getTime());
     }
 

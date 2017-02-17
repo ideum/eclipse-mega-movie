@@ -47,13 +47,13 @@
 
         <Button
             android:id="@+id/button8"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="20dp"
             android:onClick="loadCaptureActivityButtonPressed"
-            android:text="Capture" />
+            android:text="Capture Mode" />
 
     </RelativeLayout>
 

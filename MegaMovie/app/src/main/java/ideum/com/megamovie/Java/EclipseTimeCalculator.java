@@ -35,7 +35,7 @@ public class EclipseTimeCalculator {
     private final static int BASETIME_DAY = 26;
     private final static int BASETIME_HOUR = 13;
 
-    private final static boolean USE_DUMMY_ECLIPSE_TIME = false;
+    private final static boolean USE_DUMMY_ECLIPSE_TIME = true;
 
     private class MyKey {
         final int x;
@@ -137,8 +137,8 @@ public class EclipseTimeCalculator {
 //        calendar.set(Calendar.DAY_OF_MONTH,11);
 //        calendar.set(Calendar.HOUR,5);
 
-        calendar.set(Calendar.MINUTE, 20);
-        calendar.set(Calendar.SECOND, 30);
+        calendar.set(Calendar.MINUTE,45);
+        calendar.set(Calendar.SECOND, 15);
         calendar.set(Calendar.MILLISECOND, 0);
 
         long startTime = calendar.getTimeInMillis();
@@ -155,13 +155,13 @@ public class EclipseTimeCalculator {
                 contactTime = startTime;
                 break;
             case CONTACT3:
-                contactTime = startTime + 10000;
+                contactTime = startTime + 60000;
                 break;
             case CONTACT3_END:
-                contactTime = startTime + 10000;
+                contactTime = startTime + 60000;
                 break;
             case CONTACT4:
-                contactTime = startTime + 10000;
+                contactTime = startTime + 75000;
                 break;
         }
         return contactTime;

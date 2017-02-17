@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.model.LatLng;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import ideum.com.megamovie.R;
 
@@ -60,16 +62,6 @@ public class CaptureActivity extends AppCompatActivity
     private static final int SCREEN_BRIGHTNESS_LOW = 5;
 
     private Location mLocation;
-
-    @Override
-    public void onCapture() {
-        updateCaptureTextView();
-    }
-
-    @Override
-    public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
-        mCameraFragment.takePhotoWithSettings(settings);
-    }
 
 
     @Override
@@ -114,6 +106,34 @@ public class CaptureActivity extends AppCompatActivity
             permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_DENIED;
         }
         return permission;
+    }
+
+    public void startTestSequence(View view) {
+        try {
+            Resources resources = getResources();
+            ConfigParser parser = new ConfigParser(resources);
+            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment);
+            EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(mGPSFragment, parser, calculator);
+            Calendar calendar = Calendar.getInstance();
+            Long time = calendar.getTimeInMillis()+2000;
+
+            CaptureSequence sequence = builder.buildSequenceAtTime(time);
+            totalCaptures = sequence.getRequestQueue().size();
+            updateCaptureTextView();
+
+            /**
+             * Create and start the capture sequence session
+             */
+            session = new CaptureSequenceSession(sequence, mGPSFragment, this);
+            mTimer = new MyTimer();
+            mTimer.addListener(session);
+            mTimer.startTicking();
+
+         } catch (IOException e) {
+        e.printStackTrace();
+    } catch (XmlPullParserException e) {
+        e.printStackTrace();
+    }
     }
 
     private void setUpCaptureSequenceSession() {
@@ -173,6 +193,21 @@ public class CaptureActivity extends AppCompatActivity
     }
 
 
+
+    /**
+     * Updates the text view to show how many images have been captured in current session
+     */
+    @Override
+    public void onCapture() {
+        updateCaptureTextView();
+    }
+
+    @Override
+    public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
+        mCameraFragment.takePhotoWithSettings(settings);
+    }
+
+
     @Override
     public void onLocationChanged(Location location) {
 
@@ -181,6 +216,7 @@ public class CaptureActivity extends AppCompatActivity
          */
         if (mLocation == null) {
             mLocation = location;
+//            Toast.makeText(getApplicationContext(),"Ready",Toast.LENGTH_SHORT).show();
             setUpCaptureSequenceSession();
         }
     }

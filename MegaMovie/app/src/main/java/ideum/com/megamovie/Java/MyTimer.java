@@ -16,7 +16,7 @@ import static java.util.concurrent.TimeUnit.*;
 public class MyTimer {
     // Timer runs for one year
     private static long COUNTDOWN_DURATION = Long.MAX_VALUE;
-    private static long TICK_INTERVAL = 5; //milliseconds
+    private static long TICK_INTERVAL = 50; //milliseconds
     public static final String TAG = "MyTimer";
     public interface MyTimerListener {
          void onTick();

@@ -103,7 +103,7 @@ public class MapActivity extends AppCompatActivity
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
         mGPSFragment.addLocationListener(this);
-        mGPSFragment.locationRequestPriority = LocationRequest.PRIORITY_LOW_POWER;
+//        mGPSFragment.locationRequestPriority = LocationRequest.PRIORITY_LOW_POWER;
 
         /**
          * Set up eclipse time calculator and the fragment displaying contact times

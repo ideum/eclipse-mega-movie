@@ -61,14 +61,14 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
      * Sets nextRequest equal to first request whose timestamp is in the future
      */
     private void seekToNextRequest() {
-        if (requestQueue.size() == 0) {
-            return;
-        }
         nextRequest = requestQueue.poll();
         if (nextRequest == null) {
             return;
         }
         Long currentTime = getTime();
+        if (currentTime == null) {
+            return;
+        }
         Long requestTime = nextRequest.mTime;
         while (currentTime >= requestTime) {
             nextRequest = requestQueue.poll();
