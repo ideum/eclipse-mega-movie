@@ -17,7 +17,7 @@
 
         <fragment
             android:id="@+id/timer_fragment"
-            android:name="ideum.com.megamovie.Java.CountdownFragment"
+            android:name="ideum.com.megamovie.Java.EclipseCountdownFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />

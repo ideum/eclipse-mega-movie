@@ -35,7 +35,7 @@ public class EclipseTimeCalculator {
     private final static int BASETIME_DAY = 26;
     private final static int BASETIME_HOUR = 13;
 
-    private final static boolean USE_DUMMY_ECLIPSE_TIME = true;
+    private final static boolean USE_DUMMY_ECLIPSE_TIME = false;
 
     private class MyKey {
         final int x;
@@ -67,10 +67,7 @@ public class EclipseTimeCalculator {
     }
 
     public enum Event {
-        CONTACT1,
-        CONTACT2, CONTACT2_END,
-        CONTACT3, CONTACT3_END,
-        CONTACT4
+        CONTACT2, CONTACT3
     }
 
     public EclipseTimeCalculator(Context context, LocationProvider provider) throws IOException {
@@ -79,18 +76,38 @@ public class EclipseTimeCalculator {
         mLocationProvider = provider;
     }
 
-    public Long getEclipseTime(Location location, Event event) {
-//        if (mLocationProvider == null) {
-//            return null;
-//        }
-//        Location location = mLocationProvider.getLocation();
-//        if (location == null) {
-//            return null;
-//        }
+    public Long getTimeToEvent(Event event) {
 
+        if (mLocationProvider == null) {
+            return null;
+        }
+        Location location = mLocationProvider.getLocation();
+
+        if (location == null) {
+            return null;
+        }
+
+        Long eventTime = getEclipseTime(event);
+        if (eventTime == null) {
+            return null;
+        }
+
+        return eventTime - location.getTime();
+
+    }
+
+    public Long getEclipseTime(Event event) {
         if (USE_DUMMY_ECLIPSE_TIME) {
             return dummyEclipseTime(event);
         }
+        if (mLocationProvider == null) {
+            return null;
+        }
+        Location location = mLocationProvider.getLocation();
+        if (location == null) {
+            return null;
+        }
+
         double lat = location.getLatitude();
         double lng = location.getLongitude();
         int x = (int) ((lat - STARTING_LAT) / LATLNG_INTERVAL);
@@ -130,38 +147,28 @@ public class EclipseTimeCalculator {
         return calendar.getTimeInMillis();
     }
 
-    // This method is just a stand-in for now
+    /**
+     * helper method used for testing
+     */
     public long dummyEclipseTime(Event event) {
         Calendar calendar = Calendar.getInstance();
-//        calendar.set(Calendar.MONTH,7);
-//        calendar.set(Calendar.DAY_OF_MONTH,11);
+
 //        calendar.set(Calendar.HOUR,5);
 
-        calendar.set(Calendar.MINUTE,45);
-        calendar.set(Calendar.SECOND, 15);
+        calendar.set(Calendar.MINUTE,7);
+        calendar.set(Calendar.SECOND, 50);
         calendar.set(Calendar.MILLISECOND, 0);
 
         long startTime = calendar.getTimeInMillis();
         long contactTime = 0;
 
         switch (event) {
-            case CONTACT1:
-                contactTime = startTime;
-                break;
+
             case CONTACT2:
-                contactTime = startTime;
-                break;
-            case CONTACT2_END:
                 contactTime = startTime;
                 break;
             case CONTACT3:
                 contactTime = startTime + 60000;
-                break;
-            case CONTACT3_END:
-                contactTime = startTime + 60000;
-                break;
-            case CONTACT4:
-                contactTime = startTime + 75000;
                 break;
         }
         return contactTime;

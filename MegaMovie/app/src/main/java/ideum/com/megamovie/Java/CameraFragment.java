@@ -67,8 +67,8 @@ public class CameraFragment extends android.app.Fragment
      * Determines whether camera session sends image data to surfaces
      * which handle JPEG/RAW images, respectively
      */
-    private static final boolean CAN_SAVE_JPEG = true;
-    private static final boolean CAN_SAVE_RAW = false;
+    private static final boolean ALLOWS_JPEG = true;
+    private static final boolean ALLOWS_RAW = false;
 
     private static final String RAW_METADATA_FILENAME = "metadata_raw.txt";
     private static final String JPEG_METADATA_FILENAME = "metadata_jpeg.txt";
@@ -359,10 +359,10 @@ public class CameraFragment extends android.app.Fragment
     private void createCameraSession() {
         try {
             List<Surface> surfaces = new ArrayList<>();
-            if (CAN_SAVE_JPEG) {
+            if (ALLOWS_JPEG) {
                 surfaces.add(mJpegImageReader.get().getSurface());
             }
-            if (CAN_SAVE_RAW) {
+            if (ALLOWS_RAW) {
                 surfaces.add(mRawImageReader.get().getSurface());
             }
             mCameraDevice.createCaptureSession(surfaces,
@@ -468,8 +468,7 @@ public class CameraFragment extends android.app.Fragment
                         }
                 );
 
-
-                if (CAN_SAVE_JPEG) {
+                if (ALLOWS_JPEG) {
                     if (mJpegImageReader == null || mJpegImageReader.getAndRetain() == null) {
                         mJpegImageReader = new RefCountedAutoCloseable<>(
                                 ImageReader.newInstance(mJpegImageSize.getWidth(),
@@ -479,7 +478,7 @@ public class CameraFragment extends android.app.Fragment
 
                     }
                 }
-                if (CAN_SAVE_RAW) {
+                if (ALLOWS_RAW) {
                     if (mRawImageReader == null || mRawImageReader.getAndRetain() == null) {
                         mRawImageReader = new RefCountedAutoCloseable<>(
                                 ImageReader.newInstance(mRawImageSize.getWidth(),
@@ -488,10 +487,10 @@ public class CameraFragment extends android.app.Fragment
                         /*max images */50));
                     }
                 }
-                if (CAN_SAVE_JPEG) {
+                if (ALLOWS_JPEG) {
                     mJpegImageReader.get().setOnImageAvailableListener(mOnJpegImageAvailableListener, mBackgroundHandler);
                 }
-                if (CAN_SAVE_RAW) {
+                if (ALLOWS_RAW) {
                     mRawImageReader.get().setOnImageAvailableListener(mOnRawImageAvailableListener, mBackgroundHandler);
                 }
                 mCameraID = cameraID;
@@ -543,17 +542,16 @@ public class CameraFragment extends android.app.Fragment
             return;
         }
         builder.setRefCountedReader(reader).setImage(image);
-        handleCompletionLocked(entry.getKey(), builder, pendingQueue);
+        handleCompletion(entry.getKey(), builder, pendingQueue);
     }
 
-    private void handleCompletionLocked(int requestId, ImageSaver.ImageSaverBuilder builder,
-                                        TreeMap<Integer, ImageSaver.ImageSaverBuilder> queue) {
+    private void handleCompletion(int requestId, ImageSaver.ImageSaverBuilder builder,
+                                  TreeMap<Integer, ImageSaver.ImageSaverBuilder> queue) {
         if (builder == null) return;
         ImageSaver saver = builder.buildIfComplete();
         if (saver != null) {
             queue.remove(requestId);
             AsyncTask.THREAD_POOL_EXECUTOR.execute(saver);
-//            new Thread(saver).start();
         }
     }
 
@@ -578,7 +576,6 @@ public class CameraFragment extends android.app.Fragment
         public void run() {
 
             int format = mImage.getFormat();
-//            mImage.setCropRect(new Rect(0,0,-100,100));
             switch (format) {
                 case ImageFormat.JPEG: {
                     ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
@@ -603,8 +600,6 @@ public class CameraFragment extends android.app.Fragment
                     FileOutputStream output = null;
                     try {
                         output = new FileOutputStream(mFile);
-//                        ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-//                        dngCreator.writeByteBuffer(output,new Size(4080,3028), buffer,0);
                         dngCreator.writeImage(output, mImage);
 
                     } catch (IOException e) {
@@ -701,13 +696,11 @@ public class CameraFragment extends android.app.Fragment
                 long mills = mLocationProvider.getLocation().getTime();
                 calendar.setTimeInMillis(mills);
 
+            } else {
+                Log.e(TAG, "location was null");
             }
-            else {
-                Log.e(TAG,"location was null");
-            }
-        }
-        else {
-            Log.e(TAG,"location provider is null!");
+        } else {
+            Log.e(TAG, "location provider is null!");
         }
 
         DateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US);

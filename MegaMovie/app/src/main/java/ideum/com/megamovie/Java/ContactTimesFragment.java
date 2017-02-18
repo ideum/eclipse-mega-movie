@@ -75,8 +75,8 @@ public class ContactTimesFragment extends Fragment {
             return;
         }
 //        long contact1 = mEclipseTimeCalculator.getEclipseTime(loc, EclipseTimeCalculator.Event.CONTACT1);
-        Long contact2 = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT2);
-        Long contact3 = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT3);
+        Long contact2 = mEclipseTimeCalculator.getEclipseTime(EclipseTimeCalculator.Event.CONTACT2);
+        Long contact3 = mEclipseTimeCalculator.getEclipseTime(EclipseTimeCalculator.Event.CONTACT3);
 //        long contact4 = mEclipseTimeCalculator.getEclipseTime(loc, EclipseTimeCalculator.Event.CONTACT4);
 
 //        textViewContact1.setText("C1: " + timeOfDayString(contact1));

@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import org.xmlpull.v1.XmlPullParserException;
@@ -18,7 +17,7 @@ implements MyTimer.MyTimerListener {
 
     public final static String TAG = "CALIBRATION_ACTIVITY";
     private GPSFragment mGPSFragment;
-    private CountdownFragment mCountdownFragment;
+    private EclipseCountdownFragment mCountdownFragment;
     private CameraPreviewAndCaptureFragment mPreviewFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private MyTimer mTimer;
@@ -45,7 +44,7 @@ implements MyTimer.MyTimerListener {
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
 
-        mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        mCountdownFragment = (EclipseCountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
 
         try {
             mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(),mGPSFragment);
@@ -54,7 +53,6 @@ implements MyTimer.MyTimerListener {
         }
         if (mCountdownFragment != null) {
             mCountdownFragment.includesDays = COUNTDOWN_TIMER_SHOWS_DAYS;
-            mCountdownFragment.setLocationProvider(mGPSFragment);
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         }
 
@@ -78,10 +76,7 @@ implements MyTimer.MyTimerListener {
         super.onResume();
 
         mTimer = new MyTimer();
-
-
         mTimer.addListener(this);
-
         mTimer.addListener(mCountdownFragment);
         mTimer.startTicking();
     }
@@ -112,17 +107,18 @@ implements MyTimer.MyTimerListener {
 
     // Check whether it is time to move to capture activity
     private boolean isWithinTimeThreshold() {
-        if (mGPSFragment.getLocation() == null) {
+        if (mEclipseTimeCalculator == null) {
             return false;
         }
-        Location location = getLocation();
-        Long firstContactTime = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT2);
-        if (firstContactTime == null) {
+        Long millsToContact2 = mEclipseTimeCalculator.getTimeToEvent(EclipseTimeCalculator.Event.CONTACT2);
+
+        if (millsToContact2 == null) {
             return false;
         }
-        Long currentTime = mGPSFragment.getLocation().getTime();
-        Long delta_time_seconds = (firstContactTime - currentTime)/1000;
-        return delta_time_seconds < THRESHOLD_TIME_SECONDS;
+
+        Long secondsToContact2 = millsToContact2/1000;
+
+        return secondsToContact2 < THRESHOLD_TIME_SECONDS;
     }
 
     private void loadCaptureActivity() {

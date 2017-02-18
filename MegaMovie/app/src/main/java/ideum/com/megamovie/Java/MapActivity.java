@@ -15,9 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,7 +36,7 @@ public class MapActivity extends AppCompatActivity
     private GoogleMap mGoogleMap;
     private GPSFragment mGPSFragment;
     private ContactTimesFragment mContactTimesFragment;
-    private CountdownFragment mCountdownFragment;
+    private EclipseCountdownFragment mCountdownFragment;
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private MyTimer mTimer;
     private Location mLocation;
@@ -120,11 +118,10 @@ public class MapActivity extends AppCompatActivity
         /**
          * Set up countdown fragment
          */
-        mCountdownFragment = (CountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
+        mCountdownFragment = (EclipseCountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
 
         if (mCountdownFragment != null) {
             mCountdownFragment.includesDays = true;
-            mCountdownFragment.setLocationProvider(mGPSFragment);
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         }
 
@@ -181,18 +178,18 @@ public class MapActivity extends AppCompatActivity
     }
 
     private boolean isWithinTimeThreshold() {
-        Location location = mGPSFragment.getLocation();
-        if (location == null) {
+        if (mEclipseTimeCalculator == null) {
+            return false;
+        }
+        Long millsToContact2 = mEclipseTimeCalculator.getTimeToEvent(EclipseTimeCalculator.Event.CONTACT2);
+
+        if (millsToContact2 == null) {
             return false;
         }
 
-        Long firstContactTime = mEclipseTimeCalculator.getEclipseTime(location, EclipseTimeCalculator.Event.CONTACT2);
-        if (firstContactTime == null) {
-            return false;
-        }
-        Long currentTime = mGPSFragment.getLocation().getTime();
-        Long delta_time_seconds = (firstContactTime - currentTime) / 1000;
-        return delta_time_seconds < THRESHOLD_TIME_SECONDS;
+        Long secondsToContact2 = millsToContact2/1000;
+
+        return secondsToContact2 < THRESHOLD_TIME_SECONDS;
     }
 
     private boolean checkSystemWritePermissions() {
