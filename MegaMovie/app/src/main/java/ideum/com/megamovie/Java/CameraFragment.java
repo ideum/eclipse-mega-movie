@@ -18,6 +18,8 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
@@ -134,34 +136,38 @@ public class CameraFragment extends android.app.Fragment
                     /**
                      * Set up jpegBuild for request
                      */
-                    ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+                    if (ALLOWS_JPEG) {
+                        ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
 
-                    File jpegRootPath = new File(Environment.getExternalStorageDirectory(), DATA_DIRECTORY_NAME + "/JPEG");
-                    if (!jpegRootPath.exists()) {
-                        jpegRootPath.mkdirs();
-                    }
+                        File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), DATA_DIRECTORY_NAME + "/JPEG");
+                        if (!jpegRootPath.exists()) {
+                            jpegRootPath.mkdirs();
+                        }
 
-                    File jpegFile = new File(jpegRootPath,
-                            "JPEG_" + currentDateTime + ".jpg");
+                        File jpegFile = new File(jpegRootPath,
+                                "JPEG_" + currentDateTime + ".jpg");
 
-                    if (jpegBuilder != null) {
-                        jpegBuilder.setFile(jpegFile);
+                        if (jpegBuilder != null) {
+                            jpegBuilder.setFile(jpegFile);
+                        }
                     }
 
                     /**
                      * Set up rawBuilder for request
                      */
-                    ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
+                    if (ALLOWS_RAW) {
+                        ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
 
-                    File rawRootPath = new File(Environment.getExternalStorageDirectory(), DATA_DIRECTORY_NAME + "/RAW");
-                    if (!rawRootPath.exists()) {
-                        rawRootPath.mkdirs();
-                    }
-                    File rawFile = new File(rawRootPath,
-                            "RAW_" + currentDateTime + ".dng");
+                        File rawRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), DATA_DIRECTORY_NAME + "/RAW");
+                        if (!rawRootPath.exists()) {
+                            rawRootPath.mkdirs();
+                        }
+                        File rawFile = new File(rawRootPath,
+                                "RAW_" + currentDateTime + ".dng");
 
-                    if (rawBuilder != null) {
-                        rawBuilder.setFile(rawFile);
+                        if (rawBuilder != null) {
+                            rawBuilder.setFile(rawFile);
+                        }
                     }
                 }
 
@@ -179,7 +185,7 @@ public class CameraFragment extends android.app.Fragment
                          */
                         String fileName = jpegBuilder.getFileName();
                         MetadataWriter writer = new MetadataWriter(result, fileName);
-                        File rootPath = new File(Environment.getExternalStorageDirectory(), DATA_DIRECTORY_NAME);
+                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), DATA_DIRECTORY_NAME);
                         File metadataFile = new File(rootPath, JPEG_METADATA_FILENAME);
                         try {
                             FileOutputStream stream = new FileOutputStream(metadataFile, true);
@@ -199,7 +205,7 @@ public class CameraFragment extends android.app.Fragment
                          */
                         String fileName = rawBuilder.getFileName();
                         MetadataWriter writer = new MetadataWriter(result, fileName);
-                        File rootPath = new File(Environment.getExternalStorageDirectory(), DATA_DIRECTORY_NAME);
+                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), DATA_DIRECTORY_NAME);
                         File metadataFile = new File(rootPath, RAW_METADATA_FILENAME);
                         try {
                             FileOutputStream stream = new FileOutputStream(metadataFile, true);
@@ -338,12 +344,12 @@ public class CameraFragment extends android.app.Fragment
 
             CaptureRequest request = captureRequestBuilder.build();
             if (shouldSaveJpeg) {
-                ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
+                ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder(getActivity()).setCharacteristics(mCharacteristics);
                 mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
 
             }
             if (shouldSaveRaw) {
-                ImageSaver.ImageSaverBuilder rawBuilder = new ImageSaver.ImageSaverBuilder().setCharacteristics(mCharacteristics);
+                ImageSaver.ImageSaverBuilder rawBuilder = new ImageSaver.ImageSaverBuilder(getActivity()).setCharacteristics(mCharacteristics);
                 mRawResultQueue.put((int) request.getTag(), rawBuilder);
             }
             mCameraCaptureSession.capture(request,
@@ -561,20 +567,24 @@ public class CameraFragment extends android.app.Fragment
         private final File mFile;
         private final CaptureResult mCaptureResult;
         private final CameraCharacteristics mCharacteristics;
+        private final Context mContext;
+
         private final RefCountedAutoCloseable<ImageReader> mReader;
 
         private ImageSaver(Image image, File file, CaptureResult captureResult,
-                           CameraCharacteristics characteristics, RefCountedAutoCloseable<ImageReader> reader) {
+                           CameraCharacteristics characteristics, Context context, RefCountedAutoCloseable<ImageReader> reader) {
             mImage = image;
             mFile = file;
             mCaptureResult = captureResult;
             mCharacteristics = characteristics;
             mReader = reader;
+            mContext = context;
         }
 
         @Override
         public void run() {
 
+            boolean success = false;
             int format = mImage.getFormat();
             switch (format) {
                 case ImageFormat.JPEG: {
@@ -587,6 +597,7 @@ public class CameraFragment extends android.app.Fragment
                     try {
                         fileOutputStream = new FileOutputStream(mFile);
                         fileOutputStream.write(bytes);
+                        success = true;
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
@@ -601,7 +612,7 @@ public class CameraFragment extends android.app.Fragment
                     try {
                         output = new FileOutputStream(mFile);
                         dngCreator.writeImage(output, mImage);
-
+                        success = true;
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
@@ -615,6 +626,24 @@ public class CameraFragment extends android.app.Fragment
                     break;
                 }
             }
+            mReader.close();
+
+            if (success) {
+                MediaScannerConnection.scanFile(mContext, new String[]{mFile.getPath()},
+                        null, new MediaScannerConnection.MediaScannerConnectionClient() {
+                            @Override
+                            public void onMediaScannerConnected() {
+                                // Do nothing
+                            }
+
+                            @Override
+                            public void onScanCompleted(String path, Uri uri) {
+                                Log.i(TAG, "Scanned" + path + ":");
+                                Log.i(TAG, "-> uri=" + uri);
+                            }
+                        });
+            }
+
         }
 
         public static class ImageSaverBuilder {
@@ -623,6 +652,11 @@ public class CameraFragment extends android.app.Fragment
             private CaptureResult mCaptureResult;
             private CameraCharacteristics mCharacteristics;
             private RefCountedAutoCloseable<ImageReader> mReader;
+            private Context mContext;
+
+            public ImageSaverBuilder(final Context context) {
+                mContext = context;
+            }
 
             public synchronized ImageSaverBuilder setRefCountedReader(RefCountedAutoCloseable<ImageReader> reader) {
                 if (reader == null) throw new NullPointerException();
@@ -658,7 +692,7 @@ public class CameraFragment extends android.app.Fragment
                 if (!isComplete()) {
                     return null;
                 }
-                return new ImageSaver(mImage, mFile, mCaptureResult, mCharacteristics, mReader);
+                return new ImageSaver(mImage, mFile, mCaptureResult, mCharacteristics, mContext, mReader);
             }
 
             public synchronized String getSaveLocation() {
