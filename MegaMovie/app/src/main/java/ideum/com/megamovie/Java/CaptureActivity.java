@@ -4,6 +4,7 @@ package ideum.com.megamovie.Java;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -15,15 +16,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import ideum.com.megamovie.R;
 
@@ -40,6 +38,10 @@ public class CaptureActivity extends AppCompatActivity
     private TextView captureTextView;
     private Integer totalCaptures;
     private static final String[] SETTINGS_PERMISSIONS = {Manifest.permission.WRITE_SETTINGS};
+    private static final int NARROW_FIELD_CONFIG_ID = R.xml.narrow_field_config;
+    private static final int WIDE_FIELD_CONFIG_ID = R.xml.wide_field_config;
+    private Integer configId;
+    private Boolean isNarrowField;
 
     /**
      * Resolver used for interacting with system settings to adjust screen brightness
@@ -76,6 +78,15 @@ public class CaptureActivity extends AppCompatActivity
 
         mContentResolver = getContentResolver();
 
+        SharedPreferences preferences = getPreferences(0);
+        Intent intent = getIntent();
+        isNarrowField = intent.getBooleanExtra("IS_NARROW_FIELD",false);
+        if (isNarrowField) {
+            configId = NARROW_FIELD_CONFIG_ID;
+        } else {
+            configId = WIDE_FIELD_CONFIG_ID;
+        }
+
         /**
          * Initial view showing number of completed captures
          */
@@ -108,38 +119,11 @@ public class CaptureActivity extends AppCompatActivity
         return permission;
     }
 
-    public void startTestSequence(View view) {
-        try {
-            Resources resources = getResources();
-            ConfigParser parser = new ConfigParser(resources);
-            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment);
-            EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(mGPSFragment, parser, calculator);
-            Calendar calendar = Calendar.getInstance();
-            Long time = calendar.getTimeInMillis()+2000;
-
-            CaptureSequence sequence = builder.buildSequenceAtTime(time);
-            totalCaptures = sequence.getRequestQueue().size();
-            updateCaptureTextView();
-
-            /**
-             * Create and start the capture sequence session
-             */
-            session = new CaptureSequenceSession(sequence, mGPSFragment, this);
-            mTimer = new MyTimer();
-            mTimer.addListener(session);
-            mTimer.startTicking();
-
-         } catch (IOException e) {
-        e.printStackTrace();
-    } catch (XmlPullParserException e) {
-        e.printStackTrace();
-    }
-    }
 
     private void setUpCaptureSequenceSession() {
         try {
             Resources resources = getResources();
-            ConfigParser parser = new ConfigParser(resources);
+            ConfigParser parser = new ConfigParser(resources, configId);
             EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment);
             EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(mGPSFragment, parser, calculator);
             CaptureSequence sequence = builder.buildSequence();

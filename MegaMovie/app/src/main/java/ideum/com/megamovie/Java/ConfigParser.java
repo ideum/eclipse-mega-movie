@@ -1,6 +1,6 @@
 package ideum.com.megamovie.Java;
 /**
- * Parses config xml file to create queue of timed capture requests
+ * Parses narrow_field_config xml file to create queue of timed capture requests
  */
 
 import android.content.res.Resources;
@@ -17,13 +17,15 @@ import ideum.com.megamovie.R;
 
 public class ConfigParser {
     private Resources mResources;
+    private int configFileId = R.xml.narrow_field_config;
 
-    public ConfigParser(Resources resources) {
+    public ConfigParser(Resources resources,int configFileId) {
         mResources = resources;
+        this.configFileId = configFileId;
     }
 
     public List<CaptureSequence.IntervalProperties> getIntervalProperties() throws IOException, XmlPullParserException {
-        XmlResourceParser parser = mResources.getXml(R.xml.config);
+        XmlResourceParser parser = mResources.getXml(configFileId);
         return readIntervals(parser);
     }
 

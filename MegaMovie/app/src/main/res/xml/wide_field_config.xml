@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <interval_properties>
+        <spacing>200</spacing>
+        <should_save_raw>false</should_save_raw>
+        <should_save_jpeg>true</should_save_jpeg>
+
+        <sensor_sensitivity>150</sensor_sensitivity>>
+        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <lens_focus_distance>2.5</lens_focus_distance>
+    </interval_properties>
+
+    <interval_properties>
+        <spacing>200</spacing>
+        <should_save_raw>false</should_save_raw>
+        <should_save_jpeg>true</should_save_jpeg>
+
+        <sensor_sensitivity>150</sensor_sensitivity>>
+        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <lens_focus_distance>2.5</lens_focus_distance>
+    </interval_properties>
+
+
+</resources>
