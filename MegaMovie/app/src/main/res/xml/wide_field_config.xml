@@ -5,8 +5,8 @@
         <should_save_raw>false</should_save_raw>
         <should_save_jpeg>true</should_save_jpeg>
 
-        <sensor_sensitivity>150</sensor_sensitivity>>
-        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <sensor_sensitivity>60</sensor_sensitivity>>
+        <sensor_exposure_time>500000</sensor_exposure_time>
         <lens_focus_distance>2.5</lens_focus_distance>
     </interval_properties>
 
@@ -15,8 +15,8 @@
         <should_save_raw>false</should_save_raw>
         <should_save_jpeg>true</should_save_jpeg>
 
-        <sensor_sensitivity>150</sensor_sensitivity>>
-        <sensor_exposure_time>5000000</sensor_exposure_time>
+        <sensor_sensitivity>60</sensor_sensitivity>>
+        <sensor_exposure_time>500000</sensor_exposure_time>
         <lens_focus_distance>2.5</lens_focus_distance>
     </interval_properties>
 
