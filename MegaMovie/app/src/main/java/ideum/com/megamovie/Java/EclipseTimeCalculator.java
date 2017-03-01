@@ -2,7 +2,6 @@ package ideum.com.megamovie.Java;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,8 +27,8 @@ public class EclipseTimeCalculator {
     private static final Double LATLNG_INTERVAL = -0.01;
     private Map<MyKey, Double> eclipseTimeMapC2;
     private Map<MyKey, Double> eclipseTimeMapC3;
-    private final static int C2_TIMING_FILE_RESOURCE_ID = R.raw.c2_times;
-    private final static int C3_TIMING_FILE_RESOURCE_ID = R.raw.c3_times;
+    private final static int C2_TIMING_FILE_RESOURCE_ID = R.raw.c2_times_patagonia;
+    private final static int C3_TIMING_FILE_RESOURCE_ID = R.raw.c3_times_patagonia;
     private LocationProvider mLocationProvider;
 
     private final static int BASETIME_YEAR = 2017;
@@ -38,7 +37,7 @@ public class EclipseTimeCalculator {
     private final static int BASETIME_HOUR = 13;
     private final static int BASETIME_MINUTE = 0;
 
-    private final static boolean USE_DUMMY_ECLIPSE_TIME = false;
+    private final static boolean USE_DUMMY_ECLIPSE_TIME = true;
 
     private class MyKey {
         final int x;
@@ -158,7 +157,7 @@ public class EclipseTimeCalculator {
 
 //        calendar.set(Calendar.HOUR,5);
 
-        calendar.set(Calendar.MINUTE,13);
+        calendar.set(Calendar.MINUTE,45);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 

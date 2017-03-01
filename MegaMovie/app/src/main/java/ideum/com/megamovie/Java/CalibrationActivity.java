@@ -1,4 +1,12 @@
+/**
+ * Provides a camera preview for aligning the camera, and allows for selecting between
+ * wide-field and narrow-field options (i.e. whether the user is employee an external
+ * telephoto lens
+ */
+
+
 package ideum.com.megamovie.Java;
+
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,7 +36,7 @@ public class CalibrationActivity extends AppCompatActivity
     private MyTimer mTimer;
     private CheckBox narrowFieldCheckbox;
     private final static String NARROW_FIELD_PREF = "USES_LENS";
-    private static final int NARROW_FIELD_CONFIG_ID = R.xml.narrow_field_config;
+    private static final int NARROW_FIELD_CONFIG_ID = R.xml.narrow_field__annular_config;
     private boolean mIsNarrowField;
 
 
@@ -83,7 +91,7 @@ public class CalibrationActivity extends AppCompatActivity
     }
 
     private void setCameraSettings() throws IOException, XmlPullParserException {
-        // Set up preview using initial camera settings from narrow_field_config file
+        // Set up preview using initial camera settings from narrow_field__annular_config file
         Resources resources = getResources();
         ConfigParser parser = new ConfigParser(resources, NARROW_FIELD_CONFIG_ID);
         CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(parser.getIntervalProperties().get(0));

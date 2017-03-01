@@ -1,3 +1,11 @@
+/**
+ * Captures images in either RAW and/or JPEG format. For performance
+ * reasons, it does not provide a live preview. It uses manual camera settings
+ * for exposure time, sensor sensitivity, and focus distance, and saves those settings
+ * together with gps to custom metadata file. Code is primarily based on the Google
+ * sample project available here: https://github.com/googlesamples/android-Camera2Raw
+ */
+
 package ideum.com.megamovie.Java;
 
 import android.Manifest;

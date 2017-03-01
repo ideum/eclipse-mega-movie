@@ -39,8 +39,8 @@ public class CaptureActivity extends AppCompatActivity
     private TextView captureTextView;
     private Integer totalCaptures;
     private static final String[] SETTINGS_PERMISSIONS = {Manifest.permission.WRITE_SETTINGS};
-    private static final int NARROW_FIELD_CONFIG_ID = R.xml.narrow_field_config;
-    private static final int WIDE_FIELD_CONFIG_ID = R.xml.wide_field_config;
+    private static final int NARROW_FIELD_CONFIG_ID = R.xml.narrow_field__annular_config;
+    private static final int WIDE_FIELD_CONFIG_ID = R.xml.wide_field_annular_config;
     private Integer configId;
     private Boolean isNarrowField;
 
