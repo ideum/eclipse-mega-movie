@@ -1,3 +1,7 @@
+/**
+ * UI Fragment for displaying eclipse contact times
+ */
+
 package ideum.com.megamovie.Java;
 
 import android.content.Context;
@@ -24,10 +28,8 @@ import ideum.com.megamovie.R;
 public class ContactTimesFragment extends Fragment {
 
     private EclipseTimeCalculator mEclipseTimeCalculator;
-    private TextView textViewContact1;
     private TextView textViewContact2;
     private TextView textViewContact3;
-    private TextView textViewContact4;
     private LocationProvider mLocationProvider;
 
     public void setLocationProvider(LocationProvider provider) {
@@ -56,11 +58,8 @@ public class ContactTimesFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-//        textViewContact1 = (TextView) view.findViewById(R.id.contact1);
         textViewContact2 = (TextView) view.findViewById(R.id.contact2);
         textViewContact3 = (TextView) view.findViewById(R.id.contact3);
-//        textViewContact4 = (TextView) view.findViewById(R.id.contact4);
 
         updateTextViews();
     }
@@ -74,12 +73,8 @@ public class ContactTimesFragment extends Fragment {
         if (location == null) {
             return;
         }
-//        long contact1 = mEclipseTimeCalculator.getEclipseTime(loc, EclipseTimeCalculator.Event.CONTACT1);
         Long contact2 = mEclipseTimeCalculator.getEclipseTime(EclipseTimeCalculator.Event.CONTACT2);
         Long contact3 = mEclipseTimeCalculator.getEclipseTime(EclipseTimeCalculator.Event.CONTACT3);
-//        long contact4 = mEclipseTimeCalculator.getEclipseTime(loc, EclipseTimeCalculator.Event.CONTACT4);
-
-//        textViewContact1.setText("C1: " + timeOfDayString(contact1));
 
         String contact2String = "";
         if (contact2 != null) {
@@ -92,7 +87,6 @@ public class ContactTimesFragment extends Fragment {
 
         textViewContact2.setText("Contact2: " + contact2String);
         textViewContact3.setText("Contact3: " + contact3String);
-//        textViewContact4.setText("C4: " + timeOfDayString(contact4));
     }
 
     private String timeOfDayString(Long mills) {

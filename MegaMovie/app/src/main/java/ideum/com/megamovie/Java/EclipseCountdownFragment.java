@@ -1,3 +1,7 @@
+/**
+ * UI Fragment for displaying countdown to an eclipse event
+ */
+
 package ideum.com.megamovie.Java;
 
 import android.location.Location;
@@ -71,23 +75,6 @@ implements MyTimer.MyTimerListener{
             return null;
         }
         return mEclipseTimeCalculator.getTimeToEvent(EclipseTimeCalculator.Event.CONTACT2);
-
-//        if ( mEclipseTimeCalculator == null || mLocationProvider == null) {
-//            return null;
-//        }
-//
-//        Location currentLocation = mLocationProvider.getLocation();
-//        if (currentLocation == null) {
-//            return null;
-//        }
-//        Long rightNow = currentLocation.getTime();
-//
-//
-//        Long contact2 = mEclipseTimeCalculator.getEclipseTime(EclipseTimeCalculator.Event.CONTACT2);
-//        if (contact2 == null) {
-//            return null;
-//        }
-//        return contact2 - rightNow;
     }
 
     // Creates string representing time in mills in days, hours, minutes and seconds

@@ -1,3 +1,7 @@
+/**
+ * Encodes the data for a sequence of camera captures.
+ */
+
 package ideum.com.megamovie.Java;
 
 import java.text.DateFormat;

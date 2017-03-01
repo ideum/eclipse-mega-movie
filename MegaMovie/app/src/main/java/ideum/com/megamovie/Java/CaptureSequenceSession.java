@@ -1,3 +1,8 @@
+/**
+ * Controls the automatic capturing of images using a Capture Sequence
+ * and Camera Fragment
+ */
+
 package ideum.com.megamovie.Java;
 
 

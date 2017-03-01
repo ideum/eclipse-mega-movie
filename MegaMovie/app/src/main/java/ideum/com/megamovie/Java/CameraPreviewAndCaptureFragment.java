@@ -1,3 +1,8 @@
+/**
+ * This activity provides a camera preview together with the ability to
+ * save images in RAW or JPEG.
+ */
+
 package ideum.com.megamovie.Java;
 
 import android.Manifest;

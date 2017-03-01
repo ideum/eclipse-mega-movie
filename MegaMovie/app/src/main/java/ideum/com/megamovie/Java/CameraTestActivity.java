@@ -1,3 +1,8 @@
+/**
+ * This activity is not part of the main app, but is used
+ * for experimenting with different camera settings
+ */
+
 package ideum.com.megamovie.Java;
 
 import android.content.pm.ActivityInfo;

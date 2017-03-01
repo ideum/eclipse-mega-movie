@@ -1,5 +1,9 @@
-package ideum.com.megamovie.Java;
+/**
+ * Simple class for writing camera metadata to
+ * an xml file
+ */
 
+package ideum.com.megamovie.Java;
 
 import android.hardware.camera2.CaptureResult;
 
