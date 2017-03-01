@@ -35,7 +35,7 @@ public class CalibrationActivity extends AppCompatActivity
     /**
      * Switch to capture mode with 20 seconds until first contact
      */
-    private static final long THRESHOLD_TIME_SECONDS = 20;
+    private static final long THRESHOLD_TIME_SECONDS = 40;
     private static final boolean COUNTDOWN_TIMER_SHOWS_DAYS = true;
 
 
@@ -87,6 +87,8 @@ public class CalibrationActivity extends AppCompatActivity
         Resources resources = getResources();
         ConfigParser parser = new ConfigParser(resources, NARROW_FIELD_CONFIG_ID);
         CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(parser.getIntervalProperties().get(0));
+        settings.sensitivity = 200;
+        settings.exposureTime = 1000000;
         mPreviewFragment.setCameraSettings(settings);
     }
 

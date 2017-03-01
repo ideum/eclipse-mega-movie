@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -51,7 +52,7 @@ public class CaptureActivity extends AppCompatActivity
     /**
      * Whether to dim screen to save battery power
      */
-    private static final boolean SHOULD_DIM_SCREEN = false;
+    private static final boolean SHOULD_DIM_SCREEN = true;
 
     /**
      * Screen brightness saved before dimming
@@ -76,6 +77,10 @@ public class CaptureActivity extends AppCompatActivity
          */
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        /**
+         * Fix screen in portrait mode
+         */
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContentResolver = getContentResolver();
 
         SharedPreferences preferences = getPreferences(0);

@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,8 +30,8 @@ public class GPSFragment extends Fragment
     public  long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
-    private static final double DUMMY_LATITUDE = -45;
-    private static final double DUMMY_LONGITUDE = -71;
+    private static final double DUMMY_LATITUDE = -45.4592;
+    private static final double DUMMY_LONGITUDE = -69.6785;
 
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;
@@ -96,7 +97,6 @@ public class GPSFragment extends Fragment
             lastLocation.setLatitude(DUMMY_LATITUDE);
             lastLocation.setLongitude(DUMMY_LONGITUDE);
         }
-
         return lastLocation;
     }
 
@@ -135,7 +135,7 @@ public class GPSFragment extends Fragment
             location.setLatitude(DUMMY_LATITUDE);
             location.setLongitude(DUMMY_LONGITUDE);
         }
-
+        Log.e("GPS fragment","Location changed");
         for(LocationListener listener: locationListeners) {
             listener.onLocationChanged(location);
         }

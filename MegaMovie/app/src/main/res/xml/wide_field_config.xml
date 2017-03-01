@@ -7,7 +7,7 @@
 
         <sensor_sensitivity>60</sensor_sensitivity>>
         <sensor_exposure_time>500000</sensor_exposure_time>
-        <lens_focus_distance>2.5</lens_focus_distance>
+        <lens_focus_distance>3.0</lens_focus_distance>
     </interval_properties>
 
     <interval_properties>
@@ -17,7 +17,7 @@
 
         <sensor_sensitivity>60</sensor_sensitivity>>
         <sensor_exposure_time>500000</sensor_exposure_time>
-        <lens_focus_distance>2.5</lens_focus_distance>
+        <lens_focus_distance>3.0</lens_focus_distance>
     </interval_properties>
 
 

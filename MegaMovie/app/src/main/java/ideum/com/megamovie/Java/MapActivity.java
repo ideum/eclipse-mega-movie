@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,12 +41,13 @@ public class MapActivity extends AppCompatActivity
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private MyTimer mTimer;
     private Location mLocation;
+    private TextView latLngTextView;
     private static final String TAG = "Main Activity";
 
     /**
      * Switch to capture mode with 20 seconds until first contact
      */
-    private static final long THRESHOLD_TIME_SECONDS = 20;
+    private static final long THRESHOLD_TIME_SECONDS = 40;
     /**
      * Resolver is used to interact with system settings to be able
      * to control screen brightness
@@ -94,6 +96,9 @@ public class MapActivity extends AppCompatActivity
         if (!hasAllPermissionsGranted()) {
             requestAllPermissions();
         }
+
+        latLngTextView = (TextView) findViewById(R.id.lat_lng_text_view);
+
         /**
          * Set up gps
          */
@@ -214,10 +219,17 @@ public class MapActivity extends AppCompatActivity
     }
 
 
+    private void updateLatLngTextView(double lat, double lng) {
+        if (latLngTextView != null) {
+            latLngTextView.setText("Latitiude: " + String.valueOf(lat) + "\nlongitude: " + String.valueOf(lng));
+        }
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         double lat = location.getLatitude();
         double lng = location.getLongitude();
+        updateLatLngTextView(lat,lng);
         LatLng currentLocation = new LatLng(lat, lng);
         mGoogleMap.clear();
         mGoogleMap.addMarker(new MarkerOptions().position(currentLocation));

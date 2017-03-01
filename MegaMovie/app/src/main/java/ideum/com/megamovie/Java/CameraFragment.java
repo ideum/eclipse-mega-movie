@@ -191,6 +191,20 @@ public class CameraFragment extends android.app.Fragment
                             FileOutputStream stream = new FileOutputStream(metadataFile, true);
                             byte[] bytes = writer.getXMLString().getBytes();
                             stream.write(bytes);
+                            MediaScannerConnection.scanFile(getActivity(), new String[]{metadataFile.getPath()},
+                                    null, new MediaScannerConnection.MediaScannerConnectionClient() {
+                                        @Override
+                                        public void onMediaScannerConnected() {
+                                            // Do nothing
+                                        }
+
+                                        @Override
+                                        public void onScanCompleted(String path, Uri uri) {
+                                            Log.i(TAG, "Scanned" + path + ":");
+                                            Log.i(TAG, "-> uri=" + uri);
+                                        }
+                                    });
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

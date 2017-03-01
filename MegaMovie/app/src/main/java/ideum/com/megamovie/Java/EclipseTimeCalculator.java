@@ -2,6 +2,8 @@ package ideum.com.megamovie.Java;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,8 +36,9 @@ public class EclipseTimeCalculator {
     private final static int BASETIME_MONTH = 01;
     private final static int BASETIME_DAY = 26;
     private final static int BASETIME_HOUR = 13;
+    private final static int BASETIME_MINUTE = 0;
 
-    private final static boolean USE_DUMMY_ECLIPSE_TIME = true;
+    private final static boolean USE_DUMMY_ECLIPSE_TIME = false;
 
     private class MyKey {
         final int x;
@@ -132,7 +135,6 @@ public class EclipseTimeCalculator {
         }
 
         long millsAfterBaseTime = 1000 * Math.round(secondsAfterBaseTime);
-
         return getBaseTime() + millsAfterBaseTime;
     }
 
@@ -144,6 +146,7 @@ public class EclipseTimeCalculator {
         calendar.set(Calendar.MONTH, BASETIME_MONTH);
         calendar.set(Calendar.DAY_OF_MONTH, BASETIME_DAY);
         calendar.set(Calendar.HOUR, BASETIME_HOUR);
+        calendar.set(Calendar.MINUTE,BASETIME_MINUTE);
         return calendar.getTimeInMillis();
     }
 
@@ -155,7 +158,7 @@ public class EclipseTimeCalculator {
 
 //        calendar.set(Calendar.HOUR,5);
 
-        calendar.set(Calendar.MINUTE,14);
+        calendar.set(Calendar.MINUTE,13);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 

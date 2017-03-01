@@ -21,11 +21,11 @@ public class EclipseCaptureSequenceBuilder {
     private LocationProvider mLocationProvider;
     private ConfigParser mConfig;
     private EclipseTimeCalculator mEclipseTimeCalculator;
-    private static final long INTERVAL_LENGTH = 30 * 1000;//30*1000;
+    private static final long INTERVAL_LENGTH = 30 * 1000;
     /**
      * How long before each contact to start recording images, in milliseconds
      */
-    private static final long INTERVAL_STARTING_OFFSET = 5 * 1000;
+    private static final long INTERVAL_STARTING_OFFSET = 15 * 1000;
 
     public EclipseCaptureSequenceBuilder(LocationProvider provider, ConfigParser config, EclipseTimeCalculator eclipseTimeCalculator) {
         mLocationProvider = provider;
