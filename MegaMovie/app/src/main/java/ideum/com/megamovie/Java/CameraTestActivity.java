@@ -22,6 +22,12 @@ public class CameraTestActivity extends AppCompatActivity {
     private TextView mFocusDistanceTextView;
     private TextView mDurationTextView;
 
+    private static final int SENSITIVITY_INCREMEMENT = 30;
+    private static final long DURATION_INCREMENT = 1;
+    private static final float FOCUS_DISTANCE_INCREMENT = 0.1f;
+    private static final boolean SHOULD_USE_DELAY = false;
+    private static final long CAPTURE_DELAY_MILLS = 4000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,44 +46,48 @@ public class CameraTestActivity extends AppCompatActivity {
     }
 
     public void increaseSensitivity(View view) {
-        mCameraFragment.incrementSensitivity(30);
+        mCameraFragment.incrementSensitivity(SENSITIVITY_INCREMEMENT);
         updateTextViews();
     }
 
     public void decreaseSensitivity(View view) {
-        mCameraFragment.decrementSensitivity(30);
+        mCameraFragment.decrementSensitivity(SENSITIVITY_INCREMEMENT);
         updateTextViews();
     }
 
     public void increaseFocusDistance(View view) {
-        mCameraFragment.incrementFocusDistance(0.5f);
+        mCameraFragment.incrementFocusDistance(FOCUS_DISTANCE_INCREMENT);
         updateTextViews();
     }
     public void decreaseFocusDistance(View view) {
-        mCameraFragment.decrementFocusDistance(0.5f);
+        mCameraFragment.decrementFocusDistance(FOCUS_DISTANCE_INCREMENT);
         updateTextViews();
     }
     public void increaseDuration(View view) {
-        mCameraFragment.incrementDuration(1);
+        mCameraFragment.incrementDuration(DURATION_INCREMENT);
         updateTextViews();
     }
 
     public void decreaseDuration(View view) {
-        mCameraFragment.decrementDuration(1);
+        mCameraFragment.decrementDuration(DURATION_INCREMENT);
         updateTextViews();
     }
 
 
     public void captureImage(View view) {
-        new CountDownTimer(4000, 1000) {
+        if (SHOULD_USE_DELAY) {
+            new CountDownTimer(CAPTURE_DELAY_MILLS, 1000) {
 
-            public void onTick(long millisUntilFinished) {
+                public void onTick(long millisUntilFinished) {
+                }
+
+                public void onFinish() {
+                    takePhoto();
+                }
+            }.start();
+        } else {
+            takePhoto();
         }
-
-            public void onFinish() {
-                takePhoto();
-            }
-        }.start();
     }
 
     private void takePhoto() {
