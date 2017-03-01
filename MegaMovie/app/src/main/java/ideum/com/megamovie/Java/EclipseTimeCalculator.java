@@ -37,7 +37,7 @@ public class EclipseTimeCalculator {
     private final static int BASETIME_HOUR = 13;
     private final static int BASETIME_MINUTE = 0;
 
-    private final static boolean USE_DUMMY_ECLIPSE_TIME = true;
+    private final static boolean USE_DUMMY_ECLIPSE_TIME = false;
 
     private class MyKey {
         final int x;
