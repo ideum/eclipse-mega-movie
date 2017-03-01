@@ -32,8 +32,8 @@ public class EclipseTimeCalculator {
     private LocationProvider mLocationProvider;
 
     private final static int BASETIME_YEAR = 2017;
-    private final static int BASETIME_MONTH = 01;
-    private final static int BASETIME_DAY = 26;
+    private final static int BASETIME_MONTH = 07;
+    private final static int BASETIME_DAY = 21;
     private final static int BASETIME_HOUR = 13;
     private final static int BASETIME_MINUTE = 0;
 

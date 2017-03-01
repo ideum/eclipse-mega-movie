@@ -5,6 +5,7 @@
 
 package ideum.com.megamovie.Java;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -93,6 +94,10 @@ public class CameraTestActivity extends AppCompatActivity {
     private void takePhoto() {
         Toast.makeText(getApplicationContext(),"Photo taken!",Toast.LENGTH_SHORT).show();
         mCameraFragment.captureStillImage();
+    }
+
+    public void loadMapActivity(View view) {
+        startActivity(new Intent(this, MapActivity.class));
     }
 }
 

@@ -10,14 +10,21 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ideum.com.megamovie.Java.CalibrationActivity">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="horizontal"
+    android:layout_marginBottom="5dp">
     <fragment
         android:id="@+id/timer_fragment"
         android:name="ideum.com.megamovie.Java.EclipseCountdownFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="5dp"/>
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>
 
     <fragment android:id="@+id/preview_fragment"
         android:name="ideum.com.megamovie.Java.CameraPreviewAndCaptureFragment"

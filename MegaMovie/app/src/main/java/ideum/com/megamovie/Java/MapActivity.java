@@ -250,6 +250,10 @@ public class MapActivity extends AppCompatActivity
         startActivity(new Intent(this, CalibrationActivity.class));
     }
 
+    public void loadCameraTestActivity(View view) {
+        startActivity(new Intent(this, CameraTestActivity.class));
+    }
+
     private void loadCaptureActivity() {
         startActivity(new Intent(this, CaptureActivity.class));
     }
