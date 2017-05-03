@@ -10,5 +10,12 @@
     <string name="congratulations_message">The eclipse is complete.</string>
     <string name="view_photos_button_text">View Photos</string>
     <string name="share_photos_button_text">Share</string>
+    <string name="map_activity_title">Path of Totality</string>
+    <string name="title_activity_path_of_totality">PathOfTotalityActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 
 </resources>
