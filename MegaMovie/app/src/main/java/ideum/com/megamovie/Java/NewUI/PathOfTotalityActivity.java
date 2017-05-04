@@ -39,15 +39,6 @@ public class PathOfTotalityActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Path of Totality");
 
-        FloatingActionButton myLocationFab = (FloatingActionButton) findViewById(R.id.my_location_fab);
-//        myLocationFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getApplicationContext(),"button pressed",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-        FloatingActionButton assistantFab = (FloatingActionButton) findViewById(R.id.assistant_fab);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -58,9 +49,9 @@ public class PathOfTotalityActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
     }
 
     public void onMyLocationButtonPressed(View view) {
