@@ -26,8 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import ideum.com.megamovie.R;
 
 public class PathOfTotalityActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        OnMapReadyCallback{
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private GoogleMap mMap;
 
@@ -49,17 +48,19 @@ public class PathOfTotalityActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
     }
 
     public void onMyLocationButtonPressed(View view) {
-        Log.i("TAG","location button pressed");
+        Log.i("TAG", "location button pressed");
     }
 
     public void onAssistantButtonPressed(View view) {
-        Log.i("TAG","assistant button pressed");
+        Log.i("TAG", "assistant button pressed");
     }
 
     @Override
@@ -88,7 +89,7 @@ public class PathOfTotalityActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_info) {
-            Toast.makeText(this,"info button pressed",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "info button pressed", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -120,13 +121,5 @@ public class PathOfTotalityActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(35.2, -106.6);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
 }

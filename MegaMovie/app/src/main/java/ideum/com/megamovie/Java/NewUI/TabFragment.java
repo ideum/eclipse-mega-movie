@@ -13,15 +13,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import ideum.com.megamovie.R;
 
-public class TabFragment extends Fragment {
+public class TabFragment extends Fragment
+   implements OnMapReadyCallback     {
 
+
+    private GoogleMap mMap;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -48,7 +59,33 @@ public class TabFragment extends Fragment {
         mViewPager = (ViewPager) rootView.findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        mViewPager.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
+        SupportMapFragment mapFragment = (SupportMapFragment) mSectionsPagerAdapter.getItem(0);
+        mapFragment.getMapAsync(this);
+        SupportMapFragment mapFragment1 = (SupportMapFragment) mSectionsPagerAdapter.getItem(0);
+        mapFragment.getMapAsync(this);
+        int id = mapFragment.getId();
+        int id1 = mapFragment1.getId();
+
+
         return rootView;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng corrales = new LatLng(35.2, -106.6);
+        mMap.addMarker(new MarkerOptions().position(corrales).title("Marker in Coralles"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(corrales));
     }
 
 
@@ -93,12 +130,18 @@ public class TabFragment extends Fragment {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        private SupportMapFragment mMapFragment;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            mMapFragment = SupportMapFragment.newInstance();
         }
 
         @Override
         public Fragment getItem(int position) {
+            if(position == 0) {
+                return mMapFragment;
+            }
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);
@@ -114,11 +157,11 @@ public class TabFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "MAP";
                 case 1:
-                    return "SECTION 2";
+                    return "COUNTDOWN";
                 case 2:
-                    return "SECTION 3";
+                    return "PHASES";
             }
             return null;
         }
