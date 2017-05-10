@@ -23,6 +23,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 public class CalibrationActivity extends AppCompatActivity
@@ -41,7 +42,7 @@ public class CalibrationActivity extends AppCompatActivity
 
 
     /**
-     * Switch to capture mode with 20 seconds until first contact
+     * Switch to capture mode with 20 seconds until first_contact
      */
     private static final long THRESHOLD_TIME_SECONDS = 40;
     private static final boolean COUNTDOWN_TIMER_SHOWS_DAYS = true;
@@ -152,7 +153,7 @@ public class CalibrationActivity extends AppCompatActivity
         if (mEclipseTimeCalculator == null) {
             return false;
         }
-        Long millsToContact2 = mEclipseTimeCalculator.getTimeToEvent(EclipseTimeCalculator.Event.CONTACT2);
+        Long millsToContact2 = mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
 
         if (millsToContact2 == null) {
             return false;

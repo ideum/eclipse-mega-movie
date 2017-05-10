@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 
+import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 public class MapActivity extends AppCompatActivity
@@ -45,7 +46,7 @@ public class MapActivity extends AppCompatActivity
     private static final String TAG = "Main Activity";
 
     /**
-     * Switch to capture mode with 20 seconds until first contact
+     * Switch to capture mode with 20 seconds until first_contact
      */
     private static final long THRESHOLD_TIME_SECONDS = 40;
     /**
@@ -113,6 +114,7 @@ public class MapActivity extends AppCompatActivity
          */
         mContactTimesFragment = (ContactTimesFragment) getFragmentManager().findFragmentById(R.id.contact_times_fragment);
         mContactTimesFragment.setLocationProvider(mGPSFragment);
+
         try {
             mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment);
             mContactTimesFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
@@ -186,7 +188,7 @@ public class MapActivity extends AppCompatActivity
         if (mEclipseTimeCalculator == null) {
             return false;
         }
-        Long millsToContact2 = mEclipseTimeCalculator.getTimeToEvent(EclipseTimeCalculator.Event.CONTACT2);
+        Long millsToContact2 = mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
 
         if (millsToContact2 == null) {
             return false;

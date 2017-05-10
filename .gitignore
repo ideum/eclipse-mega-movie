@@ -56,3 +56,6 @@ Temporary Items
 /build
 /captures
 .externalNativeBuild
+
+# Resources
+MegaMovie/app/src/main/res/raw/*

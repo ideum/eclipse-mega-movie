@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
+import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
+
 public class EclipseCaptureSequenceBuilder {
 
     public final static String TAG = "SequenceBuilder";
@@ -40,12 +42,12 @@ public class EclipseCaptureSequenceBuilder {
 
         Location currentLocation = mLocationProvider.getLocation();
 
-        Long contact2 = mEclipseTimeCalculator.getEclipseTime(EclipseTimeCalculator.Event.CONTACT2);
+        Long contact2 = mEclipseTimeCalculator.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
         if (contact2 != null) {
             Long startingTime2 = contact2 - INTERVAL_STARTING_OFFSET;
             intervals.add(new CaptureSequence.CaptureInterval(iProperties.get(0), startingTime2, INTERVAL_LENGTH));
         }
-        Long contact3 = mEclipseTimeCalculator.getEclipseTime(EclipseTimeCalculator.Event.CONTACT3);
+        Long contact3 = mEclipseTimeCalculator.getEclipseTime(EclipseTimingMap.Event.CONTACT3);
         /**
          * Make sure intervals don't overlap
          */

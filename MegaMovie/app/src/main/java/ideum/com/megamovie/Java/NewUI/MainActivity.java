@@ -1,9 +1,10 @@
 package ideum.com.megamovie.Java.NewUI;
 
+import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,28 +17,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import java.io.IOException;
 
+import ideum.com.megamovie.Java.Application.MyApplication;
+import ideum.com.megamovie.Java.EclipseTimeCalculator;
+import ideum.com.megamovie.Java.GPSFragment;
+import ideum.com.megamovie.Java.MyTimer;
+import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
-public class PathOfTotalityActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        AssistantFragment.OnFragmentInteractionListener,
+        CalibrationFragment.OnFragmentInteractionListener,
+        MyTimer.MyTimerListener{
 
-    private GoogleMap mMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_path_of_totality);
+        setContentView(R.layout.activity_main);
+
+        /**
+         * Keep activity in portrait mode
+         */
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Path of Totality");
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -48,15 +58,9 @@ public class PathOfTotalityActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        loadFragment(EclipseInfoFragment.class);
 
 
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-    }
-
-    public void onMyLocationButtonPressed(View view) {
-        Log.i("TAG", "location button pressed");
     }
 
     public void onAssistantButtonPressed(View view) {
@@ -102,17 +106,13 @@ public class PathOfTotalityActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        if (id == R.id.path_of_totality) {
+           loadFragment(EclipseInfoFragment.class);
+        } else if (id == R.id.assistant) {
+            loadFragment(AssistantFragment.class);
+        } else if (id == R.id.about_eclipse_app) {
+            loadFragment(CalibrationFragment.class);
+        } else if (id == R.id.equipment) {
 
         }
 
@@ -121,5 +121,27 @@ public class PathOfTotalityActivity extends AppCompatActivity
         return true;
     }
 
+    private void loadFragment(Class c) {
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) c.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+
+
+    @Override
+    public void onTick() {
+
+    }
 }

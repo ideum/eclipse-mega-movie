@@ -4,27 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="ideum.com.megamovie.Java.NewUI.PathOfTotalityActivity"
+    tools:context="ideum.com.megamovie.Java.NewUI.MainActivity"
     tools:showIn="@layout/app_bar_path_of_totality">
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="14"
-        android:name="ideum.com.megamovie.Java.NewUI.TabFragment"
+        android:name="ideum.com.megamovie.Java.NewUI.EclipseInfoFragment"
         android:id="@+id/tab_fragment"
         />
-
-
-    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--xmlns:tools="http://schemas.android.com/tools"-->
-        <!--android:id="@+id/map"-->
-        <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="14"-->
-        <!--tools:context="ideum.com.megamovie.Java.MapActivity" />-->
-
 
 </android.support.constraint.ConstraintLayout>

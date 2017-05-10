@@ -29,9 +29,9 @@ public class GPSFragment extends Fragment
     public  long gpsInterval = 1000 * 30;
     public  long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
-    private static final boolean SHOULD_USE_DUMMY_LOCATION = false;
-    private static final double DUMMY_LATITUDE = -45.4592;
-    private static final double DUMMY_LONGITUDE = -69.6785;
+    private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
+    private static final double DUMMY_LATITUDE = 36.1627; //Nashville Tennessee
+    private static final double DUMMY_LONGITUDE = -86.7816; //Nashville Tennessee
 
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;
@@ -135,7 +135,6 @@ public class GPSFragment extends Fragment
             location.setLatitude(DUMMY_LATITUDE);
             location.setLongitude(DUMMY_LONGITUDE);
         }
-        Log.e("GPS fragment","Location changed");
         for(LocationListener listener: locationListeners) {
             listener.onLocationChanged(location);
         }
