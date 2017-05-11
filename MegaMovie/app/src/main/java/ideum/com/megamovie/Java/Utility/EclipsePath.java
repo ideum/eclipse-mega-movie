@@ -2,11 +2,18 @@ package ideum.com.megamovie.Java.Utility;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Arrays;
+
 /**
  * Created by MT_User on 5/10/2017.
  */
 
 public class EclipsePath {
+
+    // Number of sample point to calculate closest point in path of totality
+    private static final int NUM_SAMPLE_POINTS = 10000;
+
+    private static final double RADIUS_EARTH_KM = 6371;
 
     public static final int SOUTH_BOUNDARY = 0;
     public static final int NORTH_BOUNDARY = 1;
@@ -37,6 +44,63 @@ public class EclipsePath {
         double lng = minLongitude + t * (maxLongitude - minLongitude);
         double lat = getLatForLng(lng,boundary);
         return new LatLng(lat,lng);
+    }
+
+    // Formula for the distance (in km) between two points on the earth's surface,
+    // travelling along a great circle (geodesic distance)
+
+    public static double greatCircleDistance(LatLng p_1, LatLng p_2) {
+        double psi_1 = Math.toRadians(p_1.latitude);
+        double psi_2 = Math.toRadians(p_2.latitude);
+        double lambda_1 = Math.toRadians(p_1.longitude);
+        double lambda_2 = Math.toRadians(p_2.longitude);
+        double dPsi = psi_2 - psi_1;
+        double dLambda = lambda_2 - lambda_1;
+
+        double a = Math.sin(dPsi/2)*Math.sin(dPsi/2) + Math.cos(psi_1)*Math.cos(psi_2)*Math.sin(dLambda/2)*Math.sin(dLambda/2);
+        double b = 2 * Math.asin(Math.sqrt(a));
+
+        return RADIUS_EARTH_KM * b;
+    }
+
+    public static LatLng closestPointOnPathOfTotality(LatLng pos) {
+        LatLng southBoundaryPoint = closestPointOnBoundary(pos,SOUTH_BOUNDARY);
+        if (pos.latitude <= southBoundaryPoint.latitude) {
+            return southBoundaryPoint;
+        }
+
+        LatLng northBoundaryPoint = closestPointOnBoundary(pos,NORTH_BOUNDARY);
+        if (pos.latitude >= northBoundaryPoint.latitude) {
+            return northBoundaryPoint;
+        }
+
+        return pos;
+    }
+
+    public static Double distanceToPathOfTotality(LatLng pos) {
+        LatLng closestPoint = closestPointOnPathOfTotality(pos);
+        return greatCircleDistance(pos,closestPoint);
+    }
+
+    private static LatLng closestPointOnBoundary(LatLng pos, int boundary) {
+
+
+        double parameter = 0;
+        LatLng endpoint = getLatLngForParameter(parameter,boundary);
+        double minDistance = greatCircleDistance(pos,endpoint);
+        double minParameter = 0;
+
+        while(parameter < 1 ) {
+            endpoint = getLatLngForParameter(parameter,boundary);
+            double distance = greatCircleDistance(pos,endpoint);
+            if (distance < minDistance) {
+                minDistance = distance;
+                minParameter = parameter;
+            }
+            parameter = parameter + 1.0/NUM_SAMPLE_POINTS;
+        }
+
+        return getLatLngForParameter(minParameter,boundary);
     }
 
 }

@@ -17,12 +17,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.GPSFragment;
 import ideum.com.megamovie.Java.MyTimer;
+import ideum.com.megamovie.Java.Utility.EclipsePath;
 import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
@@ -60,6 +63,9 @@ public class MainActivity extends AppCompatActivity
 
         loadFragment(EclipseInfoFragment.class);
 
+//       LatLng saltLakeCity = new LatLng(40.7608,-111.8910);
+//        LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(saltLakeCity);
+//        double distance = EclipsePath.greatCircleDistance(saltLakeCity,endpoint);
 
     }
 

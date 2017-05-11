@@ -14,6 +14,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import ideum.com.megamovie.Java.Utility.EclipsePath;
 import ideum.com.megamovie.R;
@@ -24,6 +25,9 @@ public class MyMapFragment extends Fragment
 
     private GoogleMap mMap;
     private Location mLocation;
+
+    private LatLng initialPoint = new LatLng(39.8,-102);
+    private float initialZoom = 3.2f;
 
     public MyMapFragment() {
         // Required empty public constructor
@@ -94,8 +98,35 @@ public class MyMapFragment extends Fragment
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        setMarker();
-        moveToCurrentLocation();
+//        setMarker();
+//        moveToCurrentLocation();
+        drawEclipsePath();
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(initialPoint));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(initialZoom));
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latLng) {
+                drawShortestPathToTotality(latLng);
+            }
+        });
+
+    }
+
+    private void drawShortestPathToTotality(LatLng point) {
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(point));
+        LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(point);
+
+        PolylineOptions plo = new PolylineOptions();
+        plo.add(point);
+        plo.add(endpoint);
+        plo.geodesic(true);
+        plo.width(5);
+        plo.color(Color.RED);
+        mMap.addPolyline(plo);
         drawEclipsePath();
     }
 
@@ -115,6 +146,17 @@ public class MyMapFragment extends Fragment
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(loc));
         drawEclipsePath();
+
+
+        LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(loc);
+
+        PolylineOptions plo = new PolylineOptions();
+        plo.add(loc);
+        plo.add(endpoint);
+        plo.geodesic(true);
+        plo.width(5);
+        plo.color(Color.RED);
+        mMap.addPolyline(plo);
     }
 
     @Override

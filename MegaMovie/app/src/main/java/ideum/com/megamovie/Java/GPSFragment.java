@@ -29,7 +29,7 @@ public class GPSFragment extends Fragment
     public  long gpsInterval = 1000 * 30;
     public  long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
-    private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
+    private static final boolean SHOULD_USE_DUMMY_LOCATION = false;
     private static final double DUMMY_LATITUDE = 36.1627; //Nashville Tennessee
     private static final double DUMMY_LONGITUDE = -86.7816; //Nashville Tennessee
 

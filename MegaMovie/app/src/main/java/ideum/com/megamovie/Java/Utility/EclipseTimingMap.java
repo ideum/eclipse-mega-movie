@@ -67,10 +67,11 @@ public class EclipseTimingMap {
         Double secondsAfterBaseTime = 0.0;
         switch (event) {
             case CONTACT2:
-                secondsAfterBaseTime = 0.1 * eclipseTimeMapC2.get(key); //units in table are .1 seconds
+                secondsAfterBaseTime =  eclipseTimeMapC2.get(key); //units in table are .1 seconds
                 if (secondsAfterBaseTime == null || secondsAfterBaseTime == 0) {
                     return null;
                 }
+                secondsAfterBaseTime = (0.1) * secondsAfterBaseTime;
                 break;
             case CONTACT3:
                 secondsAfterBaseTime = eclipseTimeMapC3.get(key);
