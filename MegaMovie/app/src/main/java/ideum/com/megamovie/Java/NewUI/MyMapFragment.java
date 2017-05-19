@@ -113,6 +113,7 @@ public class MyMapFragment extends Fragment
             }
         });
 
+
     }
 
     private void drawShortestPathToTotality(LatLng point) {

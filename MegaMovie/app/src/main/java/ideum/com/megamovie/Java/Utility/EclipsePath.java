@@ -1,5 +1,7 @@
 package ideum.com.megamovie.Java.Utility;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Arrays;
@@ -75,6 +77,11 @@ public class EclipsePath {
         }
 
         return pos;
+    }
+
+    public static Double distanceToPathOfTotality(Location loc) {
+        LatLng latLng = new LatLng(loc.getLatitude(),loc.getLongitude());
+        return distanceToPathOfTotality(latLng);
     }
 
     public static Double distanceToPathOfTotality(LatLng pos) {

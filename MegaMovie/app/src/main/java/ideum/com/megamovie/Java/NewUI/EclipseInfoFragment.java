@@ -3,6 +3,7 @@ package ideum.com.megamovie.Java.NewUI;
 import android.Manifest;
 import android.location.Location;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,12 +24,13 @@ import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.GPSFragment;
 import ideum.com.megamovie.Java.MyTimer;
+import ideum.com.megamovie.Java.Utility.EclipsePath;
 import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 public class EclipseInfoFragment extends Fragment
        implements LocationListener,
-        MyTimer.MyTimerListener{
+        MyTimer.MyTimerListener {
 
     /**
      * Request code for permissions
@@ -71,20 +73,14 @@ public class EclipseInfoFragment extends Fragment
         TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // Add GPS fragment
-        mGPSFragment = new GPSFragment();
-        getActivity().getFragmentManager().beginTransaction().add(
-                android.R.id.content, mGPSFragment).commit();
-        mGPSFragment.addLocationListener(this);
-
-
-
-        MyApplication ma = (MyApplication) getActivity().getApplication();
-        EclipseTimingMap etm = ma.getEclipseTimingMap();
-        // Create the EclipseTimeCalculator
-            mEclipseTimeCalculator = new EclipseTimeCalculator(etm, mGPSFragment);
-
-
+        FloatingActionButton assistantButton = (FloatingActionButton) rootView.findViewById(R.id.assistant_fab);
+        assistantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.onAssistantButtonPressed(v);
+            }
+        });
 
 
         return rootView;
@@ -140,6 +136,9 @@ public class EclipseInfoFragment extends Fragment
         mLocation = location;
         MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
         mmf.setLocation(mLocation);
+        CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
+        double distance = EclipsePath.distanceToPathOfTotality(location);
+        cdf.setDistanceToPathOfTotality(distance);
     }
 
     @Override
@@ -148,6 +147,20 @@ public class EclipseInfoFragment extends Fragment
         mTimer = new MyTimer();
         mTimer.addListener(this);
         mTimer.startTicking();
+
+        // Add GPS fragment
+        mGPSFragment = new GPSFragment();
+        getActivity().getFragmentManager().beginTransaction().add(
+                android.R.id.content, mGPSFragment).commit();
+        mGPSFragment.addLocationListener(this);
+
+
+
+        MyApplication ma = (MyApplication) getActivity().getApplication();
+        EclipseTimingMap etm = ma.getEclipseTimingMap();
+        // Create the EclipseTimeCalculator
+        mEclipseTimeCalculator = new EclipseTimeCalculator(etm, mGPSFragment);
+
     }
 
     @Override

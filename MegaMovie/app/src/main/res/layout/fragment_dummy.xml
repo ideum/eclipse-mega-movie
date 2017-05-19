@@ -9,7 +9,7 @@
     tools:context="ideum.com.megamovie.Java.NewUI.EclipseInfoFragment$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/section_label"
+        android:id="@+id/section_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

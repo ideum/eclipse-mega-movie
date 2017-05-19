@@ -1,10 +1,15 @@
 package ideum.com.megamovie.Java.NewUI;
 
+import android.Manifest;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,26 +20,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
-
-import ideum.com.megamovie.Java.Application.MyApplication;
-import ideum.com.megamovie.Java.EclipseTimeCalculator;
-import ideum.com.megamovie.Java.GPSFragment;
 import ideum.com.megamovie.Java.MyTimer;
-import ideum.com.megamovie.Java.Utility.EclipsePath;
-import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        AssistantFragment.OnFragmentInteractionListener,
         CalibrationFragment.OnFragmentInteractionListener,
         MyTimer.MyTimerListener{
-
 
 
     @Override
@@ -46,11 +39,15 @@ public class MainActivity extends AppCompatActivity
          * Keep activity in portrait mode
          */
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//
+//        if (!hasAllPermissionsGranted()) {
+//            requestAllPermissions();
+//        }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Path of Totality");
+        getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -63,14 +60,11 @@ public class MainActivity extends AppCompatActivity
 
         loadFragment(EclipseInfoFragment.class);
 
-//       LatLng saltLakeCity = new LatLng(40.7608,-111.8910);
-//        LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(saltLakeCity);
-//        double distance = EclipsePath.greatCircleDistance(saltLakeCity,endpoint);
-
     }
 
     public void onAssistantButtonPressed(View view) {
-        Log.i("TAG", "assistant button pressed");
+        getSupportActionBar().setTitle(getString(R.string.assistant_section_title));
+        loadFragment(AssistantFragment.class);
     }
 
     @Override
@@ -99,11 +93,17 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_info) {
-            Toast.makeText(this, "info button pressed", Toast.LENGTH_SHORT).show();
+            loadAboutActivity();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadAboutActivity() {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity (intent);
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -113,13 +113,21 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.path_of_totality) {
+            getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
            loadFragment(EclipseInfoFragment.class);
         } else if (id == R.id.assistant) {
+            getSupportActionBar().setTitle(getString(R.string.assistant_section_title));
             loadFragment(AssistantFragment.class);
         } else if (id == R.id.about_eclipse_app) {
-            loadFragment(CalibrationFragment.class);
+            getSupportActionBar().setTitle(getString(R.string.about_section_title));
+            loadAboutActivity();
         } else if (id == R.id.equipment) {
 
+        } else if (id == R.id.image) {
+
+        } else if (id == R.id.gallery) {
+            getSupportActionBar().setTitle("Image Gallery");
+            loadFragment(GalleryFragment.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -127,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void loadFragment(Class c) {
+    public void loadFragment(Class c) {
         Fragment fragment = null;
         try {
             fragment = (Fragment) c.newInstance();
@@ -136,7 +144,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        transaction.replace(R.id.flContent, fragment);
+        transaction.commit();
     }
 
     @Override
@@ -144,10 +155,29 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
-
     @Override
     public void onTick() {
 
+    }
+
+    private static final int REQUEST_PERMISSIONS = 0;
+
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+    private void requestAllPermissions() {
+        ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSIONS);
+
+    }
+
+    private boolean hasAllPermissionsGranted() {
+        for (String permission : PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -54,13 +54,18 @@ public class EclipseTimingMap {
         CONTACT2, CONTACT3
     }
 
-    public Long getEclipseTime(EclipseTimingMap.Event event, Location location) {
+    public Long getEclipseTime(EclipseTimingMap.Event event,Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+        return getEclipseTime(event,latLng);
+    }
+
+    public Long getEclipseTime(EclipseTimingMap.Event event, LatLng location) {
         if (USE_DUMMY_ECLIPSE_TIME) {
             return dummyEclipseTime(event);
         }
 
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
+        double lat = location.latitude;
+        double lng = location.longitude;
         int x = (int) ((lat - STARTING_LAT) / LATLNG_INTERVAL);
         int y = (int) ((lng - STARTING_LNG) / LATLNG_INTERVAL);
         MyKey key = new MyKey(x, y);

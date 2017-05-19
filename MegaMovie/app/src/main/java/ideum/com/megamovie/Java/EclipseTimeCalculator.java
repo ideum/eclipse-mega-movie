@@ -3,6 +3,8 @@ package ideum.com.megamovie.Java;
 import android.content.Context;
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import ideum.com.megamovie.Java.Utility.EclipsePath;
 import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
@@ -46,7 +49,11 @@ public class EclipseTimeCalculator {
         if (location == null) {
             return null;
         }
-        return mEclipseTimingMap.getEclipseTime(event,location);
+
+        LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+        LatLng closestEclipseLatLng = EclipsePath.closestPointOnPathOfTotality(latLng);
+
+        return mEclipseTimingMap.getEclipseTime(event,closestEclipseLatLng);
 
 
     }

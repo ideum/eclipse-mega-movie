@@ -13,6 +13,12 @@
     <string name="map_activity_title">Path of Totality</string>
     <string name="title_activity_path_of_totality">PathOfTotalityActivity</string>
 
+    <string name="eclipse_info_section_title">Eclipse: Where and When</string>
+    <string name="assistant_section_title">Assistant</string>
+    <string name="about_section_title">About</string>
+    <string name="gallery_section_title">Image Gallery</string>
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -20,8 +26,30 @@
     <string name="title_activity_tab_fragment">TabFragment</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_nav_drawer">NavDrawerActivity</string>
+    <string name="title_activity_intro">IntroActivity</string>
+    <string name="intro_text_0">On August 21st, 2017, a total solar eclipse will traverse North America.
+        This app allows you to capture images of the event and participate in an unprecedented citizen-science project.</string>
+    <string name="intro_text_1">Everybody! The app does all the hard work of controlling your smarphone
+        camera and capturing images of the eclipse at just the right times. It can be used by itself,
+        or together with an external lens and tripod.</string>
+    <string name="intro_text_2">The app is incredibly easy to use: you just point it in the right direction during the eclipse and it does the rest! If you have additional equipment, the app will guide you to set everything up correctly to get the best posible results.</string>
+
+    <string name="intro_title_0">Welcome to Megamovie Mobile</string>
+    <string name="intro_title_1">Who is this app for?</string>
+    <string name="intro_title_2">How do I use the app?</string>
+
+    <string name="distance_to_totality_format">You are %1$d kilometers from the path of totality.</string>
+    <string name="in_the_path_of_totality_string">You are in the path of totality!</string>
+    <string name="about_megamovie">About Megamovie Mobile\n\nThe Megamovie Mobile app allows you to capture images of the solar eclipse on August 21, 2017.
+        It also enables you to share your photos with scientists for a citizen science project led by UC Berkeley’s Space Sciences Laboratory and Google.
+        Click [here] to learn more about the Megamovie Project.\n\n The app can capture valuable scientific information without additional equipment.
+        But you can obtain even better results by using an external lens and tripod with your phone. If you already have this equipment or want to learn more,
+        use our built-in [Assistant] to customize the app.\n\n If you are using an external lens and tripod, the app has a calibration mode that will
+        help you focus the lens and point the camera in the right direction. You can practice with these features by capturing images of the moon.\n\n
+        One outcome of the Megamovie Project will be a movie of the eclipse as it moves across the US. The movie will incorporate high-quality images
+        captured by trained volunteers with DSLR cameras. Once it is available, you can download and view it in the [Eclipse Megamovie] section.\n\n\n\n\n
+    </string>
 
 </resources>

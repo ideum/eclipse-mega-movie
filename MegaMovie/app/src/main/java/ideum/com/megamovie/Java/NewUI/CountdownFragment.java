@@ -25,6 +25,7 @@ public class CountdownFragment extends Fragment {
     private TextView hoursTextView;
     private TextView minutesTextView;
     private TextView secondsTextView;
+    private TextView distanceToTotalityTextView;
 
     public CountdownFragment() {
         // Required empty public constructor
@@ -44,9 +45,25 @@ public class CountdownFragment extends Fragment {
         hoursTextView = (TextView) rootView.findViewById(R.id.hours_text_view);
         minutesTextView = (TextView) rootView.findViewById(R.id.minutes_text_view);
         secondsTextView = (TextView) rootView.findViewById(R.id.seconds_text_view);
+        distanceToTotalityTextView = (TextView) rootView.findViewById(R.id.distance_to_totality);
 
+        updateDistanceToTotalityTextView(3);
 
         return rootView;
+    }
+
+    public void setDistanceToPathOfTotality(double km) {
+        updateDistanceToTotalityTextView(km);
+    }
+
+    private void updateDistanceToTotalityTextView(double km) {
+        String text = "";
+        if (km == 0) {
+            text = getString(R.string.in_the_path_of_totality_string);
+        } else {
+            text = getString(R.string.distance_to_totality_format, (int) km);
+        }
+        distanceToTotalityTextView.setText(text);
     }
 
     public void setMillsRemaining(Long mills) {

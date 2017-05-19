@@ -1,14 +1,72 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="24dp"
+    android:layout_marginLeft="32dp"
+    android:layout_marginRight="32dp"
     tools:context="ideum.com.megamovie.Java.NewUI.AssistantFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Assistant Fragment"
-        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="Roboto"
+        android:textSize="24dp"
+        android:textColor="#000"
+        android:text="Photographing the Eclipse"
         />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="Roboto"
+        android:textSize="16dp"
+        android:textColor="#7A000000"
+        android:text="How will you capture the eclipse?"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="Roboto"
+        android:layout_marginTop="24dp"
+        android:textSize="14dp"
+        android:textColor="#000"
+        android:text="What equipment will you use to photograph the eclipse?"/>
+
+    <Button
+        android:id="@+id/only_my_phone_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textColor="#fff"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:background="@color/colorPrimary"
+        android:text="Only my phone"/>
+
+    <Button
+        android:id="@+id/with_equipment_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textColor="#fff"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:background="@color/colorPrimary"
+        android:text="My phone with peripheral equipment"/>
+
+    <Button
+        android:id="@+id/DSLR_camera_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textColor="#fff"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:background="@color/colorPrimary"
+        android:text="A DSLR camera"/>
+
+</LinearLayout>
