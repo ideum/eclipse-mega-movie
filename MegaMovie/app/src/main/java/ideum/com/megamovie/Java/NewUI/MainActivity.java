@@ -10,7 +10,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -148,6 +147,18 @@ public class MainActivity extends AppCompatActivity
 
         transaction.replace(R.id.flContent, fragment);
         transaction.commit();
+    }
+
+    public void loadAssistantFragment(int index) throws ClassNotFoundException {
+
+
+        AssistantEquipmentChoiceInfoFragment fragment = AssistantEquipmentChoiceInfoFragment.newInstance(index);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            transaction.replace(R.id.flContent, fragment);
+            transaction.commit();
     }
 
     @Override

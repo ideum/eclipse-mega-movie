@@ -40,7 +40,11 @@ public class AssistantFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.loadFragment(AssistantOnlyPhoneFragment.class);
+                try {
+                    mainActivity.loadAssistantFragment(0);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -49,7 +53,11 @@ public class AssistantFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.loadFragment(AssistantEquipmentFragment.class);
+                try {
+                    mainActivity.loadAssistantFragment(1);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -58,7 +66,11 @@ public class AssistantFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.loadFragment(AssistantDSLRFragment.class);
+                try {
+                    mainActivity.loadAssistantFragment(2);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

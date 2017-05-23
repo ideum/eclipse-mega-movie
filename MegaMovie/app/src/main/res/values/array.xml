@@ -7,4 +7,72 @@
         <item>DSLR camera</item>
 
     </string-array>
+
+    <string-array name="lens_choices">
+        <item>No External Lens</item>
+        <item>lens choice 1</item>
+        <item>lens choice 2</item>
+        <item>lens choice 3</item>
+    </string-array>
+
+    <string-array name="tripod_choices">
+        <item>No Tripod</item>
+        <item>tripod choice 1</item>
+        <item>tripod choice 2</item>
+        <item>tripod choice 3</item>
+    </string-array>
+
+    <string-array name="assistant_headers">
+        <item>Using your smartphone</item>
+        <item>Eclipse photo Gear</item>
+        <item>DSLR eclipse photography</item>
+    </string-array>
+
+    <string-array name="assistant_subheaders">
+        <item>Capturing the eclipse with your phone</item>
+        <item>Equipment for eclipse photography</item>
+        <item>Capture stunning eclipse photos</item>
+    </string-array>
+
+    <string-array name="assistant_bodies">
+        <item>
+            The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
+        It tells you when and where to see the eclipse, how to aim your camera when the eclipse is about to start, and automatically controls your camera’s settings
+        and shutter to take a series of photos during the event. All you’ll have to do is be ready and follow a few simple instructions when the time comes.\n\nThe
+        app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon. Go to Moon test to try it out.
+        </item>
+        <item>
+            Holding a camera by hand can cause tiny vibrations that blur photos.
+        This can be especially troublesome with astronomical images. Mounting your phone on a tripod is an easy way to improve your photos.
+        There are many kinds of tripods available for cell phones, including inexpensive ones made by Joby, Square Jellyfish, and Charger City.
+        \n\nAlso, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens like those made by Olloclip, Moment, Mozeat, and instaLens. Lenses like these are easy to attach to your phone and can help you take great photos of many things in addition to the eclipse.
+        \n\nGo to Calibrate your camera to set up your phone with a tripod and lens.
+        </item>
+        <item>
+             If you want to use a separate camera to photograph the eclipse, you can still use the eclipse map and countdown functions in the Megamovie Mobile app.
+        You can view those features here. Goes to Eclipse 2017: Where and When?
+        \n\nYou may also be interested in being an official volunteer to capture images for the Megamovie itself. To learn more, visit the Google Megamovie Website.
+        </item>
+    </string-array>
+
+    <string-array name="assistant_image_names">
+        <item>only_phone</item>
+        <item>eclipse_photo_gear</item>
+        <item>dslr</item>
+    </string-array>
+    <integer-array name="assistant_is_terminals">
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+    </integer-array>
+
+    <string-array name="assistant_next_classes">
+        <item>ideum.com.megamovie.Java.NewUI.EclipseInfoFragment</item>
+        <item>ideum.com.megamovie.Java.NewUI.AssistantEquipmentChoiceFragment</item>
+        <item>ideum.com.megamovie.Java.NewUI.EclipseInfoFragment</item>
+    </string-array>
+
+
+
+
 </resources>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.AssistantDSLRFragment">
+    tools:context="ideum.com.megamovie.Java.NewUI.AssistantEquipmentChoiceInfoFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,8 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <include
                 layout="@layout/equipment_spinner"
@@ -22,12 +21,12 @@
 
 
             <ImageView
+                android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:adjustViewBounds="true"
-                android:paddingLeft="0dp"
-                android:src="@drawable/dslr" />
+                android:paddingLeft="0dp" />
 
 
             <LinearLayout
@@ -39,25 +38,25 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="DSLR eclipse photography"
                     android:textColor="#000"
                     android:textSize="24dp" />
 
                 <TextView
+                    android:id="@+id/subheader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Capture stunning eclipse photos"
                     android:textColor="#36000000"
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/body"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/assistant_dslr"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="65dp"/>
+                    android:layout_marginBottom="65dp"
+                    android:layout_marginTop="15dp" />
 
             </LinearLayout>
 
@@ -65,38 +64,15 @@
 
     </ScrollView>
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
-        android:background="#EEEEEE">
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BACK"
-            android:textSize="14dp"
-            android:fontFamily="Roboto"
-            android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"
-            android:textColor="#6E6E6E"
-            android:background="#00000000"
-            android:elevation="0dp"
-            android:layout_gravity="left"/>
-        <Button
-            android:id="@+id/finish_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="FINISH"
-            android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
-            android:background="#00000000"
-            android:textSize="14dp"
-            android:fontFamily="Roboto"
-            android:textColor="#6E6E6E"
-            android:elevation="0dp"
-            android:layout_gravity="right"/>
+        android:layout_gravity="bottom">
 
+        <include
+            layout="@layout/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </FrameLayout>
 
 </FrameLayout>
