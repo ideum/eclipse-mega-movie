@@ -4,10 +4,101 @@
     android:layout_height="match_parent"
     tools:context="ideum.com.megamovie.Java.NewUI.AssistantEquipmentFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="vertical"
+            >
+
+            <include
+                layout="@layout/equipment_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:adjustViewBounds="true"
+                android:paddingLeft="0dp"
+                android:src="@drawable/eclipse_photo_gear" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Equipment for eclipse photography"
+                    android:textColor="#000"
+                    android:textSize="24dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Capturing the eclipse with your phone"
+                    android:textColor="#36000000"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/assistant_equipment"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="65dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:background="#EEEEEE">
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BACK"
+            android:textSize="14dp"
+            android:fontFamily="Roboto"
+            android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"
+            android:textColor="#6E6E6E"
+            android:background="#00000000"
+            android:elevation="0dp"
+            android:layout_gravity="left"/>
+        <Button
+            android:id="@+id/finish_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEXT"
+            android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
+            android:background="#00000000"
+            android:textSize="14dp"
+            android:fontFamily="Roboto"
+            android:textColor="#6E6E6E"
+            android:elevation="0dp"
+            android:layout_gravity="right"/>
+
+    </FrameLayout>
 
 </FrameLayout>

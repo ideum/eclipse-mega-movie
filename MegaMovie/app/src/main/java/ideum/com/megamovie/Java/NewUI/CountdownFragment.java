@@ -75,7 +75,6 @@ public class CountdownFragment extends Fragment {
      */
     private void setCountdownViews(long mills) {
 
-
         long days = TimeUnit.MILLISECONDS.toDays(mills);
         mills -= TimeUnit.DAYS.toMillis(days);
         long hours = TimeUnit.MILLISECONDS.toHours(mills);

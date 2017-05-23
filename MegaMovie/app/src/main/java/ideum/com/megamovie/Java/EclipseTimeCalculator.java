@@ -58,8 +58,6 @@ public class EclipseTimeCalculator {
 
     }
 
-
-
     public Long getTimeToEvent(EclipseTimingMap.Event event) {
 
         if (mLocationProvider == null) {
@@ -75,8 +73,6 @@ public class EclipseTimeCalculator {
         if (eventTime == null) {
             return null;
         }
-
         return eventTime - location.getTime();
-
     }
 }

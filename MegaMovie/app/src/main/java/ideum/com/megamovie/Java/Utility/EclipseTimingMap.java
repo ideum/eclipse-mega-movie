@@ -27,7 +27,7 @@ public class EclipseTimingMap {
 
     private final static boolean USE_DUMMY_ECLIPSE_TIME = false;
 
-    private static final Double STARTING_LAT = 36.0;
+    private static final Double STARTING_LAT = 35.0;
     private static final Double STARTING_LNG = -90.0;
     private static final Double LATLNG_INTERVAL = 0.01;
 
@@ -66,21 +66,20 @@ public class EclipseTimingMap {
 
         double lat = location.latitude;
         double lng = location.longitude;
-        int x = (int) ((lat - STARTING_LAT) / LATLNG_INTERVAL);
-        int y = (int) ((lng - STARTING_LNG) / LATLNG_INTERVAL);
+        int y = (int) ((lat - STARTING_LAT) / LATLNG_INTERVAL);
+        int x = (int) ((lng - STARTING_LNG) / LATLNG_INTERVAL);
         MyKey key = new MyKey(x, y);
-        Double secondsAfterBaseTime = 0.0;
+        Double tenthsOfSecondsAfterBasetime = 0.0;
         switch (event) {
             case CONTACT2:
-                secondsAfterBaseTime =  eclipseTimeMapC2.get(key); //units in table are .1 seconds
-                if (secondsAfterBaseTime == null || secondsAfterBaseTime == 0) {
+                tenthsOfSecondsAfterBasetime =  eclipseTimeMapC2.get(key);
+                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
                     return null;
                 }
-                secondsAfterBaseTime = (0.1) * secondsAfterBaseTime;
                 break;
             case CONTACT3:
-                secondsAfterBaseTime = eclipseTimeMapC3.get(key);
-                if (secondsAfterBaseTime == null || secondsAfterBaseTime == 0) {
+                tenthsOfSecondsAfterBasetime = eclipseTimeMapC3.get(key);
+                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
                     return null;
                 }
                 break;
@@ -88,7 +87,7 @@ public class EclipseTimingMap {
                 return null;
         }
 
-        long millsAfterBaseTime = 1000 * Math.round(secondsAfterBaseTime);
+        long millsAfterBaseTime = 100 * Math.round(tenthsOfSecondsAfterBasetime);
         return getBaseTime() + millsAfterBaseTime;
     }
 

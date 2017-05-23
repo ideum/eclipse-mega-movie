@@ -1,0 +1,45 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ideum.com.megamovie.Java.NewUI.AssistantEquipmentChoiceFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Equipment choice" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:background="#EEEEEE">
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BACK"
+            android:textSize="14dp"
+            android:fontFamily="Roboto"
+            android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"
+            android:textColor="#6E6E6E"
+            android:background="#00000000"
+            android:elevation="0dp"
+            android:layout_gravity="left"/>
+        <Button
+            android:id="@+id/finish_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FINISH"
+            android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
+            android:background="#00000000"
+            android:textSize="14dp"
+            android:fontFamily="Roboto"
+            android:textColor="#6E6E6E"
+            android:elevation="0dp"
+            android:layout_gravity="right"/>
+
+    </FrameLayout>
+
+</FrameLayout>

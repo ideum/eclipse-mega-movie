@@ -44,6 +44,42 @@ public class AssistantFragment extends Fragment {
             }
         });
 
+        Button withEquipmentButton = (Button) rootView.findViewById(R.id.with_equipment_button);
+        withEquipmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.loadFragment(AssistantEquipmentFragment.class);
+            }
+        });
+
+        Button withDSLRButton = (Button) rootView.findViewById(R.id.DSLR_camera_button);
+        withDSLRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.loadFragment(AssistantDSLRFragment.class);
+            }
+        });
+
+        Button back = (Button) rootView.findViewById(R.id.back_button);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+              //  mainActivity.loadFragment(AssistantFragment.class);
+            }
+        });
+
+        Button finish = (Button) rootView.findViewById(R.id.finish_button);
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.loadFragment(EclipseInfoFragment.class);
+            }
+        });
+
 
         return rootView;
     }

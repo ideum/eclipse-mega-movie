@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="equipment_array">
+        <item>Only my phone</item>
+        <item>Phone with equipment</item>
+        <item>DSLR camera</item>
+
+    </string-array>
+</resources>
