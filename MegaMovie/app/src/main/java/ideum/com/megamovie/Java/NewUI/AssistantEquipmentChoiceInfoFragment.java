@@ -1,7 +1,10 @@
 package ideum.com.megamovie.Java.NewUI;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +30,6 @@ implements AdapterView.OnItemSelectedListener{
     private String subheaderText;
     private String bodyText;
     private boolean isTerminal;
-    private int spinnerSelectedItem;
     private Class nextClass;
 
     private ImageView imageView;
@@ -116,18 +118,12 @@ implements AdapterView.OnItemSelectedListener{
         back = (Button) rootView.findViewById(R.id.back_button);
         forward = (Button) rootView.findViewById(R.id.finish_button);
         Spinner spinner = (Spinner) rootView.findViewById(R.id.equipment_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),R.array.equipment_array,android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),R.array.user_mode_preferences_entries,android.R.layout.simple_spinner_item);
         spinner.setOnItemSelectedListener(this);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setSelection(index);
-//
-//        try {
-//            setValues();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        setViews();
+
         return rootView;
     }
 
@@ -140,6 +136,16 @@ implements AdapterView.OnItemSelectedListener{
             e.printStackTrace();
         }
         setViews();
+        setUserModePreferences(position);
+    }
+
+    private void setUserModePreferences(int index) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        String userModePreference = getResources().getStringArray(R.array.user_mode_preferences_entries)[index];
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("user_mode_preference",userModePreference);
+        editor.commit();
     }
 
     @Override

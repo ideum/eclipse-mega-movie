@@ -5,7 +5,8 @@
         <item
             android:id="@+id/path_of_totality"
             android:icon="@drawable/ic_brightness_high_gray_24dp"
-            android:title="@string/eclipse_info_section_title" />
+            android:title="@string/eclipse_info_section_title"
+            />
         <item
             android:id="@+id/assistant"
             android:icon="@drawable/ic_assistant_gray_24dp"
@@ -15,29 +16,34 @@
             android:icon="@drawable/ic_info_gray_24dp"
             android:title="@string/about_section_title" />
         <item
-            android:id="@+id/equipment"
+            android:id="@+id/my_eclipse"
             android:icon="@drawable/ic_list_gray_24dp"
-            android:title="Equipment" />
+            android:title="My Eclipse" />
         <item
             android:id="@+id/full_moon_test"
             android:icon="@drawable/ic_camera_enhance_gray_24dp"
-            android:title="Full Moon Test" />
+            android:title="Full Moon Test"
+            android:enabled="false"/>
         <item
             android:id="@+id/calibration_mode"
             android:icon="@drawable/ic_filter_center_focus_gray_24dp"
-            android:title="Calibration Mode" />
+            android:title="Calibration Mode"
+            android:enabled="false"/>
         <item
             android:id="@+id/capture_mode"
             android:icon="@drawable/ic_camera_gray_24dp"
-            android:title="Capture Mode" />
+            android:title="Capture Mode"
+            android:enabled="false"/>
         <item
             android:id="@+id/gallery"
             android:icon="@drawable/ic_camera_roll_24dp"
-            android:title="@string/gallery_section_title" />
+            android:title="@string/gallery_section_title"
+            android:enabled="false"/>
         <item
             android:id="@+id/eclipse_megamovie"
             android:icon="@drawable/ic_movie_gray_24dp"
-            android:title="Eclipse Megamovie" />
+            android:title="Eclipse Megamovie"
+            android:enabled="false"/>
         <item
             android:id="@+id/credits"
             android:icon="@drawable/ic_menu_manage"

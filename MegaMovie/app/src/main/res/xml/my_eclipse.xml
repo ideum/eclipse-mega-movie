@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="user_mode_preference"
+        android:title="Equipment"
+        android:entries="@array/user_mode_preferences_entries"
+        android:entryValues="@array/user_mode_preferences_entries"
+        android:summary="How do you plan to photograph the eclipse?"
+        android:dialogTitle="How do you plan to photograph the eclipse?"
+        android:defaultValue="@string/user_mode_default"
+        />
+    <ListPreference
+        android:key="lens_preference"
+        android:title="External lens"
+        android:entries="@array/lens_choices_entries"
+        android:entryValues="@array/lens_choices_entries"
+        android:dialogTitle="What type of external lens will you use?"
+        android:defaultValue="@string/lens_default"
+        />
+
+    <ListPreference
+        android:key="tripod_preference"
+        android:title="Tripod"
+        android:entries="@array/tripod_choices"
+        android:entryValues="@array/tripod_choices"
+        android:dialogTitle="What type of tripod will you use?"
+        android:defaultValue="@string/tripod_default"
+        />
+</PreferenceScreen>

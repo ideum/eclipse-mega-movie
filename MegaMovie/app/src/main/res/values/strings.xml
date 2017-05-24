@@ -29,12 +29,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_nav_drawer">NavDrawerActivity</string>
     <string name="title_activity_intro">IntroActivity</string>
-    <string name="intro_text_0">On August 21st, 2017, a total solar eclipse will traverse North America.
-        This app allows you to capture images of the event and participate in an unprecedented citizen-science project.</string>
-    <string name="intro_text_1">Everybody! The app does all the hard work of controlling your smarphone
-        camera and capturing images of the eclipse at just the right times. It can be used by itself,
-        or together with an external lens and tripod.</string>
-    <string name="intro_text_2">The app is incredibly easy to use: you just point it in the right direction during the eclipse and it does the rest! If you have additional equipment, the app will guide you to set everything up correctly to get the best posible results.</string>
+    <string name="intro_text_0">On August 21st, 2017, a total solar eclipse will occur across North America. This app makes it easy
+        to capture images of the eclipse. Your images can also become part of an exciting citizen science project.</string>
+    <string name="intro_text_1">Everyone! This app does all the hard work of controlling your smartphone
+        camera to capture images of the eclipse at just the right times. You can use it just with your phone
+    or with an external lens and tripod to get even sharper images of this once-in-a-lifetime event.</string>
+    <string name="intro_text_2">The app is very easy to use. You just have to point your phone in the right direction during the eclipse
+    and the app takes the pictures for you. If you have an external lens and tripod, the app will help you set everything up
+    to get the best shots possible.</string>
 
     <string name="intro_title_0">Welcome to Megamovie Mobile</string>
     <string name="intro_title_1">Who is this app for?</string>
@@ -75,6 +77,83 @@
     <string name="assistant_equipment_choice">
         Choose the equipment you plan to use below. You can always review or change this information in the My Eclipse section of the app.
     </string>
+    <string name="title_activity_settings">Settings</string>
 
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+
+    <string name="user_mode_default">Phone only</string>
+    <string name="lens_default">No external lens</string>
+    <string name="tripod_default">No tripod</string>
 
 </resources>

@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="equipment_array">
-        <item>Only my phone</item>
-        <item>Phone with equipment</item>
-        <item>DSLR camera</item>
-
-    </string-array>
-
-    <string-array name="lens_choices">
-        <item>No External Lens</item>
-        <item>lens choice 1</item>
-        <item>lens choice 2</item>
-        <item>lens choice 3</item>
-    </string-array>
-
-    <string-array name="tripod_choices">
-        <item>No Tripod</item>
-        <item>tripod choice 1</item>
-        <item>tripod choice 2</item>
-        <item>tripod choice 3</item>
-    </string-array>
 
     <string-array name="assistant_headers">
         <item>Using your smartphone</item>
@@ -71,6 +51,32 @@
         <item>ideum.com.megamovie.Java.NewUI.AssistantEquipmentChoiceFragment</item>
         <item>ideum.com.megamovie.Java.NewUI.EclipseInfoFragment</item>
     </string-array>
+
+
+
+    <string-array name="user_mode_preferences_entries">
+        <item>Phone only</item>
+        <item>Phone with equipment</item>
+        <item>DSLR</item>
+    </string-array>
+
+    <string-array name="lens_choices_entries">
+        <item>No external lens</item>
+        <item>lens choice 1</item>
+        <item>lens choice 2</item>
+        <item>lens choice 3</item>
+    </string-array>
+
+    <string-array name="tripod_choices">
+        <item>No tripod</item>
+        <item>tripod choice 1</item>
+        <item>tripod choice 2</item>
+        <item>tripod choice 3</item>
+    </string-array>
+
+
+
+
 
 
 

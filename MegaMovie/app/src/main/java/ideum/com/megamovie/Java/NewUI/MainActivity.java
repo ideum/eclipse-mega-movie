@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.about_eclipse_app) {
             getSupportActionBar().setTitle(getString(R.string.about_section_title));
             loadAboutActivity();
-        } else if (id == R.id.equipment) {
-
+        } else if (id == R.id.my_eclipse) {
+            loadActivity(MyEclipseActivity.class);
         } else if (id == R.id.image) {
 
         } else if (id == R.id.gallery) {
@@ -132,6 +132,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void loadActivity(Class c) {
+        Intent intent = new Intent(this,c);
+        startActivity(intent);
     }
 
     public void loadFragment(Class c) {
