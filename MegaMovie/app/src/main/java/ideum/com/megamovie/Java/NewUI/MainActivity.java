@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onAssistantButtonPressed(View view) {
-        getSupportActionBar().setTitle(getString(R.string.assistant_section_title));
+        getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
         loadFragment(AssistantFragment.class);
     }
 
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
            loadFragment(EclipseInfoFragment.class);
         } else if (id == R.id.assistant) {
-            getSupportActionBar().setTitle(getString(R.string.assistant_section_title));
+            getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
             loadFragment(AssistantFragment.class);
         } else if (id == R.id.about_eclipse_app) {
             getSupportActionBar().setTitle(getString(R.string.about_section_title));

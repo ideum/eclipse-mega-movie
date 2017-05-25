@@ -39,10 +39,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="9dp"
-            android:fontFamily="Helvetica Neue"
+            android:fontFamily="Roboto"
             android:lineSpacingExtra="4dp"
             android:textColor="#fff"
-            android:textSize="15dp" />
+            android:textSize="14dp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -10,7 +10,7 @@
         <item
             android:id="@+id/assistant"
             android:icon="@drawable/ic_assistant_gray_24dp"
-            android:title="@string/assistant_section_title" />
+            android:title="@string/orientation_section_title" />
         <item
             android:id="@+id/about_eclipse_app"
             android:icon="@drawable/ic_info_gray_24dp"
@@ -47,7 +47,8 @@
         <item
             android:id="@+id/credits"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Credits" />
+            android:title="Credits"
+            android:enabled="false"/>
 
     </group>
 

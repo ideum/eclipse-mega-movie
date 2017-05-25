@@ -14,7 +14,7 @@
     <string name="title_activity_path_of_totality">PathOfTotalityActivity</string>
 
     <string name="eclipse_info_section_title">Eclipse: Where and When</string>
-    <string name="assistant_section_title">Assistant</string>
+    <string name="orientation_section_title">Orientation</string>
     <string name="about_section_title">About</string>
     <string name="gallery_section_title">Image Gallery</string>
 
@@ -45,22 +45,22 @@
     <string name="distance_to_totality_format">You are %1$d kilometers from the path of totality.</string>
     <string name="in_the_path_of_totality_string">You are in the path of totality!</string>
     <string name="about_megamovie">About Megamovie Mobile\n\nThe Megamovie Mobile app allows you to capture images of the solar eclipse on August 21, 2017.
-        It also enables you to share your photos with scientists for a citizen science project led by UC Berkeley’s Space Sciences Laboratory and Google.
-        Click [here] to learn more about the Megamovie Project.
+        It also lets you share your photos with scientists for a citizen science project led by UC Berkeley’s Space Sciences Laboratory and Google.
+        Click [here] to learn more.
         \n\nThe app can capture valuable scientific information without additional equipment.
-        But you can obtain even better results by using an external lens and tripod with your phone. If you already have this equipment or want to learn more,
-        use our built-in [Assistant] to customize the app.
-        \n\nIf you are using an external lens and tripod, the app has a calibration mode that will
-        help you focus the lens and point the camera in the right direction. You can practice with these features by capturing images of the moon.
+        But you can obtain even better results with an external lens and tripod. If you already have this equipment or want to learn more,
+        use our built-in Eclipse Orientation to customize the app.
+        \n\nIf you are using an external lens and tripod, the app has a Calibration mode that will
+        help you focus the lens and point the camera in the right direction. You can practice by capturing images of the moon.
         \n\nOne outcome of the Megamovie Project will be a movie of the eclipse as it moves across the US. The movie will incorporate high-quality images
-        captured by trained volunteers with DSLR cameras. Once it is available, you can download and view it in the [Eclipse Megamovie] section.\n\n\n\n\n
+        captured by trained volunteers with DSLR cameras. Once it is available, you can download and view it in the Eclipse Megamovie section.\n\n\n\n\n
     </string>
     <string name="assistant_only_phone_header">Using Your Smartphone</string>
     <string name="assistant_only_phone_subheader">Capturing the eclipse with your smartphone</string>
 
     <string name="assistant_only_phone_body">The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
         It tells you when and where to see the eclipse, how to aim your camera when the eclipse is about to start, and automatically controls your camera’s settings
-        and shutter to take a series of photos during the event. All you’ll have to do is be ready and follow a few simple instructions when the time comes.\n\nThe
+        and shutter to take a series of photos during the event. All you’ll have to do is be ready to follow a few simple instructions when the time comes.\n\nThe
         app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon. Go to Moon test to try it out.
     </string>
     <string name="assistant_equipment">Holding a camera by hand can cause tiny vibrations that blur photos.
@@ -155,5 +155,17 @@
     <string name="user_mode_default">Phone only</string>
     <string name="lens_default">No external lens</string>
     <string name="tripod_default">No tripod</string>
+
+    <string name="first_contact_dialog_message">This is when the edge of the moon first
+        begins to cover the sun. Even though the sun will start to get dimmer at this point,
+        it’s still not safe to look directly at the eclipse.\n</string>
+    <string name="second_contact_dialog_message">In a total solar eclipse, this is when
+        totality begins and the sun’s disk is completely covered by the moon. You can now
+        see the corona, the sun’s hot, hazy outer atmosphere. Be sure to look away
+        before totality ends.\n</string>
+    <string name="third_contact_dialog_message">Third contact is the moment when totality
+        ends and the sun begins to emerge from the moon’s shadow.\n</string>
+    <string name="fourth_contact_dialog_message">This is the end of the eclipse, when the
+        moon’s shadow no longer covers any part of the sun.\n</string>
 
 </resources>

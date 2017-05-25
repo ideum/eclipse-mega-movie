@@ -148,9 +148,9 @@ implements View.OnClickListener{
                     getString(R.string.intro_title_2)};
             sectionTitle.setText(title_strings[sectionNumber]);
 
-            int[] colors = {res.getColor(R.color.intro_color_1,null),
-            res.getColor(R.color.intro_color_2,null),
-            res.getColor(R.color.intro_color_3,null)};
+            int[] colors = {res.getColor(R.color.intro_color_1),
+            res.getColor(R.color.intro_color_2),
+            res.getColor(R.color.intro_color_3)};
 
             rootView.setBackgroundColor(colors[sectionNumber]);
 
