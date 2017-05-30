@@ -1,9 +1,13 @@
 package ideum.com.megamovie.Java.NewUI;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +32,8 @@ public class MyMapFragment extends Fragment
 
     private LatLng initialPoint = new LatLng(39.8,-102);
     private float initialZoom = 3.2f;
+
+
 
     public MyMapFragment() {
         // Required empty public constructor
@@ -162,6 +168,7 @@ public class MyMapFragment extends Fragment
 
     @Override
     public void onClick(View v) {
+
         moveToCurrentLocation();
         setMarker();
     }

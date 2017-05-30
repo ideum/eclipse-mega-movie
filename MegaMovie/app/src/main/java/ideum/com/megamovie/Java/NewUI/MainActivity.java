@@ -2,10 +2,12 @@ package ideum.com.megamovie.Java.NewUI;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +22,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import ideum.com.megamovie.Java.PatagoniaTest.MyTimer;
 import ideum.com.megamovie.R;
@@ -33,6 +38,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean previouslyStarted = prefs.getBoolean(getResources().getString(R.string.previously_started_key),false);
+        if (!previouslyStarted) {
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putBoolean(getResources().getString(R.string.previously_started_key),true);
+            edit.commit();
+           // loadIntroActivity();
+        }
         setContentView(R.layout.activity_main);
 
         /**
@@ -58,11 +71,27 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        TextView emailTextView = (TextView) findViewById(R.id.navHeaderTextView);
+        String email = prefs.getString(getResources().getString(R.string.email_preference_key),"");
+        if (!email.equals("")) {
+            emailTextView.setText(email);
+        }
+
+
         loadFragment(EclipseInfoFragment.class);
 
-        showSafetyWarning();
+        boolean safetyWarningSeen = prefs.getBoolean(getResources().getString(R.string.safety_warning_seen),false);
+        if (!safetyWarningSeen) {
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putBoolean(getResources().getString(R.string.safety_warning_seen),true);
+            edit.commit();
+            showSafetyWarning();
+        }
+
 
     }
+
+
 
     public void onAssistantButtonPressed(View view) {
         getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
@@ -100,6 +129,11 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadIntroActivity() {
+        Intent intent = new Intent(this, IntroActivity.class);
+        startActivity (intent);
     }
 
     private void loadAboutActivity() {

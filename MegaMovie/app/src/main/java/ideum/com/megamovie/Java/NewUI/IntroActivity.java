@@ -1,9 +1,13 @@
 package ideum.com.megamovie.Java.NewUI;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -39,6 +43,8 @@ public class IntroActivity extends AppCompatActivity
 
 
     private static final int RC_SIGN_IN = 9001;
+    private int REQUEST_LOCATION_PERMISSIONS = 0;
+
     private GoogleApiClient mGoogleApiClient;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -54,6 +60,11 @@ public class IntroActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSIONS);
+        }
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -90,6 +101,7 @@ public class IntroActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         loadSignInActivity();
+//        loadMainActivity();
     }
 
     private void signIn() {
@@ -113,6 +125,7 @@ public class IntroActivity extends AppCompatActivity
             Log.d("TAG", acct.getEmail());
 
         }
+        loadMainActivity();
     }
 
 

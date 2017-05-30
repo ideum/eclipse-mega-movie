@@ -1,12 +1,15 @@
 package ideum.com.megamovie.Java.NewUI;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
@@ -25,7 +28,7 @@ implements GoogleApiClient.OnConnectionFailedListener,
 
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
-    private TextView signInResultTextView;
+//    private TextView signInResultTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,29 @@ implements GoogleApiClient.OnConnectionFailedListener,
 
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+//        signInButton.setSize(SignInButton.SizeW);
 
-        signInResultTextView = (TextView) findViewById(R.id.sign_in_result_text_view);
+        Button continueButton = (Button) findViewById(R.id.continue_button);
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMainActivity();
+            }
+        });
+
+//        for (int i = 0; i < continueButton.getChildCount(); i++) {
+//            View v = signInButton.getChildAt(i);
+//
+//            if (v instanceof TextView) {
+//                TextView tv = (TextView) v;
+//                tv.setText("Continue without sign in");
+//            }
+//            if (v instanceof ImageView) {
+//                continueButton.removeView(v);
+//            }
+//        }
+
+//        signInResultTextView = (TextView) findViewById(R.id.sign_in_result_text_view);
 
     }
 
@@ -74,14 +97,27 @@ implements GoogleApiClient.OnConnectionFailedListener,
         }
     }
     private void handleSignInResult(GoogleSignInResult result) {
-        signInResultTextView.setText("Sign in Result: " + result.isSuccess());
+//        signInResultTextView.setText("Sign in Result: " + result.isSuccess());
 
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            Log.d("TAG",acct.getEmail());
 
+//            storeEmail(acct.getEmail());
         }
+        loadMainActivity();
+
     }
 
+    private void storeEmail(String email) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString(getResources().getString(R.string.email_preference_key),email);
+        edit.commit();
+    }
+
+    private void loadMainActivity() {
+        startActivity(new Intent(this, MainActivity.class));
+
+    }
 
 }
