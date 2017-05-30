@@ -2,9 +2,8 @@
  * UI Fragment for displaying countdown to an eclipse event
  */
 
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
-import android.location.Location;
 import android.os.Bundle;
 import android.app.Fragment;
 

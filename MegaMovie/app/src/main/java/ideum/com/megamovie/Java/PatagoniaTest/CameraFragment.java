@@ -6,7 +6,7 @@
  * sample project available here: https://github.com/googlesamples/android-Camera2Raw
  */
 
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 import android.Manifest;
 import android.app.Activity;

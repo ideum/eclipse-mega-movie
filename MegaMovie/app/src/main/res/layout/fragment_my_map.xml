@@ -11,7 +11,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ideum.com.megamovie.Java.MapActivity" />
+        tools:context="ideum.com.megamovie.Java.PatagoniaTest.MapActivity" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/my_location_fab"

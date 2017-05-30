@@ -3,7 +3,7 @@
  * an xml file
  */
 
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 import android.hardware.camera2.CaptureResult;
 

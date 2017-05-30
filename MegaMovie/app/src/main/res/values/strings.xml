@@ -1,34 +1,31 @@
 <resources>
+    <!--Manifest-->
     <string name="app_name">MegaMovie</string>
     <string name="google_maps_key">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
-    <string name="title_activity_camera">CameraActivity</string>
-    <string name="welcome_message">Welcome to the MegaMovie app.</string>
-    <string name="location_prompt">Where will you be viewing the eclipse?</string>
-    <string name="location_map">Choose location on map</string>
-    <string name="location_address">Enter Address</string>
-    <string name="location_GPS">Enter GPS Coordinates</string>
-    <string name="congratulations_message">The eclipse is complete.</string>
-    <string name="view_photos_button_text">View Photos</string>
-    <string name="share_photos_button_text">Share</string>
-    <string name="map_activity_title">Path of Totality</string>
-    <string name="title_activity_path_of_totality">PathOfTotalityActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_intro">IntroActivity</string>
+    <string name="title_activity_settings">Settings</string>
 
+
+    <!--Section Titles-->
     <string name="eclipse_info_section_title">Eclipse: Where and When</string>
     <string name="orientation_section_title">Orientation</string>
     <string name="about_section_title">About</string>
     <string name="gallery_section_title">Image Gallery</string>
+    <string name="settings_section_title">My Eclipse</string>
+    <string name="moon_test_section_title">Moon Test</string>
+    <string name="calibration_section_title">Calibration</string>
+    <string name="capture_mode_section_title">Capture Mode</string>
+    <string name="megamovie_section_title">Megamovie</string>
+    <string name="credits_section_title">Credits</string>
 
-
+    <!--Generated-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
-    <string name="title_activity_tab_fragment">TabFragment</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_nav_drawer">NavDrawerActivity</string>
-    <string name="title_activity_intro">IntroActivity</string>
+
+    <!--Intro Copy-->
     <string name="intro_text_0">On August 21st, 2017, a total solar eclipse will occur across North America. This app makes it easy
         to capture images of the eclipse. Your images can also become part of an exciting citizen science project.</string>
     <string name="intro_text_1">Everyone! This app does all the hard work of controlling your smartphone
@@ -37,16 +34,30 @@
     <string name="intro_text_2">The app is very easy to use. You just have to point your phone in the right direction during the eclipse
     and the app takes the pictures for you. If you have an external lens and tripod, the app will help you set everything up
     to get the best shots possible.</string>
+    <string name="sign_in_prompt">Sign in?</string>
 
     <string name="intro_title_0">Welcome to Megamovie Mobile</string>
     <string name="intro_title_1">Who is this app for?</string>
     <string name="intro_title_2">How do I use the app?</string>
 
+    <!--Warning message-->
+    <string name="safety_warning_title">
+        Safety Warning
+    </string>
+    <string name="safety_warning">
+        Even a short glance at the sun can cause permanent eye damage. That’s also true during the first and last
+        phases of an eclipse when the sun’s disk is partially covered. So while the dimmer light of a partial
+        eclipse may tempt you, the only time you can safely view the sun is the short period called totality, when
+        the sun is completely covered by the moon.
+    </string>
+
+    <!--When and Where Copy-->
     <string name="distance_to_totality_format">You are %1$d kilometers from the path of totality.</string>
     <string name="in_the_path_of_totality_string">You are in the path of totality!</string>
+    <!--About Megamovie Mobile Copy-->
     <string name="about_megamovie">About Megamovie Mobile\n\nThe Megamovie Mobile app allows you to capture images of the solar eclipse on August 21, 2017.
         It also lets you share your photos with scientists for a citizen science project led by UC Berkeley’s Space Sciences Laboratory and Google.
-        Click [here] to learn more.
+        Click <a href="https://eclipsemega.movie/">here</a> to learn more.
         \n\nThe app can capture valuable scientific information without additional equipment.
         But you can obtain even better results with an external lens and tripod. If you already have this equipment or want to learn more,
         use our built-in Eclipse Orientation to customize the app.
@@ -55,107 +66,29 @@
         \n\nOne outcome of the Megamovie Project will be a movie of the eclipse as it moves across the US. The movie will incorporate high-quality images
         captured by trained volunteers with DSLR cameras. Once it is available, you can download and view it in the Eclipse Megamovie section.\n\n\n\n\n
     </string>
-    <string name="assistant_only_phone_header">Using Your Smartphone</string>
-    <string name="assistant_only_phone_subheader">Capturing the eclipse with your smartphone</string>
 
-    <string name="assistant_only_phone_body">The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
+    <!--Orientation Copy-->
+    <string name="equipment_info_phone">
+        The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
         It tells you when and where to see the eclipse, how to aim your camera when the eclipse is about to start, and automatically controls your camera’s settings
-        and shutter to take a series of photos during the event. All you’ll have to do is be ready to follow a few simple instructions when the time comes.\n\nThe
+        and shutter to take a series of photos during the event. All you’ll have to do is be ready and follow a few simple instructions when the time comes.\n\nThe
         app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon. Go to Moon test to try it out.
     </string>
-    <string name="assistant_equipment">Holding a camera by hand can cause tiny vibrations that blur photos.
+    <string name="equipment_info_equipment">
+        Holding a camera by hand can cause tiny vibrations that blur photos.
         This can be especially troublesome with astronomical images. Mounting your phone on a tripod is an easy way to improve your photos.
         There are many kinds of tripods available for cell phones, including inexpensive ones made by Joby, Square Jellyfish, and Charger City.
         \n\nAlso, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens like those made by Olloclip, Moment, Mozeat, and instaLens. Lenses like these are easy to attach to your phone and can help you take great photos of many things in addition to the eclipse.
         \n\nGo to Calibrate your camera to set up your phone with a tripod and lens.
     </string>
-    <string name="assistant_dslr">
+    <string name="equipment_info_dslr">
         If you want to use a separate camera to photograph the eclipse, you can still use the eclipse map and countdown functions in the Megamovie Mobile app.
         You can view those features here. Goes to Eclipse 2017: Where and When?
-        \n\nYou may also be interested in being an official volunteer to capture images for the Megamovie itself. To learn more, visit the Google Megamovie Website.
-    </string>
-    <string name="assistant_equipment_choice">
-        Choose the equipment you plan to use below. You can always review or change this information in the My Eclipse section of the app.
-    </string>
-    <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
+        \n\nYou may also be interested in being an official volunteer to capture images for the Megamovie itself. To learn more, visit the <a href="https://eclipsemega.movie/">Megamovie Website</a>.
     </string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
 
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
-
-
-    <string name="user_mode_default">Phone only</string>
-    <string name="lens_default">No external lens</string>
-    <string name="tripod_default">No tripod</string>
-
+    <!--Phases Copy-->
     <string name="first_contact_dialog_message">This is when the edge of the moon first
         begins to cover the sun. Even though the sun will start to get dimmer at this point,
         it’s still not safe to look directly at the eclipse.\n</string>
@@ -167,5 +100,25 @@
         ends and the sun begins to emerge from the moon’s shadow.\n</string>
     <string name="fourth_contact_dialog_message">This is the end of the eclipse, when the
         moon’s shadow no longer covers any part of the sun.\n</string>
+
+    <!-- Strings related to Settings -->
+    <string name="user_mode_default">Phone only</string>
+    <string name="lens_default">No external lens</string>
+    <string name="tripod_default">No tripod</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
 
 </resources>

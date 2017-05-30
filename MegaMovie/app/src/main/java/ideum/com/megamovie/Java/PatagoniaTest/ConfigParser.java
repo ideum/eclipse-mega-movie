@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 /**
  * Parses narrow_field__annular_config xml file to create queue of timed capture requests
  */

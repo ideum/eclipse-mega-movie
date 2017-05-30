@@ -3,11 +3,10 @@
  * and Camera Fragment
  */
 
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 
 import android.location.Location;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

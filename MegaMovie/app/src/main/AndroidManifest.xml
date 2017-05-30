@@ -12,6 +12,11 @@
 
     <uses-feature android:name="android.hardware.camera2.full" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".Java.Application.MyApplication"
         android:allowBackup="true"
@@ -28,7 +33,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Java.MapActivity">
+        <activity android:name=".Java.PatagoniaTest.MapActivity">
             android:screenOrientation="portrait"
 
             <!-- <intent-filter> -->
@@ -36,7 +41,7 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".Java.CalibrationActivity">
+        <activity android:name=".Java.PatagoniaTest.CalibrationActivity">
             android:screenOrientation="portrait"
 
             <!-- <intent-filter> -->
@@ -45,7 +50,7 @@
             <!-- </intent-filter> -->
 
         </activity>
-        <activity android:name=".Java.CaptureActivity">
+        <activity android:name=".Java.PatagoniaTest.CaptureActivity">
             android:screenOrientation="portrait"
 
             <!-- <intent-filter> -->
@@ -56,7 +61,7 @@
             <!-- </intent-filter> -->
 
         </activity>
-        <activity android:name=".Java.CameraTestActivity">
+        <activity android:name=".Java.PatagoniaTest.CameraTestActivity">
             android:screenOrientation="portrait"
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -67,17 +72,7 @@
         </activity>
         <activity
             android:name=".Java.NewUI.MainActivity"
-            android:label="@string/title_activity_path_of_totality"
-            android:theme="@style/AppTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity
-            android:name=".Java.NewUI.IntroActivity"
-            android:label="@string/title_activity_intro"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme">
 
              <intent-filter>
@@ -86,6 +81,18 @@
 
              <category android:name="android.intent.category.LAUNCHER" />
              </intent-filter>
+        </activity>
+        <activity
+            android:name=".Java.NewUI.IntroActivity"
+            android:label="@string/title_activity_intro"
+            android:theme="@style/AppTheme">
+
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN" />-->
+
+
+             <!--<category android:name="android.intent.category.LAUNCHER" />-->
+             <!--</intent-filter>-->
         </activity>
         <activity android:name=".Java.NewUI.AboutActivity">
 
@@ -97,11 +104,21 @@
             <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.MyEclipseActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".Java.NewUI.SignInActivity">
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN" />-->
+
+
+             <!--<category android:name="android.intent.category.LAUNCHER" />-->
+             <!--</intent-filter>-->
         </activity>
     </application>
 

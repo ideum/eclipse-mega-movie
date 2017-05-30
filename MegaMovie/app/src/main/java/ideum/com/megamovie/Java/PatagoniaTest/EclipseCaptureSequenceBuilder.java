@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 
 import android.location.Location;
@@ -10,10 +10,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Queue;
 
 import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 

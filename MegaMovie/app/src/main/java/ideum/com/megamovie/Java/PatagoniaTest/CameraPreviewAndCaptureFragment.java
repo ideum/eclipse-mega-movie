@@ -3,7 +3,7 @@
  * save images in RAW or JPEG.
  */
 
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 import android.Manifest;
 import android.app.Activity;

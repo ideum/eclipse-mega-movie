@@ -21,11 +21,13 @@ import ideum.com.megamovie.R;
 
 public class CountdownFragment extends Fragment {
 
+
     private TextView daysTextView;
     private TextView hoursTextView;
     private TextView minutesTextView;
     private TextView secondsTextView;
     private TextView distanceToTotalityTextView;
+    private Long millsRemaining;
 
     public CountdownFragment() {
         // Required empty public constructor
@@ -67,21 +69,22 @@ public class CountdownFragment extends Fragment {
     }
 
     public void setMillsRemaining(Long mills) {
-        setCountdownViews(mills);
+        millsRemaining = mills;
+        setCountdownViews();
     }
 
     /*
     The argument mills is the time remaining in milliseconds.
      */
-    private void setCountdownViews(long mills) {
+    private void setCountdownViews() {
 
-        long days = TimeUnit.MILLISECONDS.toDays(mills);
-        mills -= TimeUnit.DAYS.toMillis(days);
-        long hours = TimeUnit.MILLISECONDS.toHours(mills);
-        mills = mills - TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(mills);
-        mills = mills - TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(mills);
+        long days = TimeUnit.MILLISECONDS.toDays(millsRemaining);
+        millsRemaining -= TimeUnit.DAYS.toMillis(days);
+        long hours = TimeUnit.MILLISECONDS.toHours(millsRemaining);
+        millsRemaining = millsRemaining - TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millsRemaining);
+        millsRemaining = millsRemaining - TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millsRemaining);
 
         if(daysTextView != null) {
             daysTextView.setText(String.format("%02d", days));

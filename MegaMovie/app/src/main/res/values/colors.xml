@@ -7,5 +7,6 @@
     <color name="intro_color_1">#000</color>
     <color name="intro_color_2">#0f9D58</color>
     <color name="intro_color_3">#4481f8</color>
+    <color name="intro_color_4">#fff</color>
 
 </resources>

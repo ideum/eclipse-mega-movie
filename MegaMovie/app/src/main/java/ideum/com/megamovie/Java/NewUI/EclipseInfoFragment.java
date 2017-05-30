@@ -18,12 +18,10 @@ import android.view.ViewGroup;
 import com.google.android.gms.location.LocationListener;
 
 
-import java.io.IOException;
-
 import ideum.com.megamovie.Java.Application.MyApplication;
-import ideum.com.megamovie.Java.EclipseTimeCalculator;
-import ideum.com.megamovie.Java.GPSFragment;
-import ideum.com.megamovie.Java.MyTimer;
+import ideum.com.megamovie.Java.PatagoniaTest.EclipseTimeCalculator;
+import ideum.com.megamovie.Java.PatagoniaTest.GPSFragment;
+import ideum.com.megamovie.Java.PatagoniaTest.MyTimer;
 import ideum.com.megamovie.Java.Utility.EclipsePath;
 import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;

@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ideum.com.megamovie.Java.MapActivity">
+    tools:context="ideum.com.megamovie.Java.PatagoniaTest.MapActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
 
         <fragment
             android:id="@+id/timer_fragment"
-            android:name="ideum.com.megamovie.Java.EclipseCountdownFragment"
+            android:name="ideum.com.megamovie.Java.PatagoniaTest.EclipseCountdownFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2" />
@@ -36,7 +36,7 @@
 
         <fragment
             android:id="@+id/contact_times_fragment"
-            android:name="ideum.com.megamovie.Java.ContactTimesFragment"
+            android:name="ideum.com.megamovie.Java.PatagoniaTest.ContactTimesFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="14"
-            tools:context="ideum.com.megamovie.Java.MapActivity" />
+            tools:context="ideum.com.megamovie.Java.PatagoniaTest.MapActivity" />
     </LinearLayout>
 
     <Button

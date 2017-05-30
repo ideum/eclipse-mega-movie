@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -8,7 +8,6 @@ import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,7 +28,7 @@ public class GPSFragment extends Fragment
     public  long gpsInterval = 1000 * 30;
     public  long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
-    private static final boolean SHOULD_USE_DUMMY_LOCATION = false;
+    private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
     private static final double DUMMY_LATITUDE = 36.1627; //Nashville Tennessee
     private static final double DUMMY_LONGITUDE = -86.7816; //Nashville Tennessee
 

@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 import android.Manifest;
 import android.app.Fragment;

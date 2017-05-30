@@ -3,8 +3,12 @@ package ideum.com.megamovie.Java.NewUI;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import ideum.com.megamovie.R;
 
@@ -18,6 +22,10 @@ public class AboutActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("About");
+
+        TextView aboutText = (TextView) findViewById(R.id.about_text);
+        aboutText.setMovementMethod(LinkMovementMethod.getInstance());
+
     }
 
     @Override

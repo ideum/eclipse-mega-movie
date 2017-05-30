@@ -3,7 +3,7 @@
  * for experimenting with different camera settings
  */
 
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;

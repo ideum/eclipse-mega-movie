@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "668463149127",
+    "project_id": "firebase-megamovie"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668463149127:android:2235a77d4a7049cc",
+        "android_client_info": {
+          "package_name": "ideum.com.megamovie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "668463149127-s1fhse3bdkod8sjj2i2lvsrqool6js7v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ideum.com.megamovie",
+            "certificate_hash": "863c02f229cb353f6cefdada6a3f58d74438f5f5"
+          }
+        },
+        {
+          "client_id": "668463149127-ut0v321vhipgtv3beh92p33r7d0e3d42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYmIVn65qsCw0cqTYkYL1bz7gyqc_Eo2o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

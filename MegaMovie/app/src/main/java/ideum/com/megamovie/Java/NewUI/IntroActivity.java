@@ -1,12 +1,9 @@
 package ideum.com.megamovie.Java.NewUI;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -14,29 +11,38 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v7.widget.ButtonBarLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 
-import ideum.com.megamovie.Java.MapActivity;
 import ideum.com.megamovie.R;
 
 public class IntroActivity extends AppCompatActivity
-implements View.OnClickListener{
+        implements ViewPager.OnTouchListener,
+        GoogleApiClient.OnConnectionFailedListener,
+        Button.OnClickListener,
+        ViewPager.OnPageChangeListener {
 
-    private int REQUEST_LOCATION_PERMISSIONS = 0;
+
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleApiClient mGoogleApiClient;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private Button signInButton;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -49,80 +55,144 @@ implements View.OnClickListener{
         setContentView(R.layout.activity_intro);
 
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(this);
 
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_dots);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_dots);
         tabLayout.setupWithViewPager(mViewPager);
 
-        ImageButton rightArrow = (ImageButton) findViewById(R.id.right_chevron);
-        rightArrow.setOnClickListener(this);
-    }
+//        ImageButton rightArrow = (ImageButton) findViewById(R.id.right_chevron);
+//        rightArrow.setOnClickListener(this);
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_intro, menu);
-        return true;
-    }
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        signInButton = (Button) findViewById(R.id.get_started_button);
+        signInButton.setOnClickListener(this);
+        signInButton.setVisibility(View.GONE);
 
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onClick(View v) {
-        int currentPage = mViewPager.getCurrentItem();
-        if (currentPage < mSectionsPagerAdapter.getCount() - 1) {
-            mViewPager.setCurrentItem(currentPage + 1);
-        } else {
-            loadMainActivity();
+        loadSignInActivity();
+    }
+
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
         }
     }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Log.d("TAG", acct.getEmail());
+
+        }
+    }
+
+
+//    @Override
+//    public void onClick(View v) {
+//        int currentPage = mViewPager.getCurrentItem();
+//        if (currentPage < mSectionsPagerAdapter.getCount() - 1) {
+//            mViewPager.setCurrentItem(currentPage + 1);
+//        } else {
+//            loadMainActivity();
+//        }
+//    }
 
     private void loadMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
 
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    private void loadSignInActivity() {
+        startActivity(new Intent(this, SignInActivity.class));
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+//        switch (event.getAction()) {
+//            case: MotionEvent.
+//        }
+
+        int currentPage = mViewPager.getCurrentItem();
+        if (currentPage < mSectionsPagerAdapter.getCount() - 1) {
+            mViewPager.setCurrentItem(currentPage + 1);
+        } else {
+            loadMainActivity();
+        }
+        return true;
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position == 2) {
+            signInButton.setVisibility(View.VISIBLE);
+        } else {
+            signInButton.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+
+    public static class IntroFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
+        public IntroFragment() {
         }
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static IntroFragment newInstance(int sectionNumber) {
+            IntroFragment fragment = new IntroFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -138,30 +208,33 @@ implements View.OnClickListener{
             TextView textView = (TextView) rootView.findViewById(R.id.section_text);
             String[] content_strings = {getString(R.string.intro_text_0),
                     getString(R.string.intro_text_1),
-                    getString(R.string.intro_text_2)};
+                    getString(R.string.intro_text_2),
+                    ""
+            };
             textView.setText(content_strings[sectionNumber]);
             Resources res = getResources();
 
             TextView sectionTitle = (TextView) rootView.findViewById(R.id.section_title);
             String[] title_strings = {getString(R.string.intro_title_0),
                     getString(R.string.intro_title_1),
-                    getString(R.string.intro_title_2)};
+                    getString(R.string.intro_title_2),
+                    ""};
             sectionTitle.setText(title_strings[sectionNumber]);
 
             int[] colors = {res.getColor(R.color.intro_color_1),
-            res.getColor(R.color.intro_color_2),
-            res.getColor(R.color.intro_color_3)};
+                    res.getColor(R.color.intro_color_2),
+                    res.getColor(R.color.intro_color_3),
+                    res.getColor(R.color.intro_color_4)};
 
             rootView.setBackgroundColor(colors[sectionNumber]);
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.intro_image);
 
-            int[] images = {res.getIdentifier("megamovie_logo","drawable", getActivity().getPackageName()),
-                    res.getIdentifier("megamovie_intro_one","drawable", getActivity().getPackageName()),
-                    res.getIdentifier("megamovie_intro_two","drawable", getActivity().getPackageName())};
+            int[] images = {res.getIdentifier("megamovie_logo", "drawable", getActivity().getPackageName()),
+                    res.getIdentifier("megamovie_intro_one", "drawable", getActivity().getPackageName()),
+                    res.getIdentifier("megamovie_intro_two", "drawable", getActivity().getPackageName()),
+                    0};
             imageView.setImageResource(images[sectionNumber]);
-
-
 
 
             return rootView;
@@ -181,8 +254,8 @@ implements View.OnClickListener{
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position);
+            // Return a IntroFragment (defined as a static inner class below).
+            return IntroFragment.newInstance(position);
         }
 
         @Override

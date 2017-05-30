@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,7 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import ideum.com.megamovie.Java.MyTimer;
+import ideum.com.megamovie.Java.PatagoniaTest.MyTimer;
 import ideum.com.megamovie.R;
 
 public class MainActivity extends AppCompatActivity
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         loadFragment(EclipseInfoFragment.class);
+
+        showSafetyWarning();
 
     }
 
@@ -181,6 +184,18 @@ public class MainActivity extends AppCompatActivity
     private static final String[] PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION
     };
+
+    private void showSafetyWarning() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources()
+                .getString(R.string.safety_warning))
+                .setTitle(getResources().getString(R.string.safety_warning_title))
+        .setPositiveButton("Got It",null)
+        .setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private void requestAllPermissions() {
         ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSIONS);

@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-import ideum.com.megamovie.Java.EclipseTimeCalculator;
 import ideum.com.megamovie.R;
 
 /**

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,9 +55,15 @@ implements AdapterView.OnItemSelectedListener{
 
     private void setValues() throws ClassNotFoundException {
 
+        String[] bodyTexts = {
+                getResources().getString(R.string.equipment_info_phone),
+                getResources().getString(R.string.equipment_info_equipment),
+                getResources().getString(R.string.equipment_info_dslr)};
+
+
         headerText = getResources().getStringArray(R.array.assistant_headers)[index];
         subheaderText = getResources().getStringArray(R.array.assistant_subheaders)[index];
-        bodyText = getResources().getStringArray(R.array.assistant_bodies)[index];
+        bodyText = bodyTexts[index];
         String imageName= getResources().getStringArray(R.array.assistant_image_names)[index];
         imageId = getResources().getIdentifier(imageName,"drawable",getActivity().getPackageName());
         int isTerminalInt = getResources().getIntArray(R.array.assistant_is_terminals)[index];
@@ -74,6 +81,7 @@ implements AdapterView.OnItemSelectedListener{
         header.setText(headerText);
         subheader.setText(subheaderText);
         body.setText(bodyText);
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +123,9 @@ implements AdapterView.OnItemSelectedListener{
         header = (TextView) rootView.findViewById(R.id.header);
         subheader = (TextView) rootView.findViewById(R.id.subheader);
         body = (TextView) rootView.findViewById(R.id.body);
+
+        body.setMovementMethod(LinkMovementMethod.getInstance());
+
         back = (Button) rootView.findViewById(R.id.back_button);
         forward = (Button) rootView.findViewById(R.id.finish_button);
         Spinner spinner = (Spinner) rootView.findViewById(R.id.equipment_spinner);

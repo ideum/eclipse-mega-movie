@@ -2,7 +2,7 @@
  * Encodes the data for a sequence of camera captures.
  */
 
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

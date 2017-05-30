@@ -1,27 +1,14 @@
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 import android.content.Context;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
 
 import ideum.com.megamovie.Java.Utility.EclipsePath;
 import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
-import ideum.com.megamovie.R;
 
 
 public class EclipseTimeCalculator {

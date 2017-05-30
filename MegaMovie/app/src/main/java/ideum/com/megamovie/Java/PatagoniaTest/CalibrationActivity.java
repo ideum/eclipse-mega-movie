@@ -5,7 +5,7 @@
  */
 
 
-package ideum.com.megamovie.Java;
+package ideum.com.megamovie.Java.PatagoniaTest;
 
 
 import android.content.Intent;
