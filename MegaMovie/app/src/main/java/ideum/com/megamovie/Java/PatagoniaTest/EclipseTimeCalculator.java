@@ -15,17 +15,22 @@ public class EclipseTimeCalculator {
     public final static String TAG = "EclipseTimeCalculator";
 
     LocationProvider mLocationProvider;
+    TimeProvider mTimerProvider;
 
     EclipseTimingMap mEclipseTimingMap;
 
-    public EclipseTimeCalculator(EclipseTimingMap etm, LocationProvider provider) {
+
+
+    public EclipseTimeCalculator(EclipseTimingMap etm, LocationProvider provider, TimeProvider timeProvider) {
         mEclipseTimingMap = etm;
         mLocationProvider = provider;
+        mTimerProvider = timeProvider;
     }
-    public EclipseTimeCalculator(Context context, LocationProvider provider) throws IOException {
+    public EclipseTimeCalculator(Context context, LocationProvider locationProvider, TimeProvider timeProvider) throws IOException {
 
         mEclipseTimingMap = new EclipseTimingMap(context);
-        mLocationProvider = provider;
+        mLocationProvider = locationProvider;
+        mTimerProvider = timeProvider;
     }
 
     public Long getEclipseTime(EclipseTimingMap.Event event) {
@@ -60,6 +65,6 @@ public class EclipseTimeCalculator {
         if (eventTime == null) {
             return null;
         }
-        return eventTime - location.getTime();
+        return eventTime - mTimerProvider.getTime();
     }
 }

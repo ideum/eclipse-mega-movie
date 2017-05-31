@@ -116,7 +116,7 @@ public class MapActivity extends AppCompatActivity
         mContactTimesFragment.setLocationProvider(mGPSFragment);
 
         try {
-            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment);
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment, mGPSFragment);
             mContactTimesFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
         } catch (IOException e) {
             e.printStackTrace();

@@ -101,8 +101,9 @@ implements GoogleApiClient.OnConnectionFailedListener,
 
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
+            Log.d("TAG",acct.getEmail());
 
-//            storeEmail(acct.getEmail());
+            //storeEmail(acct.getEmail());
         }
         loadMainActivity();
 
@@ -112,7 +113,7 @@ implements GoogleApiClient.OnConnectionFailedListener,
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString(getResources().getString(R.string.email_preference_key),email);
-        edit.commit();
+        //edit.commit();
     }
 
     private void loadMainActivity() {

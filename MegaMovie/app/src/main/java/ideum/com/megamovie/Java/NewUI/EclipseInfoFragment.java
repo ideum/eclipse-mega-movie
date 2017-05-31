@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -157,7 +158,7 @@ public class EclipseInfoFragment extends Fragment
         MyApplication ma = (MyApplication) getActivity().getApplication();
         EclipseTimingMap etm = ma.getEclipseTimingMap();
         // Create the EclipseTimeCalculator
-        mEclipseTimeCalculator = new EclipseTimeCalculator(etm, mGPSFragment);
+        mEclipseTimeCalculator = new EclipseTimeCalculator(etm, mGPSFragment, mGPSFragment);
 
     }
 
@@ -179,6 +180,7 @@ public class EclipseInfoFragment extends Fragment
         if (mills == null) {
             return;
         }
+
 
         CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         cdf.setMillsRemaining(mills);

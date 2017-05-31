@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity
 
         TextView emailTextView = (TextView) findViewById(R.id.navHeaderTextView);
         String email = prefs.getString(getResources().getString(R.string.email_preference_key),"");
-        if (!email.equals("")) {
-            emailTextView.setText(email);
-        }
+//        if (!email.equals("")) {
+//            emailTextView.setText(email);
+//        }
 
 
         loadFragment(EclipseInfoFragment.class);

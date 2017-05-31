@@ -71,7 +71,7 @@ public class CalibrationActivity extends AppCompatActivity
         mCountdownFragment = (EclipseCountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
 
         try {
-            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment);
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment, mGPSFragment);
         } catch (IOException e) {
             e.printStackTrace();
         }

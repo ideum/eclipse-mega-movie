@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -16,6 +17,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -23,10 +25,11 @@ public class GPSFragment extends Fragment
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
-        LocationProvider {
+        LocationProvider,
+        TimeProvider {
 
-    public  long gpsInterval = 1000 * 30;
-    public  long fastestGpsInterval = 1000 * 10;
+    public long gpsInterval = 1000 * 30;
+    public long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
     private static final double DUMMY_LATITUDE = 36.1627; //Nashville Tennessee
@@ -104,6 +107,19 @@ public class GPSFragment extends Fragment
         return lastLocation;
     }
 
+
+    @Override
+    public Long getTime() {
+        Calendar calendar = Calendar.getInstance();
+//        Location location = getLocation();
+//        if (location != null) {
+//            long difference = Math.abs(calendar.getTimeInMillis() - location.getTime());
+//            Log.i("TAG", String.valueOf(difference));
+//        }
+
+        return calendar.getTimeInMillis();
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         startLocationUpdates();
@@ -126,6 +142,7 @@ public class GPSFragment extends Fragment
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(gpsInterval);
@@ -139,8 +156,9 @@ public class GPSFragment extends Fragment
             location.setLatitude(DUMMY_LATITUDE);
             location.setLongitude(DUMMY_LONGITUDE);
         }
-        for(LocationListener listener: locationListeners) {
+        for (LocationListener listener : locationListeners) {
             listener.onLocationChanged(location);
         }
     }
+
 }
