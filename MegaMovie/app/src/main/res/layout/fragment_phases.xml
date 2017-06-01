@@ -61,13 +61,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/first_contact" />
+                    android:src="@drawable/c1" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="#88222222"
+                    android:background="#44222222"
                     android:orientation="vertical">
 
                     <TextView
@@ -115,14 +115,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/second_contact" />
+                    android:src="@drawable/c2" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_margin="8dp"
-                    android:background="#88222222"
+                    android:background="#44222222"
                     android:orientation="vertical">
 
                     <TextView
@@ -170,13 +169,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/third_contact" />
+                    android:src="@drawable/c3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="#88222222"
+                    android:background="#44222222"
                     android:orientation="vertical">
 
                     <TextView
@@ -223,13 +222,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/first_contact" />
+                    android:src="@drawable/c4" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="#88222222"
+                    android:background="#44222222"
                     android:orientation="vertical">
 
                     <TextView

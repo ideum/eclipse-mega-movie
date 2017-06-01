@@ -129,7 +129,7 @@ public class CaptureActivity extends AppCompatActivity
         try {
             Resources resources = getResources();
             ConfigParser parser = new ConfigParser(resources, configId);
-            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment, mGPSFragment);
+            EclipseTimeCalculator calculator = new EclipseTimeCalculator(getApplicationContext());
             EclipseCaptureSequenceBuilder builder = new EclipseCaptureSequenceBuilder(mGPSFragment, parser, calculator);
             CaptureSequence sequence = builder.buildSequence();
 

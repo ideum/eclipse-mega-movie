@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import com.google.android.gms.location.LocationListener;
 
 
+import java.io.IOException;
+
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.PatagoniaTest.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.PatagoniaTest.GPSFragment;
@@ -28,7 +30,7 @@ import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 public class EclipseInfoFragment extends Fragment
-       implements LocationListener,
+        implements LocationListener,
         MyTimer.MyTimerListener {
 
     /**
@@ -61,7 +63,7 @@ public class EclipseInfoFragment extends Fragment
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Disables page navigation by swiping
-         mViewPager.setOnTouchListener(new View.OnTouchListener() {
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
@@ -83,6 +85,62 @@ public class EclipseInfoFragment extends Fragment
 
 
         return rootView;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLocation = location;
+        MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
+        mmf.setLocation(mLocation);
+        CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
+        double distance = EclipsePath.distanceToPathOfTotality(location);
+        cdf.setDistanceToPathOfTotality(distance);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mTimer = new MyTimer();
+        mTimer.addListener(this);
+        mTimer.startTicking();
+
+        // Add GPS fragment
+        mGPSFragment = new GPSFragment();
+        getActivity().getFragmentManager().beginTransaction().add(
+                android.R.id.content, mGPSFragment).commit();
+        mGPSFragment.addLocationListener(this);
+
+
+//        MyApplication ma = (MyApplication) getActivity().getApplication();
+//        EclipseTimingMap etm = ma.getEclipseTimingMap();
+        // Create the EclipseTimeCalculator
+        MyApplication ma = (MyApplication) getActivity().getApplication();
+        mEclipseTimeCalculator = ma.getEclipseTimeCalculator();
+        mGPSFragment.addLocationListener(mEclipseTimeCalculator);
+    }
+
+    @Override
+    public void onPause() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onTick() {
+        if (mEclipseTimeCalculator == null) {
+            return;
+        }
+        Long mills = mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
+
+        if (mills == null) {
+            return;
+        }
+
+
+        CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
+        cdf.setMillsRemaining(mills);
     }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
@@ -128,61 +186,5 @@ public class EclipseInfoFragment extends Fragment
             }
             return null;
         }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mLocation = location;
-        MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
-        mmf.setLocation(mLocation);
-        CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
-        double distance = EclipsePath.distanceToPathOfTotality(location);
-        cdf.setDistanceToPathOfTotality(distance);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mTimer = new MyTimer();
-        mTimer.addListener(this);
-        mTimer.startTicking();
-
-        // Add GPS fragment
-        mGPSFragment = new GPSFragment();
-        getActivity().getFragmentManager().beginTransaction().add(
-                android.R.id.content, mGPSFragment).commit();
-        mGPSFragment.addLocationListener(this);
-
-
-
-        MyApplication ma = (MyApplication) getActivity().getApplication();
-        EclipseTimingMap etm = ma.getEclipseTimingMap();
-        // Create the EclipseTimeCalculator
-        mEclipseTimeCalculator = new EclipseTimeCalculator(etm, mGPSFragment, mGPSFragment);
-
-    }
-
-    @Override
-    public void onPause() {
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onTick() {
-        if (mEclipseTimeCalculator == null) {
-            return;
-        }
-        Long mills = mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
-
-        if (mills == null) {
-            return;
-        }
-
-
-        CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
-        cdf.setMillsRemaining(mills);
     }
 }

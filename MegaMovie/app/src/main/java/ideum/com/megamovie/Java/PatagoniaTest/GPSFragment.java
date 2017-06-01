@@ -32,8 +32,8 @@ public class GPSFragment extends Fragment
     public long fastestGpsInterval = 1000 * 10;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
-    private static final double DUMMY_LATITUDE = 36.1627; //Nashville Tennessee
-    private static final double DUMMY_LONGITUDE = -86.7816; //Nashville Tennessee
+    private static final double DUMMY_LATITUDE = 36.239743;
+    private static final double DUMMY_LONGITUDE = -86.885504;
 
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;
@@ -111,11 +111,6 @@ public class GPSFragment extends Fragment
     @Override
     public Long getTime() {
         Calendar calendar = Calendar.getInstance();
-//        Location location = getLocation();
-//        if (location != null) {
-//            long difference = Math.abs(calendar.getTimeInMillis() - location.getTime());
-//            Log.i("TAG", String.valueOf(difference));
-//        }
 
         return calendar.getTimeInMillis();
     }

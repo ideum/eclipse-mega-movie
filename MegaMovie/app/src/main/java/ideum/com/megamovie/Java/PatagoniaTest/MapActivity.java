@@ -115,12 +115,10 @@ public class MapActivity extends AppCompatActivity
         mContactTimesFragment = (ContactTimesFragment) getFragmentManager().findFragmentById(R.id.contact_times_fragment);
         mContactTimesFragment.setLocationProvider(mGPSFragment);
 
-        try {
-            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment, mGPSFragment);
+
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext());
             mContactTimesFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         /**
          * Set up countdown fragment

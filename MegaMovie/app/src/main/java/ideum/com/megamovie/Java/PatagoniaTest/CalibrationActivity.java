@@ -70,11 +70,9 @@ public class CalibrationActivity extends AppCompatActivity
 
         mCountdownFragment = (EclipseCountdownFragment) getFragmentManager().findFragmentById(R.id.timer_fragment);
 
-        try {
-            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext(), mGPSFragment, mGPSFragment);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+            mEclipseTimeCalculator = new EclipseTimeCalculator(getApplicationContext());
+
         if (mCountdownFragment != null) {
             mCountdownFragment.includesDays = COUNTDOWN_TIMER_SHOWS_DAYS;
             mCountdownFragment.setEclipseTimeCalculator(mEclipseTimeCalculator);
