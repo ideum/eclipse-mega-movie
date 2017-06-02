@@ -18,7 +18,9 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
+import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 
@@ -70,8 +72,8 @@ public class ContactTimesFragment extends Fragment {
         if (location == null) {
             return;
         }
-        Long contact2 = mEclipseTimeCalculator.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
-        Long contact3 = mEclipseTimeCalculator.getEclipseTime(EclipseTimingMap.Event.CONTACT3);
+        Long contact2 = null;// mEclipseTimeCalculator.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
+        Long contact3 = null;// mEclipseTimeCalculator.getEclipseTime(EclipseTimingMap.Event.CONTACT3);
 
         String contact2String = "";
         if (contact2 != null) {

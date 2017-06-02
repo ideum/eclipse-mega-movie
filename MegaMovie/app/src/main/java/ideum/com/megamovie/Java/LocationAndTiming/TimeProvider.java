@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.LocationAndTiming;
 
 /**
  * Created by MT_User on 5/31/2017.

@@ -24,9 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import ideum.com.megamovie.Java.PatagoniaTest.MyTimer;
+import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
 
 public class MainActivity extends AppCompatActivity

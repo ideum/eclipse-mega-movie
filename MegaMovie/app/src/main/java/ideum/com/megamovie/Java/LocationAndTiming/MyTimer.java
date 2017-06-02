@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -36,8 +36,6 @@ public class MyTimer {
                     }
                 });
         }
-
-        ;
     }
 
     // Timer runs for one year

@@ -2,13 +2,7 @@ package ideum.com.megamovie.Java.Application;
 
 import android.app.Application;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
-
-import ideum.com.megamovie.Java.PatagoniaTest.EclipseTimeCalculator;
-import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
-import ideum.com.megamovie.R;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
 
 /**
  * Created by MT_User on 5/10/2017.
@@ -17,15 +11,10 @@ import ideum.com.megamovie.R;
 public class MyApplication extends Application {
 
     private EclipseTimeCalculator mEclipseTimeCalculator;
-
     public EclipseTimeCalculator getEclipseTimeCalculator() {
         return mEclipseTimeCalculator;
     }
 
-//    private EclipseTimingMap mEclipseTimingMap;
-//    public EclipseTimingMap getEclipseTimingMap() {
-//        return mEclipseTimingMap;
-//    }
 
     @Override
     public void onCreate() {

@@ -24,9 +24,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
-
-import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
+import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
+import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
 
 public class MapActivity extends AppCompatActivity
@@ -183,18 +184,19 @@ public class MapActivity extends AppCompatActivity
     }
 
     private boolean isWithinTimeThreshold() {
-        if (mEclipseTimeCalculator == null) {
-            return false;
-        }
-        Long millsToContact2 = mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
-
-        if (millsToContact2 == null) {
-            return false;
-        }
-
-        Long secondsToContact2 = millsToContact2/1000;
-
-        return secondsToContact2 < THRESHOLD_TIME_SECONDS;
+        return false;
+//        if (mEclipseTimeCalculator == null) {
+//            return false;
+//        }
+//        Long millsToContact2 = mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
+//
+//        if (millsToContact2 == null) {
+//            return false;
+//        }
+//
+//        Long secondsToContact2 = millsToContact2/1000;
+//
+//        return secondsToContact2 < THRESHOLD_TIME_SECONDS;
     }
 
     private boolean checkSystemWritePermissions() {

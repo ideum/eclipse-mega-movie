@@ -24,6 +24,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
+import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
+import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
 
 public class CaptureActivity extends AppCompatActivity

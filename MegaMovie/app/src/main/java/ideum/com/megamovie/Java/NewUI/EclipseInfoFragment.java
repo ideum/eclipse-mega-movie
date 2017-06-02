@@ -19,14 +19,13 @@ import android.view.ViewGroup;
 import com.google.android.gms.location.LocationListener;
 
 
-import java.io.IOException;
-
 import ideum.com.megamovie.Java.Application.MyApplication;
-import ideum.com.megamovie.Java.PatagoniaTest.EclipseTimeCalculator;
-import ideum.com.megamovie.Java.PatagoniaTest.GPSFragment;
-import ideum.com.megamovie.Java.PatagoniaTest.MyTimer;
-import ideum.com.megamovie.Java.Utility.EclipsePath;
-import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeManager;
+import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
+import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipsePath;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 public class EclipseInfoFragment extends Fragment
@@ -44,7 +43,8 @@ public class EclipseInfoFragment extends Fragment
 
     private GPSFragment mGPSFragment;
     private Location mLocation;
-    private EclipseTimeCalculator mEclipseTimeCalculator;
+    //private EclipseTimeCalculator mEclipseTimeCalculator;
+    private EclipseTimeManager mEclipseTimeManager;
     private MyTimer mTimer;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -110,13 +110,10 @@ public class EclipseInfoFragment extends Fragment
                 android.R.id.content, mGPSFragment).commit();
         mGPSFragment.addLocationListener(this);
 
-
-//        MyApplication ma = (MyApplication) getActivity().getApplication();
-//        EclipseTimingMap etm = ma.getEclipseTimingMap();
-        // Create the EclipseTimeCalculator
         MyApplication ma = (MyApplication) getActivity().getApplication();
-        mEclipseTimeCalculator = ma.getEclipseTimeCalculator();
-        mGPSFragment.addLocationListener(mEclipseTimeCalculator);
+        EclipseTimeCalculator  eclipseTimeCalculator = ma.getEclipseTimeCalculator();
+        mEclipseTimeManager = new EclipseTimeManager(eclipseTimeCalculator);
+        mEclipseTimeManager.setAsLocationListener(mGPSFragment);
     }
 
     @Override
@@ -129,16 +126,16 @@ public class EclipseInfoFragment extends Fragment
 
     @Override
     public void onTick() {
-        if (mEclipseTimeCalculator == null) {
+        Log.i("TAG","tick");
+
+        if (mEclipseTimeManager == null) {
             return;
         }
-        Long mills = mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
+        Long mills = mEclipseTimeManager.getTimeToEclipse(EclipseTimingMap.Event.CONTACT2);
 
         if (mills == null) {
             return;
         }
-
-
         CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         cdf.setMillsRemaining(mills);
     }

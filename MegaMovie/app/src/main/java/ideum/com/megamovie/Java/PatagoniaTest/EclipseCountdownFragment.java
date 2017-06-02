@@ -19,7 +19,9 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import ideum.com.megamovie.Java.Utility.EclipseTimingMap;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
+import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
 
 
@@ -74,7 +76,8 @@ implements MyTimer.MyTimerListener{
         if (mEclipseTimeCalculator == null) {
             return null;
         }
-        return mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
+//        return mEclipseTimeCalculator.getTimeToEvent(EclipseTimingMap.Event.CONTACT2);
+        return null;
     }
 
     // Creates string representing time in mills in days, hours, minutes and seconds

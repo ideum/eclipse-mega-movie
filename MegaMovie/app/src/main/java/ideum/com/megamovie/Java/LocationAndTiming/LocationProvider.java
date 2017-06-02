@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.location.Location;
 

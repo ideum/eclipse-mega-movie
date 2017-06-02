@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.Utility;
+package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.content.Context;
 import android.location.Location;
@@ -14,8 +14,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
-
-import ideum.com.megamovie.R;
 
 /**
  * Created by MT_User on 5/10/2017.

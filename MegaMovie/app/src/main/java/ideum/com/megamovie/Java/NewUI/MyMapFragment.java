@@ -1,13 +1,9 @@
 package ideum.com.megamovie.Java.NewUI;
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import ideum.com.megamovie.Java.Utility.EclipsePath;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipsePath;
 import ideum.com.megamovie.R;
 
 public class MyMapFragment extends Fragment

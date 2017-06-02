@@ -60,6 +60,8 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
+
 public class CameraFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
 

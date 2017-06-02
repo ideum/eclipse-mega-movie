@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.Utility;
+package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.location.Location;
 

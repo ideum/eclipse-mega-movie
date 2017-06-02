@@ -14,6 +14,9 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Queue;
 
+import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
+import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
+
 public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public static final String TAG = "CaptureSequenceSession";
     private LocationProvider mLocationProvider;
