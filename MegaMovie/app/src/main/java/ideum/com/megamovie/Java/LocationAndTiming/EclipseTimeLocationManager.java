@@ -11,31 +11,38 @@ import java.util.Calendar;
  * Created by MT_User on 6/2/2017.
  */
 
-public class EclipseTimeManager implements LocationListener {
+public class EclipseTimeLocationManager implements LocationListener {
 
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private LatLng currentLatLng;
-
-    public EclipseTimeManager(EclipseTimeCalculator etc) {
-        mEclipseTimeCalculator = etc;
-    }
-
-    public Long getEclipseTimeC2() {
+    private LatLng cloestTotalityLatLng() {
         if (currentLatLng == null) {
             return null;
         }
-        return mEclipseTimeCalculator.getEclipseTime(EclipseTimingMap.Event.CONTACT2,currentLatLng);
+        return EclipsePath.closestPointOnPathOfTotality(currentLatLng);
+    }
+
+    public boolean shouldUpdateLocationFromGPS = true;
+
+
+    public EclipseTimeLocationManager(EclipseTimeCalculator etc) {
+        mEclipseTimeCalculator = etc;
+    }
+
+    public Long getEclipseTime(EclipseTimingMap.Event event) {
+        if (currentLatLng == null) {
+            return null;
+        }
+        return mEclipseTimeCalculator.getEclipseTime(event,cloestTotalityLatLng());
     }
 
     public Long getTimeToEclipse(EclipseTimingMap.Event event) {
         Long result = null;
-        if (event == EclipseTimingMap.Event.CONTACT2) {
-            Long c2Time = getEclipseTimeC2();
-            if (c2Time != null) {
-                Calendar c = Calendar.getInstance();
-                result = c2Time - c.getTimeInMillis();
-            }
+        Long eclipseTime = getEclipseTime(event);
+        if (eclipseTime != null) {
+            result = eclipseTime - Calendar.getInstance().getTimeInMillis();
         }
+
         return result;
     }
 
@@ -43,10 +50,15 @@ public class EclipseTimeManager implements LocationListener {
         notifier.addLocationListener(this);
     }
 
+    public void setCurrentLatLng(LatLng latLng) {
+        currentLatLng = latLng;
+    }
 
     @Override
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        currentLatLng = EclipsePath.closestPointOnPathOfTotality(latLng);
+        if (shouldUpdateLocationFromGPS) {
+            setCurrentLatLng(latLng);
+        }
     }
 }

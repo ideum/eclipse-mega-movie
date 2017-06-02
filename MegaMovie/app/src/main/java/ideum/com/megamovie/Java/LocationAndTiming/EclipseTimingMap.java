@@ -49,6 +49,14 @@ public class EclipseTimingMap {
             this.endingLng = endingLng;
         }
 
+        public EclipseTimingFile(int fileID, int startingLat, int endingLat, int startingLng, int endingLng) {
+            this.fileId = fileID;
+            this.startingLat = (double) startingLat;
+            this.endingLat = (double) endingLat;
+            this.startingLng = (double) startingLng;
+            this.endingLng = (double) endingLng;
+        }
+
         public boolean contains(LatLng location) {
             double lat = location.latitude;
             double lng = location.longitude;
@@ -60,55 +68,12 @@ public class EclipseTimingMap {
         }
     }
 
-//    private EclipseTimingFile currentC2File;
-//    private EclipseTimingFile currentC3File;
-
-
-    private EclipseTimingFile getCurrentFile(Event event) {
-        if (event == Event.CONTACT2) {
-            return c2EclipseTimingFile;
-        } else {
-            return c3EclipseTimingFile;
-        }
-    }
-
-//    private final EclipseTimingFile[] c2_timing_files = {
-//            new EclipseTimingFile(R.raw.c2_t125119_4346, 43.0, 46.0, -125.0, -119.0),
-//            new EclipseTimingFile(R.raw.c2_t119114_4346, 43.0, 46.0, -119.0, -114.0),
-//            new EclipseTimingFile(R.raw.c2_t114109_4245, 42.0, 45.0, -114.0, -109.0),
-//            new EclipseTimingFile(R.raw.c2_t109105_4144, 41.0, 44.0, -109.0, -105.0),
-//            new EclipseTimingFile(R.raw.c2_t105101_4044, 40.0, 44.0, -105.0, -101.0),
-//            new EclipseTimingFile(R.raw.c2_t101097_3943, 39.0, 43.0, -101.0, -97.0),
-//            new EclipseTimingFile(R.raw.c2_t097093_3842, 38.0, 42.0, -97.0, -93.0),
-//            new EclipseTimingFile(R.raw.c2_t093090_3640, 36.0, 40.0, -93.0, -90.0),
-//            new EclipseTimingFile(R.raw.c2_t090085_3539, 35.0, 39.0, -90.0, -85.0)
-//    };
-
-//    private EclipseTimingFile getC2FileForLocation(LatLng location) {
-//        EclipseTimingFile file = null;
-//
-//        for (EclipseTimingFile f : c2_timing_files) {
-//            if (f.contains(location)) {
-//                file = f;
-//            }
-//        }
-//        return file;
-//    }
-
-//    private void updateTimingMapForLocation(LatLng location) throws IOException {
-//        EclipseTimingFile etf = getC2FileForLocation(location);
-//        if (etf == null) {
-//            return;
-//        }
-//        currentC2File = etf;
-//        eclipseTimeMapC2 = parseTextFile(context, etf);
-//    }
 
     public boolean containsLocation(LatLng location) {
-        if (c2EclipseTimingFile == null) {
+        if (c2EclipseTimingFile == null || c3EclipseTimingFile == null) {
             return false;
         }
-        return c2EclipseTimingFile.contains(location);
+        return c2EclipseTimingFile.contains(location) && c3EclipseTimingFile.contains(location);
     }
 
     private Context context;
@@ -141,7 +106,7 @@ public class EclipseTimingMap {
             return dummyEclipseTime(event);
         }
 
-        if (eclipseTimeMapC2 == null) {
+        if (eclipseTimeMapC2 == null || eclipseTimeMapC3 == null) {
             return null;
         }
 

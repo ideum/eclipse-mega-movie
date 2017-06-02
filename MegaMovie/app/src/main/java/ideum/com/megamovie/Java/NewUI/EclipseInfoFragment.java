@@ -21,8 +21,9 @@ import com.google.android.gms.location.LocationListener;
 
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeManager;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeLocationManager;
 import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
+import ideum.com.megamovie.Java.LocationAndTiming.MyMapFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipsePath;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
@@ -44,7 +45,7 @@ public class EclipseInfoFragment extends Fragment
     private GPSFragment mGPSFragment;
     private Location mLocation;
     //private EclipseTimeCalculator mEclipseTimeCalculator;
-    private EclipseTimeManager mEclipseTimeManager;
+    private EclipseTimeLocationManager mEclipseTimeManager;
     private MyTimer mTimer;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -87,15 +88,7 @@ public class EclipseInfoFragment extends Fragment
         return rootView;
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        mLocation = location;
-        MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
-        mmf.setLocation(mLocation);
-        CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
-        double distance = EclipsePath.distanceToPathOfTotality(location);
-        cdf.setDistanceToPathOfTotality(distance);
-    }
+
 
     @Override
     public void onResume() {
@@ -112,7 +105,7 @@ public class EclipseInfoFragment extends Fragment
 
         MyApplication ma = (MyApplication) getActivity().getApplication();
         EclipseTimeCalculator  eclipseTimeCalculator = ma.getEclipseTimeCalculator();
-        mEclipseTimeManager = new EclipseTimeManager(eclipseTimeCalculator);
+        mEclipseTimeManager = new EclipseTimeLocationManager(eclipseTimeCalculator);
         mEclipseTimeManager.setAsLocationListener(mGPSFragment);
     }
 
@@ -125,19 +118,36 @@ public class EclipseInfoFragment extends Fragment
     }
 
     @Override
+    public void onLocationChanged(Location location) {
+        mLocation = location;
+        MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
+        mmf.setLocation(mLocation);
+        CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
+        double distance = EclipsePath.distanceToPathOfTotality(location);
+        cdf.setDistanceToPathOfTotality(distance);
+    }
+
+    @Override
     public void onTick() {
-        Log.i("TAG","tick");
 
         if (mEclipseTimeManager == null) {
             return;
         }
-        Long mills = mEclipseTimeManager.getTimeToEclipse(EclipseTimingMap.Event.CONTACT2);
+        Long millsUntilC2 = mEclipseTimeManager.getTimeToEclipse(EclipseTimingMap.Event.CONTACT2);
 
-        if (mills == null) {
+        if (millsUntilC2 == null) {
             return;
         }
+
+
         CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
-        cdf.setMillsRemaining(mills);
+        cdf.setMillsRemaining(millsUntilC2);
+
+        PhasesFragment pf = (PhasesFragment) mSectionsPagerAdapter.getItem(2);
+        Long c2Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
+        Long c3Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT3);
+        pf.setContactTime(EclipseTimingMap.Event.CONTACT2,c2Time);
+        pf.setContactTime(EclipseTimingMap.Event.CONTACT3,c3Time);
     }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {

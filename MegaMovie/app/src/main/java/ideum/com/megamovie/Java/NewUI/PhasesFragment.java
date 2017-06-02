@@ -5,14 +5,31 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ButtonBarLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
+import ideum.com.megamovie.Java.LocationAndTiming.LocationNotifier;
 import ideum.com.megamovie.R;
 
 public class PhasesFragment extends Fragment {
+
+    private TextView c1TextView;
+    private TextView c2TextView;
+    private TextView c3TextView;
+    private TextView c4TextView;
 
 
     public PhasesFragment() {
@@ -30,6 +47,12 @@ public class PhasesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_phases, container, false);
+
+        c1TextView = (TextView) rootView.findViewById(R.id.c1_text_view);
+        c2TextView = (TextView) rootView.findViewById(R.id.c2_text_view);
+        c3TextView = (TextView) rootView.findViewById(R.id.c3_text_view);
+        c4TextView = (TextView) rootView.findViewById(R.id.c4_text_view);
+
 
         Button learnMoreFirstContact = (Button) rootView.findViewById(R.id.learn_more_first_contact);
         learnMoreFirstContact.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +103,35 @@ public class PhasesFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public void setContactTime(EclipseTimingMap.Event event, Long mills) {
+        switch (event) {
+            case CONTACT2:
+                String s2 = "Second Contact: " + timeOfDayString(mills);
+                if (c2TextView != null) {
+                    c2TextView.setText(s2);
+                }
+                break;
+            case CONTACT3:
+                String s3 = "Third Contact: " + timeOfDayString(mills);
+                if (c3TextView != null) {
+                    c3TextView.setText(s3);
+                }
+                break;
+        }
+    }
+
+    private String timeOfDayString(Long mills) {
+        if (mills == null) {
+            return "";
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mills);
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        return formatter.format(calendar.getTime());
     }
 
 }

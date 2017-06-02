@@ -1,18 +1,12 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.util.Calendar;
 
-import ideum.com.megamovie.Java.LocationAndTiming.EclipsePath;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 
@@ -37,6 +31,15 @@ public class EclipseTimeCalculator {
     };
 
     private final EclipseTimingMap.EclipseTimingFile[] c3_timing_files = {
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t125119_4346, 43.0, 46.0, -125.0, -119.0),
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t119114_4346, 43.0, 46.0, -119.0, -114.0),
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t114109_4245, 42.0, 45.0, -114.0, -109.0),
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t109105_4144, 41.0, 44.0, -109.0, -105.0),
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t105101_4044, 40.0, 44.0, -105.0, -101.0),
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t101097_3943, 39.0, 43.0, -101.0, -97.0),
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t097093_3842, 38.0, 42.0, -97.0, -93.0),
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t093090_3640, 36.0, 40.0, -93.0, -90.0),
+            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t090087_3539, 35.0, 39.0, -90.0, -87.0),
             new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t087084_3438, 34.0, 38.0, -87.0, -84.0)
     };
 
@@ -45,13 +48,22 @@ public class EclipseTimeCalculator {
         this.context = context;
     }
 
-    private EclipseTimingMap.EclipseTimingFile getC2FileForLocation(LatLng location) {
+    private EclipseTimingMap.EclipseTimingFile getFileForLocation(EclipseTimingMap.Event event, LatLng location) {
         EclipseTimingMap.EclipseTimingFile file = null;
 
-        for (EclipseTimingMap.EclipseTimingFile f : c2_timing_files) {
-            if (f.contains(location)) {
-                file = f;
-            }
+        switch (event) {
+            case CONTACT2:
+            for (EclipseTimingMap.EclipseTimingFile f : c2_timing_files) {
+                if (f.contains(location)) {
+                    file = f;
+                }
+            } break;
+            case CONTACT3:
+                for (EclipseTimingMap.EclipseTimingFile f : c3_timing_files) {
+                    if (f.contains(location)) {
+                        file = f;
+                    }
+                } break;
         }
         return file;
     }
@@ -84,8 +96,11 @@ public class EclipseTimeCalculator {
     }
 
     private void refreshTimingMapWithLatLng(LatLng latLng) throws IOException {
-        EclipseTimingMap.EclipseTimingFile etf = getC2FileForLocation(latLng);
-        new RefreshTimingMapTask().execute(context, etf, c3_timing_files[0]);
+        EclipseTimingMap.EclipseTimingFile c2File = getFileForLocation(EclipseTimingMap.Event.CONTACT2, latLng);
+        EclipseTimingMap.EclipseTimingFile c3File =  getFileForLocation(EclipseTimingMap.Event.CONTACT3, latLng);
+        if (c2File != null && c3File != null) {
+            new RefreshTimingMapTask().execute(context, c2File, c3File);
+        }
     }
 
     private void refreshTimingMap() throws IOException {

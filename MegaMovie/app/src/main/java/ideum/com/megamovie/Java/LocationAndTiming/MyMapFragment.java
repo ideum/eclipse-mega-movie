@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.NewUI;
+package ideum.com.megamovie.Java.LocationAndTiming;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import ideum.com.megamovie.Java.LocationAndTiming.EclipsePath;
 import ideum.com.megamovie.R;
 
 public class MyMapFragment extends Fragment
