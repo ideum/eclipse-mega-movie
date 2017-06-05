@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity
          * Keep activity in portrait mode
          */
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//
-//        if (!hasAllPermissionsGranted()) {
-//            requestAllPermissions();
-//        }
+
+        if (!hasAllPermissionsGranted()) {
+            requestAllPermissions();
+        }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

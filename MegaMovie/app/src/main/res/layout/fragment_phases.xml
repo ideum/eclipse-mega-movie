@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="22dp"
-                        android:text="First Contact: 11:58:19 am"
+                        android:text="First Contact:"
                         android:textColor="#fff"
                         android:textSize="24dp" />
 
@@ -131,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="22dp"
-                        android:text="Second Contact: 1:27:06 pm"
+                        android:text="Second Contact: "
                         android:textColor="#fff"
                         android:textSize="24dp" />
 
@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="22dp"
-                        android:text="Third Contact:1:28:10 pm"
+                        android:text="Third Contact:"
                         android:textColor="#fff"
                         android:textSize="24dp" />
 
@@ -240,7 +240,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="22dp"
-                        android:text="Fourth Contact: 2:53:49 pm"
+                        android:text="Fourth Contact:"
                         android:textColor="#fff"
                         android:textSize="24dp" />
 

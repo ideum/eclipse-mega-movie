@@ -13,6 +13,25 @@
         android:layout_height="match_parent"
         tools:context="ideum.com.megamovie.Java.PatagoniaTest.MapActivity" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="#fff">
+
+        <fragment
+            android:id="@+id/place_autocomplete_fragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </FrameLayout>
+
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/my_location_fab"
         android:layout_width="wrap_content"
@@ -20,6 +39,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="88dp"
         android:layout_marginRight="16dp"
-        app:srcCompat="@drawable/ic_my_location_24dp"/>
+        app:srcCompat="@drawable/ic_my_location_24dp" />
 
 </FrameLayout>

@@ -31,7 +31,7 @@
         <!-- The API key for Google Maps-based APIs. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyB0mm9X7tEIxtV-2DAS1LRMhmhGwLQPl-8" />
 
         <activity android:name=".Java.PatagoniaTest.MapActivity">
             android:screenOrientation="portrait"
@@ -75,24 +75,24 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-
-
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-        </activity>
-        <activity
-            android:name=".Java.NewUI.IntroActivity"
-            android:label="@string/title_activity_intro"
-            android:theme="@style/AppTheme">
-
              <!--<intent-filter>-->
              <!--<action android:name="android.intent.action.MAIN" />-->
 
 
              <!--<category android:name="android.intent.category.LAUNCHER" />-->
              <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".Java.NewUI.IntroActivity"
+            android:label="@string/title_activity_intro"
+            android:theme="@style/AppTheme">
+
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity android:name=".Java.NewUI.AboutActivity">
 

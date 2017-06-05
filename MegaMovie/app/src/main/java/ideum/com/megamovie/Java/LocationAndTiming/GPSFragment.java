@@ -10,6 +10,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.LocationSource;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,26 +23,22 @@ public class GPSFragment extends Fragment
         LocationListener,
         LocationProvider,
         TimeProvider,
-        LocationNotifier{
+        LocationSource{
 
     public long gpsInterval = 1000 * 30;
     public long fastestGpsInterval = 1000 * 20;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
     private static final boolean SHOULD_USE_DUMMY_LOCATION = true;
-    private static final double DUMMY_LATITUDE = 36.0;
-    private static final double DUMMY_LONGITUDE = -86.0;
+    private static final double DUMMY_LATITUDE = 36.209;
+    private static final double DUMMY_LONGITUDE = -86.761;
 
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private List<LocationListener> locationListeners = new ArrayList<>();
+    private List<OnLocationChangedListener> locationListeners = new ArrayList<>();
 
 
-    @Override
-    public void addLocationListener(LocationListener listener) {
-        locationListeners.add(listener);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,9 +146,18 @@ public class GPSFragment extends Fragment
             location.setLatitude(DUMMY_LATITUDE);
             location.setLongitude(DUMMY_LONGITUDE);
         }
-        for (LocationListener listener : locationListeners) {
+        for (OnLocationChangedListener listener : locationListeners) {
             listener.onLocationChanged(location);
         }
     }
 
+    @Override
+    public void activate(OnLocationChangedListener onLocationChangedListener) {
+        locationListeners.add(onLocationChangedListener);
+    }
+
+    @Override
+    public void deactivate() {
+
+    }
 }

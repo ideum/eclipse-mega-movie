@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.LocationSource;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -32,7 +33,7 @@ import ideum.com.megamovie.R;
 public class CaptureActivity extends AppCompatActivity
         implements CameraFragment.CaptureListener,
         CaptureSequenceSession.CameraController,
-        LocationListener {
+        LocationSource.OnLocationChangedListener {
 
     private final static String TAG = "CaptureActivity";
     private GPSFragment mGPSFragment;
@@ -105,7 +106,7 @@ public class CaptureActivity extends AppCompatActivity
         mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
-        mGPSFragment.addLocationListener(this);
+        mGPSFragment.activate(this);
 
         /**
          * Add Camera Fragment

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -32,7 +33,7 @@ import ideum.com.megamovie.R;
 
 public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback,
-        LocationListener,
+        LocationSource.OnLocationChangedListener,
         ActivityCompat.OnRequestPermissionsResultCallback,
         MyTimer.MyTimerListener {
 
@@ -107,7 +108,7 @@ public class MapActivity extends AppCompatActivity
         mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
-        mGPSFragment.addLocationListener(this);
+        mGPSFragment.activate(this);
 //        mGPSFragment.locationRequestPriority = LocationRequest.PRIORITY_LOW_POWER;
 
         /**

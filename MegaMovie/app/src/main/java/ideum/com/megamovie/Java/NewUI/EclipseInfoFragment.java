@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.LocationSource;
 
 
 import ideum.com.megamovie.Java.Application.MyApplication;
@@ -30,7 +31,7 @@ import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 public class EclipseInfoFragment extends Fragment
-        implements LocationListener,
+        implements LocationSource.OnLocationChangedListener,
         MyTimer.MyTimerListener {
 
     /**
@@ -85,10 +86,11 @@ public class EclipseInfoFragment extends Fragment
         });
 
 
+
+
+
         return rootView;
     }
-
-
 
     @Override
     public void onResume() {
@@ -101,7 +103,10 @@ public class EclipseInfoFragment extends Fragment
         mGPSFragment = new GPSFragment();
         getActivity().getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
-        mGPSFragment.addLocationListener(this);
+        mGPSFragment.activate(this);
+
+        MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
+        mmf.setLocationSource(mGPSFragment);
 
         MyApplication ma = (MyApplication) getActivity().getApplication();
         EclipseTimeCalculator  eclipseTimeCalculator = ma.getEclipseTimeCalculator();

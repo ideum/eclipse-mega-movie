@@ -113,8 +113,9 @@ public class EclipseTimingMap {
         double lat = location.latitude;
         double lng = location.longitude;
 
-        int y = (int) (lat / LATLNG_INTERVAL);
-        int x = (int) (lng / LATLNG_INTERVAL);
+        int x = (int) (lat / LATLNG_INTERVAL);
+        int y = (int) (lng / LATLNG_INTERVAL);
+
         MyKey key = new MyKey(x, y);
         Double tenthsOfSecondsAfterBasetime = 0.0;
         switch (event) {
@@ -134,7 +135,7 @@ public class EclipseTimingMap {
                 return null;
         }
 
-        long millsAfterBaseTime = 100 * Math.round(tenthsOfSecondsAfterBasetime);
+        long millsAfterBaseTime = 1000 * Math.round(tenthsOfSecondsAfterBasetime);
         return getBaseTime() + millsAfterBaseTime;
     }
 
@@ -213,12 +214,12 @@ public class EclipseTimingMap {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         String line = br.readLine();
         int lineLength = line.length();
-        int x = startingLngInt;
+        int x = startingLatInt;
         Map<MyKey, Double> map = new HashMap<>();
 
         while (line != null && line.length() == lineLength) {
             ArrayList<Double> times = parseLine(line);
-            int y = startingLatInt;
+            int y = startingLngInt;
             for (Double t : times) {
                 map.put(new MyKey(x, y), t);
                 y++;
@@ -230,26 +231,26 @@ public class EclipseTimingMap {
     }
 
 
-    private Map<MyKey, Double> parseTextFile(Context context, int resource_file_id) throws IOException {
-        InputStream inputStream = context.getResources().openRawResource(resource_file_id);
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        String line = br.readLine();
-        int lineLength = line.length();
-        int x = 0;
-        Map<MyKey, Double> map = new HashMap<>();
-
-        while (line != null && line.length() == lineLength) {
-            ArrayList<Double> times = parseLine(line);
-            int y = 0;
-            for (Double t : times) {
-                map.put(new MyKey(x, y), t);
-                y++;
-            }
-            x++;
-            line = br.readLine();
-        }
-        return map;
-    }
+//    private Map<MyKey, Double> parseTextFile(Context context, int resource_file_id) throws IOException {
+//        InputStream inputStream = context.getResources().openRawResource(resource_file_id);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+//        String line = br.readLine();
+//        int lineLength = line.length();
+//        int x = 0;
+//        Map<MyKey, Double> map = new HashMap<>();
+//
+//        while (line != null && line.length() == lineLength) {
+//            ArrayList<Double> times = parseLine(line);
+//            int y = 0;
+//            for (Double t : times) {
+//                map.put(new MyKey(x, y), t);
+//                y++;
+//            }
+//            x++;
+//            line = br.readLine();
+//        }
+//        return map;
+//    }
 
     private ArrayList<Double> parseLine(String line) {
         String[] separated = line.split(" ");

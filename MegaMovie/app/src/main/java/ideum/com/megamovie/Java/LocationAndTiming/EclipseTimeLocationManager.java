@@ -3,6 +3,7 @@ package ideum.com.megamovie.Java.LocationAndTiming;
 import android.location.Location;
 
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Calendar;
@@ -11,7 +12,7 @@ import java.util.Calendar;
  * Created by MT_User on 6/2/2017.
  */
 
-public class EclipseTimeLocationManager implements LocationListener {
+public class EclipseTimeLocationManager implements LocationSource.OnLocationChangedListener {
 
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private LatLng currentLatLng;
@@ -46,8 +47,8 @@ public class EclipseTimeLocationManager implements LocationListener {
         return result;
     }
 
-    public void setAsLocationListener(LocationNotifier notifier) {
-        notifier.addLocationListener(this);
+    public void setAsLocationListener(LocationSource source) {
+        source.activate(this);
     }
 
     public void setCurrentLatLng(LatLng latLng) {

@@ -30,6 +30,7 @@ public class EclipseTimeCalculator {
             new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t090085_3539, 35.0, 39.0, -90.0, -85.0)
     };
 
+
     private final EclipseTimingMap.EclipseTimingFile[] c3_timing_files = {
             new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t125119_4346, 43.0, 46.0, -125.0, -119.0),
             new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t119114_4346, 43.0, 46.0, -119.0, -114.0),

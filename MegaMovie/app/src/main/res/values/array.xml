@@ -33,7 +33,7 @@
 
     <string-array name="assistant_image_names">
         <item>only_phone</item>
-        <item>eclipse_photo_gear</item>
+        <item>eclipse_photo_gear_new</item>
         <item>dslr</item>
     </string-array>
     <integer-array name="assistant_is_terminals">
