@@ -1,12 +1,16 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.preference.PreferenceManager;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Calendar;
+
+import ideum.com.megamovie.R;
 
 /**
  * Created by MT_User on 6/2/2017.
@@ -16,25 +20,34 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
 
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private LatLng currentLatLng;
-    private LatLng cloestTotalityLatLng() {
-        if (currentLatLng == null) {
-            return null;
+    private Context mContext;
+
+
+    private LatLng getPlannedLatLng() {
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+        float lat = settings.getFloat(mContext.getString(R.string.planned_lat_key),0);
+        float lng = settings.getFloat(mContext.getString(R.string.planned_lng_key),0);
+        LatLng result;
+        if (lat != 0 && lng != 0) {
+            result = new LatLng(lat,lng);
+        } else {
+            result = null;
         }
-        return EclipsePath.closestPointOnPathOfTotality(currentLatLng);
+        return result;
     }
 
-    public boolean shouldUpdateLocationFromGPS = true;
 
-
-    public EclipseTimeLocationManager(EclipseTimeCalculator etc) {
+    public EclipseTimeLocationManager(EclipseTimeCalculator etc, Context context) {
         mEclipseTimeCalculator = etc;
+        mContext = context;
     }
 
     public Long getEclipseTime(EclipseTimingMap.Event event) {
-        if (currentLatLng == null) {
+        if (referenceLatLng() == null) {
             return null;
         }
-        return mEclipseTimeCalculator.getEclipseTime(event,cloestTotalityLatLng());
+        return mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
     }
 
     public Long getTimeToEclipse(EclipseTimingMap.Event event) {
@@ -43,7 +56,6 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         if (eclipseTime != null) {
             result = eclipseTime - Calendar.getInstance().getTimeInMillis();
         }
-
         return result;
     }
 
@@ -58,8 +70,18 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
     @Override
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        if (shouldUpdateLocationFromGPS) {
             setCurrentLatLng(latLng);
+    }
+
+    private LatLng referenceLatLng() {
+        LatLng plannedLatLng = getPlannedLatLng();
+        if (plannedLatLng != null) {
+            return plannedLatLng;
         }
+
+        if (currentLatLng == null) {
+            return null;
+        }
+        return EclipsePath.closestPointOnPathOfTotality(currentLatLng);
     }
 }

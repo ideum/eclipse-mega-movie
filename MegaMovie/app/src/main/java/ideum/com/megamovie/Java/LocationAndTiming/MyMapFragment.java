@@ -1,12 +1,14 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import android.view.LayoutInflater;
@@ -14,17 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -39,14 +38,13 @@ import ideum.com.megamovie.R;
 public class MyMapFragment extends Fragment
         implements OnMapReadyCallback,
         View.OnClickListener,
-        PlaceSelectionListener,
-        GoogleApiClient.OnConnectionFailedListener {
+        PlaceSelectionListener {
 
     private GoogleMap mMap;
-    private Location mLocation;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationSource mLocationSource;
+    private LatLng currentLatLng;
+    private LatLng plannedLatLng;
 
+    // Parameters for initial camera position and zoom level
     private LatLng initialPoint = new LatLng(39.8, -102);
     private float initialZoom = 3.2f;
 
@@ -61,19 +59,8 @@ public class MyMapFragment extends Fragment
         return fragment;
     }
 
-    public void setLocation(Location location) {
-        mLocation = location;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-//        mGoogleApiClient = new GoogleApiClient
-//                .Builder(getActivity())
-//                .addApi(Places.GEO_DATA_API)
-//                .enableAutoManage(getActivity(), this)
-//                .build();
+    public void setCurrentLatLng(LatLng latLng) {
+        currentLatLng = latLng;
     }
 
     @Override
@@ -82,43 +69,145 @@ public class MyMapFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_my_map, container, false);
 
-        SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.support_map);
+        FragmentManager fm = getChildFragmentManager();
+
+//        SupportMapFragment smf = (SupportMapFragment) fm.findFragmentById(R.id.support_map);
+
+        SupportMapFragment smf = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
+        if (smf == null) {
+            smf = new SupportMapFragment();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.myMap_fragment_holder, smf, "mapFragment");
+            ft.commit();
+            fm.executePendingTransactions();
+        }
+
         smf.getMapAsync(this);
 
         FloatingActionButton myLocationButton = (FloatingActionButton) rootView.findViewById(R.id.my_location_fab);
         myLocationButton.setOnClickListener(this);
 
-        PlaceAutocompleteFragment paf = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        if (paf != null) {
-            paf.setOnPlaceSelectedListener(this);
-            paf.setHint("Your eclipse location?");
-        }
+        SupportPlaceAutocompleteFragment paf = (SupportPlaceAutocompleteFragment) fm.findFragmentByTag("autocompleteFragment");
+        if (paf == null) {
+            paf = new SupportPlaceAutocompleteFragment();
+            if (paf != null) {
+                paf.setOnPlaceSelectedListener(this);
+            }
+            FragmentTransaction ft1 = fm.beginTransaction();
+            ft1.add(R.id.auto_complete_fragment, paf, "autocompleteFragment");
+            ft1.commit();
+            fm.executePendingTransactions();
 
+        }
         return rootView;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        PlaceAutocompleteFragment paf = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        if (paf != null) {
-            getActivity().getFragmentManager().beginTransaction().remove(paf).commit();
-        }
 
-        SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.support_map);
-        if (smf != null) {
-            getActivity().getSupportFragmentManager().beginTransaction().remove(smf).commit();
-        }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        drawEclipsePath();
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(initialPoint));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(initialZoom));
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latLng) {
+                setPlannedLocation(latLng);
+            }
+        });
+
+        setPlannedLocation(getPlannedLocationFromPreferences());
+
+
     }
 
-    public void setLocationSource(LocationSource locationSource) {
-        mLocationSource = locationSource;
+    private void setPlannedLocationPreferenceValue(LatLng latLng) {
+        if (latLng == null) {
+            return;
+        }
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putFloat(getString(R.string.planned_lng_key), (float) latLng.longitude);
+        editor.putFloat(getString(R.string.planned_lat_key), (float) latLng.latitude);
+        editor.commit();
+    }
+
+    private void setPlannedLocation(LatLng latLng) {
+        plannedLatLng = latLng;
+        setPlannedLocationPreferenceValue(latLng);
+        refreshMarkersAndOverlay();
+    }
+
+    public void moveToCurrentLocation() {
+        if (currentLatLng == null || mMap == null) {
+            return;
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+    }
+
+    private void setCurrentLocationMarker() {
+        if (currentLatLng == null || mMap == null) {
+            return;
+        }
+
+        mMap.addMarker(new MarkerOptions().position(currentLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
+        //drawShortestPathToTotality(currentLatLng);
+    }
+
+    private void refreshMarkersAndOverlay() {
+        mMap.clear();
+        placeMarkerAtPlannedLocation();
+        setCurrentLocationMarker();
+        drawEclipsePath();
+    }
+
+    private LatLng getPlannedLocationFromPreferences() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        float lat = settings.getFloat(getString(R.string.planned_lat_key),0);
+        float lng = settings.getFloat(getString(R.string.planned_lng_key),0);
+        LatLng result = null;
+        if (lat != 0 && lng != 0) {
+            result = new LatLng(lat,lng);
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
+    private void placeMarkerAtPlannedLocation() {
+        if (plannedLatLng == null) {
+            return;
+        }
+        mMap.addMarker(new MarkerOptions().position(plannedLatLng));
+    }
+
+
+    // called when the 'current location' button is pressed
+    @Override
+    public void onClick(View v) {
+        moveToCurrentLocation();
+        refreshMarkersAndOverlay();
+        drawShortestPathToTotality(currentLatLng);
+    }
+
+    @Override
+    public void onPlaceSelected(Place place) {
+        setPlannedLocationPreferenceValue(place.getLatLng());
+        setPlannedLocation(place.getLatLng());
+    }
+
+    @Override
+    public void onError(Status status) {
+        Log.d("TAG", status.toString());
     }
 
     private void drawEclipsePath() {
 
         int fillColor = 0x55000066;
-
         PolygonOptions polygonOptions = new PolygonOptions().strokeColor(Color.BLACK).fillColor(fillColor).strokeWidth(2);
 
         int numPoints = 500;
@@ -132,30 +221,8 @@ public class MyMapFragment extends Fragment
         mMap.addPolygon(polygonOptions);
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-
-        drawEclipsePath();
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(initialPoint));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(initialZoom));
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng latLng) {
-                drawShortestPathToTotality(latLng);
-            }
-        });
-
-
-    }
 
     private void drawShortestPathToTotality(LatLng point) {
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(point));
         LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(point);
 
         PolylineOptions plo = new PolylineOptions();
@@ -165,58 +232,7 @@ public class MyMapFragment extends Fragment
         plo.width(5);
         plo.color(Color.RED);
         mMap.addPolyline(plo);
-        drawEclipsePath();
-    }
-
-    public void moveToCurrentLocation() {
-        if (mLocation == null || mMap == null) {
-            return;
-        }
-        LatLng loc = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
-    }
-
-    private void setMarker() {
-        if (mLocation == null || mMap == null) {
-            return;
-        }
-        LatLng loc = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(loc).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
-        drawEclipsePath();
-
-
-        LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(loc);
-
-        PolylineOptions plo = new PolylineOptions();
-        plo.add(loc);
-        plo.add(endpoint);
-        plo.geodesic(true);
-        plo.width(5);
-        plo.color(Color.RED);
-        mMap.addPolyline(plo);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        moveToCurrentLocation();
-        setMarker();
     }
 
 
-    @Override
-    public void onPlaceSelected(Place place) {
-        mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
-    }
-
-    @Override
-    public void onError(Status status) {
-        Log.d("TAG", status.toString());
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 }

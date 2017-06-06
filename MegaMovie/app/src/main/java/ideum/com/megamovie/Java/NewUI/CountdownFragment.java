@@ -21,7 +21,6 @@ import ideum.com.megamovie.R;
 
 public class CountdownFragment extends Fragment {
 
-
     private TextView daysTextView;
     private TextView hoursTextView;
     private TextView minutesTextView;
@@ -59,6 +58,9 @@ public class CountdownFragment extends Fragment {
     }
 
     private void updateDistanceToTotalityTextView(double km) {
+        if (!isAdded()) {
+            return;
+        }
         String text = "";
         if (km == 0) {
             text = getString(R.string.in_the_path_of_totality_string);
@@ -69,8 +71,19 @@ public class CountdownFragment extends Fragment {
     }
 
     public void setMillsRemaining(Long mills) {
-        millsRemaining = mills;
-        setCountdownViews();
+        if (millsRemaining == null) {
+            if (mills != null) {
+                millsRemaining = mills;
+                setCountdownViews();
+            }
+            return;
+        }
+
+        boolean changed = !millsRemaining.equals(mills);
+        if (changed) {
+            millsRemaining = mills;
+            setCountdownViews();
+        }
     }
 
     /*
@@ -78,25 +91,40 @@ public class CountdownFragment extends Fragment {
      */
     private void setCountdownViews() {
 
-        long days = TimeUnit.MILLISECONDS.toDays(millsRemaining);
-        millsRemaining -= TimeUnit.DAYS.toMillis(days);
-        long hours = TimeUnit.MILLISECONDS.toHours(millsRemaining);
-        millsRemaining = millsRemaining - TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millsRemaining);
-        millsRemaining = millsRemaining - TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millsRemaining);
+        if (!isAdded()) {
+            return;
+        }
+
+        String daysString = "";
+        String hoursString = "";
+        String minutesString = "";
+        String secondsString = "";
+
+        if (millsRemaining != null) {
+            long days = TimeUnit.MILLISECONDS.toDays(millsRemaining);
+            daysString = String.format("%02d",days);
+            millsRemaining -= TimeUnit.DAYS.toMillis(days);
+            long hours = TimeUnit.MILLISECONDS.toHours(millsRemaining);
+            hoursString = String.format("%02d",hours);
+            millsRemaining = millsRemaining - TimeUnit.HOURS.toMillis(hours);
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(millsRemaining);
+            minutesString = String.format("%02d",minutes);
+            millsRemaining = millsRemaining - TimeUnit.MINUTES.toMillis(minutes);
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(millsRemaining);
+            secondsString = String.format("%02d",seconds);
+        }
 
         if(daysTextView != null) {
-            daysTextView.setText(String.format("%02d", days));
+            daysTextView.setText(daysString);
         }
         if (hoursTextView != null) {
-            hoursTextView.setText(String.format("%02d", hours));
+            hoursTextView.setText(hoursString);
         }
         if (minutesTextView != null) {
-            minutesTextView.setText(String.format("%02d", minutes));
+            minutesTextView.setText(minutesString);
         }
         if (secondsTextView != null) {
-            secondsTextView.setText(String.format("%02d", seconds));
+            secondsTextView.setText(secondsString);
         }
     }
 

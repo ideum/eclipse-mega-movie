@@ -31,6 +31,9 @@ public class PhasesFragment extends Fragment {
     private TextView c3TextView;
     private TextView c4TextView;
 
+    private Long c2Mills;
+    private Long c3Mills;
+
 
     public PhasesFragment() {
         // Required empty public constructor
@@ -105,22 +108,36 @@ public class PhasesFragment extends Fragment {
         return rootView;
     }
 
-    public void setContactTime(EclipseTimingMap.Event event, Long mills) {
-        switch (event) {
-            case CONTACT2:
-                String s2 = "Second Contact: " + timeOfDayString(mills);
-                if (c2TextView != null) {
-                    c2TextView.setText(s2);
-                }
-                break;
-            case CONTACT3:
-                String s3 = "Third Contact: " + timeOfDayString(mills);
-                if (c3TextView != null) {
-                    c3TextView.setText(s3);
-                }
-                break;
+    public void updateUi() {
+        if (!isAdded()) {
+            return;
+        }
+
+        Log.i("Phases","ui updated");
+        String s2 = "Second Contact: " + timeOfDayString(c2Mills);
+        if (c2TextView != null) {
+            c2TextView.setText(s2);
+        }
+
+
+        String s3 = "Third Contact: " + timeOfDayString(c3Mills);
+        if (c3TextView != null) {
+            c3TextView.setText(s3);
         }
     }
+
+    public void setC2Mills(Long mills) {
+
+        c2Mills = mills;
+        updateUi();
+    }
+
+    public void setC3Mills(Long mills) {
+        c3Mills = mills;
+        updateUi();
+    }
+
+
 
     private String timeOfDayString(Long mills) {
         if (mills == null) {

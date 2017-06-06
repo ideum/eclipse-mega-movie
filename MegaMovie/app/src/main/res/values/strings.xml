@@ -106,6 +106,8 @@
     <string name="lens_default">No external lens</string>
     <string name="tripod_default">No tripod</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="planned_lat_key">planned latitude</string>
+    <string name="planned_lng_key">planned longitude</string>
 
     <!-- Strings related to login -->
     <string name="login_rationale">

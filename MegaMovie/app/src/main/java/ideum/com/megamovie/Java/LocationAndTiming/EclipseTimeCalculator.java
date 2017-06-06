@@ -2,6 +2,7 @@ package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -17,6 +18,7 @@ public class EclipseTimeCalculator {
     EclipseTimingMap mEclipseTimingMap;
     private Context context;
     private LatLng mostRecentLatLng;
+    private boolean refreshPending = false;
 
     private final EclipseTimingMap.EclipseTimingFile[] c2_timing_files = {
             new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t125119_4346, 43.0, 46.0, -125.0, -119.0),
@@ -79,8 +81,13 @@ public class EclipseTimeCalculator {
     }
 
     private void setMostRecentLatLng(LatLng latLng) {
+        if (refreshPending) {
+            return;
+        }
         mostRecentLatLng = latLng;
+
         if (!currentMapContainsLocation(mostRecentLatLng)) {
+            Log.i("TAG","refreshing map");
             try {
                 refreshTimingMap();
             } catch (IOException e) {
@@ -100,6 +107,7 @@ public class EclipseTimeCalculator {
         EclipseTimingMap.EclipseTimingFile c2File = getFileForLocation(EclipseTimingMap.Event.CONTACT2, latLng);
         EclipseTimingMap.EclipseTimingFile c3File =  getFileForLocation(EclipseTimingMap.Event.CONTACT3, latLng);
         if (c2File != null && c3File != null) {
+            refreshPending = true;
             new RefreshTimingMapTask().execute(context, c2File, c3File);
         }
     }
@@ -130,6 +138,7 @@ public class EclipseTimeCalculator {
         protected void onPostExecute(EclipseTimingMap eclipseTimingMap) {
             super.onPostExecute(eclipseTimingMap);
             mEclipseTimingMap = eclipseTimingMap;
+            refreshPending = false;
         }
     }
 }

@@ -16,8 +16,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.LocationSource;
+import com.google.android.gms.maps.model.LatLng;
 
 
 import ideum.com.megamovie.Java.Application.MyApplication;
@@ -45,12 +45,19 @@ public class EclipseInfoFragment extends Fragment
 
     private GPSFragment mGPSFragment;
     private Location mLocation;
-    //private EclipseTimeCalculator mEclipseTimeCalculator;
     private EclipseTimeLocationManager mEclipseTimeManager;
     private MyTimer mTimer;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     public ViewPager mViewPager;
+
+    private MyMapFragment mMyMapFragment;
+    private CountdownFragment mCountdownFragment;
+    private PhasesFragment mPhasesFragment;
+
+    private Long c2ContactTime;
+    private Long c3ContactTime;
+    private Long millsToC2;
 
 
     @Override
@@ -59,6 +66,10 @@ public class EclipseInfoFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_eclipse_info, container, false);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
+
+        mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
+        mCountdownFragment = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
+        mPhasesFragment = (PhasesFragment) mSectionsPagerAdapter.getItem(2);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) rootView.findViewById(R.id.view_pager);
@@ -85,10 +96,6 @@ public class EclipseInfoFragment extends Fragment
             }
         });
 
-
-
-
-
         return rootView;
     }
 
@@ -105,13 +112,16 @@ public class EclipseInfoFragment extends Fragment
                 android.R.id.content, mGPSFragment).commit();
         mGPSFragment.activate(this);
 
-        MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
-        mmf.setLocationSource(mGPSFragment);
 
         MyApplication ma = (MyApplication) getActivity().getApplication();
-        EclipseTimeCalculator  eclipseTimeCalculator = ma.getEclipseTimeCalculator();
-        mEclipseTimeManager = new EclipseTimeLocationManager(eclipseTimeCalculator);
+        EclipseTimeCalculator eclipseTimeCalculator = ma.getEclipseTimeCalculator();
+
+
+        mEclipseTimeManager = new EclipseTimeLocationManager(eclipseTimeCalculator,getActivity().getApplicationContext());
         mEclipseTimeManager.setAsLocationListener(mGPSFragment);
+
+//        MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
+        //mEclipseTimeManager.setPlannedLatLngProvider(mmf);
     }
 
     @Override
@@ -126,7 +136,7 @@ public class EclipseInfoFragment extends Fragment
     public void onLocationChanged(Location location) {
         mLocation = location;
         MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
-        mmf.setLocation(mLocation);
+        mmf.setCurrentLatLng(new LatLng(mLocation.getLatitude(),mLocation.getLongitude()));
         CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         double distance = EclipsePath.distanceToPathOfTotality(location);
         cdf.setDistanceToPathOfTotality(distance);
@@ -138,21 +148,57 @@ public class EclipseInfoFragment extends Fragment
         if (mEclipseTimeManager == null) {
             return;
         }
-        Long millsUntilC2 = mEclipseTimeManager.getTimeToEclipse(EclipseTimingMap.Event.CONTACT2);
 
-        if (millsUntilC2 == null) {
-            return;
+        Long timeRemaining = mEclipseTimeManager.getTimeToEclipse(EclipseTimingMap.Event.CONTACT2);
+        int item = mViewPager.getCurrentItem();
+        if (item == 1) {
+
+            boolean changed = false;
+            if (millsToC2 == null) {
+                if (timeRemaining != null) {
+                    changed = true;
+                }
+            } else {
+                changed = !millsToC2.equals(timeRemaining);
+            }
+            if (changed) {
+                millsToC2 = timeRemaining;
+                mCountdownFragment.setMillsRemaining(millsToC2);
+            }
         }
+        if (item == 2) {
+            Long c2Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
+            boolean c2Changed = false;
+            if (c2ContactTime == null) {
+                if (c2Time != null) {
+                    c2Changed = true;
+                }
+            } else {
+                c2Changed = !c2ContactTime.equals(c2Time);
+            }
+            if (c2Changed) {
+                c2ContactTime = c2Time;
+                mPhasesFragment.setC2Mills(c2ContactTime);
+                Log.i("EclipseInfoFrag","c2 changed");
+            }
 
 
-        CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
-        cdf.setMillsRemaining(millsUntilC2);
+            Long c3Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT3);
+            boolean c3Changed = false;
+            if (c3ContactTime == null) {
+                if (c3Time != null) {
+                    c3Changed = true;
+                }
+            } else {
+                c3Changed = !c3ContactTime.equals(c3Time);
+            }
+            if (c3Changed) {
+                c3ContactTime = c3Time;
+                mPhasesFragment.setC3Mills(c3ContactTime);
+                Log.i("EclipseInfoFrag","c3 changed");
+            }
 
-        PhasesFragment pf = (PhasesFragment) mSectionsPagerAdapter.getItem(2);
-        Long c2Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
-        Long c3Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT3);
-        pf.setContactTime(EclipseTimingMap.Event.CONTACT2,c2Time);
-        pf.setContactTime(EclipseTimingMap.Event.CONTACT3,c3Time);
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
@@ -177,7 +223,6 @@ public class EclipseInfoFragment extends Fragment
             } else {
                 return mPhasesFragment;
             }
-
         }
 
         @Override
