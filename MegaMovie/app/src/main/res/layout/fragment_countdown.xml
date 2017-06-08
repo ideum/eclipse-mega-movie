@@ -2,138 +2,182 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#ECEFF1"
+    android:orientation="vertical"
     tools:context="ideum.com.megamovie.Java.NewUI.CountdownFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:elevation="2dp"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:paddingTop="35dp"
-        android:paddingBottom="35dp"
         android:layout_margin=".5dp"
         android:background="#fff"
-        >
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        android:paddingBottom="35dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="35dp">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="6dp"
+                android:background="@color/colorPrimary">
+
+                <View
+                    android:layout_width="72dp"
+                    android:layout_height="39dp"
+                    android:background="#33ffffff" />
+
+                <TextView
+                    android:id="@+id/days_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="90"
+                    android:textColor="#fff"
+                    android:textSize="48dp" />
+            </FrameLayout>
+
             <TextView
-                android:id="@+id/days_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:text="90"
-                android:textColor="#000"
-                android:textSize="48dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content"
                 android:text="DAYS"
-                android:textColor="#000"
+                android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
                 android:textStyle="bold" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_gravity="center_horizontal">
-            <TextView
+            android:orientation="vertical">
+
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:id="@+id/hours_text_view"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:text="12"
-                android:textColor="#000"
-                android:textSize="48dp" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="6dp"
+                android:background="@color/colorPrimary">
+
+                <View
+                    android:layout_width="72dp"
+                    android:layout_height="39dp"
+                    android:background="#33ffffff" />
+
+                <TextView
+                    android:id="@+id/hours_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="90"
+                    android:textColor="#fff"
+                    android:textSize="48dp" />
+            </FrameLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="HOURS"
-                android:textColor="#000"
+                android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
                 android:textStyle="bold" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_gravity="end">
-            <TextView
-                android:id="@+id/minutes_text_view"
+            android:orientation="vertical">
+
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:text="19"
-                android:textColor="#000"
-                android:textSize="48dp" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="6dp"
+                android:background="@color/colorPrimary">
+
+                <View
+                    android:layout_width="72dp"
+                    android:layout_height="39dp"
+                    android:background="#33ffffff" />
+
+                <TextView
+                    android:id="@+id/minutes_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="90"
+                    android:textColor="#fff"
+                    android:textSize="48dp" />
+            </FrameLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="MINUTES"
+                android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
-                android:textColor="#000"
                 android:textStyle="bold" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_gravity="end">
-            <TextView
-                android:id="@+id/seconds_text_view"
+            android:orientation="vertical">
+
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dp"
-                android:text="19"
-                android:textColor="#000"
-                android:textSize="48dp" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="6dp"
+                android:background="@color/colorPrimary">
+
+                <View
+                    android:layout_width="72dp"
+                    android:layout_height="39dp"
+                    android:background="#33ffffff" />
+
+                <TextView
+                    android:id="@+id/seconds_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="90"
+                    android:textColor="#fff"
+                    android:textSize="48dp" />
+            </FrameLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="SECONDS"
+                android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
-                android:textColor="#000"
                 android:textStyle="bold" />
         </LinearLayout>
 
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/distance_to_totality"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin=".5dp"
-        android:background="#fff"
-        android:textSize="14dp"
-        android:fontFamily="Roboto"
-        android:textColor="#000"
-        android:text="You are 326 miles southwest of the Path of Totality.\n\nPrasesent commodo cursus magna, vel scelerisque nisl consectetur et."
-        android:paddingLeft="32dp"
-        android:paddingRight="47dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp"
-        android:elevation="2dp">
-
-
-    </TextView>
-
 </LinearLayout>
