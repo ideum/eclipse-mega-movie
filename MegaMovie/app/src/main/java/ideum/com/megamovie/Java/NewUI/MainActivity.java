@@ -92,8 +92,10 @@ public class MainActivity extends AppCompatActivity
 
 
     public void onAssistantButtonPressed(View view) {
-        getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
-        loadFragment(AssistantFragment.class);
+
+        loadFragment(OrientationIntroFragment.class);
+//        Intent intent = new Intent(this,OrientationIntroFragment.class);
+//        startActivity(intent);
     }
 
     @Override
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity
            loadFragment(EclipseInfoFragment.class);
         } else if (id == R.id.assistant) {
             getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
-            loadFragment(AssistantFragment.class);
+            loadFragment(OrientationIntroFragment.class);
         } else if (id == R.id.about_eclipse_app) {
             getSupportActionBar().setTitle(getString(R.string.about_section_title));
             loadAboutActivity();

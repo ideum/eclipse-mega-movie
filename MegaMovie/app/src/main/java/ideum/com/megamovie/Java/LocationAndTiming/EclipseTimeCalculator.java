@@ -7,6 +7,9 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import ideum.com.megamovie.R;
 
@@ -20,62 +23,114 @@ public class EclipseTimeCalculator {
     private LatLng mostRecentLatLng;
     private boolean refreshPending = false;
 
-    private final EclipseTimingMap.EclipseTimingFile[] c2_timing_files = {
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t125119_4346, 43.0, 46.0, -125.0, -119.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t119114_4346, 43.0, 46.0, -119.0, -114.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t114109_4245, 42.0, 45.0, -114.0, -109.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t109105_4144, 41.0, 44.0, -109.0, -105.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t105101_4044, 40.0, 44.0, -105.0, -101.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t101097_3943, 39.0, 43.0, -101.0, -97.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t097093_3842, 38.0, 42.0, -97.0, -93.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t093090_3640, 36.0, 40.0, -93.0, -90.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c2_t090085_3539, 35.0, 39.0, -90.0, -85.0)
-    };
-
-
-    private final EclipseTimingMap.EclipseTimingFile[] c3_timing_files = {
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t125119_4346, 43.0, 46.0, -125.0, -119.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t119114_4346, 43.0, 46.0, -119.0, -114.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t114109_4245, 42.0, 45.0, -114.0, -109.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t109105_4144, 41.0, 44.0, -109.0, -105.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t105101_4044, 40.0, 44.0, -105.0, -101.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t101097_3943, 39.0, 43.0, -101.0, -97.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t097093_3842, 38.0, 42.0, -97.0, -93.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t093090_3640, 36.0, 40.0, -93.0, -90.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t090087_3539, 35.0, 39.0, -90.0, -87.0),
-            new EclipseTimingMap.EclipseTimingFile(R.raw.c3_t087084_3438, 34.0, 38.0, -87.0, -84.0)
-    };
+    private List<EclipseTimingMap.EclipseTimingFile> c1_timing_files = new ArrayList<>();
+    private List<EclipseTimingMap.EclipseTimingFile> c2_timing_files = new ArrayList<>();
+    private List<EclipseTimingMap.EclipseTimingFile> cm_timing_files = new ArrayList<>();
+    private List<EclipseTimingMap.EclipseTimingFile> c3_timing_files = new ArrayList<>();
+    private List<EclipseTimingMap.EclipseTimingFile> c4_timing_files = new ArrayList<>();
 
 
     public EclipseTimeCalculator(Context context) {
         this.context = context;
+        Field[] fields = R.raw.class.getFields();
+        for (int i = 0; i < fields.length; i++) {
+            String name = fields[i].getName();
+            String[] parts = name.split("_");
+
+            String contact = parts[0];
+            if (!contact.equals("c1")
+                    && !contact.equals("c2")
+                    && !contact.equals("cm")
+                    && !contact.equals("c3")
+                    && !contact.equals("c4")) {
+                continue;
+            }
+
+            int fileId = 0;
+            try {
+                fileId = fields[i].getInt(fields[i]);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            Double startingLng = -Double.valueOf(parts[1]);
+            Double endingLng = -Double.valueOf(parts[2]);
+            Double startingLat = Double.valueOf(parts[3]);
+            Double endingLat = Double.valueOf(parts[4]);
+            EclipseTimingMap.EclipseTimingFile etf = new EclipseTimingMap.EclipseTimingFile(fileId, startingLat, endingLat, startingLng, endingLng);
+
+
+            if (contact.equals("c1")) {
+                c1_timing_files.add(etf);
+            }
+            if (contact.equals("c2")) {
+                c2_timing_files.add(etf);
+            }
+            if (contact.equals("cm")) {
+                cm_timing_files.add(etf);
+            }
+            if (contact.equals("c3")) {
+                c3_timing_files.add(etf);
+            }
+            if (contact.equals("c4")) {
+                c4_timing_files.add(etf);
+            }
+        }
+
+        Log.i("TAG", String.valueOf(c1_timing_files.size()));
     }
+
 
     private EclipseTimingMap.EclipseTimingFile getFileForLocation(EclipseTimingMap.Event event, LatLng location) {
         EclipseTimingMap.EclipseTimingFile file = null;
 
         switch (event) {
-            case CONTACT2:
-            for (EclipseTimingMap.EclipseTimingFile f : c2_timing_files) {
-                if (f.contains(location)) {
-                    file = f;
+            case CONTACT1:
+                for (EclipseTimingMap.EclipseTimingFile f : c1_timing_files) {
+                    if (f.contains(location)) {
+                        file = f;
+                    }
                 }
-            } break;
+                break;
+
+            case CONTACT2:
+                for (EclipseTimingMap.EclipseTimingFile f : c2_timing_files) {
+                    if (f.contains(location)) {
+                        file = f;
+                    }
+                }
+                break;
+
+            case MIDDLE:
+                for (EclipseTimingMap.EclipseTimingFile f : cm_timing_files) {
+                    if (f.contains(location)) {
+                        file = f;
+                    }
+                }
+                break;
             case CONTACT3:
                 for (EclipseTimingMap.EclipseTimingFile f : c3_timing_files) {
                     if (f.contains(location)) {
                         file = f;
                     }
-                } break;
+                }
+                break;
+            case CONTACT4:
+                for (EclipseTimingMap.EclipseTimingFile f : c4_timing_files) {
+                    if (f.contains(location)) {
+                        file = f;
+                    }
+                }
+                break;
         }
         return file;
     }
 
-    public Long getEclipseTime(EclipseTimingMap.Event event,LatLng latLng) {
+    public Long getEclipseTime(EclipseTimingMap.Event event, LatLng latLng) {
         setMostRecentLatLng(latLng);
         Long result = null;
         if (mEclipseTimingMap != null) {
-            result = mEclipseTimingMap.getEclipseTime(event,latLng);
+            result = mEclipseTimingMap.getEclipseTime(event, latLng);
         }
         return result;
     }
@@ -87,7 +142,6 @@ public class EclipseTimeCalculator {
         mostRecentLatLng = latLng;
 
         if (!currentMapContainsLocation(mostRecentLatLng)) {
-            Log.i("TAG","refreshing map");
             try {
                 refreshTimingMap();
             } catch (IOException e) {
@@ -104,11 +158,14 @@ public class EclipseTimeCalculator {
     }
 
     private void refreshTimingMapWithLatLng(LatLng latLng) throws IOException {
+        EclipseTimingMap.EclipseTimingFile c1File = getFileForLocation(EclipseTimingMap.Event.CONTACT1, latLng);
         EclipseTimingMap.EclipseTimingFile c2File = getFileForLocation(EclipseTimingMap.Event.CONTACT2, latLng);
-        EclipseTimingMap.EclipseTimingFile c3File =  getFileForLocation(EclipseTimingMap.Event.CONTACT3, latLng);
+        EclipseTimingMap.EclipseTimingFile cmFile = getFileForLocation(EclipseTimingMap.Event.MIDDLE, latLng);
+        EclipseTimingMap.EclipseTimingFile c3File = getFileForLocation(EclipseTimingMap.Event.CONTACT3, latLng);
+        EclipseTimingMap.EclipseTimingFile c4File = getFileForLocation(EclipseTimingMap.Event.CONTACT4, latLng);
         if (c2File != null && c3File != null) {
             refreshPending = true;
-            new RefreshTimingMapTask().execute(context, c2File, c3File);
+            new RefreshTimingMapTask().execute(context, c1File, c2File, cmFile, c3File, c4File);
         }
     }
 
@@ -121,13 +178,16 @@ public class EclipseTimeCalculator {
         @Override
         protected EclipseTimingMap doInBackground(Object... params) {
             Context context = (Context) params[0];
-            EclipseTimingMap.EclipseTimingFile c2_etf = (EclipseTimingMap.EclipseTimingFile) params[1];
-            EclipseTimingMap.EclipseTimingFile c3_etf = (EclipseTimingMap.EclipseTimingFile) params[2];
+            EclipseTimingMap.EclipseTimingFile c1_etf = (EclipseTimingMap.EclipseTimingFile) params[1];
+            EclipseTimingMap.EclipseTimingFile c2_etf = (EclipseTimingMap.EclipseTimingFile) params[2];
+            EclipseTimingMap.EclipseTimingFile cm_etf = (EclipseTimingMap.EclipseTimingFile) params[3];
+            EclipseTimingMap.EclipseTimingFile c3_etf = (EclipseTimingMap.EclipseTimingFile) params[4];
+            EclipseTimingMap.EclipseTimingFile c4_etf = (EclipseTimingMap.EclipseTimingFile) params[5];
 
             EclipseTimingMap etm = null;
 
             try {
-                etm = new EclipseTimingMap(context, c2_etf, c3_etf);
+                etm = new EclipseTimingMap(context,c1_etf, c2_etf, cm_etf, c3_etf, c4_etf);
             } catch (IOException e) {
                 e.printStackTrace();
             }

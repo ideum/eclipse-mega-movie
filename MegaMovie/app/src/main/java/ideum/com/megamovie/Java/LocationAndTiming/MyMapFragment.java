@@ -28,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -38,7 +39,8 @@ import ideum.com.megamovie.R;
 public class MyMapFragment extends Fragment
         implements OnMapReadyCallback,
         View.OnClickListener,
-        PlaceSelectionListener {
+        PlaceSelectionListener,
+        GoogleMap.OnMarkerClickListener{
 
     private GoogleMap mMap;
     private LatLng currentLatLng;
@@ -106,7 +108,7 @@ public class MyMapFragment extends Fragment
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setOnMarkerClickListener(this);
         drawEclipsePath();
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(initialPoint));
@@ -140,6 +142,7 @@ public class MyMapFragment extends Fragment
         plannedLatLng = latLng;
         setPlannedLocationPreferenceValue(latLng);
         refreshMarkersAndOverlay();
+        drawPathToPlannedLocation();
     }
 
     public void moveToCurrentLocation() {
@@ -154,7 +157,9 @@ public class MyMapFragment extends Fragment
             return;
         }
 
-        mMap.addMarker(new MarkerOptions().position(currentLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
+
+
+        mMap.addMarker(new MarkerOptions().position(currentLatLng).anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
         //drawShortestPathToTotality(currentLatLng);
     }
 
@@ -191,12 +196,14 @@ public class MyMapFragment extends Fragment
     public void onClick(View v) {
         moveToCurrentLocation();
         refreshMarkersAndOverlay();
-        drawShortestPathToTotality(currentLatLng);
+        setPlannedLocation(EclipsePath.closestPointOnPathOfTotality(currentLatLng));
+//        drawShortestPathToTotality(currentLatLng);
+
     }
 
     @Override
     public void onPlaceSelected(Place place) {
-        setPlannedLocationPreferenceValue(place.getLatLng());
+//        setPlannedLocationPreferenceValue(place.getLatLng());
         setPlannedLocation(place.getLatLng());
     }
 
@@ -221,6 +228,21 @@ public class MyMapFragment extends Fragment
         mMap.addPolygon(polygonOptions);
     }
 
+    private void drawPathToPlannedLocation() {
+        if (currentLatLng == null || plannedLatLng == null) {
+            return;
+        }
+
+        PolylineOptions plo = new PolylineOptions();
+        plo.add(currentLatLng);
+        plo.add(plannedLatLng);
+        plo.geodesic(true);
+        plo.width(5);
+        plo.color(getResources().getColor(R.color.intro_color_3));
+        mMap.addPolyline(plo);
+
+    }
+
 
     private void drawShortestPathToTotality(LatLng point) {
         LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(point);
@@ -235,4 +257,9 @@ public class MyMapFragment extends Fragment
     }
 
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+       // marker.remove();
+        return true;
+    }
 }

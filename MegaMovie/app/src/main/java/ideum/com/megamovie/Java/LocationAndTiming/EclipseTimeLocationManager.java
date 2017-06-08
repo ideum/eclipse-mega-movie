@@ -82,6 +82,7 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         if (currentLatLng == null) {
             return null;
         }
-        return EclipsePath.closestPointOnPathOfTotality(currentLatLng);
+
+        return  EclipsePath.closestPointOnPathOfTotality(currentLatLng);
     }
 }

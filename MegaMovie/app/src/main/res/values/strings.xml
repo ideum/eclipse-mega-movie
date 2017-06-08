@@ -68,6 +68,11 @@
     </string>
 
     <!--Orientation Copy-->
+    <string name="orientation_intro">
+        The Orientation mode helps you determine how best to use the app.
+        \n\nAnswer a few questions on the next screen to optimize your eclipse experience.
+    </string>
+
     <string name="equipment_info_phone">
         The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
         It tells you when and where to see the eclipse, how to aim your camera when the eclipse is about to start, and automatically controls your camera’s settings

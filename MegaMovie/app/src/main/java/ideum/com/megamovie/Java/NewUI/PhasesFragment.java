@@ -28,12 +28,15 @@ public class PhasesFragment extends Fragment {
 
     private TextView c1TextView;
     private TextView c2TextView;
+    private TextView cmTextView;
     private TextView c3TextView;
     private TextView c4TextView;
 
+    private Long c1Mills;
     private Long c2Mills;
+    private Long cmMills;
     private Long c3Mills;
-
+    private Long c4Mills;
 
     public PhasesFragment() {
         // Required empty public constructor
@@ -53,6 +56,7 @@ public class PhasesFragment extends Fragment {
 
         c1TextView = (TextView) rootView.findViewById(R.id.c1_text_view);
         c2TextView = (TextView) rootView.findViewById(R.id.c2_text_view);
+        cmTextView = (TextView) rootView.findViewById(R.id.cm_text_view);
         c3TextView = (TextView) rootView.findViewById(R.id.c3_text_view);
         c4TextView = (TextView) rootView.findViewById(R.id.c4_text_view);
 
@@ -112,18 +116,38 @@ public class PhasesFragment extends Fragment {
         if (!isAdded()) {
             return;
         }
-
-        Log.i("Phases","ui updated");
+        String s1 = "First Contact: " + timeOfDayString(c1Mills);
         String s2 = "Second Contact: " + timeOfDayString(c2Mills);
+        String sm = "Mid Eclipse: " + timeOfDayString(cmMills);
+        String s3 = "Third Contact: " + timeOfDayString(c3Mills);
+        String s4 = "Fourth Contact: " + timeOfDayString(c4Mills);
+
+
+        if (c1TextView != null) {
+            c1TextView.setText(s1);
+        }
+
+
         if (c2TextView != null) {
             c2TextView.setText(s2);
         }
 
+        if (cmTextView != null) {
+            cmTextView.setText(sm);
+        }
 
-        String s3 = "Third Contact: " + timeOfDayString(c3Mills);
         if (c3TextView != null) {
             c3TextView.setText(s3);
         }
+
+        if (c4TextView != null) {
+            c4TextView.setText(s4);
+        }
+    }
+
+    public void setC1Mills(Long mills) {
+        c1Mills = mills;
+        updateUi();
     }
 
     public void setC2Mills(Long mills) {
@@ -132,8 +156,18 @@ public class PhasesFragment extends Fragment {
         updateUi();
     }
 
+    public void setCmMills(Long mills) {
+        cmMills = mills;
+        updateUi();
+    }
+
     public void setC3Mills(Long mills) {
         c3Mills = mills;
+        updateUi();
+    }
+
+    public void setC4Mills(Long mills) {
+        c4Mills = mills;
         updateUi();
     }
 
@@ -146,7 +180,7 @@ public class PhasesFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+       // formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         return formatter.format(calendar.getTime());
     }

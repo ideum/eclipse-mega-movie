@@ -158,6 +158,59 @@
                 </LinearLayout>
 
             </FrameLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/cm" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="#44222222"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/cm_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="22dp"
+                        android:text="Mid Eclipse: "
+                        android:textColor="#fff"
+                        android:textSize="24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="27dp"
+                        android:layout_marginLeft="16dp"
+                        android:text="The middle of the eclipse"
+                        android:textColor="#fff"
+                        android:textSize="14dp" />
+
+                    <Button
+                        android:id="@+id/learn_more_middle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="18dp"
+                        android:layout_marginLeft="16dp"
+                        android:text="LEARN MORE"
+                        android:textColor="#fff"
+                        android:background="#00000000"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
 
 
             <FrameLayout

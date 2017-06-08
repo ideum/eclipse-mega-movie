@@ -31,74 +31,56 @@ public class EclipseTimingMap {
     private final static int BASETIME_DAY = 21;
     private final static int BASETIME_HOUR = 0;
     private final static int BASETIME_MINUTE = 0;
+
+    private EclipseTimingFile c1EclipseTimingFile;
     private EclipseTimingFile c2EclipseTimingFile;
+    private EclipseTimingFile cmEclipseTimingFile;
     private EclipseTimingFile c3EclipseTimingFile;
+    private EclipseTimingFile c4EclipseTimingFile;
 
-    public static class EclipseTimingFile {
-        public int fileId;
-        public double startingLat;
-        public double endingLat;
-        public double startingLng;
-        public double endingLng;
+    public Map<MyKey, Double> eclipseTimeMapC1;
+    public Map<MyKey, Double> eclipseTimeMapC2;
+    public Map<MyKey, Double> eclipseTimeMapCm;
+    public Map<MyKey, Double> eclipseTimeMapC3;
+    public Map<MyKey, Double> eclipseTimeMapC4;
 
-        public EclipseTimingFile(int fileID, double startingLat, double endingLat, double startingLng, double endingLng) {
-            this.fileId = fileID;
-            this.startingLat = startingLat;
-            this.endingLat = endingLat;
-            this.startingLng = startingLng;
-            this.endingLng = endingLng;
-        }
+    private Context context;
 
-        public EclipseTimingFile(int fileID, int startingLat, int endingLat, int startingLng, int endingLng) {
-            this.fileId = fileID;
-            this.startingLat = (double) startingLat;
-            this.endingLat = (double) endingLat;
-            this.startingLng = (double) startingLng;
-            this.endingLng = (double) endingLng;
-        }
+    public EclipseTimingMap(Context context,
+                            EclipseTimingFile c1File,
+                            EclipseTimingFile c2File,
+                            EclipseTimingFile cmFile,
+                            EclipseTimingFile c3File,
+                            EclipseTimingFile c4File) throws IOException {
+        this.context = context;
 
-        public boolean contains(LatLng location) {
-            double lat = location.latitude;
-            double lng = location.longitude;
-            return lat >= startingLat
-                    && lat <= endingLat
-                    && lng >= startingLng
-                    && lng <= endingLng;
+        c1EclipseTimingFile = c1File;
+        c2EclipseTimingFile = c2File;
+        cmEclipseTimingFile = cmFile;
+        c3EclipseTimingFile = c3File;
+        c4EclipseTimingFile = c4File;
 
-        }
+        eclipseTimeMapC1 = parseTextFile(context, c1EclipseTimingFile);
+        eclipseTimeMapC2 = parseTextFile(context, c2EclipseTimingFile);
+        eclipseTimeMapCm = parseTextFile(context, cmEclipseTimingFile);
+        eclipseTimeMapC3 = parseTextFile(context, c3EclipseTimingFile);
+        eclipseTimeMapC4 = parseTextFile(context, c4EclipseTimingFile);
     }
 
 
     public boolean containsLocation(LatLng location) {
-        if (c2EclipseTimingFile == null || c3EclipseTimingFile == null) {
+        if (c1EclipseTimingFile == null
+                || c2EclipseTimingFile == null
+                || cmEclipseTimingFile == null
+                || c3EclipseTimingFile == null
+                || c4EclipseTimingFile == null) {
             return false;
         }
-        return c2EclipseTimingFile.contains(location) && c3EclipseTimingFile.contains(location);
-    }
-
-    private Context context;
-
-
-    public Map<MyKey, Double> eclipseTimeMapC2;
-    public Map<MyKey, Double> eclipseTimeMapC3;
-
-
-    public EclipseTimingMap(Context context, EclipseTimingFile c2EclipseTimingFile,EclipseTimingFile c3EclipseTimingFile) throws IOException {
-        this.context = context;
-
-        this.c2EclipseTimingFile = c2EclipseTimingFile;
-        this.c3EclipseTimingFile = c3EclipseTimingFile;
-        eclipseTimeMapC2 = parseTextFile(context,c2EclipseTimingFile);
-        eclipseTimeMapC3 = parseTextFile(context, c3EclipseTimingFile);
-    }
-
-    public enum Event {
-        CONTACT2, CONTACT3
-    }
-
-    public Long getEclipseTime(EclipseTimingMap.Event event, Location location) {
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        return getEclipseTime(event, latLng);
+        return c1EclipseTimingFile.contains(location)
+                && c2EclipseTimingFile.contains(location)
+                && cmEclipseTimingFile.contains(location)
+                && c3EclipseTimingFile.contains(location)
+                && c4EclipseTimingFile.contains(location);
     }
 
     public Long getEclipseTime(EclipseTimingMap.Event event, LatLng location) {
@@ -119,12 +101,26 @@ public class EclipseTimingMap {
         MyKey key = new MyKey(x, y);
         Double tenthsOfSecondsAfterBasetime = 0.0;
         switch (event) {
+            case CONTACT1:
+                tenthsOfSecondsAfterBasetime = eclipseTimeMapC1.get(key);
+                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
+                    return null;
+                }
+                break;
             case CONTACT2:
                 tenthsOfSecondsAfterBasetime = eclipseTimeMapC2.get(key);
                 if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
                     return null;
                 }
                 break;
+
+            case MIDDLE:
+                tenthsOfSecondsAfterBasetime = eclipseTimeMapCm.get(key);
+                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
+                    return null;
+                }
+                break;
+
             case CONTACT3:
                 tenthsOfSecondsAfterBasetime = eclipseTimeMapC3.get(key);
                 if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
@@ -133,9 +129,16 @@ public class EclipseTimingMap {
                 break;
             default:
                 return null;
+
+            case CONTACT4:
+                tenthsOfSecondsAfterBasetime = eclipseTimeMapC4.get(key);
+                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
+                    return null;
+                }
+                break;
         }
 
-        long millsAfterBaseTime = 1000 * Math.round(tenthsOfSecondsAfterBasetime);
+        long millsAfterBaseTime = 100 * Math.round(tenthsOfSecondsAfterBasetime);
         return getBaseTime() + millsAfterBaseTime;
     }
 
@@ -231,27 +234,6 @@ public class EclipseTimingMap {
     }
 
 
-//    private Map<MyKey, Double> parseTextFile(Context context, int resource_file_id) throws IOException {
-//        InputStream inputStream = context.getResources().openRawResource(resource_file_id);
-//        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-//        String line = br.readLine();
-//        int lineLength = line.length();
-//        int x = 0;
-//        Map<MyKey, Double> map = new HashMap<>();
-//
-//        while (line != null && line.length() == lineLength) {
-//            ArrayList<Double> times = parseLine(line);
-//            int y = 0;
-//            for (Double t : times) {
-//                map.put(new MyKey(x, y), t);
-//                y++;
-//            }
-//            x++;
-//            line = br.readLine();
-//        }
-//        return map;
-//    }
-
     private ArrayList<Double> parseLine(String line) {
         String[] separated = line.split(" ");
         ArrayList<Double> result = new ArrayList<>();
@@ -261,6 +243,45 @@ public class EclipseTimingMap {
             }
         }
         return result;
+    }
+
+
+    public enum Event {
+        CONTACT1, CONTACT2, MIDDLE, CONTACT3, CONTACT4
+    }
+
+    public static class EclipseTimingFile {
+        public int fileId;
+        public double startingLat;
+        public double endingLat;
+        public double startingLng;
+        public double endingLng;
+
+        public EclipseTimingFile(int fileID, double startingLat, double endingLat, double startingLng, double endingLng) {
+            this.fileId = fileID;
+            this.startingLat = startingLat;
+            this.endingLat = endingLat;
+            this.startingLng = startingLng;
+            this.endingLng = endingLng;
+        }
+
+        public EclipseTimingFile(int fileID, int startingLat, int endingLat, int startingLng, int endingLng) {
+            this.fileId = fileID;
+            this.startingLat = (double) startingLat;
+            this.endingLat = (double) endingLat;
+            this.startingLng = (double) startingLng;
+            this.endingLng = (double) endingLng;
+        }
+
+        public boolean contains(LatLng location) {
+            double lat = location.latitude;
+            double lng = location.longitude;
+            return lat >= startingLat
+                    && lat <= endingLat
+                    && lng >= startingLng
+                    && lng <= endingLng;
+
+        }
     }
 
 }

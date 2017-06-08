@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="ideum.com.megamovie.Java.NewUI.OrientationIntroFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="202dp"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+
+                android:layout_gravity="bottom"
+                android:background="#33000000">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="32dp"
+                    android:text="Eclipse Orientation"
+                    android:textColor="#ffffff"
+                    android:textSize="24dp" />
+            </FrameLayout>
+        </FrameLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginTop="22dp"
+        android:text="@string/orientation_intro"
+        android:textColor="#000" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#EEEEEE"
+        android:orientation="horizontal">
+
+        <!--<Button-->
+            <!--android:id="@+id/back_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="left"-->
+            <!--android:background="#00000000"-->
+            <!--android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"-->
+            <!--android:elevation="0dp"-->
+            <!--android:fontFamily="Roboto"-->
+            <!--android:text="BACK"-->
+            <!--android:textColor="#6E6E6E"-->
+            <!--android:textSize="14dp" />-->
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="#00000000"
+            android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
+            android:elevation="0dp"
+            android:fontFamily="Roboto"
+            android:text="NEXT"
+            android:textColor="#6E6E6E"
+            android:textSize="14dp" />
+
+    </FrameLayout>
+
+</FrameLayout>

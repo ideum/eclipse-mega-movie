@@ -49,6 +49,7 @@ public class CountdownFragment extends Fragment {
         distanceToTotalityTextView = (TextView) rootView.findViewById(R.id.distance_to_totality);
 
         updateDistanceToTotalityTextView(3);
+        setCountdownViews();
 
         return rootView;
     }

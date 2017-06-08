@@ -79,7 +79,7 @@ public class AssistantFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
-              //  mainActivity.loadFragment(AssistantFragment.class);
+                mainActivity.loadFragment(OrientationIntroFragment.class);
             }
         });
 
@@ -88,6 +88,7 @@ public class AssistantFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
                 mainActivity.loadFragment(EclipseInfoFragment.class);
             }
         });

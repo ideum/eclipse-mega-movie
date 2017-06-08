@@ -1,6 +1,7 @@
 package ideum.com.megamovie.Java.NewUI;
 
 import android.Manifest;
+import android.content.Context;
 import android.location.Location;
 
 import android.support.design.widget.FloatingActionButton;
@@ -55,8 +56,11 @@ public class EclipseInfoFragment extends Fragment
     private CountdownFragment mCountdownFragment;
     private PhasesFragment mPhasesFragment;
 
+    private Long c1ContactTime;
     private Long c2ContactTime;
+    private Long cmContactTime;
     private Long c3ContactTime;
+    private Long c4ContactTime;
     private Long millsToC2;
 
 
@@ -97,6 +101,13 @@ public class EclipseInfoFragment extends Fragment
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
     }
 
     @Override
@@ -167,7 +178,26 @@ public class EclipseInfoFragment extends Fragment
             }
         }
         if (item == 2) {
+
+            // Todo: refactor this code
+            Long c1Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT1);
+
+            boolean c1Changed = false;
+            if (c1ContactTime == null) {
+                if (c1Time != null) {
+                    c1Changed = true;
+                }
+            } else {
+                c1Changed = !c1ContactTime.equals(c1Time);
+            }
+            if (c1Changed) {
+                c1ContactTime = c1Time;
+                mPhasesFragment.setC1Mills(c1ContactTime);
+
+            }
+
             Long c2Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
+
             boolean c2Changed = false;
             if (c2ContactTime == null) {
                 if (c2Time != null) {
@@ -179,7 +209,21 @@ public class EclipseInfoFragment extends Fragment
             if (c2Changed) {
                 c2ContactTime = c2Time;
                 mPhasesFragment.setC2Mills(c2ContactTime);
-                Log.i("EclipseInfoFrag","c2 changed");
+            }
+
+            Long cmTime = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.MIDDLE);
+
+            boolean cmChanged = false;
+            if (cmContactTime == null) {
+                if (cmTime != null) {
+                    cmChanged = true;
+                }
+            } else {
+                cmChanged = !cmContactTime.equals(cmTime);
+            }
+            if (cmChanged) {
+                cmContactTime = cmTime;
+                mPhasesFragment.setCmMills(cmContactTime);
             }
 
 
@@ -198,6 +242,20 @@ public class EclipseInfoFragment extends Fragment
                 Log.i("EclipseInfoFrag","c3 changed");
             }
 
+            Long c4Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT4);
+            boolean c4Changed = false;
+            if (c4ContactTime == null) {
+                if (c4Time != null) {
+                    c4Changed = true;
+                }
+            } else {
+                c4Changed = !c4ContactTime.equals(c4Time);
+            }
+            if (c4Changed) {
+                c4ContactTime = c4Time;
+                mPhasesFragment.setC4Mills(c4ContactTime);
+
+            }
         }
     }
 
