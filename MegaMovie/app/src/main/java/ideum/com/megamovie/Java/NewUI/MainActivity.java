@@ -25,8 +25,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+
 
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         CalibrationFragment.OnFragmentInteractionListener,
         MyTimer.MyTimerListener{
 
-    TextView comingSoonView;
+   // TextView comingSoonView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +78,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        comingSoonView = (TextView)
-                MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.full_moon_test));
-        initializeComingSoonViews();
+//        comingSoonView = (TextView)
+//                MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.full_moon_test));
+//        initializeComingSoonViews();
 
 
         loadFragment(EclipseInfoFragment.class);
@@ -90,15 +94,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void initializeComingSoonViews() {
-        comingSoonView.setGravity(Gravity.CENTER_VERTICAL);
-        comingSoonView.setTextColor(Color.WHITE);
-        comingSoonView.setTextSize(10);
-        comingSoonView.setHeight(12);
-        comingSoonView.setPadding(4,0,0,4);
-        comingSoonView.setBackgroundColor(getResources().getColor(R.color.coming_soon_background));
-        comingSoonView.setText("COMING SOON!");
-    }
+//    private void initializeComingSoonViews() {
+//        comingSoonView.setGravity(Gravity.CENTER_VERTICAL);
+//        comingSoonView.setTextColor(Color.WHITE);
+//        comingSoonView.setTextSize(8);
+//        comingSoonView.setText("COMING SOON!");
+//        comingSoonView.setBackground(getDrawable(R.drawable.rounded_cornder));
+//
+//    }
+
+
 
     public void onAssistantButtonPressed(View view) {
 
