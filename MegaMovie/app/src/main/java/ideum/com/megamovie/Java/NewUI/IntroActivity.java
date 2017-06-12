@@ -243,9 +243,9 @@ public class IntroActivity extends AppCompatActivity
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.intro_image);
 
-            int[] images = {res.getIdentifier("megamovie_logo", "drawable", getActivity().getPackageName()),
+            int[] images = {res.getIdentifier("megamovie_logo_padding", "drawable", getActivity().getPackageName()),
                     res.getIdentifier("megamovie_intro_one", "drawable", getActivity().getPackageName()),
-                    res.getIdentifier("megamovie_intro_two", "drawable", getActivity().getPackageName()),
+                    res.getIdentifier("megamovie_intro_two_padding", "drawable", getActivity().getPackageName()),
                     0};
             imageView.setImageResource(images[sectionNumber]);
 

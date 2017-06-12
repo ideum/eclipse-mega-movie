@@ -14,8 +14,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 
@@ -34,6 +41,9 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ideum.com.megamovie.R;
 
 public class MyMapFragment extends Fragment
@@ -45,6 +55,7 @@ public class MyMapFragment extends Fragment
     private GoogleMap mMap;
     private LatLng currentLatLng;
     private LatLng plannedLatLng;
+    boolean usingClosestLatLng = true;
 
     // Parameters for initial camera position and zoom level
     private LatLng initialPoint = new LatLng(39.8, -102);
@@ -118,13 +129,48 @@ public class MyMapFragment extends Fragment
 
             @Override
             public void onMapClick(LatLng latLng) {
+                if (EclipsePath.distanceToPathOfTotality(latLng) <=0) {
+                    showLocationInPathSelectedToast();
+                }
                 setPlannedLocation(latLng);
             }
         });
 
+        LatLng savedLatLng = getPlannedLocationFromPreferences();
         setPlannedLocation(getPlannedLocationFromPreferences());
 
 
+    }
+
+    private void setTimeZonePreferenceString(LatLng latLng) {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String url = String.format("https://maps.googleapis.com/maps/api/timezone/json?location=%f,%f&timestamp=1458000000&key=AIzaSyB0mm9X7tEIxtV-2DAS1LRMhmhGwLQPl-8",latLng.latitude,latLng.longitude);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject != null) {
+                        String timeZoneId = jsonObject.getString("timeZoneId");
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString(getString(R.string.timezone_id), timeZoneId);
+                        editor.commit();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        queue.add(stringRequest);
     }
 
     private void setPlannedLocationPreferenceValue(LatLng latLng) {
@@ -139,8 +185,19 @@ public class MyMapFragment extends Fragment
     }
 
     private void setPlannedLocation(LatLng latLng) {
+        if (latLng == null) {
+            return;
+        }
+         //Only allow locations within the path of totality
+        if (EclipsePath.distanceToPathOfTotality(latLng) > 0) {
+            Toast.makeText(getContext(),"This location is not within the path of totality",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         plannedLatLng = latLng;
+
         setPlannedLocationPreferenceValue(latLng);
+        setTimeZonePreferenceString(latLng);
         refreshMarkersAndOverlay();
         drawPathToPlannedLocation();
     }
@@ -156,11 +213,7 @@ public class MyMapFragment extends Fragment
         if (currentLatLng == null || mMap == null) {
             return;
         }
-
-
-
         mMap.addMarker(new MarkerOptions().position(currentLatLng).anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
-        //drawShortestPathToTotality(currentLatLng);
     }
 
     private void refreshMarkersAndOverlay() {
@@ -177,8 +230,6 @@ public class MyMapFragment extends Fragment
         LatLng result = null;
         if (lat != 0 && lng != 0) {
             result = new LatLng(lat,lng);
-        } else {
-            result = null;
         }
         return result;
     }
@@ -196,14 +247,32 @@ public class MyMapFragment extends Fragment
     public void onClick(View v) {
         moveToCurrentLocation();
         refreshMarkersAndOverlay();
+        showDistanceToPathToast();
         setPlannedLocation(EclipsePath.closestPointOnPathOfTotality(currentLatLng));
-//        drawShortestPathToTotality(currentLatLng);
 
+    }
+
+
+    private void showDistanceToPathToast() {
+        if (currentLatLng == null) {
+            return;
+        }
+        double distance = EclipsePath.distanceToPathOfTotality(currentLatLng);
+        String toastMessage = String.format("You are %.0f km from the path of totality",distance);
+        Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG).show();
+    }
+
+    private void showLocationInPathSelectedToast() {
+        Toast.makeText(getContext(),"This location is in the path of totality! \nGo to Phases to see the eclipse timing",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onPlaceSelected(Place place) {
-//        setPlannedLocationPreferenceValue(place.getLatLng());
+        if (EclipsePath.distanceToPathOfTotality(place.getLatLng()) <= 0) {
+            showLocationInPathSelectedToast();
+        }
+
+
         setPlannedLocation(place.getLatLng());
     }
 

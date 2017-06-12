@@ -14,11 +14,16 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.security.cert.Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationNotifier;
@@ -85,6 +90,18 @@ public class PhasesFragment extends Fragment {
             }
         });
 
+
+        Button learnMoreMiddle = (Button) rootView.findViewById(R.id.learn_more_middle);
+        learnMoreMiddle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(getResources().getString(R.string.second_contact_dialog_message))
+                        .setTitle("Totality");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
         Button learnMoreThirdContact = (Button) rootView.findViewById(R.id.learn_more_third_contact);
         learnMoreThirdContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +128,33 @@ public class PhasesFragment extends Fragment {
 
         return rootView;
     }
+
+    public void setContactTimeString(EclipseTimingMap.Event event, String timeOfDayString) {
+        switch (event) {
+            case CONTACT1:
+                if (c1TextView != null) {
+                    c1TextView.setText("First Contact: " + timeOfDayString);
+                }
+            case CONTACT2:
+                if (c2TextView != null) {
+                    c2TextView.setText("Second Contact: " + timeOfDayString);
+                }
+            case MIDDLE:
+                if (cmTextView != null) {
+                    cmTextView.setText("Mid Eclipse: " + timeOfDayString);
+                }
+            case CONTACT3:
+                if (c3TextView != null) {
+                    c3TextView.setText("Third Contact: " + timeOfDayString);
+                }
+            case CONTACT4:
+                if (c4TextView != null) {
+                    c4TextView.setText("Fourth Contact: " + timeOfDayString);
+                }
+
+        }
+    }
+
 
     public void updateUi() {
         if (!isAdded()) {
@@ -180,7 +224,9 @@ public class PhasesFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
-       // formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
 
         return formatter.format(calendar.getTime());
     }

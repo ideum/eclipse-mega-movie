@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
@@ -22,8 +23,10 @@
         <item
             android:id="@+id/full_moon_test"
             android:icon="@drawable/ic_camera_enhance_gray_24dp"
+            app:actionViewClass="android.widget.TextView"
             android:title="@string/moon_test_section_title"
-            android:enabled="false"/>
+            android:enabled="false"
+            />
         <item
             android:id="@+id/calibration_mode"
             android:icon="@drawable/ic_filter_center_focus_gray_24dp"
@@ -48,7 +51,7 @@
             android:id="@+id/credits"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/credits_section_title"
-            android:enabled="false"/>
+            android:enabled="true"/>
 
     </group>
 

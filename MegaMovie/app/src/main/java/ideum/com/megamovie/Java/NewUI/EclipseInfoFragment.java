@@ -192,7 +192,7 @@ public class EclipseInfoFragment extends Fragment
             }
             if (c1Changed) {
                 c1ContactTime = c1Time;
-                mPhasesFragment.setC1Mills(c1ContactTime);
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT1,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.CONTACT1));
 
             }
 
@@ -208,7 +208,8 @@ public class EclipseInfoFragment extends Fragment
             }
             if (c2Changed) {
                 c2ContactTime = c2Time;
-                mPhasesFragment.setC2Mills(c2ContactTime);
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT2,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.CONTACT2));
+                //mPhasesFragment.setC2Mills(c2ContactTime);
             }
 
             Long cmTime = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.MIDDLE);
@@ -223,7 +224,8 @@ public class EclipseInfoFragment extends Fragment
             }
             if (cmChanged) {
                 cmContactTime = cmTime;
-                mPhasesFragment.setCmMills(cmContactTime);
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.MIDDLE,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.MIDDLE));
+                //mPhasesFragment.setCmMills(cmContactTime);
             }
 
 
@@ -238,8 +240,9 @@ public class EclipseInfoFragment extends Fragment
             }
             if (c3Changed) {
                 c3ContactTime = c3Time;
-                mPhasesFragment.setC3Mills(c3ContactTime);
-                Log.i("EclipseInfoFrag","c3 changed");
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT3,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.CONTACT3));
+                //mPhasesFragment.setC3Mills(c3ContactTime);
+
             }
 
             Long c4Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT4);
@@ -253,7 +256,8 @@ public class EclipseInfoFragment extends Fragment
             }
             if (c4Changed) {
                 c4ContactTime = c4Time;
-                mPhasesFragment.setC4Mills(c4ContactTime);
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT4,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.CONTACT4));
+                //mPhasesFragment.setC4Mills(c4ContactTime);
 
             }
         }

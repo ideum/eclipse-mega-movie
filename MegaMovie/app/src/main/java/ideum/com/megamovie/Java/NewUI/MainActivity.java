@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,7 +13,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity
         CalibrationFragment.OnFragmentInteractionListener,
         MyTimer.MyTimerListener{
 
+    TextView comingSoonView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +74,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        TextView emailTextView = (TextView) findViewById(R.id.navHeaderTextView);
-        String email = prefs.getString(getResources().getString(R.string.email_preference_key),"");
-//        if (!email.equals("")) {
-//            emailTextView.setText(email);
-//        }
+        comingSoonView = (TextView)
+                MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.full_moon_test));
+        initializeComingSoonViews();
 
 
         loadFragment(EclipseInfoFragment.class);
@@ -85,11 +88,17 @@ public class MainActivity extends AppCompatActivity
             edit.commit();
             showSafetyWarning();
         }
-
-
     }
 
-
+    private void initializeComingSoonViews() {
+        comingSoonView.setGravity(Gravity.CENTER_VERTICAL);
+        comingSoonView.setTextColor(Color.WHITE);
+        comingSoonView.setTextSize(10);
+        comingSoonView.setHeight(12);
+        comingSoonView.setPadding(4,0,0,4);
+        comingSoonView.setBackgroundColor(getResources().getColor(R.color.coming_soon_background));
+        comingSoonView.setText("COMING SOON!");
+    }
 
     public void onAssistantButtonPressed(View view) {
 
@@ -164,6 +173,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.gallery) {
             getSupportActionBar().setTitle("Image Gallery");
             loadFragment(GalleryFragment.class);
+        } else if (id == R.id.credits) {
+            getSupportActionBar().setTitle("Credits");
+            loadFragment(CreditsFragment.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

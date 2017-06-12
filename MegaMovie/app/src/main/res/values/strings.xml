@@ -1,6 +1,6 @@
 <resources>
     <!--Manifest-->
-    <string name="app_name">MegaMovie</string>
+    <string name="app_name">Megamovie Mobile</string>
     <string name="google_maps_key">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_intro">IntroActivity</string>
@@ -8,7 +8,7 @@
 
 
     <!--Section Titles-->
-    <string name="eclipse_info_section_title">Eclipse: Where and When</string>
+    <string name="eclipse_info_section_title">Eclipse: Where and When?</string>
     <string name="orientation_section_title">Orientation</string>
     <string name="about_section_title">About</string>
     <string name="gallery_section_title">Image Gallery</string>
@@ -101,6 +101,10 @@
         totality begins and the sun’s disk is completely covered by the moon. You can now
         see the corona, the sun’s hot, hazy outer atmosphere. Be sure to look away
         before totality ends.\n</string>
+    <string name="mid_eclipse_dialog_message">
+        The sun’s corona, a halo of ionized gases, extends millions of miles into space.
+        At over 1 million degrees Fahrenheit, it is much hotter than the sun’s surface.
+    </string>
     <string name="third_contact_dialog_message">Third contact is the moment when totality
         ends and the sun begins to emerge from the moon’s shadow.\n</string>
     <string name="fourth_contact_dialog_message">This is the end of the eclipse, when the
@@ -113,6 +117,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="planned_lat_key">planned latitude</string>
     <string name="planned_lng_key">planned longitude</string>
+    <string name="timezone_id">timezone id</string>
 
     <!-- Strings related to login -->
     <string name="login_rationale">
@@ -125,5 +130,26 @@
     <!--Shared Preferences-->
     <string name="previously_started_key">previously started</string>
     <string name="safety_warning_seen">safety warning seen</string>
+
+    <!--Credits-->
+<string name="ideum_credit">
+    Ideum is a creative company focused on using emerging technologies to
+    design public installations and products that lead to meaningful and
+    compelling user experiences. We works with museums, Fortune 500 companies,
+    and other entities throughout North America and around the world. Our
+    firm provides design services, custom software development, interactive
+    displays and touch tables along with audio-visual (A/V) solutions.
+</string>
+    <string name="ssl_credit">
+        The Space Sciences Laboratory (SSL) is the UC system’s premier space sciences
+        research facility and one of the preeminent university laboratories in the country
+        for space research. Its primary goal is to foster outstanding research in space-related
+        sciences and to provide education for the next generation of space scientists.
+        Research at SSL is led by Berkeley faculty and SSL Senior Fellows, and focuses on
+        experiments and observations carried out in space, but also includes research with the
+        potential of leading to future space experiments, and the theoretical research that is
+        tied into the experimental and observational programs.
+    </string>
+
 
 </resources>

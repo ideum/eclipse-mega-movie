@@ -20,17 +20,17 @@ public class EclipsePath {
     public static final int SOUTH_BOUNDARY = 0;
     public static final int NORTH_BOUNDARY = 1;
 
-    private static final double s0 = 209.07217;
-    private static final double s1 = 11.207175;
-    private static final double s2 = 0.24183656;
-    private static final double s3 = 0.0023871380;
-    private static final double s4 = 0.000011327374;
-    private static final double s5 = 0.000000021152977;
+//    private static final double s0 = 209.07217;
+//    private static final double s1 = 11.207175;
+//    private static final double s2 = 0.24183656;
+//    private static final double s3 = 0.0023871380;
+//    private static final double s4 = 0.000011327374;
+//    private static final double s5 = 0.000000021152977;
 
-//    private static final double s0 = -56.5932;
-//    private static final double s1 = -1.77885;
-//    private static final double s2 = -0.00918829;
-//    private static final double s3 = -0.0000113559;
+    private static final double s0 = -56.5932;
+    private static final double s1 = -1.77885;
+    private static final double s2 = -0.00918829;
+    private static final double s3 = -0.0000113559;
 
     private static final double n0 = -57.1030;
     private static final double n1 = -1.84427;
@@ -42,7 +42,7 @@ public class EclipsePath {
 
     public static double getLatForLng(double lng,int boundary) {
         if (boundary == SOUTH_BOUNDARY) {
-            double result = s0 + s1 * Math.pow(lng,1.0) + s2 * Math.pow(lng,2.0) + s3 * Math.pow(lng,3.0) + s4 * Math.pow(lng,4.0) + s5 * Math.pow(lng,5.0);;
+            double result = s0 + s1 * Math.pow(lng,1.0) + s2 * Math.pow(lng,2.0) + s3 * Math.pow(lng,3.0);// + s4 * Math.pow(lng,4.0) + s5 * Math.pow(lng,5.0);;
             return result;
         } else if (boundary == NORTH_BOUNDARY) {
             return n0 + n1*lng + n2*lng*lng + n3*lng*lng*lng;
@@ -74,6 +74,9 @@ public class EclipsePath {
     }
 
     public static LatLng closestPointOnPathOfTotality(LatLng pos) {
+        if (pos == null) {
+            return null;
+        }
         LatLng southBoundaryPoint = closestPointOnBoundary(pos,SOUTH_BOUNDARY);
         if (pos.latitude <= southBoundaryPoint.latitude) {
             return southBoundaryPoint;
