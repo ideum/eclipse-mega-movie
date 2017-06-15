@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.R;
 
-public class AssistantIntroFragment extends Fragment {
+public class AssistantIntroFragment extends Fragment
+implements CustomNamable{
 
 
     public AssistantIntroFragment() {
@@ -24,4 +26,13 @@ public class AssistantIntroFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_assistant_intro, container, false);
     }
 
+    @Override
+    public String getTitle() {
+        return "Orientation";
+    }
+
+    @Override
+    public boolean shouldShowActionBar() {
+        return false;
+    }
 }

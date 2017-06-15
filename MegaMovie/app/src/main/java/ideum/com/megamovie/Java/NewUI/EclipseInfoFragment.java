@@ -21,6 +21,7 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 
 
+import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeLocationManager;
@@ -33,7 +34,8 @@ import ideum.com.megamovie.R;
 
 public class EclipseInfoFragment extends Fragment
         implements LocationSource.OnLocationChangedListener,
-        MyTimer.MyTimerListener {
+        MyTimer.MyTimerListener,
+        CustomNamable{
 
     /**
      * Request code for permissions
@@ -64,12 +66,14 @@ public class EclipseInfoFragment extends Fragment
     private Long millsToC2;
 
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_eclipse_info, container, false);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
         mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
         mCountdownFragment = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
@@ -103,12 +107,6 @@ public class EclipseInfoFragment extends Fragment
         return rootView;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
-    }
 
     @Override
     public void onResume() {
@@ -174,6 +172,8 @@ public class EclipseInfoFragment extends Fragment
             }
             if (changed) {
                 millsToC2 = timeRemaining;
+                //CountdownFragment ctf = (CountdownFragment) mSectionsPagerAdapter.getItem(item);
+
                 mCountdownFragment.setMillsRemaining(millsToC2);
             }
         }
@@ -261,6 +261,16 @@ public class EclipseInfoFragment extends Fragment
 
             }
         }
+    }
+
+    @Override
+    public String getTitle() {
+        return "Eclipse: Where and When?";
+    }
+
+    @Override
+    public boolean shouldShowActionBar() {
+        return true;
     }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {

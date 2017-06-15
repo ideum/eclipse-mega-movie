@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.R;
 
 
 public class AssistantEquipmentChoiceInfoFragment extends Fragment
-implements AdapterView.OnItemSelectedListener{
+implements AdapterView.OnItemSelectedListener,
+        CustomNamable{
 
 
     private int index;
@@ -37,7 +40,7 @@ implements AdapterView.OnItemSelectedListener{
     private TextView header;
     private TextView subheader;
     private TextView body;
-    private Button back;
+   // private Button back;
     private Button forward;
 
 
@@ -58,7 +61,9 @@ implements AdapterView.OnItemSelectedListener{
         String[] bodyTexts = {
                 getResources().getString(R.string.equipment_info_phone),
                 getResources().getString(R.string.equipment_info_equipment),
-                getResources().getString(R.string.equipment_info_dslr)};
+                " If you want to use a separate camera to photograph the eclipse, you can still use the eclipse map and countdown functions in the Megamovie Mobile app.\n" +
+                        "        You can view those features here. Goes to Eclipse 2017: Where and When?\n" +
+                        "        \n\nYou may also be interested in being an official volunteer to capture images for the Megamovie itself. To learn more, visit the <a href=\"https://eclipsemega.movie/\">Megamovie Website</a>."};
 
 
         headerText = getResources().getStringArray(R.array.assistant_headers)[index];
@@ -80,16 +85,17 @@ implements AdapterView.OnItemSelectedListener{
         imageView.setImageResource(imageId);
         header.setText(headerText);
         subheader.setText(subheaderText);
-        body.setText(bodyText);
 
+        body.setText(Html.fromHtml(bodyText));
+        body.setMovementMethod(LinkMovementMethod.getInstance());
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.loadFragment(AssistantFragment.class);
-            }
-        });
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity mainActivity = (MainActivity) getActivity();
+//                mainActivity.loadFragment(AssistantFragment.class);
+//            }
+//        });
 
         if (isTerminal) {
             forward.setText("finish");
@@ -105,13 +111,13 @@ implements AdapterView.OnItemSelectedListener{
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.loadFragment(AssistantFragment.class);
-            }
-        });
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity mainActivity = (MainActivity) getActivity();
+//                mainActivity.loadFragment(AssistantFragment.class);
+//            }
+//        });
     }
 
     @Override
@@ -123,10 +129,10 @@ implements AdapterView.OnItemSelectedListener{
         header = (TextView) rootView.findViewById(R.id.header);
         subheader = (TextView) rootView.findViewById(R.id.subheader);
         body = (TextView) rootView.findViewById(R.id.body);
+        //body.setText(getResources().getString(R.string.equipment_info_dslr));
 
-        body.setMovementMethod(LinkMovementMethod.getInstance());
 
-        back = (Button) rootView.findViewById(R.id.back_button);
+        //back = (Button) rootView.findViewById(R.id.back_button);
         forward = (Button) rootView.findViewById(R.id.finish_button);
         Spinner spinner = (Spinner) rootView.findViewById(R.id.equipment_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),R.array.user_mode_preferences_entries,android.R.layout.simple_spinner_item);
@@ -162,5 +168,15 @@ implements AdapterView.OnItemSelectedListener{
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public String getTitle() {
+        return "Orientation";
+    }
+
+    @Override
+    public boolean shouldShowActionBar() {
+        return true;
     }
 }

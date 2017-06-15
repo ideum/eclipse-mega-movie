@@ -31,27 +31,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-
+import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CalibrationFragment.OnFragmentInteractionListener,
-        MyTimer.MyTimerListener{
+        MyTimer.MyTimerListener,
+FragmentManager.OnBackStackChangedListener{
 
    // TextView comingSoonView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean previouslyStarted = prefs.getBoolean(getResources().getString(R.string.previously_started_key),false);
         if (!previouslyStarted) {
             SharedPreferences.Editor edit = prefs.edit();
             edit.putBoolean(getResources().getString(R.string.previously_started_key),true);
             edit.commit();
-           // loadIntroActivity();
+            loadIntroActivity();
+            return;
         }
         setContentView(R.layout.activity_main);
 
@@ -67,7 +70,6 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -78,9 +80,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        comingSoonView = (TextView)
-//                MenuItemCompat.getActionView(navigationView.getMenu().findItem(R.id.full_moon_test));
-//        initializeComingSoonViews();
 
 
         loadFragment(EclipseInfoFragment.class);
@@ -92,17 +91,10 @@ public class MainActivity extends AppCompatActivity
             edit.commit();
             showSafetyWarning();
         }
+
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
+
     }
-
-//    private void initializeComingSoonViews() {
-//        comingSoonView.setGravity(Gravity.CENTER_VERTICAL);
-//        comingSoonView.setTextColor(Color.WHITE);
-//        comingSoonView.setTextSize(8);
-//        comingSoonView.setText("COMING SOON!");
-//        comingSoonView.setBackground(getDrawable(R.drawable.rounded_cornder));
-//
-//    }
-
 
 
     public void onAssistantButtonPressed(View view) {
@@ -163,23 +155,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.path_of_totality) {
-            getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
            loadFragment(EclipseInfoFragment.class);
         } else if (id == R.id.assistant) {
-            getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
             loadFragment(OrientationIntroFragment.class);
         } else if (id == R.id.about_eclipse_app) {
-            getSupportActionBar().setTitle(getString(R.string.about_section_title));
             loadAboutActivity();
         } else if (id == R.id.my_eclipse) {
             loadActivity(MyEclipseActivity.class);
         } else if (id == R.id.image) {
 
         } else if (id == R.id.gallery) {
-            getSupportActionBar().setTitle("Image Gallery");
             loadFragment(GalleryFragment.class);
         } else if (id == R.id.credits) {
-            getSupportActionBar().setTitle("Credits");
             loadFragment(CreditsFragment.class);
         }
 
@@ -202,21 +189,38 @@ public class MainActivity extends AppCompatActivity
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment current = fragmentManager.findFragmentByTag("current");
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        transaction.replace(R.id.flContent, fragment);
+        if (current != null) {
+            transaction.remove(current);
+        }
+        transaction.add(R.id.flContent,fragment,"current");
+        //transaction.replace(R.id.flContent, fragment);
+        transaction.addToBackStack(null);
         transaction.commit();
+
+        if (fragment instanceof CustomNamable) {
+            getSupportActionBar().setTitle(((CustomNamable) fragment).getTitle());
+        }
     }
 
     public void loadAssistantFragment(int index) throws ClassNotFoundException {
 
-
         AssistantEquipmentChoiceInfoFragment fragment = AssistantEquipmentChoiceInfoFragment.newInstance(index);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            Fragment current = fragmentManager.findFragmentByTag("current");
 
-            transaction.replace(R.id.flContent, fragment);
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            if (current != null) {
+                transaction.remove(current);
+                current.onDestroy();
+            }
+            transaction.add(R.id.flContent,fragment,"current");
+            transaction.addToBackStack(null);
+            //transaction.replace(R.id.flContent, fragment,"current");
+
             transaction.commit();
     }
 
@@ -261,5 +265,20 @@ public class MainActivity extends AppCompatActivity
             }
         }
         return true;
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        Fragment current = getSupportFragmentManager().findFragmentByTag("current");
+        if (current != null && current instanceof CustomNamable) {
+            CustomNamable cn = (CustomNamable) current;
+            getSupportActionBar().setTitle(cn.getTitle());
+            if (cn.shouldShowActionBar()) {
+                getSupportActionBar().show();
+            } else {
+                getSupportActionBar().hide();
+            }
+
+        }
     }
 }

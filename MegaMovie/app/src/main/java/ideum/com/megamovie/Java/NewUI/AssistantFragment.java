@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.R;
 
-public class AssistantFragment extends Fragment {
+public class AssistantFragment extends Fragment
+implements CustomNamable{
 
 
 
@@ -74,14 +76,14 @@ public class AssistantFragment extends Fragment {
             }
         });
 
-        Button back = (Button) rootView.findViewById(R.id.back_button);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.loadFragment(OrientationIntroFragment.class);
-            }
-        });
+//        Button back = (Button) rootView.findViewById(R.id.back_button);
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity mainActivity = (MainActivity) getActivity();
+//                mainActivity.loadFragment(OrientationIntroFragment.class);
+//            }
+//        });
 
         Button finish = (Button) rootView.findViewById(R.id.finish_button);
         finish.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +98,15 @@ public class AssistantFragment extends Fragment {
 
         return rootView;
     }
-    
 
 
+    @Override
+    public String getTitle() {
+        return "Orientation";
+    }
+
+    @Override
+    public boolean shouldShowActionBar() {
+        return true;
+    }
 }

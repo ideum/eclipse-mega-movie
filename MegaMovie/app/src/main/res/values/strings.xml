@@ -1,6 +1,6 @@
 <resources>
     <!--Manifest-->
-    <string name="app_name">Megamovie Mobile</string>
+    <string name="app_name">Eclipse Megamovie Mobile</string>
     <string name="google_maps_key">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_intro">IntroActivity</string>
@@ -26,7 +26,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--Intro Copy-->
-    <string name="intro_text_0">On August 21st, 2017, a total solar eclipse will occur across North America. This app makes it easy
+
+    <string name="intro_text">On August 21st, 2017, a solar eclipse will be visible in North America. People in the narrow <b>path of totality</b>
+        will see the sun\'s disk completely covered by the moon. This app makes it easy
         to capture images of the eclipse. Your images can also become part of an exciting citizen science project.</string>
     <string name="intro_text_1">Everyone! This app does all the hard work of controlling your smartphone
         camera to capture images of the eclipse at just the right times. You can use it just with your phone
@@ -88,7 +90,7 @@
     </string>
     <string name="equipment_info_dslr">
         If you want to use a separate camera to photograph the eclipse, you can still use the eclipse map and countdown functions in the Megamovie Mobile app.
-        You can view those features here. Goes to Eclipse 2017: Where and When?
+
         \n\nYou may also be interested in being an official volunteer to capture images for the Megamovie itself. To learn more, visit the <a href="https://eclipsemega.movie/">Megamovie Website</a>.
     </string>
 
@@ -118,6 +120,7 @@
     <string name="planned_lat_key">planned latitude</string>
     <string name="planned_lng_key">planned longitude</string>
     <string name="timezone_id">timezone id</string>
+    <string name="phases_got_it_visible_key">got it visible</string>
 
     <!-- Strings related to login -->
     <string name="login_rationale">
@@ -132,7 +135,8 @@
     <string name="safety_warning_seen">safety warning seen</string>
 
     <!--Credits-->
-<string name="ideum_credit">
+    <string name="ideum_url">http://ideum.com/</string>
+    <string name="ideum_credit">
     Ideum is a creative company focused on using emerging technologies to
     design public installations and products that lead to meaningful and
     compelling user experiences. We works with museums, Fortune 500 companies,
@@ -140,6 +144,7 @@
     firm provides design services, custom software development, interactive
     displays and touch tables along with audio-visual (A/V) solutions.
 </string>
+    <string name="ssl_url">http://www.ssl.berkeley.edu/</string>
     <string name="ssl_credit">
         The Space Sciences Laboratory (SSL) is the UC system’s premier space sciences
         research facility and one of the preeminent university laboratories in the country

@@ -1,10 +1,12 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -55,7 +57,7 @@ public class MyMapFragment extends Fragment
     private GoogleMap mMap;
     private LatLng currentLatLng;
     private LatLng plannedLatLng;
-    boolean usingClosestLatLng = true;
+
 
     // Parameters for initial camera position and zoom level
     private LatLng initialPoint = new LatLng(39.8, -102);
@@ -115,6 +117,16 @@ public class MyMapFragment extends Fragment
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        FragmentManager fm = getChildFragmentManager();
+        SupportPlaceAutocompleteFragment paf = (SupportPlaceAutocompleteFragment) fm.findFragmentByTag("autocompleteFragment");
+        if (paf != null) {
+            paf.setHint("Where will you view the eclipse?");
+        }
+
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -189,7 +201,7 @@ public class MyMapFragment extends Fragment
             return;
         }
          //Only allow locations within the path of totality
-        if (EclipsePath.distanceToPathOfTotality(latLng) > 0) {
+        if (EclipsePath.distanceToPathOfTotality(latLng) > 0.1) {
             Toast.makeText(getContext(),"This location is not within the path of totality",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -245,7 +257,7 @@ public class MyMapFragment extends Fragment
     // called when the 'current location' button is pressed
     @Override
     public void onClick(View v) {
-        moveToCurrentLocation();
+        //moveToCurrentLocation();
         refreshMarkersAndOverlay();
         showDistanceToPathToast();
         setPlannedLocation(EclipsePath.closestPointOnPathOfTotality(currentLatLng));
@@ -259,11 +271,11 @@ public class MyMapFragment extends Fragment
         }
         double distance = EclipsePath.distanceToPathOfTotality(currentLatLng);
         String toastMessage = String.format("You are %.0f km from the path of totality",distance);
-        Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
     }
 
     private void showLocationInPathSelectedToast() {
-        Toast.makeText(getContext(),"This location is in the path of totality! \nGo to Phases to see the eclipse timing",Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),"This location is in the path of totality! \nGo to Phases to see the eclipse timing",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -278,7 +290,7 @@ public class MyMapFragment extends Fragment
 
     @Override
     public void onError(Status status) {
-        Log.d("TAG", status.toString());
+        Log.d("place error", status.toString());
     }
 
     private void drawEclipsePath() {

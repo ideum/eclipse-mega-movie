@@ -55,18 +55,6 @@
         android:background="#EEEEEE"
         android:orientation="horizontal">
 
-        <!--<Button-->
-            <!--android:id="@+id/back_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="left"-->
-            <!--android:background="#00000000"-->
-            <!--android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"-->
-            <!--android:elevation="0dp"-->
-            <!--android:fontFamily="Roboto"-->
-            <!--android:text="BACK"-->
-            <!--android:textColor="#6E6E6E"-->
-            <!--android:textSize="14dp" />-->
 
         <Button
             android:id="@+id/next_button"
@@ -79,7 +67,7 @@
             android:fontFamily="Roboto"
             android:text="NEXT"
             android:textColor="#6E6E6E"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
     </FrameLayout>
 

@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -83,15 +84,15 @@ public class IntroActivity extends AppCompatActivity
 //        rightArrow.setOnClickListener(this);
 
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestEmail()
+//                .build();
+//
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .enableAutoManage(this, this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                .build();
+//
         signInButton = (Button) findViewById(R.id.get_started_button);
         signInButton.setOnClickListener(this);
         signInButton.setVisibility(View.GONE);
@@ -100,7 +101,7 @@ public class IntroActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        loadSignInActivity();
+        loadMainActivity();
 //        loadMainActivity();
     }
 
@@ -219,12 +220,14 @@ public class IntroActivity extends AppCompatActivity
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 
             TextView textView = (TextView) rootView.findViewById(R.id.section_text);
-            String[] content_strings = {getString(R.string.intro_text_0),
+            String[] content_strings = {"On August 21st, 2017, a solar eclipse will be visible in North America. People in the narrow <b>path of totality</b>\n" +
+                    "        will see the sun\'s disk completely covered by the moon. This app makes it easy\n" +
+                    "        to capture images of the eclipse. Your images can also become part of an exciting citizen science project.",
                     getString(R.string.intro_text_1),
                     getString(R.string.intro_text_2),
                     ""
             };
-            textView.setText(content_strings[sectionNumber]);
+            textView.setText(Html.fromHtml(content_strings[sectionNumber]));
             Resources res = getResources();
 
             TextView sectionTitle = (TextView) rootView.findViewById(R.id.section_title);

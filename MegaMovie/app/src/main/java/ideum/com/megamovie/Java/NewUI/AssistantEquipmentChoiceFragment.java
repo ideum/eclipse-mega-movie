@@ -13,13 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AssistantEquipmentChoiceFragment extends Fragment
-        implements AdapterView.OnItemSelectedListener{
+        implements AdapterView.OnItemSelectedListener,
+        CustomNamable{
 
     public AssistantEquipmentChoiceFragment() {
         // Required empty public constructor
@@ -36,18 +38,18 @@ public class AssistantEquipmentChoiceFragment extends Fragment
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_assistant_equipment_choice, container, false);
 
-        Button back = (Button) rootView.findViewById(R.id.back_button);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                try {
-                    mainActivity.loadAssistantFragment(1);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        Button back = (Button) rootView.findViewById(R.id.back_button);
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity mainActivity = (MainActivity) getActivity();
+//                try {
+//                    mainActivity.loadAssistantFragment(1);
+//                } catch (ClassNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         Button finish = (Button) rootView.findViewById(R.id.finish_button);
         finish.setOnClickListener(new View.OnClickListener() {
@@ -107,5 +109,15 @@ public class AssistantEquipmentChoiceFragment extends Fragment
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public String getTitle() {
+        return "Orientation";
+    }
+
+    @Override
+    public boolean shouldShowActionBar() {
+        return true;
     }
 }

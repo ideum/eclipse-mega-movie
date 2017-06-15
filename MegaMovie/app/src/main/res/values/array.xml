@@ -4,7 +4,7 @@
 
     <string-array name="assistant_headers">
         <item>Using your smartphone</item>
-        <item>Eclipse photo Gear</item>
+        <item>Eclipse photo gear</item>
         <item>DSLR eclipse photography</item>
     </string-array>
 
@@ -32,9 +32,9 @@
     </string-array>
 
     <string-array name="assistant_image_names">
-        <item>only_phone</item>
+        <item>only_phone_new</item>
         <item>eclipse_photo_gear_new</item>
-        <item>dslr</item>
+        <item>dslr_new</item>
     </string-array>
     <integer-array name="assistant_is_terminals">
         <item>1</item>

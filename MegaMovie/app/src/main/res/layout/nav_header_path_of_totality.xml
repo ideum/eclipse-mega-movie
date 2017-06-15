@@ -12,19 +12,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="24dp"
-        app:srcCompat="@drawable/ic_account_circle_black_64dp" />
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingTop="24dp"-->
+        <!--app:srcCompat="@drawable/ic_account_circle_black_64dp" />-->
 
 
-    <TextView
-        android:id="@+id/navHeaderTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="android.studio@android.com" />
+    <!--<TextView-->
+        <!--android:id="@+id/navHeaderTextView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="24dp"-->
+        <!--android:text="android.studio@android.com" />-->
 
 </LinearLayout>

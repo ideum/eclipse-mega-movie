@@ -68,7 +68,15 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         if (referenceLatLng() == null) {
             return null;
         }
+        Long time = mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
+        if (time == null) {
+            return getDummyEclipseTime(event);
+        }
         return mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
+    }
+
+    private Long getDummyEclipseTime(EclipseTimingMap.Event event) {
+        return null;//mEclipseTimeCalculator.getEclipseTime(event,new LatLng(42.263,-104.0462));
     }
 
     public Long getTimeToEclipse(EclipseTimingMap.Event event) {
@@ -89,8 +97,6 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         currentLatLng = latLng;
         currentClosestTotalityLatLng = EclipsePath.closestPointOnPathOfTotality(currentLatLng);
     }
-
-
 
     @Override
     public void onLocationChanged(Location location) {
@@ -132,8 +138,6 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
 
 
         return formatter.format(calendar.getTime()) + " " + timeZoneDisplayName;
-
-
     }
 
 

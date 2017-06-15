@@ -1,7 +1,10 @@
 package ideum.com.megamovie.Java.NewUI;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ButtonBarLayout;
@@ -10,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -57,7 +61,28 @@ public class PhasesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_phases, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_phases, container, false);
+
+        final LinearLayout intro_layout = (LinearLayout) rootView.findViewById(R.id.phases_intro);
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        boolean gotItVisible = settings.getBoolean(getString(R.string.phases_got_it_visible_key),true);
+
+
+        if (gotItVisible) {
+            intro_layout.setVisibility(View.VISIBLE);
+            Button got_it = (Button) rootView.findViewById(R.id.got_it);
+            got_it.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LinearLayout bottom = (LinearLayout) rootView.findViewById(R.id.bottom_layout);
+                    bottom.animate().translationY(-intro_layout.getHeight());
+                    intro_layout.animate().alpha(0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean(getString(R.string.phases_got_it_visible_key),false);
+                    editor.commit();
+                }
+            });
+        }
 
         c1TextView = (TextView) rootView.findViewById(R.id.c1_text_view);
         c2TextView = (TextView) rootView.findViewById(R.id.c2_text_view);
@@ -96,7 +121,7 @@ public class PhasesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getResources().getString(R.string.second_contact_dialog_message))
+                builder.setMessage(getResources().getString(R.string.mid_eclipse_dialog_message))
                         .setTitle("Totality");
                 AlertDialog dialog = builder.create();
                 dialog.show();
