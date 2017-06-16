@@ -27,19 +27,42 @@ public class CreditsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_credits, container, false);
-        Button ideum_learn_more_button = (Button) rootView.findViewById(R.id.ideum_learn_more);
-        ideum_learn_more_button.setOnClickListener(new View.OnClickListener() {
+//        Button ideum_learn_more_button = (Button) rootView.findViewById(R.id.ideum_learn_more);
+//        ideum_learn_more_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openWebPage(getString(R.string.ideum_url));
+//            }
+//        });
+
+//        Button ssl_learn_more_button = (Button) rootView.findViewById(R.id.ssl_learn_more);
+//        ssl_learn_more_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openWebPage(getString(R.string.ssl_url));
+//            }
+//        });
+
+        View ideum_card = (View) rootView.findViewById(R.id.ideum_credit_card);
+        ideum_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openWebPage(getString(R.string.ideum_url));
             }
         });
 
-        Button ssl_learn_more_button = (Button) rootView.findViewById(R.id.ssl_learn_more);
-        ssl_learn_more_button.setOnClickListener(new View.OnClickListener() {
+        View ssl_card = (View) rootView.findViewById(R.id.ssl_credit_card);
+        ssl_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openWebPage(getString(R.string.ssl_url));
+            }
+        });
+        View eaa_card = (View) rootView.findViewById(R.id.eaa_credit_card);
+        eaa_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openWebPage(getString(R.string.eaa_url));
             }
         });
 

@@ -41,6 +41,18 @@ public class PhasesFragment extends Fragment {
     private TextView c3TextView;
     private TextView c4TextView;
 
+    private TextView learnMorec1;
+    private TextView learnMorec2;
+    private TextView learnMorecm;
+    private TextView learnMorec3;
+    private TextView learnMorec4;
+
+    private boolean c1Expanded = false;
+    private boolean c2Expanded = false;
+    private boolean cmExpanded = false;
+    private boolean c3Expanded = false;
+    private boolean c4Expanded = false;
+
     private Long c1Mills;
     private Long c2Mills;
     private Long cmMills;
@@ -90,68 +102,108 @@ public class PhasesFragment extends Fragment {
         c3TextView = (TextView) rootView.findViewById(R.id.c3_text_view);
         c4TextView = (TextView) rootView.findViewById(R.id.c4_text_view);
 
+        learnMorec1 = (TextView) rootView.findViewById(R.id.learn_more_c1);
+        learnMorec2 = (TextView) rootView.findViewById(R.id.learn_more_c2);
+        learnMorecm = (TextView) rootView.findViewById(R.id.learn_more_cm);
+        learnMorec3 = (TextView) rootView.findViewById(R.id.learn_more_c3);
+        learnMorec4 = (TextView) rootView.findViewById(R.id.learn_more_c4);
 
-        Button learnMoreFirstContact = (Button) rootView.findViewById(R.id.learn_more_first_contact);
-        learnMoreFirstContact.setOnClickListener(new View.OnClickListener() {
+
+        View c1View = rootView.findViewById(R.id.c1_view);
+        c1View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getResources().getString(R.string.first_contact_dialog_message))
-                        .setTitle("First Contact");
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                onLearnMoreTapped(EclipseTimingMap.Event.CONTACT1);
             }
         });
 
-        Button learnMoreSecondContact = (Button) rootView.findViewById(R.id.learn_more_second_contact);
-        learnMoreSecondContact.setOnClickListener(new View.OnClickListener() {
+        View c2View = rootView.findViewById(R.id.c2_view);
+        c2View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getResources().getString(R.string.second_contact_dialog_message))
-                        .setTitle("Second Contact");
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                onLearnMoreTapped(EclipseTimingMap.Event.CONTACT2);
             }
         });
 
 
-        Button learnMoreMiddle = (Button) rootView.findViewById(R.id.learn_more_middle);
-        learnMoreMiddle.setOnClickListener(new View.OnClickListener() {
+        View cmView = rootView.findViewById(R.id.cm_view);
+        cmView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getResources().getString(R.string.mid_eclipse_dialog_message))
-                        .setTitle("Totality");
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                onLearnMoreTapped(EclipseTimingMap.Event.MIDDLE);
             }
         });
-        Button learnMoreThirdContact = (Button) rootView.findViewById(R.id.learn_more_third_contact);
-        learnMoreThirdContact.setOnClickListener(new View.OnClickListener() {
+        View c3View = rootView.findViewById(R.id.c3_view);
+        c3View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getResources().getString(R.string.third_contact_dialog_message))
-                        .setTitle("Third Contact");
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                onLearnMoreTapped(EclipseTimingMap.Event.CONTACT3);
             }
         });
 
-        Button learnMoreFourthContact = (Button) rootView.findViewById(R.id.learn_more_fourth_contact);
-        learnMoreFourthContact.setOnClickListener(new View.OnClickListener() {
+        View c4View =  rootView.findViewById(R.id.c4_view);
+        c4View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getResources().getString(R.string.fourth_contact_dialog_message))
-                        .setTitle("Fourth Contact");
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                onLearnMoreTapped(EclipseTimingMap.Event.CONTACT4);
             }
         });
 
         return rootView;
+    }
+
+    private void onLearnMoreTapped(EclipseTimingMap.Event event) {
+        String caption = "";
+        // Todo: refactor this
+        switch (event) {
+            case CONTACT1:
+                caption = getResources().getString(R.string.first_contact_dialog_message);
+                if (!c1Expanded) {
+                    learnMorec1.setText(caption);
+                } else {
+                    learnMorec1.setText("LEARN MORE");
+                }
+                c1Expanded = !c1Expanded;
+                break;
+
+            case CONTACT2:
+                caption = getResources().getString(R.string.second_contact_dialog_message);
+                if (!c2Expanded) {
+                    learnMorec2.setText(caption);
+                } else {
+                    learnMorec2.setText("LEARN MORE");
+                }
+                c2Expanded = !c2Expanded;
+                break;
+            case MIDDLE:
+                caption = getResources().getString(R.string.mid_eclipse_dialog_message);
+                if (!cmExpanded) {
+                    learnMorecm.setText(caption);
+                } else {
+                    learnMorecm.setText("LEARN MORE");
+                }
+                cmExpanded = !cmExpanded;
+                break;
+            case CONTACT3:
+                caption = getResources().getString(R.string.third_contact_dialog_message);
+                if (!c3Expanded) {
+                    learnMorec3.setText(caption);
+                } else {
+                    learnMorec3.setText("LEARN MORE");
+                }
+                c3Expanded = !c3Expanded;
+                break;
+            case CONTACT4:
+                caption = getResources().getString(R.string.fourth_contact_dialog_message);
+                if (!c4Expanded) {
+                    learnMorec4.setText(caption);
+                } else {
+                    learnMorec4.setText("LEARN MORE");
+                }
+                c4Expanded = !c4Expanded;
+                break;
+        }
+
     }
 
     public void setContactTimeString(EclipseTimingMap.Event event, String timeOfDayString) {

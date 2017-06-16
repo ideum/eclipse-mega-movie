@@ -147,9 +147,10 @@ public class MyMapFragment extends Fragment
             @Override
             public void onMapClick(LatLng latLng) {
                 if (EclipsePath.distanceToPathOfTotality(latLng) <=0) {
+                    setPlannedLocation(latLng);
                     showLocationInPathSelectedToast();
                 }
-                setPlannedLocation(latLng);
+
             }
         });
 
@@ -269,7 +270,6 @@ public class MyMapFragment extends Fragment
 
     }
 
-
     private void showDistanceToPathToast() {
         if (currentLatLng == null) {
             return;
@@ -280,17 +280,20 @@ public class MyMapFragment extends Fragment
     }
 
     private void showLocationInPathSelectedToast() {
-        Toast.makeText(getContext(),"This location is in the path of totality! \nGo to Phases to see the eclipse timing",Toast.LENGTH_SHORT).show();
+        double distance = EclipsePath.greatCircleDistance(currentLatLng,plannedLatLng);
+        String toastMessage = String.format("This location is in the path of totality! \nGo to Phases to see the eclipse timing.\nThe location is %.0f km away",distance);
+        Toast.makeText(getContext(),toastMessage,Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onPlaceSelected(Place place) {
-        if (EclipsePath.distanceToPathOfTotality(place.getLatLng()) <= 0) {
-            showLocationInPathSelectedToast();
-        }
+
 
 
         setPlannedLocation(place.getLatLng());
+        if (EclipsePath.distanceToPathOfTotality(place.getLatLng()) <= 0) {
+            showLocationInPathSelectedToast();
+        }
     }
 
     @Override

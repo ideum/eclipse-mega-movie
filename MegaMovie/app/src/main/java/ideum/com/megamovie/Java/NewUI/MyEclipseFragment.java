@@ -20,11 +20,18 @@ public class MyEclipseFragment extends PreferenceFragment {
     private static Preference user_mode_preference;
     private static Preference lens_preference;
     private static Preference tripod_preference;
+    private static Preference tracking_mount_preference;
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
+            if (stringValue.equals("true")) {
+                stringValue = "yes";
+            }
+            if (stringValue.equals("false")) {
+                stringValue = "no";
+            }
             if(preference.equals(tripod_preference)) {
                showNoTripodWarning(preference,value);
             }
@@ -33,9 +40,11 @@ public class MyEclipseFragment extends PreferenceFragment {
                 if (!stringValue.equals("Phone with equipment")) {
                     lens_preference.setEnabled(false);
                     tripod_preference.setEnabled(false);
+                    tracking_mount_preference.setEnabled(false);
                 } else {
                     lens_preference.setEnabled(true);
                     tripod_preference.setEnabled(true);
+                    tracking_mount_preference.setEnabled(true);
                 }
             }
             if (preference instanceof ListPreference) {
@@ -112,9 +121,11 @@ public class MyEclipseFragment extends PreferenceFragment {
         user_mode_preference = findPreference("user_mode_preference");
         lens_preference = findPreference(getString(R.string.lens_magnification_pref_key));
         tripod_preference = findPreference("tripod_preference");
+        tracking_mount_preference = findPreference("tracking_mount_preference");
 
         bindPreferenceSummaryToValue(user_mode_preference);
         bindPreferenceSummaryToValue(lens_preference);
         bindPreferenceSummaryToValue(tripod_preference);
+        bindPreferenceSummaryToValue(tracking_mount_preference);
     }
 }

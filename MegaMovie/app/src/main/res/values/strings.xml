@@ -85,10 +85,12 @@
         Holding a camera by hand can cause tiny vibrations that blur photos.
         This can be especially troublesome with astronomical images. Mounting your phone on a tripod is an easy way to improve your photos.
         There are many kinds of tripods available for cell phones, including inexpensive ones made by Joby, Square Jellyfish, and Charger City.
-        \n\nAlso, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens like those
-        made by like those made by Apexel, Hsini, and Neewer. We recommend using a lens with a magnification of at least 20x, although the app is
+        Also, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens like those
+        made by Apexel, Hsini, and Neewer. We recommend using a lens with a magnification of at least 20x, although the app is
         compatible with any lens. Lenses like these are very portable and can help you take great photos of many things in addition to the eclipse.
         \n\nOnce you’ve decided on the equipment you’ll use, go to My Eclipse to enter your choice (you can change it at any time).
+        \n\nIf you’re using an especially high-powered lens, you might consider using a tracking-mount. A relatively compact and inexpensive choice
+        is the Star Adventurer made by Sky-Watcher.
 
     </string>
     <string name="equipment_info_dslr">
@@ -103,15 +105,16 @@
         begins to cover the sun. Even though the sun will start to get dimmer at this point,
         it’s still not safe to look directly at the eclipse.\n</string>
     <string name="second_contact_dialog_message">In a total solar eclipse, this is when
-        totality begins and the sun’s disk is completely covered by the moon. You can now
-        see the corona, the sun’s hot, hazy outer atmosphere. Be sure to look away
-        before totality ends.\n</string>
+        totality begins and the sun’s disk is completely covered by the moon. It is safe to remove
+        your eclipse glasses when you can no longer see the bright
+        sun through them. You can now see the sun’s hot, hazy outer atmosphere: the corona! \n</string>
     <string name="mid_eclipse_dialog_message">
         The sun’s corona, a halo of ionized gases, extends millions of miles into space.
-        At over 1 million degrees Fahrenheit, it is much hotter than the sun’s surface.
+        At over 1 million degrees Fahrenheit, it is much hotter than the sun’s surface. You can only see the whole corona during a total eclipse,
+        such as this one.
     </string>
     <string name="third_contact_dialog_message">Third contact is the moment when totality
-        ends and the sun begins to emerge from the moon’s shadow.\n</string>
+        ends and the sun begins to emerge from the moon’s shadow. As soon as the bright sun appears, you must put your eclipse glasses back on.\n</string>
     <string name="fourth_contact_dialog_message">This is the end of the eclipse, when the
         moon’s shadow no longer covers any part of the sun.\n</string>
 
@@ -163,6 +166,13 @@
         experiments and observations carried out in space, but also includes research with the
         potential of leading to future space experiments, and the theoretical research that is
         tied into the experimental and observational programs.
+    </string>
+    <string name="eaa_url">http://www.eclipseacrossamerica.org/</string>
+    <string name="eaa_credit">
+        Eclipse Across America, Inc. is a non-profit founded by filmmaker/director and Eclipse
+        Chaser Mark Bender. Its goal is to develop public awareness of the August 21st, 2017 Total Solar Eclipse,
+        from the science of how and why eclipses happen, to the different ways scientists, eclipse chasers,
+        and the general public can watch and enjoy this historic event.
     </string>
 
 

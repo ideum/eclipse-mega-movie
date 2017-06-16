@@ -14,18 +14,15 @@
         android:title="External lens magnification"
         android:dialogTitle="What type of external lens will you use?"
         />
-    <!--<ListPreference-->
-        <!--android:key="lens_preference"-->
-        <!--android:title="External lens"-->
-        <!--android:entries="@array/lens_choices_entries"-->
-        <!--android:entryValues="@array/lens_choices_entries"-->
-        <!--android:dialogTitle="What type of external lens will you use?"-->
-        <!--android:defaultValue="@string/lens_default"-->
-        <!--/>-->
 
     <CheckBoxPreference
         android:key="tripod_preference"
         android:title="Tripod"
         android:defaultValue="true"
+        />
+    <CheckBoxPreference
+        android:key="tracking_mount_preference"
+        android:title="Tracking mount"
+        android:defaultValue="false"
         />
 </PreferenceScreen>
