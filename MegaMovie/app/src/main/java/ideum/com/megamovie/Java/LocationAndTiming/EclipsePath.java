@@ -4,8 +4,6 @@ import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Arrays;
-
 /**
  * Created by MT_User on 5/10/2017.
  */
@@ -18,45 +16,49 @@ public class EclipsePath {
     private static final double RADIUS_EARTH_KM = 6371;
 
     public static final int SOUTH_BOUNDARY = 0;
-    public static final int NORTH_BOUNDARY = 1;
+    public static final int CENTER_LINE = 1;
+    public static final int NORTH_BOUNDARY = 2;
 
-//    private static final double s0 = 209.07217;
-//    private static final double s1 = 11.207175;
-//    private static final double s2 = 0.24183656;
-//    private static final double s3 = 0.0023871380;
-//    private static final double s4 = 0.000011327374;
-//    private static final double s5 = 0.000000021152977;
 
-    private static final double s0 = -56.5932;
-    private static final double s1 = -1.77885;
-    private static final double s2 = -0.00918829;
-    private static final double s3 = -0.0000113559;
-
-    private static final double n0 = -57.1030;
-    private static final double n1 = -1.84427;
-    private static final double n2 = -0.00993789;
-    private static final double n3 = -0.0000138865;
+    // Polynomial coefficients for south boundary, center line, and north boundary of path of totality
+    // for latitude as a function of longitude
+    private static final double[] SOUTH_BOUNDARY_COEFFS = {209.07217, 11.207175, 0.24183656, 0.0023871380, 1.1327374e-05, 2.1152977e-08};
+    private static final double[] CENTERLINE_COEFFS = {195.41727, 10.557370, 0.23023880, 0.0022852060, 1.0882614e-05, 2.0380168e-08};
+    private static final double[] NORTH_BOUNDARY_COEFFS = {182.12413, 9.9208717, 0.21882740, 0.0021844822, 1.0441281e-05, 1.9610047e-08};
 
     private static final double minLongitude = -126.0;
     private static final double maxLongitude = -78.00;
 
     public static double getLatForLng(double lng,int boundary) {
+       double[] coefficients = {};
         if (boundary == SOUTH_BOUNDARY) {
-            double result = s0 + s1 * Math.pow(lng,1.0) + s2 * Math.pow(lng,2.0) + s3 * Math.pow(lng,3.0);// + s4 * Math.pow(lng,4.0) + s5 * Math.pow(lng,5.0);;
-            return result;
-        } else if (boundary == NORTH_BOUNDARY) {
-            return n0 + n1*lng + n2*lng*lng + n3*lng*lng*lng;
-        } else {
-            return 0;
+            coefficients = SOUTH_BOUNDARY_COEFFS;
+        } else if (boundary == CENTER_LINE) {
+            coefficients = CENTERLINE_COEFFS;
         }
+        else if (boundary == NORTH_BOUNDARY) {
+            coefficients = NORTH_BOUNDARY_COEFFS;
+        }
+        return evaluatePolynomial(coefficients,lng);
     }
+
+    private static double evaluatePolynomial(double[] c, double t) {
+        double result = 0;
+        for (int d = 0; d < c.length; d++) {
+            result += c[d] * Math.pow(t,d);
+        }
+
+
+        return result;
+    }
+
     public static LatLng getLatLngForParameter(double t,int boundary) {
         double lng = minLongitude + t * (maxLongitude - minLongitude);
         double lat = getLatForLng(lng,boundary);
         return new LatLng(lat,lng);
     }
 
-    // Formula for the distance (in km) between two points on the earth's surface,
+    // Formula for the distance (in km) between two points on the earth'SOUTH_BOUNDARY_COEFFS surface,
     // travelling along a great circle (geodesic distance)
 
     public static double greatCircleDistance(LatLng p_1, LatLng p_2) {

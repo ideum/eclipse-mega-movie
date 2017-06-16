@@ -118,6 +118,11 @@ public class MyMapFragment extends Fragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         FragmentManager fm = getChildFragmentManager();
@@ -295,6 +300,7 @@ public class MyMapFragment extends Fragment
 
     private void drawEclipsePath() {
 
+        // Draw path region
         int fillColor = 0x55000066;
         PolygonOptions polygonOptions = new PolygonOptions().strokeColor(Color.BLACK).fillColor(fillColor).strokeWidth(2);
 
@@ -307,6 +313,16 @@ public class MyMapFragment extends Fragment
             polygonOptions.add(EclipsePath.getLatLngForParameter(i * 1.0 / numPoints, EclipsePath.SOUTH_BOUNDARY));
         }
         mMap.addPolygon(polygonOptions);
+
+        // Draw centerline
+
+
+        PolylineOptions polylineOptions = new PolylineOptions().color(getResources().getColor(R.color.centerline)).width(3);
+        for (int i = 0; i <= numPoints; i++) {
+            polylineOptions.add(EclipsePath.getLatLngForParameter(i * 1.0/ numPoints,EclipsePath.CENTER_LINE));
+        }
+        mMap.addPolyline(polylineOptions);
+
     }
 
     private void drawPathToPlannedLocation() {

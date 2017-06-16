@@ -2,6 +2,7 @@ package ideum.com.megamovie.Java.NewUI;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -42,6 +43,7 @@ implements AdapterView.OnItemSelectedListener,
     private TextView body;
    // private Button back;
     private Button forward;
+    private Button settings;
 
 
     public AssistantEquipmentChoiceInfoFragment() {
@@ -89,13 +91,6 @@ implements AdapterView.OnItemSelectedListener,
         body.setText(Html.fromHtml(bodyText));
         body.setMovementMethod(LinkMovementMethod.getInstance());
 
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainActivity mainActivity = (MainActivity) getActivity();
-//                mainActivity.loadFragment(AssistantFragment.class);
-//            }
-//        });
 
         if (isTerminal) {
             forward.setText("finish");
@@ -107,7 +102,7 @@ implements AdapterView.OnItemSelectedListener,
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.loadFragment(nextClass);
+                mainActivity.loadFragment(EclipseInfoFragment.class);
             }
         });
 
@@ -140,6 +135,18 @@ implements AdapterView.OnItemSelectedListener,
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setSelection(index);
+
+        settings = (Button) rootView.findViewById(R.id.go_to_settings);
+        if (index != 1) {
+            settings.setVisibility(View.GONE);
+        } else {
+            settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().startActivity(new Intent(getActivity(),MyEclipseActivity.class));
+                }
+            });
+        }
 
         return rootView;
     }

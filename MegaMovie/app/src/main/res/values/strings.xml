@@ -85,8 +85,11 @@
         Holding a camera by hand can cause tiny vibrations that blur photos.
         This can be especially troublesome with astronomical images. Mounting your phone on a tripod is an easy way to improve your photos.
         There are many kinds of tripods available for cell phones, including inexpensive ones made by Joby, Square Jellyfish, and Charger City.
-        \n\nAlso, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens like those made by Olloclip, Moment, Mozeat, and instaLens. Lenses like these are easy to attach to your phone and can help you take great photos of many things in addition to the eclipse.
-        \n\nGo to Calibrate your camera to set up your phone with a tripod and lens.
+        \n\nAlso, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens like those
+        made by like those made by Apexel, Hsini, and Neewer. We recommend using a lens with a magnification of at least 20x, although the app is
+        compatible with any lens. Lenses like these are very portable and can help you take great photos of many things in addition to the eclipse.
+        \n\nOnce you’ve decided on the equipment you’ll use, go to My Eclipse to enter your choice (you can change it at any time).
+
     </string>
     <string name="equipment_info_dslr">
         If you want to use a separate camera to photograph the eclipse, you can still use the eclipse map and countdown functions in the Megamovie Mobile app.
@@ -115,12 +118,18 @@
     <!-- Strings related to Settings -->
     <string name="user_mode_default">Phone only</string>
     <string name="lens_default">No external lens</string>
+    <string name="lens_magnification_pref_key">lens magnification</string>
     <string name="tripod_default">No tripod</string>
     <string name="title_activity_login">Sign in</string>
     <string name="planned_lat_key">planned latitude</string>
     <string name="planned_lng_key">planned longitude</string>
     <string name="timezone_id">timezone id</string>
     <string name="phases_got_it_visible_key">got it visible</string>
+
+    <string name="no_tripod_warning">
+        If you plan to attach an external lens to your smartphone, you will also need to mount it
+        on a tripod to ensure it is kept steady and pointed in the right direction.
+    </string>
 
     <!-- Strings related to login -->
     <string name="login_rationale">

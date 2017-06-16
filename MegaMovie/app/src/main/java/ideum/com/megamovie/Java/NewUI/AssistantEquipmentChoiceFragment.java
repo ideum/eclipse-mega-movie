@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
@@ -21,13 +23,16 @@ import ideum.com.megamovie.R;
  */
 public class AssistantEquipmentChoiceFragment extends Fragment
         implements AdapterView.OnItemSelectedListener,
-        CustomNamable{
+        CustomNamable,
+NumberPicker.OnValueChangeListener{
 
     public AssistantEquipmentChoiceFragment() {
         // Required empty public constructor
     }
 
-    private Spinner lensSpinner;
+    private NumberPicker lensPicker;
+
+    //private Spinner lensSpinner;
     private Spinner tripodSpinner;
 
 
@@ -38,18 +43,6 @@ public class AssistantEquipmentChoiceFragment extends Fragment
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_assistant_equipment_choice, container, false);
 
-//        Button back = (Button) rootView.findViewById(R.id.back_button);
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainActivity mainActivity = (MainActivity) getActivity();
-//                try {
-//                    mainActivity.loadAssistantFragment(1);
-//                } catch (ClassNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
 
         Button finish = (Button) rootView.findViewById(R.id.finish_button);
         finish.setOnClickListener(new View.OnClickListener() {
@@ -61,12 +54,18 @@ public class AssistantEquipmentChoiceFragment extends Fragment
             }
         });
 
-        lensSpinner = (Spinner) rootView.findViewById(R.id.lens_spinner);
-        ArrayAdapter<CharSequence> lensAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.lens_choices_entries,android.R.layout.simple_spinner_item);
+//        lensSpinner = (Spinner) rootView.findViewById(R.id.lens_spinner);
+//        ArrayAdapter<CharSequence> lensAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.lens_choices_entries,android.R.layout.simple_spinner_item);
+//
+//        lensAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        lensSpinner.setAdapter(lensAdapter);
+//        lensSpinner.setOnItemSelectedListener(this);
 
-        lensAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        lensSpinner.setAdapter(lensAdapter);
-        lensSpinner.setOnItemSelectedListener(this);
+        lensPicker = (NumberPicker) rootView.findViewById(R.id.lens_picker);
+        lensPicker.setMinValue(0);
+        lensPicker.setMaxValue(50);
+
+        lensPicker.setOnValueChangedListener(this);
 
          tripodSpinner = (Spinner) rootView.findViewById(R.id.tripod_spinner);
         ArrayAdapter<CharSequence> tripodAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.tripod_choices,android.R.layout.simple_spinner_item);
@@ -80,9 +79,9 @@ public class AssistantEquipmentChoiceFragment extends Fragment
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (parent == lensSpinner) {
-            setLensPreference(position);
-        }
+//        if (parent == lensSpinner) {
+//            setLensPreference(position);
+//        }
         if (parent == tripodSpinner) {
             setTripodPreference(position);
         }
@@ -119,5 +118,19 @@ public class AssistantEquipmentChoiceFragment extends Fragment
     @Override
     public boolean shouldShowActionBar() {
         return true;
+    }
+
+
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        setLensMagnificationPref(newVal);
+    }
+
+    private void setLensMagnificationPref(int value) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(getString(R.string.lens_magnification_pref_key),value);
+        editor.commit();
     }
 }

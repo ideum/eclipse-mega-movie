@@ -107,6 +107,14 @@ public class EclipseInfoFragment extends Fragment
         return rootView;
     }
 
+    public void refresh() {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
+        mCountdownFragment = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
+        mPhasesFragment = (PhasesFragment) mSectionsPagerAdapter.getItem(2);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+    }
+
 
     @Override
     public void onResume() {

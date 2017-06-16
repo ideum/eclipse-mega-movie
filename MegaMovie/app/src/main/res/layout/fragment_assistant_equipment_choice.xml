@@ -45,24 +45,30 @@
                 android:layout_marginBottom="11dp"
                 android:layout_marginLeft="22dp"
                 android:layout_marginTop="24dp"
-                android:text="External Lens"
+                android:text="External Lens Magnification"
                 android:textColor="#757575"
                 android:textSize="13sp" />
 
-            <Spinner
-                android:id="@+id/lens_spinner"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7.5dp"
-                android:layout_marginLeft="15dp"></Spinner>
-
-            <View
+            <NumberPicker
+                android:id="@+id/lens_picker"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="22dp"
-                android:layout_marginLeft="22dp"
-                android:layout_marginRight="22dp"
-                android:background="#959595" />
+                android:layout_height="wrap_content"
+                ></NumberPicker>
+
+            <!--<Spinner-->
+                <!--android:id="@+id/lens_spinner"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="7.5dp"-->
+                <!--android:layout_marginLeft="15dp"></Spinner>-->
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_marginBottom="22dp"-->
+                <!--android:layout_marginLeft="22dp"-->
+                <!--android:layout_marginRight="22dp"-->
+                <!--android:background="#959595" />-->
         </LinearLayout>
 
         <LinearLayout

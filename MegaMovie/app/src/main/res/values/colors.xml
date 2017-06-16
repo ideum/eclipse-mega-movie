@@ -9,6 +9,7 @@
     <color name="intro_color_3">#4481f8</color>
     <color name="intro_color_4">#fff</color>
 
-    <color name="coming_soon_background">#727272</color>
+    <color name="coming_soon_background">#000</color>
+    <color name="centerline">#FF5478</color>
 
 </resources>

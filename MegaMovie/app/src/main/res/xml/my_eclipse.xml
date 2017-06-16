@@ -9,21 +9,23 @@
         android:dialogTitle="How do you plan to photograph the eclipse?"
         android:defaultValue="@string/user_mode_default"
         />
-    <ListPreference
-        android:key="lens_preference"
-        android:title="External lens"
-        android:entries="@array/lens_choices_entries"
-        android:entryValues="@array/lens_choices_entries"
+    <ideum.com.megamovie.Java.NewUI.NumberPickerPreference
+        android:key="@string/lens_magnification_pref_key"
+        android:title="External lens magnification"
         android:dialogTitle="What type of external lens will you use?"
-        android:defaultValue="@string/lens_default"
         />
+    <!--<ListPreference-->
+        <!--android:key="lens_preference"-->
+        <!--android:title="External lens"-->
+        <!--android:entries="@array/lens_choices_entries"-->
+        <!--android:entryValues="@array/lens_choices_entries"-->
+        <!--android:dialogTitle="What type of external lens will you use?"-->
+        <!--android:defaultValue="@string/lens_default"-->
+        <!--/>-->
 
-    <ListPreference
+    <CheckBoxPreference
         android:key="tripod_preference"
         android:title="Tripod"
-        android:entries="@array/tripod_choices"
-        android:entryValues="@array/tripod_choices"
-        android:dialogTitle="What type of tripod will you use?"
-        android:defaultValue="@string/tripod_default"
+        android:defaultValue="true"
         />
 </PreferenceScreen>

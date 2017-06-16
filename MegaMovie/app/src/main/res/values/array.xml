@@ -38,7 +38,7 @@
     </string-array>
     <integer-array name="assistant_is_terminals">
         <item>1</item>
-        <item>0</item>
+        <item>1</item>
         <item>1</item>
     </integer-array>
 
@@ -65,9 +65,7 @@
 
     <string-array name="tripod_choices">
         <item>No tripod</item>
-        <item>tripod choice 1</item>
-        <item>tripod choice 2</item>
-        <item>tripod choice 3</item>
+        <item>Tripod</item>
     </string-array>
 
 

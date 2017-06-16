@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
 
@@ -82,7 +83,7 @@ FragmentManager.OnBackStackChangedListener{
 
 
 
-        loadFragment(EclipseInfoFragment.class);
+        loadInitialFragment(EclipseInfoFragment.class);
 
         boolean safetyWarningSeen = prefs.getBoolean(getResources().getString(R.string.safety_warning_seen),false);
         if (!safetyWarningSeen) {
@@ -190,14 +191,40 @@ FragmentManager.OnBackStackChangedListener{
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment current = fragmentManager.findFragmentByTag("current");
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        String currentTitle = null;
         if (current != null) {
             transaction.remove(current);
+            if (current instanceof CustomNamable) {
+                currentTitle = ((CustomNamable) current).getTitle();
+            }
         }
         transaction.add(R.id.flContent,fragment,"current");
         //transaction.replace(R.id.flContent, fragment);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(currentTitle);
+        transaction.commit();
+
+//        if (fragment instanceof CustomNamable) {
+//            getSupportActionBar().setTitle(((CustomNamable) fragment).getTitle());
+//        }
+    }
+
+    private void loadInitialFragment(Class c) {
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) c.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        String currentTitle = null;
+        transaction.add(R.id.flContent,fragment,"current");
         transaction.commit();
 
         if (fragment instanceof CustomNamable) {
@@ -270,7 +297,17 @@ FragmentManager.OnBackStackChangedListener{
     @Override
     public void onBackStackChanged() {
         Fragment current = getSupportFragmentManager().findFragmentByTag("current");
-        if (current != null && current instanceof CustomNamable) {
+        if (current == null) {
+            return;
+        }
+
+        if (current instanceof EclipseInfoFragment) {
+            EclipseInfoFragment eif = (EclipseInfoFragment) current;
+            eif.refresh();
+
+        }
+
+        if (current instanceof CustomNamable) {
             CustomNamable cn = (CustomNamable) current;
             getSupportActionBar().setTitle(cn.getTitle());
             if (cn.shouldShowActionBar()) {
