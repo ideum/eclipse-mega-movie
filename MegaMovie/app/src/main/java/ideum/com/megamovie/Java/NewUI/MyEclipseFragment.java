@@ -69,7 +69,7 @@ public class MyEclipseFragment extends PreferenceFragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage(context.getResources().getString(R.string.no_tripod_warning))
                     .setPositiveButton("Got It", null)
-                    .setCancelable(false);
+                    .setCancelable(true);
             AlertDialog dialog = builder.create();
             dialog.show();
         }
@@ -120,7 +120,7 @@ public class MyEclipseFragment extends PreferenceFragment {
 
         user_mode_preference = findPreference("user_mode_preference");
         lens_preference = findPreference(getString(R.string.lens_magnification_pref_key));
-        tripod_preference = findPreference("tripod_preference");
+        tripod_preference = findPreference("checkbox_tripod_preference");
         tracking_mount_preference = findPreference("tracking_mount_preference");
 
         bindPreferenceSummaryToValue(user_mode_preference);

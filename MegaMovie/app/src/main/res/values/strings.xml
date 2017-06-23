@@ -8,7 +8,7 @@
 
 
     <!--Section Titles-->
-    <string name="eclipse_info_section_title">Eclipse: Where and When?</string>
+    <string name="eclipse_info_section_title">Where and When?</string>
     <string name="orientation_section_title">Orientation</string>
     <string name="about_section_title">About</string>
     <string name="gallery_section_title">Image Gallery</string>
@@ -27,11 +27,11 @@
 
     <!--Intro Copy-->
 
-    <string name="intro_text">On August 21st, 2017, a solar eclipse will be visible in North America. People in the narrow <b>path of totality</b>
+    <string name="intro_text">On August 21, 2017, a solar eclipse will be visible in North America. People in the narrow <b>path of totality</b>
         will see the sun\'s disk completely covered by the moon. This app makes it easy
         to capture images of the eclipse. Your images can also become part of an exciting citizen science project.</string>
     <string name="intro_text_1">Everyone! This app does all the hard work of controlling your smartphone
-        camera to capture images of the eclipse at just the right times. You can use it just with your phone
+        camera to capture images of the eclipse at just the right times. You can use it with just your phone
     or with an external lens and tripod to get even sharper images of this once-in-a-lifetime event.</string>
     <string name="intro_text_2">The app is very easy to use. You just have to point your phone in the right direction during the eclipse
     and the app takes the pictures for you. If you have an external lens and tripod, the app will help you set everything up
@@ -56,17 +56,20 @@
     <!--When and Where Copy-->
     <string name="distance_to_totality_format">You are %1$d kilometers from the path of totality.</string>
     <string name="in_the_path_of_totality_string">You are in the path of totality!</string>
+    <string name="search_bar_hint">Eclipse viewing location?</string>
     <!--About Megamovie Mobile Copy-->
-    <string name="about_megamovie">About Megamovie Mobile\n\nThe Megamovie Mobile app allows you to capture images of the solar eclipse on August 21, 2017.
-        It also lets you share your photos with scientists for a citizen science project led by UC Berkeley’s Space Sciences Laboratory and Google.
-        Click <a href="https://eclipsemega.movie/">here</a> to learn more.
+    <string name="about_megamovie">About this app
+        \n\nThis app allows you to capture images of the solar eclipse on August 21, 2017.
+        It also lets you share your photos with scientists for a citizen-science project led by the Space Sciences Laboratory and Google.
+        Click <a href="https://eclipsemega.movie/">here</a> to learn more about the Megamovie Project. The Eclipse Megamovie Mobile app
+        was created by Ideum and the Space Sciences Laboratory at UC Berkeley.
         \n\nThe app can capture valuable scientific information without additional equipment.
         But you can obtain even better results with an external lens and tripod. If you already have this equipment or want to learn more,
-        use our built-in Eclipse Orientation to customize the app.
-        \n\nIf you are using an external lens and tripod, the app has a Calibration mode that will
+        use our built-in Eclipse Orientation Mode to customize the app.
+        \n\nIf you are using an external lens and tripod, the app has a Calibration Mode that will
         help you focus the lens and point the camera in the right direction. You can practice by capturing images of the moon.
         \n\nOne outcome of the Megamovie Project will be a movie of the eclipse as it moves across the US. The movie will incorporate high-quality images
-        captured by trained volunteers with DSLR cameras. Once it is available, you can download and view it in the Eclipse Megamovie section.\n\n\n\n\n
+        captured by trained volunteers with DSLR cameras. Once it is available, you can download and view it in the Eclipse Megamovie section.
     </string>
 
     <!--Orientation Copy-->
@@ -79,7 +82,7 @@
         The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
         It tells you when and where to see the eclipse, how to aim your camera when the eclipse is about to start, and automatically controls your camera’s settings
         and shutter to take a series of photos during the event. All you’ll have to do is be ready and follow a few simple instructions when the time comes.\n\nThe
-        app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon. Go to Moon test to try it out.
+        app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon. Go to Moon-test to try it out.
     </string>
     <string name="equipment_info_equipment">
         Holding a camera by hand can cause tiny vibrations that blur photos.
@@ -115,8 +118,7 @@
     </string>
     <string name="third_contact_dialog_message">Third contact is the moment when totality
         ends and the sun begins to emerge from the moon’s shadow. As soon as the bright sun appears, you must put your eclipse glasses back on.\n</string>
-    <string name="fourth_contact_dialog_message">This is the end of the eclipse, when the
-        moon’s shadow no longer covers any part of the sun.\n</string>
+    <string name="fourth_contact_dialog_message">This is the end of the eclipse.\n</string>
 
     <!-- Strings related to Settings -->
     <string name="user_mode_default">Phone only</string>
@@ -151,10 +153,10 @@
     <string name="ideum_credit">
     Ideum is a creative company focused on using emerging technologies to
     design public installations and products that lead to meaningful and
-    compelling user experiences. We works with museums, Fortune 500 companies,
+    compelling user experiences. We work with museums, Fortune 500 companies,
     and other entities throughout North America and around the world. Our
     firm provides design services, custom software development, interactive
-    displays and touch tables along with audio-visual (A/V) solutions.
+    displays, touch tables, and audio-visual (A/V) solutions.
 </string>
     <string name="ssl_url">http://www.ssl.berkeley.edu/</string>
     <string name="ssl_credit">
@@ -165,15 +167,19 @@
         Research at SSL is led by Berkeley faculty and SSL Senior Fellows, and focuses on
         experiments and observations carried out in space, but also includes research with the
         potential of leading to future space experiments, and the theoretical research that is
-        tied into the experimental and observational programs.
+        tied into their experimental and observational programs.
     </string>
     <string name="eaa_url">http://www.eclipseacrossamerica.org/</string>
     <string name="eaa_credit">
-        Eclipse Across America, Inc. is a non-profit founded by filmmaker/director and Eclipse
-        Chaser Mark Bender. Its goal is to develop public awareness of the August 21st, 2017 Total Solar Eclipse,
+        Eclipse Across America, Inc. is a non-profit founded by filmmaker/director and eclipse
+        chaser Mark Bender. Its goal is to develop public awareness of the August 21, 2017 total solar eclipse,
         from the science of how and why eclipses happen, to the different ways scientists, eclipse chasers,
         and the general public can watch and enjoy this historic event.
     </string>
 
+    <string name="pravacy_url"><a href='http://ideum.com/eclipse-megamovie-privacy-policy/'>Privacy Policy</a></string>
+
+    <string name="moon">moon</string>
+    <string name="sun">sun</string>
 
 </resources>

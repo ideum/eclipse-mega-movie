@@ -16,7 +16,7 @@
         />
 
     <CheckBoxPreference
-        android:key="tripod_preference"
+        android:key="checkbox_tripod_preference"
         android:title="Tripod"
         android:defaultValue="true"
         />

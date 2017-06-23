@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,9 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,14 +22,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
 
@@ -40,21 +31,24 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CalibrationFragment.OnFragmentInteractionListener,
         MyTimer.MyTimerListener,
-FragmentManager.OnBackStackChangedListener{
+        FragmentManager.OnBackStackChangedListener {
 
-   // TextView comingSoonView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // The first time the app is opened it shows the intro activity, but afterwards
+        // skips it.
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean previouslyStarted = prefs.getBoolean(getResources().getString(R.string.previously_started_key),false);
+        boolean previouslyStarted = prefs.getBoolean(getResources().getString(R.string.previously_started_key), false);
         if (!previouslyStarted) {
             SharedPreferences.Editor edit = prefs.edit();
-            edit.putBoolean(getResources().getString(R.string.previously_started_key),true);
+            edit.putBoolean(getResources().getString(R.string.previously_started_key), true);
             edit.commit();
             loadIntroActivity();
+            finish();
             return;
         }
         setContentView(R.layout.activity_main);
@@ -81,17 +75,18 @@ FragmentManager.OnBackStackChangedListener{
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
         loadInitialFragment(EclipseInfoFragment.class);
 
-        boolean safetyWarningSeen = prefs.getBoolean(getResources().getString(R.string.safety_warning_seen),false);
+
+        // Shows the safety warning once and then not again
+        boolean safetyWarningSeen = prefs.getBoolean(getResources().getString(R.string.safety_warning_seen), false);
         if (!safetyWarningSeen) {
             SharedPreferences.Editor edit = prefs.edit();
-            edit.putBoolean(getResources().getString(R.string.safety_warning_seen),true);
+            edit.putBoolean(getResources().getString(R.string.safety_warning_seen), true);
             edit.commit();
             showSafetyWarning();
         }
+
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
@@ -99,15 +94,17 @@ FragmentManager.OnBackStackChangedListener{
 
 
     public void onAssistantButtonPressed(View view) {
-
         loadFragment(OrientationIntroFragment.class);
-//        Intent intent = new Intent(this,OrientationIntroFragment.class);
-//        startActivity(intent);
+
     }
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer == null) {
+            return;
+    }
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -124,12 +121,8 @@ FragmentManager.OnBackStackChangedListener{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_info) {
             loadAboutActivity();
             return true;
@@ -140,12 +133,12 @@ FragmentManager.OnBackStackChangedListener{
 
     private void loadIntroActivity() {
         Intent intent = new Intent(this, IntroActivity.class);
-        startActivity (intent);
+        startActivity(intent);
     }
 
     private void loadAboutActivity() {
         Intent intent = new Intent(this, AboutActivity.class);
-        startActivity (intent);
+        startActivity(intent);
 
     }
 
@@ -156,7 +149,7 @@ FragmentManager.OnBackStackChangedListener{
         int id = item.getItemId();
 
         if (id == R.id.path_of_totality) {
-           loadFragment(EclipseInfoFragment.class);
+            loadFragment(EclipseInfoFragment.class);
         } else if (id == R.id.assistant) {
             loadFragment(OrientationIntroFragment.class);
         } else if (id == R.id.about_eclipse_app) {
@@ -165,10 +158,9 @@ FragmentManager.OnBackStackChangedListener{
             loadActivity(MyEclipseActivity.class);
         } else if (id == R.id.image) {
 
-        } else if (id == R.id.gallery) {
+        }
+        else if (id == R.id.gallery) {
             loadFragment(GalleryFragment.class);
-        } else if (id == R.id.credits) {
-            loadFragment(CreditsFragment.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -177,7 +169,7 @@ FragmentManager.OnBackStackChangedListener{
     }
 
     private void loadActivity(Class c) {
-        Intent intent = new Intent(this,c);
+        Intent intent = new Intent(this, c);
         startActivity(intent);
     }
 
@@ -192,25 +184,18 @@ FragmentManager.OnBackStackChangedListener{
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment current = fragmentManager.findFragmentByTag("current");
 
-
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        String currentTitle = null;
         if (current != null) {
             transaction.remove(current);
-            if (current instanceof CustomNamable) {
-                currentTitle = ((CustomNamable) current).getTitle();
-            }
         }
-        transaction.add(R.id.flContent,fragment,"current");
-        //transaction.replace(R.id.flContent, fragment);
-        transaction.addToBackStack(currentTitle);
+        transaction.add(R.id.flContent, fragment, "current");
+        transaction.addToBackStack(null);
         transaction.commit();
 
-//        if (fragment instanceof CustomNamable) {
-//            getSupportActionBar().setTitle(((CustomNamable) fragment).getTitle());
-//        }
     }
 
+
+    // When we load the initial fragment, we don't want to add the transaction to the back stack
     private void loadInitialFragment(Class c) {
         Fragment fragment = null;
         try {
@@ -218,13 +203,9 @@ FragmentManager.OnBackStackChangedListener{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         FragmentManager fragmentManager = getSupportFragmentManager();
-
-
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        String currentTitle = null;
-        transaction.add(R.id.flContent,fragment,"current");
+        transaction.add(R.id.flContent, fragment, "current");
         transaction.commit();
 
         if (fragment instanceof CustomNamable) {
@@ -236,19 +217,18 @@ FragmentManager.OnBackStackChangedListener{
 
         AssistantEquipmentChoiceInfoFragment fragment = AssistantEquipmentChoiceInfoFragment.newInstance(index);
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment current = fragmentManager.findFragmentByTag("current");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment current = fragmentManager.findFragmentByTag("current");
 
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            if (current != null) {
-                transaction.remove(current);
-                current.onDestroy();
-            }
-            transaction.add(R.id.flContent,fragment,"current");
-            transaction.addToBackStack(null);
-            //transaction.replace(R.id.flContent, fragment,"current");
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (current != null) {
+            transaction.remove(current);
+            current.onDestroy();
+        }
+        transaction.add(R.id.flContent, fragment, "current");
+        transaction.addToBackStack(null);
 
-            transaction.commit();
+        transaction.commit();
     }
 
     @Override
@@ -272,8 +252,8 @@ FragmentManager.OnBackStackChangedListener{
         builder.setMessage(getResources()
                 .getString(R.string.safety_warning))
                 .setTitle(getResources().getString(R.string.safety_warning_title))
-        .setPositiveButton("Got It",null)
-        .setCancelable(false);
+                .setPositiveButton("Got It", null)
+                .setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.show();
     }

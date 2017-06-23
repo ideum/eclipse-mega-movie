@@ -154,55 +154,72 @@ public class PhasesFragment extends Fragment {
 
     private void onLearnMoreTapped(EclipseTimingMap.Event event) {
         String caption = "";
+        String title = "";
         // Todo: refactor this
         switch (event) {
             case CONTACT1:
                 caption = getResources().getString(R.string.first_contact_dialog_message);
-                if (!c1Expanded) {
-                    learnMorec1.setText(caption);
-                } else {
-                    learnMorec1.setText("LEARN MORE");
-                }
-                c1Expanded = !c1Expanded;
+                title = "First Contact";
+//                if (!c1Expanded) {
+//                    learnMorec1.setText(caption);
+//                } else {
+//                    learnMorec1.setText("LEARN MORE");
+//                }
+//                c1Expanded = !c1Expanded;
                 break;
 
             case CONTACT2:
                 caption = getResources().getString(R.string.second_contact_dialog_message);
-                if (!c2Expanded) {
-                    learnMorec2.setText(caption);
-                } else {
-                    learnMorec2.setText("LEARN MORE");
-                }
-                c2Expanded = !c2Expanded;
+                title = "Second Contact";
+//                if (!c2Expanded) {
+//                    learnMorec2.setText(caption);
+//                } else {
+//                    learnMorec2.setText("LEARN MORE");
+//                }
+//                c2Expanded = !c2Expanded;
                 break;
             case MIDDLE:
                 caption = getResources().getString(R.string.mid_eclipse_dialog_message);
-                if (!cmExpanded) {
-                    learnMorecm.setText(caption);
-                } else {
-                    learnMorecm.setText("LEARN MORE");
-                }
-                cmExpanded = !cmExpanded;
+                title = "Totality";
+//                if (!cmExpanded) {
+//                    learnMorecm.setText(caption);
+//                } else {
+//                    learnMorecm.setText("LEARN MORE");
+//                }
+//                cmExpanded = !cmExpanded;
                 break;
             case CONTACT3:
                 caption = getResources().getString(R.string.third_contact_dialog_message);
-                if (!c3Expanded) {
-                    learnMorec3.setText(caption);
-                } else {
-                    learnMorec3.setText("LEARN MORE");
-                }
-                c3Expanded = !c3Expanded;
+                title = "Third Contact";
+//                if (!c3Expanded) {
+//                    learnMorec3.setText(caption);
+//                } else {
+//                    learnMorec3.setText("LEARN MORE");
+//                }
+//                c3Expanded = !c3Expanded;
                 break;
             case CONTACT4:
                 caption = getResources().getString(R.string.fourth_contact_dialog_message);
-                if (!c4Expanded) {
-                    learnMorec4.setText(caption);
-                } else {
-                    learnMorec4.setText("LEARN MORE");
-                }
-                c4Expanded = !c4Expanded;
+                title = "Fourth Contact";
+//                if (!c4Expanded) {
+//                    learnMorec4.setText(caption);
+//                } else {
+//                    learnMorec4.setText("LEARN MORE");
+//                }
+//                c4Expanded = !c4Expanded;
                 break;
         }
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(caption)
+                .setTitle(title)
+                .setPositiveButton("Got It", null)
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 

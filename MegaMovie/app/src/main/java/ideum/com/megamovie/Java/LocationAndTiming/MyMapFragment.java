@@ -1,5 +1,6 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.places.Place;
 
 
@@ -128,7 +130,7 @@ public class MyMapFragment extends Fragment
         FragmentManager fm = getChildFragmentManager();
         SupportPlaceAutocompleteFragment paf = (SupportPlaceAutocompleteFragment) fm.findFragmentByTag("autocompleteFragment");
         if (paf != null) {
-            paf.setHint("Where will you view the eclipse?");
+            paf.setHint(getString(R.string.search_bar_hint));
         }
 
     }
@@ -149,15 +151,14 @@ public class MyMapFragment extends Fragment
                 if (EclipsePath.distanceToPathOfTotality(latLng) <=0) {
                     setPlannedLocation(latLng);
                     showLocationInPathSelectedToast();
+                } else {
+                    showLocationNotInPathToast();
                 }
 
             }
         });
 
-        LatLng savedLatLng = getPlannedLocationFromPreferences();
         setPlannedLocation(getPlannedLocationFromPreferences());
-
-
     }
 
     private void setTimeZonePreferenceString(LatLng latLng) {
@@ -171,7 +172,14 @@ public class MyMapFragment extends Fragment
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject != null) {
                         String timeZoneId = jsonObject.getString("timeZoneId");
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                        if (timeZoneId == null) {
+                            return;
+                        }
+                        Activity currentActivity = getActivity();
+                        if (currentActivity == null) {
+                            return;
+                        }
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(currentActivity.getApplicationContext());
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(getString(R.string.timezone_id), timeZoneId);
                         editor.commit();
@@ -208,7 +216,7 @@ public class MyMapFragment extends Fragment
         }
          //Only allow locations within the path of totality
         if (EclipsePath.distanceToPathOfTotality(latLng) > 0.1) {
-            Toast.makeText(getContext(),"This location is not within the path of totality",Toast.LENGTH_SHORT).show();
+            showLocationNotInPathToast();
             return;
         }
 
@@ -263,33 +271,41 @@ public class MyMapFragment extends Fragment
     // called when the 'current location' button is pressed
     @Override
     public void onClick(View v) {
-        //moveToCurrentLocation();
         refreshMarkersAndOverlay();
         showDistanceToPathToast();
         setPlannedLocation(EclipsePath.closestPointOnPathOfTotality(currentLatLng));
-
     }
 
     private void showDistanceToPathToast() {
         if (currentLatLng == null) {
             return;
         }
-        double distance = EclipsePath.distanceToPathOfTotality(currentLatLng);
-        String toastMessage = String.format("You are %.0f km from the path of totality",distance);
+        double distanceKm = EclipsePath.distanceToPathOfTotality(currentLatLng);
+        double distanceMiles = (0.621371) * distanceKm;
+        String toastMessage = String.format("You are %.0f miles (%.0f km) from the path of totality",distanceMiles,distanceKm);
         Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
     }
 
     private void showLocationInPathSelectedToast() {
-        double distance = EclipsePath.greatCircleDistance(currentLatLng,plannedLatLng);
-        String toastMessage = String.format("This location is in the path of totality! \nGo to Phases to see the eclipse timing.\nThe location is %.0f km away",distance);
+        if (currentLatLng == null || plannedLatLng == null) {
+            return;
+        }
+        double distanceKm = EclipsePath.greatCircleDistance(currentLatLng,plannedLatLng);
+        double distanceMiles = (0.621371) * distanceKm;
+        String toastMessage = String.format("This location is in the path of totality! \nGo to Phases to see the eclipse timing.\nThis location is %.0f miles (%.0f km) away.",distanceMiles, distanceKm);
         Toast.makeText(getContext(),toastMessage,Toast.LENGTH_LONG).show();
+    }
+
+    private void showLocationNotInPathToast() {
+        Toast.makeText(getContext(),"This location is not within the path of totality",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onPlaceSelected(Place place) {
 
-
-
+        if (place == null) {
+            return;
+        }
         setPlannedLocation(place.getLatLng());
         if (EclipsePath.distanceToPathOfTotality(place.getLatLng()) <= 0) {
             showLocationInPathSelectedToast();
@@ -345,6 +361,11 @@ public class MyMapFragment extends Fragment
 
 
     private void drawShortestPathToTotality(LatLng point) {
+
+        if (point == null) {
+            return;
+        }
+
         LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(point);
 
         PolylineOptions plo = new PolylineOptions();

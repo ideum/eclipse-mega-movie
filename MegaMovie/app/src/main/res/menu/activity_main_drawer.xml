@@ -20,11 +20,11 @@
             android:id="@+id/my_eclipse"
             android:icon="@drawable/ic_list_gray_24dp"
             android:title="@string/settings_section_title" />
-        <item
-            android:id="@+id/credits"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/credits_section_title"
-            android:enabled="true"/>
+        <!--<item-->
+            <!--android:id="@+id/credits"-->
+            <!--android:icon="@drawable/ic_menu_manage"-->
+            <!--android:title="@string/credits_section_title"-->
+            <!--android:enabled="true"/>-->
         <item
             android:id="@+id/full_moon_test"
             android:icon="@drawable/ic_camera_enhance_gray_24dp"

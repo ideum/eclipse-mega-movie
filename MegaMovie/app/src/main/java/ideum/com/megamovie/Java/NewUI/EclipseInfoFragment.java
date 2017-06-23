@@ -273,7 +273,7 @@ public class EclipseInfoFragment extends Fragment
 
     @Override
     public String getTitle() {
-        return "Eclipse: Where and When?";
+        return "Where and When?";
     }
 
     @Override

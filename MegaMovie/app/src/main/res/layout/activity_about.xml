@@ -23,18 +23,260 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="4dp">
+            <TextView
+                android:id="@+id/about_text"
+                android:background="#fff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:fontFamily="Roboto"
+                android:lineSpacingMultiplier="1.4"
+                android:padding="30dp"
+                android:text="@string/about_megamovie"
+                android:textColor="#000"
+                android:textSize="14sp" />
+            </android.support.v7.widget.CardView>
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="#fff"-->
+                <!--android:paddingLeft="30dp"-->
+                <!--android:textColor="#000"-->
+                <!--android:text="Credits"/>-->
 
-    <TextView
-        android:id="@+id/about_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/about_megamovie"
-        android:fontFamily="Roboto"
-        android:lineSpacingMultiplier="1.4"
-        android:padding="30dp"
-        android:textColor="#000"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:textSize="14sp"/>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/ssl_credit_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="160dp"
+                        android:adjustViewBounds="true"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="24dp"
+                        android:paddingTop="8dp"
+                        android:src="@drawable/ssl_logo" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:background="#95989a" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="Roboto"
+                        android:lineSpacingMultiplier="1.4"
+                        android:padding="24dp"
+                        android:text="@string/ssl_credit"
+                        android:textColor="#000" />
+                    <Button
+                        android:id="@+id/ssl_learn_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="26dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="24dp"
+                        android:background="#0000"
+                        android:text="LEARN MORE"
+                        android:textColor="#4d4d4d" />
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/ideum_credit_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="24dp"
+                        android:paddingTop="16dp"
+                        android:src="@drawable/ideum_logo" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:background="#95989a" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="Roboto"
+                        android:lineSpacingMultiplier="1.4"
+                        android:padding="24dp"
+                        android:text="@string/ideum_credit"
+                        android:textColor="#000" />
+
+                    <Button
+                        android:id="@+id/ideum_learn_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="26dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="24dp"
+                        android:background="#0000"
+                        android:text="LEARN MORE"
+                        android:textColor="#4d4d4d" />
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/eaa_credit_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="24dp"
+                        android:paddingTop="8dp"
+                        android:src="@drawable/eaa_logo_newer" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:background="#95989a" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="Roboto"
+                        android:lineSpacingMultiplier="1.4"
+                        android:padding="24dp"
+                        android:text="@string/eaa_credit"
+                        android:textColor="#000" />
+                    <Button
+                        android:id="@+id/eaa_learn_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="26dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="24dp"
+                        android:background="#0000"
+                        android:text="LEARN MORE"
+                        android:textColor="#4d4d4d" />
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Photo Credits"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:background="#95989a" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="Roboto"
+                        android:lineSpacingMultiplier="1.4"
+                        android:padding="24dp"
+                        android:text="Photos in the Phases section by Lorenzo Comolli and Alessandro Gambaro"
+                        android:textColor="#000" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="4dp">
+
+                <TextView
+                    android:padding="24dp"
+                    android:id="@+id/privacy_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pravacy_url"/>
+
+                </android.support.v7.widget.CardView>
+
+        </LinearLayout>
     </ScrollView>
 
 </FrameLayout>

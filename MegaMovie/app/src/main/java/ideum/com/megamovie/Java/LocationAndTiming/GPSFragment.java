@@ -1,9 +1,14 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,11 +48,11 @@ public class GPSFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(getActivity(),
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-//                    REQUEST_LOCATION_PERMISSIONS);
-//        }
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSIONS);
+        }
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -142,6 +147,7 @@ public class GPSFragment extends Fragment
 
     @Override
     public void onLocationChanged(Location location) {
+       // Toast.makeText(getActivity(),"location changed",Toast.LENGTH_SHORT).show();
         if (SHOULD_USE_DUMMY_LOCATION) {
             location.setLatitude(DUMMY_LATITUDE);
             location.setLongitude(DUMMY_LONGITUDE);
