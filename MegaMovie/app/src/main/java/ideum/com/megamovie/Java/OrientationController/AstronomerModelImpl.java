@@ -18,8 +18,9 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ideum.com.megamovie.Java.ApplicationConstants;
 import ideum.com.megamovie.Java.OrientationController.AstronomerModel;
@@ -78,6 +79,10 @@ import static ideum.com.megamovie.Java.Util.Geometry.vectorProduct;
  * @author John Taylor
  */
 public class AstronomerModelImpl implements AstronomerModel {
+
+
+
+
   private static final String TAG = MiscUtil.getTag(AstronomerModelImpl.class);
   private static final Vector3 POINTING_DIR_IN_PHONE_COORDS = new Vector3(0, 0, -1);
   private static final Vector3 SCREEN_UP_IN_PHONE_COORDS = new Vector3(0, 1, 0);
@@ -92,6 +97,14 @@ public class AstronomerModelImpl implements AstronomerModel {
   private LatLong location = new LatLong(0f, 0f);
   private Clock clock = new RealClock();
   private long celestialCoordsLastUpdated = -1;
+
+
+  private List<ModelChangeListener> listeners = new ArrayList<>();
+
+  @Override
+  public void addListener(ModelChangeListener listener) {
+    listeners.add(listener);
+  }
 
   /**
    * The pointing comprises a vector into the phone's screen expressed in
@@ -281,6 +294,11 @@ public class AstronomerModelImpl implements AstronomerModel {
 
     pointing.updateLineOfSight(viewInSpaceSpace);
     pointing.updatePerpendicular(screenUpInSpaceSpace);
+
+    for(ModelChangeListener listener : listeners) {
+      listener.onModelChanged(this);
+    }
+
   }
 
   /**

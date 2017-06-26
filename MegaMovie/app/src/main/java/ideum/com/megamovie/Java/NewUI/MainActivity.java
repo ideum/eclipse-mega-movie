@@ -25,6 +25,8 @@ import android.view.MenuItem;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
+import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestIntroFragment;
+import ideum.com.megamovie.Java.NewUI.Orientation.AssistantEquipmentChoiceInfoFragment;
 import ideum.com.megamovie.R;
 
 public class MainActivity extends AppCompatActivity
@@ -158,7 +160,10 @@ public class MainActivity extends AppCompatActivity
             loadActivity(MyEclipseActivity.class);
         } else if (id == R.id.image) {
 
+        } else if (id == R.id.full_moon_test) {
+            loadFragment(MoonTestIntroFragment.class);
         }
+
         else if (id == R.id.gallery) {
             loadFragment(GalleryFragment.class);
         }

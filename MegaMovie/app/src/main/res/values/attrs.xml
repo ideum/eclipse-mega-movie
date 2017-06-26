@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DirectionCalibrationView">
+        <attr name="arrow_length" format="float"/>
+    </declare-styleable>
+
+</resources>

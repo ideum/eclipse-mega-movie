@@ -120,4 +120,12 @@ public class Vector3 {
   public String toString() {
     return String.format("x=%f, y=%f, z=%f", x, y, z);
   }
+
+  public Vector3 crossProduct(Vector3 v) {
+    float resultX = y * v.z - z * v.y;
+    float resultY = z * v.x - x * v.z;
+    float resultZ = x * v.y - y * v.x;
+
+    return new Vector3(resultX, resultY, resultZ);
+  }
 }

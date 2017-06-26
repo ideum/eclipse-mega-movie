@@ -65,16 +65,6 @@ public class GPSFragment extends Fragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onStart() {
         mGoogleApiClient.connect();
         super.onStart();

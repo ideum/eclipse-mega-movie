@@ -1,7 +1,6 @@
-package ideum.com.megamovie.Java.NewUI;
+package ideum.com.megamovie.Java.NewUI.Orientation;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,6 +19,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
+import ideum.com.megamovie.Java.NewUI.EclipseInfoFragment;
+import ideum.com.megamovie.Java.NewUI.MainActivity;
+import ideum.com.megamovie.Java.NewUI.MyEclipseActivity;
 import ideum.com.megamovie.R;
 
 

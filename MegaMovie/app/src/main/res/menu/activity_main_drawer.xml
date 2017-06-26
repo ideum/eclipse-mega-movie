@@ -28,9 +28,8 @@
         <item
             android:id="@+id/full_moon_test"
             android:icon="@drawable/ic_camera_enhance_gray_24dp"
-            app:actionLayout="@layout/coming_soon"
             android:title="@string/moon_test_section_title"
-            android:enabled="false"
+            android:enabled="true"
             />
         <item
             android:id="@+id/calibration_mode"

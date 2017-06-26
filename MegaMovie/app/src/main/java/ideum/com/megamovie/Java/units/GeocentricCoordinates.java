@@ -104,6 +104,8 @@ public class GeocentricCoordinates extends Vector3 {
     this.z = v.z;
   }
 
+
+
   @Override
   public GeocentricCoordinates copy() {
     return new GeocentricCoordinates(x, y, z);
@@ -111,5 +113,9 @@ public class GeocentricCoordinates extends Vector3 {
 
   public static GeocentricCoordinates getInstanceFromVector3(Vector3 v) {
     return new GeocentricCoordinates(v.x, v.y, v.z);
+  }
+
+  public Vector3 getVector3() {
+    return new Vector3(x,y,z);
   }
 }

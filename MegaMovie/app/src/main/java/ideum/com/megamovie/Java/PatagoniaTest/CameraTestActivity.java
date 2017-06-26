@@ -73,8 +73,6 @@ public class CameraTestActivity extends AppCompatActivity {
         mCameraFragment.decrementDuration(DURATION_INCREMENT);
         updateTextViews();
     }
-
-
     public void captureImage(View view) {
         if (SHOULD_USE_DELAY) {
             new CountDownTimer(CAPTURE_DELAY_MILLS, 1000) {
@@ -90,7 +88,6 @@ public class CameraTestActivity extends AppCompatActivity {
             takePhoto();
         }
     }
-
     private void takePhoto() {
         Toast.makeText(getApplicationContext(),"Photo taken!",Toast.LENGTH_SHORT).show();
         mCameraFragment.captureStillImage();

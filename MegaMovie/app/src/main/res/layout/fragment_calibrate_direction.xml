@@ -2,12 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.Orientation.AssistantIntroFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="ideum.com.megamovie.Java.CalibrateDirectionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ideum.com.megamovie.Java.VIews.DirectionCalibrationView
+        android:id="@+id/guide_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_weight="1"
+        app:arrow_length="10"/>
 
 </FrameLayout>

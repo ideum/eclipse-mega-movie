@@ -17,6 +17,7 @@ package ideum.com.megamovie.Java.OrientationController;
 
 
 import java.util.Date;
+import java.util.List;
 
 import ideum.com.megamovie.Java.units.GeocentricCoordinates;
 import ideum.com.megamovie.Java.units.LatLong;
@@ -30,6 +31,8 @@ import ideum.com.megamovie.Java.units.Vector3;
  * @author John Taylor
  */
 public interface AstronomerModel {
+  public void addListener(ModelChangeListener listener);
+
   /**
    * A POJO to hold the user's view direction.
    *

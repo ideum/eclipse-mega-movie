@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.NewUI;
+package ideum.com.megamovie.Java.NewUI.Orientation;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
+import ideum.com.megamovie.Java.NewUI.EclipseInfoFragment;
+import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 
 public class AssistantFragment extends Fragment

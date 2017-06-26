@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.NewUI;
+package ideum.com.megamovie.Java.NewUI.Orientation;
 
 
 import android.content.SharedPreferences;
@@ -16,6 +16,8 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
+import ideum.com.megamovie.Java.NewUI.EclipseInfoFragment;
+import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 
 /**

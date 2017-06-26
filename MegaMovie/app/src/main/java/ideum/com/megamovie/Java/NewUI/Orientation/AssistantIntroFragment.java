@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.NewUI;
+package ideum.com.megamovie.Java.NewUI.Orientation;
 
 
 import android.os.Bundle;

@@ -120,6 +120,15 @@
         ends and the sun begins to emerge from the moon’s shadow. As soon as the bright sun appears, you must put your eclipse glasses back on.\n</string>
     <string name="fourth_contact_dialog_message">This is the end of the eclipse.\n</string>
 
+
+    <!--Moon Test Copy-->
+    <string name="moon_test_intro">
+        By using the app to capture images of the moon, you\'ll become familiar with how the
+        app works and be ready to use it to photograph the main event: the solar eclipse.
+        \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse.
+    </string>
+
+
     <!-- Strings related to Settings -->
     <string name="user_mode_default">Phone only</string>
     <string name="lens_default">No external lens</string>
