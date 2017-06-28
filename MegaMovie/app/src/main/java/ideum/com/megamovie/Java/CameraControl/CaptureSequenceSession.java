@@ -3,10 +3,8 @@
  * and Camera Fragment
  */
 
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.CameraControl;
 
-
-import android.location.Location;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,12 +12,13 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Queue;
 
+import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 
 public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public static final String TAG = "CaptureSequenceSession";
-    private LocationProvider mLocationProvider;
+   // private LocationProvider mLocationProvider;
     private Queue<CaptureSequence.TimedCaptureRequest> requestQueue;
     private CaptureSequence.TimedCaptureRequest nextRequest;
     private CameraController mCameraController;
@@ -30,18 +29,26 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     }
 
     public CaptureSequenceSession(CaptureSequence captureSequence, LocationProvider locationProvider, CameraController controller) {
-        mLocationProvider = locationProvider;
+       // mLocationProvider = locationProvider;
+        requestQueue = captureSequence.getRequestQueue();
+        mCameraController = controller;
+    }
+
+    public CaptureSequenceSession(CaptureSequence captureSequence, CameraController controller) {
         requestQueue = captureSequence.getRequestQueue();
         mCameraController = controller;
     }
 
 
     private Long getTime() {
-        Location currentLocation = mLocationProvider.getLocation();
-        if (currentLocation == null) {
-            return null;
-        }
-        return currentLocation.getTime();
+        Calendar c = Calendar.getInstance();
+        return c.getTimeInMillis();
+
+//        Location currentLocation = mLocationProvider.getLocation();
+//        if (currentLocation == null) {
+//            return null;
+//        }
+//        return currentLocation.getTime();
     }
 
     @Override

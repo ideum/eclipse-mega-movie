@@ -127,6 +127,26 @@
         app works and be ready to use it to photograph the main event: the solar eclipse.
         \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse.
     </string>
+    <string name="moon_test_select_time">
+        When would you like to start taking pictures of the moon? The app will calculate the location of the moon
+        at that time.
+    </string>
+
+    <string name="moon_test_calibration">
+        Now we need to set up your equipment. When you\'re done, go to Capture Mode, and at the
+        correct time, your phone will take photos of the moon.
+    </string>
+    <string name="moon_test_calibrate_direction">
+        Turn your phone in the direction of the red line. As you get closer to the correct direction,
+        the blue circle will get larger. The circle will turn green when your phone and tripod
+        are correctly calibrated.
+    </string>
+    <string name="moon_test_calibrate_lens">
+        Point the camera at an object that is more than 100 ft away, like a tree or a building (or
+        the moon itself!). Adjust the focus of the external lens until the object in the preview
+        appears crisp and in focus. You may adjust the brightness of the preview using the buttons
+        above.
+    </string>
 
 
     <!-- Strings related to Settings -->
@@ -139,6 +159,9 @@
     <string name="planned_lng_key">planned longitude</string>
     <string name="timezone_id">timezone id</string>
     <string name="phases_got_it_visible_key">got it visible</string>
+    <string name="moon_test_hour">moon test hour</string>
+    <string name="moon_test_minute">moon test minute</string>
+    <string name="moon_test_time_mills">moon test mills</string>
 
     <string name="no_tripod_warning">
         If you plan to attach an external lens to your smartphone, you will also need to mount it

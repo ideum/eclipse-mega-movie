@@ -31,8 +31,4 @@ implements CustomNamable{
         return "Orientation";
     }
 
-    @Override
-    public boolean shouldShowActionBar() {
-        return false;
-    }
 }

@@ -117,10 +117,6 @@ NumberPicker.OnValueChangeListener{
         return "Orientation";
     }
 
-    @Override
-    public boolean shouldShowActionBar() {
-        return true;
-    }
 
 
 

@@ -13,7 +13,7 @@
 
 
 
-    <fragment android:name="ideum.com.megamovie.Java.PatagoniaTest.CameraPreviewAndCaptureFragment"
+    <fragment android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
         android:id="@+id/camera_test_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"

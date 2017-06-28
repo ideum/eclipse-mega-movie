@@ -276,10 +276,6 @@ public class EclipseInfoFragment extends Fragment
         return "Where and When?";
     }
 
-    @Override
-    public boolean shouldShowActionBar() {
-        return true;
-    }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 

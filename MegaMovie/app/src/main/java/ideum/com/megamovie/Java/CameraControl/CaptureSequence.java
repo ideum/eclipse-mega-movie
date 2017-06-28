@@ -2,10 +2,11 @@
  * Encodes the data for a sequence of camera captures.
  */
 
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.CameraControl;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,12 +55,12 @@ public class CaptureSequence {
     }
 
     public static class IntervalProperties {
-        Integer sensorSensitivity;
-        Long sensorExposureTime;
-        Float lensFocusDistance;
-        Long spacing;
-        Boolean shouldSaveRaw;
-        Boolean shouldSaveJpeg;
+        public Integer sensorSensitivity;
+        public Long sensorExposureTime;
+        public Float lensFocusDistance;
+        public Long spacing;
+        public Boolean shouldSaveRaw;
+        public Boolean shouldSaveJpeg;
 
         public IntervalProperties(Integer sensorSensitivity, Long sensorExposureTime, Float lensFocusDistance,
                                   Long spacing, Boolean shouldSaveRaw, Boolean shouldSaveJpeg) {
@@ -70,6 +71,11 @@ public class CaptureSequence {
             this.shouldSaveRaw = shouldSaveRaw;
             this.shouldSaveJpeg = shouldSaveJpeg;
         }
+    }
+
+    // Properties for interval where exposure is varied in steps
+    public static class SteppedIntervalProperties {
+
     }
 
     public static class CaptureInterval {
@@ -115,6 +121,11 @@ public class CaptureSequence {
 
     public CaptureSequence(List<CaptureInterval> captureIntervals) {
         mCaptureIntervals = captureIntervals;
+    }
+
+    public CaptureSequence(CaptureInterval interval) {
+        mCaptureIntervals = new ArrayList<>();
+        mCaptureIntervals.add(interval);
     }
 
     public Queue<TimedCaptureRequest> getRequestQueue() {

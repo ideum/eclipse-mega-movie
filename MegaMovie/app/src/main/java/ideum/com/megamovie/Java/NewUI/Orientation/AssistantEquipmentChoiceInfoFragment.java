@@ -192,8 +192,5 @@ implements AdapterView.OnItemSelectedListener,
         return "Orientation";
     }
 
-    @Override
-    public boolean shouldShowActionBar() {
-        return true;
-    }
+
 }

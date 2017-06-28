@@ -23,9 +23,11 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
+import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
+import ideum.com.megamovie.Java.CameraControl.ConfigParser;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.R;
 

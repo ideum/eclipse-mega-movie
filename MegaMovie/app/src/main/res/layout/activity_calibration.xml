@@ -27,7 +27,7 @@
 </LinearLayout>
 
     <fragment android:id="@+id/preview_fragment"
-        android:name="ideum.com.megamovie.Java.PatagoniaTest.CameraPreviewAndCaptureFragment"
+        android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"

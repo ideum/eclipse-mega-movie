@@ -32,6 +32,7 @@
             android:id="@+id/body"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:lineSpacingExtra="4sp"
             android:text="@string/moon_test_intro"
             android:layout_marginTop="24dp"/>
 

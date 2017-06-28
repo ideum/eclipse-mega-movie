@@ -6,7 +6,7 @@
  * sample project available here: https://github.com/googlesamples/android-Camera2Raw
  */
 
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.CameraControl;
 
 import android.Manifest;
 import android.app.Activity;
@@ -61,6 +61,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
+import ideum.com.megamovie.Java.PatagoniaTest.MetadataWriter;
 
 public class CameraFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {

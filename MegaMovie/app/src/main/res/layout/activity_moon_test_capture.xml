@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestCaptureActivity">
+
+    <fragment
+        android:id="@+id/camera_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+        />
+
+    <Button
+        android:id="@+id/take_photo_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:text="Take photo"/>
+
+    <TextView
+        android:id="@+id/capture_progress_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="20dp"/>
+
+</FrameLayout>

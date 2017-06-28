@@ -3,7 +3,7 @@
  * save images in RAW or JPEG.
  */
 
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.CameraControl;
 
 import android.Manifest;
 import android.app.Activity;
@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ideum.com.megamovie.Java.PatagoniaTest.MetadataWriter;
 import ideum.com.megamovie.R;
 
 public class CameraPreviewAndCaptureFragment extends android.app.Fragment
@@ -66,6 +67,12 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
 
     public static final boolean SHOULD_SAVE_RAW = false;
     public static final String TAG = "PreviewCapture";
+
+    private List<CameraFragment.CaptureListener> listeners = new ArrayList<>();
+
+    public void addCaptureListener(CameraFragment.CaptureListener listener) {
+        listeners.add(listener);
+    }
 
     public void setCameraSettings(CaptureSequence.CaptureSettings settings) {
         mSensorSensitivity = settings.sensitivity;
@@ -538,6 +545,10 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
             if (SHOULD_SAVE_RAW) {
                 ImageSaver.ImageSaverBuilder rawBuilder = new ImageSaver.ImageSaverBuilder(getActivity()).setCharacteristics(mCharacteristics);
                 mRawResultQueue.put((int) request.getTag(), rawBuilder);
+            }
+
+            for (CameraFragment.CaptureListener listener : listeners) {
+                listener.onCapture();
             }
 
             mJpegResultQueue.put((int) request.getTag(), jpegBuilder);

@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void loadActivity(Class c) {
+    public void loadActivity(Class c) {
         Intent intent = new Intent(this, c);
         startActivity(intent);
     }
@@ -295,11 +297,7 @@ public class MainActivity extends AppCompatActivity
         if (current instanceof CustomNamable) {
             CustomNamable cn = (CustomNamable) current;
             getSupportActionBar().setTitle(cn.getTitle());
-            if (cn.shouldShowActionBar()) {
-                getSupportActionBar().show();
-            } else {
-                getSupportActionBar().hide();
-            }
+
 
         }
     }

@@ -1,9 +1,31 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="ideum.com.megamovie.Java.CalibrateDirectionFragment">
+    tools:context="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/sun_ra_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            />
+        <TextView
+            android:id="@+id/phone_ra_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="right"
+            />
+
+
+    </LinearLayout>
 
     <ideum.com.megamovie.Java.VIews.DirectionCalibrationView
         android:id="@+id/guide_view"
@@ -12,4 +34,4 @@
         android:layout_weight="1"
         app:arrow_length="10"/>
 
-</FrameLayout>
+</LinearLayout>

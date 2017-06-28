@@ -18,13 +18,17 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.LocationSource;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
+import ideum.com.megamovie.Java.CameraControl.CameraFragment;
+import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
+import ideum.com.megamovie.Java.CameraControl.CaptureSequenceSession;
+import ideum.com.megamovie.Java.CameraControl.ConfigParser;
+import ideum.com.megamovie.Java.CameraControl.EclipseCaptureSequenceBuilder;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;

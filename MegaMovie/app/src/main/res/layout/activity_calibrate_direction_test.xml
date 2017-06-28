@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ideum.com.megamovie.Java.NewUI.CalibrateDirectionActivity">
+    tools:context="ideum.com.megamovie.Java.NewUI.CalibrateDirectionTestActivity">
 
     <fragment
         android:id="@+id/direction_calibration_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:name="ideum.com.megamovie.Java.CalibrateDirectionFragment"
+        android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
         />
 
     <fragment

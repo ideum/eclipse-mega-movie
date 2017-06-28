@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.CameraControl;
 
 
 import android.location.Location;
@@ -15,7 +15,6 @@ import java.util.Locale;
 
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 
 public class EclipseCaptureSequenceBuilder {
 

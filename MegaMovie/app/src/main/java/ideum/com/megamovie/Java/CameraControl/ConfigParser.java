@@ -1,4 +1,4 @@
-package ideum.com.megamovie.Java.PatagoniaTest;
+package ideum.com.megamovie.Java.CameraControl;
 /**
  * Parses narrow_field__annular_config xml file to create queue of timed capture requests
  */
@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.R;
 
 public class ConfigParser {
@@ -44,7 +45,6 @@ public class ConfigParser {
     }
 
     private CaptureSequence.IntervalProperties readIntervalProperties(XmlPullParser parser) throws IOException, XmlPullParserException {
-
         parser.require(XmlPullParser.START_TAG, null, "interval_properties");
         Integer sensitivity = null;
         Long exposureTime = null;
