@@ -27,6 +27,8 @@ public class CalibrationFragment extends Fragment {
     }
 
 
+
+
     // TODO: Rename and change types and number of parameters
     public static CalibrationFragment newInstance(String param1, String param2) {
         CalibrationFragment fragment = new CalibrationFragment();

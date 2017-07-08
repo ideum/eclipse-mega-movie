@@ -7,20 +7,128 @@
     android:orientation="vertical"
     tools:context="ideum.com.megamovie.Java.NewUI.CalibrateDirectionTestActivity">
 
-    <fragment
-        android:id="@+id/direction_calibration_fragment"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
-        />
+        android:layout_weight="2">
+
+        <fragment
+            android:id="@+id/camera_preview_fragment"
+            android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal|top">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:onClick="useMethod1"
+                android:text="method 1" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:onClick="useMethod2"
+                android:text="method 2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical|right">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:onClick="resetCalibration"
+                android:text="reset calibration" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:onClick="calibrateToMoon"
+                android:text="calibrate" />
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="useCurrentTime"
+                android:text="current time" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="useTargetTime"
+                android:text="targetTime" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="4dp">
+
+            <Button
+                android:id="@+id/set_moon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="setTargetMoon"
+                android:text="Moon" />
+
+            <Button
+                android:id="@+id/set_sun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="setTargetSun"
+                android:text="Sun" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F00"
+            android:layout_gravity="center_vertical"
+            />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#F00"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </FrameLayout>
 
     <fragment
-        android:id="@+id/preview_fragment"
+        android:id="@+id/direction_calibration_fragment"
+        android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:name="ideum.com.megamovie.Java.PatagoniaTest.CameraPreviewFragment"
-        />
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/accuracy_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

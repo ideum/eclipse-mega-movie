@@ -32,13 +32,14 @@ implements CustomNamable{
 
         View rootView = inflater.inflate(R.layout.fragment_moon_test_calibration, container, false);
         Button calibrateDirectionButton = rootView.findViewById(R.id.calibrate_direction_button);
+
         calibrateDirectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Activity activity = getActivity();
                 if (activity instanceof MainActivity) {
                     MainActivity mainActivity = (MainActivity) activity;
-                    mainActivity.loadActivity(MoonTestCalibrateDirectionActivity.class);
+                    mainActivity.loadActivity(CalibrateDirectionTestActivity.class);
                 }
             }
         });

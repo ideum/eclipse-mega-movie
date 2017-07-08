@@ -33,6 +33,7 @@ import ideum.com.megamovie.Java.units.Vector3;
 import ideum.com.megamovie.R;
 
 import static android.content.Context.SENSOR_SERVICE;
+import static android.view.View.GONE;
 
 
 public class CalibrateDirectionFragment extends Fragment
@@ -43,10 +44,10 @@ implements MyTimer.MyTimerListener,
     private MyTimer mTimer;
     private GPSFragment mGPSFragment;
     DirectionCalibrationView calibrationView;
-    private boolean shouldUseCurrentTime = false;
-    private Long targetTimeMills;
+    public boolean shouldUseCurrentTime = true;
+    private Long targetTimeMills = 0L;
 
-    private Planet planet = Planet.Sun;
+    private Planet planet = Planet.Moon;
 
     private TextView sunRaDec;
     private TextView phoneRaDec;
@@ -61,6 +62,20 @@ implements MyTimer.MyTimerListener,
 
     public void setTargetTimeMills(Long mills) {
         targetTimeMills = mills;
+        FixedClock c = new FixedClock(mills);
+        model.setClock(c);
+    }
+
+    public void setShouldUseCurrentTime(boolean value) {
+        if (value) {
+            model.setClock(new RealClock());
+            shouldUseCurrentTime = true;
+        } else {
+            shouldUseCurrentTime = false;
+            FixedClock c = new FixedClock(targetTimeMills);
+            model.setClock(c);
+        }
+
     }
 
 
@@ -77,6 +92,8 @@ implements MyTimer.MyTimerListener,
         calibrationView = rootView.findViewById(R.id.guide_view);
         sunRaDec = rootView.findViewById(R.id.sun_ra_dec);
         phoneRaDec = rootView.findViewById(R.id.phone_ra_dec);
+        sunRaDec.setVisibility(GONE);
+        phoneRaDec.setVisibility(GONE);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 
@@ -94,25 +111,18 @@ implements MyTimer.MyTimerListener,
         sensorOrientationController.setModel(model);
         sensorOrientationController.start();
 
-//        updateTargetTimeMillsFromPreferences();
 
         return rootView;
     }
 
-//    private void updateTargetTimeMillsFromPreferences() {
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//        int hour = preferences.getInt(getContext().getString(R.string.moon_test_hour),-1);
-//        int minute = preferences.getInt(getContext().getString(R.string.moon_test_minute),-1);
-//        if (hour == -1 || minute == -1) {
-//            return;
-//        }
-//
-//        Calendar c = Calendar.getInstance();
-//        c.set(Calendar.HOUR_OF_DAY,hour);
-//        c.set(Calendar.MINUTE,minute);
-//        c.set(Calendar.MILLISECOND,0);
-//        targetTimeMills = c.getTimeInMillis();
-//    }
+    public void showView(boolean shouldShow) {
+        if (shouldShow) {
+            calibrationView.setVisibility(View.VISIBLE);
+        } else {
+            calibrationView.setVisibility(GONE);
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -149,31 +159,6 @@ implements MyTimer.MyTimerListener,
     }
 
     private Float error() {
-//        if (model == null) {
-//            return null;
-//        }
-//        GeocentricCoordinates lineOfSightPointing = model.getPointing().getLineOfSight();
-//        float lineOfSightX = lineOfSightPointing.x;
-//        float lineOfSightY = lineOfSightPointing.y;
-//        float lineOfSightZ = lineOfSightPointing.z;
-//
-//        RaDec targetRA = null;
-//        switch (planet) {
-//            case Moon:
-//                targetRA = Planet.calculateLunarGeocentricLocation(model.getTime());
-//                break;
-//            case Sun:
-//                targetRA = SolarPositionCalculator.getSolarPosition(model.getTime());
-//                break;
-//        }
-//
-//        GeocentricCoordinates targetGcc = new GeocentricCoordinates(1, 0, 0);
-//        targetGcc.updateFromRaDec(targetRA);
-//        float targetX = targetGcc.x;
-//        float targetY = targetGcc.y;
-//        float targetZ = targetGcc.z;
-
-//        Vector3 difference = new Vector3(targetX - lineOfSightX, targetY - lineOfSightY, targetZ - lineOfSightZ);
         Vector3 lineOfSight = getLineOfSightVector();
         Vector3 target = getTargetVector();
         if (lineOfSight == null || target == null) {
@@ -183,19 +168,48 @@ implements MyTimer.MyTimerListener,
         return VectorUtil.difference(lineOfSight,target).length();
     }
 
+    public void useMethod(int methodNumber) {
+        ((AstronomerModelImpl) model).CALIBRATION_METHOD = methodNumber;
+    }
+
+    public void calibrateModelToMoon() {
+        ((AstronomerModelImpl) model).calibrate(getTargetGcc());
+    }
+
+    public void resetModelCalibration() {
+        ((AstronomerModelImpl) model).resetCalibration();
+    }
+
+    private AstronomerModel.Pointing pointing() {
+//        return model.getPointing();
+        return ((AstronomerModelImpl)model).getCorrectedPointing();
+    }
+
     private Vector3 getLineOfSightVector() {
         if (model == null) {
             return null;
         }
 
-        return model.getPointing().getLineOfSight().getVector3();
+        return pointing().getLineOfSight().getVector3();
 
     }
     private Vector3 getPerpendicularVector() {
         if (model == null) {
             return null;
         }
-        return model.getPointing().getPerpendicular().getVector3();
+        return pointing().getPerpendicular().getVector3();
+    }
+
+    public RaDec getTargetRaDec() {
+        float ra = getTargetGcc().getRa();
+        float dec = getTargetGcc().getDec();
+        return new RaDec(ra,dec);
+    }
+
+    public RaDec getPhoneRaDec() {
+        float ra = pointing().getLineOfSight().getRa();
+        float dec = pointing().getLineOfSight().getDec();
+        return new RaDec(ra,dec);
     }
 
     private Vector3 getTargetVector() {
@@ -231,9 +245,14 @@ implements MyTimer.MyTimerListener,
 
     private DirectionCalibrationView.ScreenVector getErrorVector() {
         Vector3 phoneOutwards = getLineOfSightVector();
+        if (phoneOutwards == null) {
+            return null;
+        }
         Vector3 phoneY = VectorUtil.negate(getPerpendicularVector());
         Vector3 phoneX = VectorUtil.crossProduct(phoneOutwards,phoneY);
-
+        if (getTargetVector() == null) {
+            return null;
+        }
         Vector3 errorVector3 = VectorUtil.difference(getTargetVector(),phoneOutwards);
 
         float x = -VectorUtil.dotProduct(errorVector3,phoneX)/2.0f;
@@ -262,27 +281,20 @@ implements MyTimer.MyTimerListener,
     }
 
     private void updateUI() {
-        float phoneRa = model.getPointing().getLineOfSight().getRa();
-        float phoneDec = model.getPointing().getLineOfSight().getDec();
-        RaDec coordinatesPhone = new RaDec(phoneRa,phoneDec);
-        phoneRaDec.setText("phone:\n" + coordinatesPhone.toString());
+
+        phoneRaDec.setText("phone:\n" + getPhoneRaDec().toString());
 
         Date date = getDate();
         if (date == null) {
             return;
         }
 
-        RaDec coordinatesTarget = null;
-        switch (planet) {
-            case Moon:
-                coordinatesTarget = Planet.calculateLunarGeocentricLocation(date);
-                break;
-            case Sun:
-                coordinatesTarget = SolarPositionCalculator.getSolarPosition(date);
-                break;
-        }
-        sunRaDec.setText("target:\n" + coordinatesTarget.toString());
+//        sunRaDec.setText(((AstronomerModelImpl)model).inverseMatrix());
+
+        sunRaDec.setText("target:\n" + getTargetRaDec().toString());
     }
+
+
 
 
     @Override

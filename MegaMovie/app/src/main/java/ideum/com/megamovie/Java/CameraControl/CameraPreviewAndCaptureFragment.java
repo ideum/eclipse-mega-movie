@@ -66,7 +66,12 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback {
 
     public static final boolean SHOULD_SAVE_RAW = false;
+    public static final boolean ALLOWS_JPEG = true;
     public static final String TAG = "PreviewCapture";
+
+    private static final String RAW_METADATA_FILENAME = "metadata_raw.txt";
+    private static final String JPEG_METADATA_FILENAME = "metadata_jpeg.txt";
+    private static final String DATA_DIRECTORY_NAME = "MegaMovie";
 
     private List<CameraFragment.CaptureListener> listeners = new ArrayList<>();
 
@@ -80,19 +85,19 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         mDuration = settings.exposureTime;
     }
 
-    public int mSensorSensitivity = 300;
-    public float mFocusDistance = 3;
-    public long mDuration = 3000000; //nanoseconds
+    public int mSensorSensitivity = 60;
+    public float mFocusDistance = 0;
+    public long mDuration = 5000000; //nanoseconds
 
     // Argument is in milliseconds
     public void incrementDuration(long deltaDuration) {
-        mDuration += deltaDuration * 1000000;
+        mDuration += deltaDuration * 100000;
         setPreviewRequest();
     }
 
     public void decrementDuration(long deltaDuration) {
         if (mDuration > 0) {
-            mDuration -= deltaDuration * 1000000;
+            mDuration -= deltaDuration * 100000;
         }
         setPreviewRequest();
     }
@@ -230,19 +235,31 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
                     int requestId = (int) request.getTag();
 
-                    String currentDataTime = generateTimeStamp();
+                    String currentDateTime = generateTimeStamp();
 
-                    File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "MegaMovieTest/JPEG");
-                    if (!jpegRootPath.exists()) {
-                        jpegRootPath.mkdirs();
+                    if (ALLOWS_JPEG) {
+                        ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+
+                        File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), DATA_DIRECTORY_NAME + "/JPEG");
+                        if (!jpegRootPath.exists()) {
+                            jpegRootPath.mkdirs();
+                        }
+
+                        File jpegFile = new File(jpegRootPath,
+                                "JPEG_" + currentDateTime + ".jpg");
+
+                        if (jpegBuilder != null) {
+                            jpegBuilder.setFile(jpegFile);
+                        }
                     }
+
                     if (SHOULD_SAVE_RAW) {
                         File rawRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "MegaMovieTest/RAW");
                         if (!rawRootPath.exists()) {
                             rawRootPath.mkdirs();
                         }
                         File rawFile = new File(rawRootPath,
-                                "RAW_" + currentDataTime + ".dng");
+                                "RAW_" + currentDateTime + ".dng");
                         ImageSaver.ImageSaverBuilder rawBuilder;
                         rawBuilder = mRawResultQueue.get(requestId);
 
@@ -250,15 +267,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                             rawBuilder.setFile(rawFile);
                         }
 
-                    }
-                    File jpegFile = new File(jpegRootPath,
-                            "JPEG_" + currentDataTime + ".jpg");
-
-
-                    ImageSaver.ImageSaverBuilder jpegBuilder;
-                    jpegBuilder = mJpegResultQueue.get(requestId);
-                    if (jpegBuilder != null) {
-                        jpegBuilder.setFile(jpegFile);
                     }
 
                 }
@@ -272,6 +280,36 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
                     if (jpegBuilder != null) {
                         jpegBuilder.setResult(result);
+                        /**
+                         * Write metadata to file
+                         */
+                        String fileName = jpegBuilder.getFileName();
+                        MetadataWriter writer = new MetadataWriter(result, fileName);
+                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), DATA_DIRECTORY_NAME);
+                        File metadataFile = new File(rootPath, JPEG_METADATA_FILENAME);
+                        try {
+                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
+                            byte[] bytes = writer.getXMLString().getBytes();
+                            stream.write(bytes);
+                            Log.i(TAG,"writing metadata");
+
+                            MediaScannerConnection.scanFile(getActivity(), new String[]{metadataFile.getPath()},
+                                    null, new MediaScannerConnection.MediaScannerConnectionClient() {
+                                        @Override
+                                        public void onMediaScannerConnected() {
+                                            // Do nothing
+                                        }
+
+                                        @Override
+                                        public void onScanCompleted(String path, Uri uri) {
+                                            Log.i(TAG, "Scanned" + path + ":");
+                                            Log.i(TAG, "-> uri=" + uri);
+                                        }
+                                    });
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (SHOULD_SAVE_RAW) {
                         ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
@@ -323,6 +361,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!hasAllPermissionsGranted()) {
+            requestAllPermissions();
+        }
     }
 
     @Override

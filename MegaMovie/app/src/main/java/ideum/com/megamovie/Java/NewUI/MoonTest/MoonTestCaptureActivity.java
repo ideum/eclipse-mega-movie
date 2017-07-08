@@ -24,8 +24,10 @@ import ideum.com.megamovie.Java.CameraControl.CaptureSequenceSession;
 import ideum.com.megamovie.Java.CameraControl.ConfigParser;
 import ideum.com.megamovie.R;
 
+import static android.view.View.GONE;
+
 public class MoonTestCaptureActivity extends AppCompatActivity
-implements CaptureSequenceSession.CameraController,
+        implements CaptureSequenceSession.CameraController,
         CameraFragment.CaptureListener {
 
     private static final int CONFIG_ID = R.xml.moon_test_config;
@@ -48,17 +50,16 @@ implements CaptureSequenceSession.CameraController,
         cameraFragment = (CameraPreviewAndCaptureFragment) fragmentManager.findFragmentById(R.id.camera_fragment);
         cameraFragment.addCaptureListener(this);
 
-        Button takePhotoButton = (Button) findViewById(R.id.take_photo_button);
-        takePhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cameraFragment.captureStillImage();
-            }
-        });
-        takePhotoButton.setVisibility(View.GONE);
+//        final Button takePhotoButton = (Button) findViewById(R.id.take_photo_button);
+//        takePhotoButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setUpCaptureSequenceSession();
+//                takePhotoButton.setVisibility(GONE);
+//            }
+//        });
         progressTextView = (TextView) findViewById(R.id.capture_progress_text_view);
 
-        setUpCaptureSequenceSession();
     }
 
     private void updateCaptureTextView() {
@@ -66,12 +67,12 @@ implements CaptureSequenceSession.CameraController,
             return;
         }
 
-        progressTextView.setText(String.valueOf(numCaptures) + "/" + String.valueOf(totalNumCaptures));
+        progressTextView.setText("Captures Started: " + String.valueOf(numCaptures) + "/" + String.valueOf(totalNumCaptures));
     }
 
     @Override
     protected void onResume() {
-        setUpCaptureSequenceSession();
+        //setUpCaptureSequenceSession();
         super.onResume();
     }
 
@@ -86,50 +87,100 @@ implements CaptureSequenceSession.CameraController,
 
     private Long getStartTime() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int hour = prefs.getInt(getString(R.string.moon_test_hour),-1);
-        int minute = prefs.getInt(getString(R.string.moon_test_minute),-1);
+        int hour = prefs.getInt(getString(R.string.moon_test_hour), -1);
+        int minute = prefs.getInt(getString(R.string.moon_test_minute), -1);
         if (hour == -1 || minute == -1) {
             return null;
         }
 
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY,hour);
-        c.set(Calendar.MINUTE,minute);
-        c.set(Calendar.SECOND,0);
-        c.set(Calendar.MILLISECOND,0);
+        c.set(Calendar.HOUR_OF_DAY, hour);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
 
         return c.getTimeInMillis();
     }
 
+    private long getCurrentTimeMills() {
+        return Calendar.getInstance().getTimeInMillis();
+    }
+
     private void setUpCaptureSequenceSession() {
-        try {
-
-            Long startTime = getStartTime();
-            if (startTime == null) {
-                Toast.makeText(this,"No test scheduled",Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Long duration = SESSION_LENGTH_SECONDS * 1000;
-
-            Resources resources = getResources();
-            ConfigParser parser = new ConfigParser(resources, CONFIG_ID);
-            CaptureSequence.IntervalProperties properties = parser.getIntervalProperties().get(0);
-            CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties,startTime,duration);
-            CaptureSequence sequence = new CaptureSequence(interval);
-            totalNumCaptures = sequence.getRequestQueue().size();
-            updateCaptureTextView();
-            mSession = new CaptureSequenceSession(sequence, this);
-
-
-            mTimer = new MyTimer();
-            mTimer.addListener(mSession);
-            mTimer.startTicking();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+        CaptureSequence sequence = createCaptureSequence();
+        if (sequence == null) {
+            return;
         }
+        totalNumCaptures = sequence.getRequestQueue().size();
+        updateCaptureTextView();
+        mSession = new CaptureSequenceSession(sequence, this);
+
+
+        mTimer = new MyTimer();
+        mTimer.addListener(mSession);
+        mTimer.startTicking();
+
+
+    }
+
+    private CaptureSequence createCaptureSequence() {
+        Long startTime = getCurrentTimeMills() + 1000;
+//        if (startTime == null) {
+//            Toast.makeText(this, "No test scheduled", Toast.LENGTH_SHORT).show();
+//            return null;
+//        }
+
+        long[] durationsMills = {
+                1,
+                5,
+                10,
+                20,
+                80,
+                320,
+                1280,
+                3000,
+                };
+
+                int numExposures = 300;
+
+        int sensitivity = 60;
+        float focusDistance = 0f;
+        boolean shouldSaveRaw = false;
+
+        boolean shouldSaveJpeg = true;
+
+        CaptureSequence.CaptureSettings[] settingsArray = new CaptureSequence.CaptureSettings[numExposures];
+
+        for (int i = 0; i < numExposures; i++) {
+            long durationNanosecs = 1000000 * durationsMills[i % durationsMills.length];
+            settingsArray[i] = new CaptureSequence.CaptureSettings(
+                    durationNanosecs,
+                    sensitivity,
+                    focusDistance,
+                    shouldSaveRaw,
+                    shouldSaveJpeg);
+        }
+        return new CaptureSequence(settingsArray,startTime);
+
+
+
+//        CaptureSequence sequence = null;
+//        try {
+//            Resources resources = getResources();
+//            ConfigParser parser = new ConfigParser(resources, CONFIG_ID);
+//            CaptureSequence.IntervalProperties properties = parser.getIntervalProperties().get(0);
+//            //CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties,startTime,duration);
+//            CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(properties);
+//            CaptureSequence.CaptureSettings[] settingsArray = {settings, settings.makeCopy(), settings.makeCopy(), settings.makeCopy()};
+//
+//            sequence = new CaptureSequence(settingsArray, startTime);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (XmlPullParserException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return sequence;
     }
 
     @Override

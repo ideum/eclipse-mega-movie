@@ -4,6 +4,8 @@
 
 package ideum.com.megamovie.Java.CameraControl;
 
+import android.util.Log;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +43,14 @@ public class CaptureSequence {
             this.focusDistance = properties.lensFocusDistance;
             this.shouldSaveRaw = properties.shouldSaveRaw;
             this.shouldSaveJpeg = properties.shouldSaveJpeg;
+        }
+
+        public CaptureSettings makeCopy() {
+            return new CaptureSettings(exposureTime,
+                    sensitivity,
+                    focusDistance,
+                    shouldSaveRaw,
+                    shouldSaveJpeg);
         }
     }
 
@@ -117,23 +127,44 @@ public class CaptureSequence {
         }
     }
 
-    public List<CaptureInterval> mCaptureIntervals;
+    //public List<CaptureInterval> mCaptureIntervals;
+    private Queue<TimedCaptureRequest> requestQueue;
 
     public CaptureSequence(List<CaptureInterval> captureIntervals) {
-        mCaptureIntervals = captureIntervals;
+//        mCaptureIntervals = captureIntervals;
+        requestQueue = new LinkedList<>();
+        for (CaptureInterval interval : captureIntervals) {
+            requestQueue.addAll(interval.getTimedRequests());
+        }
+
     }
 
     public CaptureSequence(CaptureInterval interval) {
-        mCaptureIntervals = new ArrayList<>();
-        mCaptureIntervals.add(interval);
+        requestQueue = new LinkedList<>();
+        requestQueue.addAll(interval.getTimedRequests());
+//        mCaptureIntervals = new ArrayList<>();
+//        mCaptureIntervals.add(interval);
+    }
+
+    public CaptureSequence(CaptureSettings[] settings,long startTime) {
+        requestQueue = new LinkedList<>();
+        long time = startTime;
+
+        for(int i = 0; i < settings.length; i++) {
+            requestQueue.add(new TimedCaptureRequest(time,settings[i]));
+            // the term of 500000 mills gives a bit of spacing between the captures.
+            time = time + settings[i].exposureTime/1000000 + 200;
+            Log.i("CaptureSequence",String.valueOf(time));
+        }
+        Log.i("CaptureSequence","finished loop!");
     }
 
     public Queue<TimedCaptureRequest> getRequestQueue() {
-        Queue<TimedCaptureRequest> queue = new LinkedList<>();
-        for (CaptureInterval interval : mCaptureIntervals) {
-            queue.addAll(interval.getTimedRequests());
-        }
-        return queue;
+//        Queue<TimedCaptureRequest> queue = new LinkedList<>();
+//        for (CaptureInterval interval : mCaptureIntervals) {
+//            queue.addAll(interval.getTimedRequests());
+//        }
+        return requestQueue;
     }
 
 

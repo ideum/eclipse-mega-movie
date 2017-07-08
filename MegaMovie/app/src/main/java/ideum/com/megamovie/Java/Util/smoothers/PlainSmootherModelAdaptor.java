@@ -66,6 +66,8 @@ public class PlainSmootherModelAdaptor implements SensorListener {
 
   @Override
   public void onAccuracyChanged(int sensor, int accuracy) {
-    // Do nothing, at present.
+    if (sensor == SensorManager.SENSOR_MAGNETIC_FIELD) {
+        Log.i("compass",String.valueOf(accuracy));
+    }
   }
 }

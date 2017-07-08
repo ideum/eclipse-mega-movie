@@ -274,9 +274,9 @@ public class CameraPreviewFragment extends android.app.Fragment
             surfaceTexture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
             Surface previewSurface = new Surface(surfaceTexture);
             mPreviewCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
-            mPreviewCaptureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 150);
+            mPreviewCaptureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, 100);
             mPreviewCaptureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, 0.0f);
-            mPreviewCaptureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,(long)10000000);
+            mPreviewCaptureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,(long)5000000);
 
 
             mPreviewCaptureRequestBuilder.addTarget(previewSurface);

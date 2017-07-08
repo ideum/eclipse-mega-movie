@@ -133,8 +133,10 @@
     </string>
 
     <string name="moon_test_calibration">
-        Now we need to set up your equipment. When you\'re done, go to Capture Mode, and at the
-        correct time, your phone will take photos of the moon.
+        If you don\'t have any extra equipment like a tripod or external lens, you can now enter Capture Mode and the
+        app will take pictures of the moon at the time you selected.
+        \n\nIf you have an external lens, the app can help you focus it correctly. If you are attaching your phone to
+        a tripod, the app can help you point the phone in the right direction.
     </string>
     <string name="moon_test_calibrate_direction">
         Turn your phone in the direction of the red line. As you get closer to the correct direction,

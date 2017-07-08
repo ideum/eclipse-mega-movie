@@ -26,13 +26,13 @@
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginBottom="4dp">
                 <Button
-                    android:id="@+id/dimmer_button"
+                    android:id="@+id/set_moon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="dimmer"
                     android:onClick="dim"/>
                 <Button
-                    android:id="@+id/brighter_button"
+                    android:id="@+id/set_sun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="brighter"

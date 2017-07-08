@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
+import ideum.com.megamovie.Java.NewUI.CalibrateDirectionTestActivity;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 
@@ -59,7 +60,8 @@ implements DialogInterface.OnDismissListener,
                 Activity activity = getActivity();
                 if (activity instanceof MainActivity) {
                     MainActivity mainActivity = (MainActivity) activity;
-                    mainActivity.loadFragment(MoonTestCalibrationFragment.class);
+                    mainActivity.loadActivity(CalibrateDirectionTestActivity.class);
+//                    mainActivity.loadFragment(MoonTestCalibrationFragment.class);
                 }
             }
         });

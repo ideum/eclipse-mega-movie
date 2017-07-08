@@ -2,6 +2,7 @@ package ideum.com.megamovie.Java.CameraControl;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
@@ -15,6 +16,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Size;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -23,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestCaptureActivity;
 import ideum.com.megamovie.R;
 
 public class CameraHardwareCheckActivity extends AppCompatActivity {
@@ -35,7 +39,11 @@ public class CameraHardwareCheckActivity extends AppCompatActivity {
     /**
      * Permissions required to take a picture.
      */
-    private static final String[] CAMERA_PERMISSIONS = {Manifest.permission.CAMERA};
+    private static final String[] CAMERA_PERMISSIONS = {Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
     private CameraManager mCameraManager;
     private int hardwareLevel;
     private TextView hardwareFullTextView;
@@ -51,6 +59,17 @@ public class CameraHardwareCheckActivity extends AppCompatActivity {
             requestCameraPermissions();
             return;
         }
+
+
+    }
+
+    public void loadCapture(View view) {
+        loadActivity(MoonTestCaptureActivity.class);
+    }
+
+    private void loadActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivity(intent);
     }
 
 
@@ -102,9 +121,9 @@ public class CameraHardwareCheckActivity extends AppCompatActivity {
 //
 //        }
         if (manualSensorSupported) {
-            s = "Manual Control of sensors is supported";
+            s = "Your phone's camera is supported!";
         } else {
-            s = "Manual Control of sensors is not supported";
+            s = "Unfortunately, your phone's camera is not supported";
         }
         hardwareFullTextView.setText(s);
     }

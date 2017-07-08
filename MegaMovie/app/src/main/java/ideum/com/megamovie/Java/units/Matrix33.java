@@ -57,6 +57,15 @@ public class Matrix33 implements Cloneable {
     this.zz = zz;
   }
 
+  @Override
+  public String toString() {
+    String r1 = String.format("(%.02f,%.02f,%.02f)\n",xx,xy,xz);
+    String r2 = String.format("(%.02f,%.02f,%.02f)\n",yx,yy,yz);
+    String r3 = String.format("(%.02f,%.02f,%.02f)",zx,zy,zz);
+
+    return r1 + r2 + r3;
+  }
+
   /**
    * Construct a matrix from three column vectors.
    */
