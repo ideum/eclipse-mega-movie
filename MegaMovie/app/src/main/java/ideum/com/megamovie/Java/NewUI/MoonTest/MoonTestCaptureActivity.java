@@ -1,30 +1,19 @@
 package ideum.com.megamovie.Java.NewUI.MoonTest;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.Calendar;
 
-import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.CameraControl.CameraFragment;
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequenceSession;
-import ideum.com.megamovie.Java.CameraControl.ConfigParser;
 import ideum.com.megamovie.R;
-
-import static android.view.View.GONE;
 
 public class MoonTestCaptureActivity extends AppCompatActivity
         implements CaptureSequenceSession.CameraController,
@@ -87,8 +76,8 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     private Long getStartTime() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int hour = prefs.getInt(getString(R.string.moon_test_hour), -1);
-        int minute = prefs.getInt(getString(R.string.moon_test_minute), -1);
+        int hour = prefs.getInt(getString(R.string.test_time_hour), -1);
+        int minute = prefs.getInt(getString(R.string.test_time_minute), -1);
         if (hour == -1 || minute == -1) {
             return null;
         }

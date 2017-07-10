@@ -151,6 +151,8 @@
     </string>
 
 
+
+
     <!-- Strings related to Settings -->
     <string name="user_mode_default">Phone only</string>
     <string name="lens_default">No external lens</string>
@@ -161,9 +163,11 @@
     <string name="planned_lng_key">planned longitude</string>
     <string name="timezone_id">timezone id</string>
     <string name="phases_got_it_visible_key">got it visible</string>
-    <string name="moon_test_hour">moon test hour</string>
-    <string name="moon_test_minute">moon test minute</string>
+    <string name="test_time_hour">moon test hour</string>
+    <string name="test_time_minute">moon test minute</string>
     <string name="moon_test_time_mills">moon test mills</string>
+    <string name="sun_moon_test_target">sun moon test target</string>
+    <string name="calibration_method">calibration method</string>
 
     <string name="no_tripod_warning">
         If you plan to attach an external lens to your smartphone, you will also need to mount it

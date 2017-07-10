@@ -22,43 +22,44 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal|top">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|right"
-                android:onClick="useMethod1"
-                android:text="method 1" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|right"
-                android:onClick="useMethod2"
-                android:text="method 2" />
+            android:layout_gravity="center_horizontal|top"
+            android:orientation="horizontal">
+            <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical|right"-->
+            <!--android:onClick="useMethod1"-->
+            <!--android:text="method 1" />-->
+            <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical|right"-->
+            <!--android:onClick="useMethod2"-->
+            <!--android:text="method 2" />-->
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical|right">
+            android:layout_gravity="center_vertical|right"
+            android:orientation="vertical">
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
                 android:onClick="resetCalibration"
                 android:text="reset calibration" />
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
-                android:onClick="calibrateToMoon"
+                android:onClick="calibrateToTarget"
                 android:text="calibrate" />
 
 
         </LinearLayout>
-
 
 
         <LinearLayout
@@ -106,24 +107,48 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#F00"
             android:layout_gravity="center_vertical"
-            />
+            android:background="#F00" />
+
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="#F00"
             android:layout_gravity="center_horizontal"
-            />
+            android:background="#F00" />
 
     </FrameLayout>
 
-    <fragment
-        android:id="@+id/direction_calibration_fragment"
-        android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <fragment
+            android:id="@+id/direction_calibration_fragment"
+            android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Method"/>
+
+            <ToggleButton
+                android:id="@+id/calibration_method_toggle_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="new calibration method" />
+        </LinearLayout>
+
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/accuracy_text_view"

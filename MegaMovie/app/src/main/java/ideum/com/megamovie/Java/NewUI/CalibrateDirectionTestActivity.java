@@ -7,13 +7,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Debug;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.Calendar;
 
@@ -38,7 +38,7 @@ implements SensorEventListener{
         setContentView(R.layout.activity_calibrate_direction_test);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-         calibrateDirectionFragment = (CalibrateDirectionFragment) getSupportFragmentManager().findFragmentById(R.id.direction_calibration_fragment);
+        calibrateDirectionFragment = (CalibrateDirectionFragment) getSupportFragmentManager().findFragmentById(R.id.direction_calibration_fragment);
         calibrateDirectionFragment.shouldUseCurrentTime = true;
         calibrateDirectionFragment.setTarget(Planet.Moon);
 
@@ -49,6 +49,18 @@ implements SensorEventListener{
         mMagneticField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         compassTextView = (TextView) findViewById(R.id.accuracy_text_view);
+
+        ToggleButton methodToggleButton = (ToggleButton) findViewById(R.id.calibration_method_toggle_button);
+        methodToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    useMethod2(null);
+                } else {
+                    useMethod1(null);
+                }
+            }
+        });
     }
 
     @Override
@@ -134,8 +146,8 @@ implements SensorEventListener{
 
     private Long getMoonTestTimeMills() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int hour = preferences.getInt(getString(R.string.moon_test_hour),-1);
-        int minute = preferences.getInt(getString(R.string.moon_test_minute),-1);
+        int hour = preferences.getInt(getString(R.string.test_time_hour),-1);
+        int minute = preferences.getInt(getString(R.string.test_time_minute),-1);
         if (hour == -1 || minute == -1) {
             return null;
         }

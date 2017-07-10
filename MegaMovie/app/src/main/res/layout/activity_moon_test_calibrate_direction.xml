@@ -11,83 +11,121 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5">
 
 
+            <fragment
+                android:id="@+id/camera_preview_fragment"
+                android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:background="#f00" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="#f00" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/target_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ddd"
+                    android:padding="3dp"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/method_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="#ddd"
+                    android:padding="3dp"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/test_time_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginTop="5dp"
+                    android:background="#ddd"
+                    android:padding="3dp"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:layout_marginBottom="4dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/set_sun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="brighten"
+                    android:text="brighter" />
+
+                <Button
+                    android:id="@+id/set_moon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="dim"
+                    android:text="dimmer" />
+
+            </LinearLayout>
+
+        </FrameLayout>
 
         <fragment
-            android:id="@+id/camera_preview_fragment"
-            android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+            android:id="@+id/direction_calibration_fragment"
+            android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="2" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|right"
-            android:onClick="calibrateToMoon"
-            android:text="calibrate" />
-
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="4dp">
+            android:layout_gravity="bottom"
+            android:background="#EEEEEE"
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/set_moon"
+                android:id="@+id/next_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="dim"
-                android:text="dimmer" />
+                android:layout_gravity="right"
+                android:background="#00000000"
+                android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
+                android:elevation="0dp"
+                android:fontFamily="Roboto"
+                android:text="next"
+                android:textColor="#6E6E6E"
+                android:textSize="14dp" />
 
-            <Button
-                android:id="@+id/set_sun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="brighten"
-                android:text="brighter" />
-
-        </LinearLayout>
-    </FrameLayout>
-
-
-
-    <fragment
-        android:id="@+id/direction_calibration_fragment"
-        android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        </FrameLayout>
 
     </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#EEEEEE"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/next_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="#00000000"
-            android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
-            android:elevation="0dp"
-            android:fontFamily="Roboto"
-            android:text="next"
-            android:textColor="#6E6E6E"
-            android:textSize="14dp" />
-
-    </FrameLayout>
 
 
 </FrameLayout>

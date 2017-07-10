@@ -39,7 +39,7 @@ implements CustomNamable{
                 Activity activity = getActivity();
                 if (activity instanceof MainActivity) {
                     MainActivity mainActivity = (MainActivity) activity;
-                    mainActivity.loadActivity(CalibrateDirectionTestActivity.class);
+                    mainActivity.loadActivity(MoonTestCalibrateDirectionActivity.class);
                 }
             }
         });
