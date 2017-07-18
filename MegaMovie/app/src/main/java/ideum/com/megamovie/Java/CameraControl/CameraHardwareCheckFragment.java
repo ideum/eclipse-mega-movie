@@ -3,11 +3,13 @@ package ideum.com.megamovie.Java.CameraControl;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -75,6 +77,11 @@ public class CameraHardwareCheckFragment extends Fragment {
                 for (int i = 0; i< supportedCapabilities.length; i++) {
                     if (supportedCapabilities[i] == CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR) {
                         manualSensorSupported = true;
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(getString(R.string.camera_supported_key),true);
+                        editor.commit();
+
                     }
                 }
 

@@ -78,6 +78,13 @@ public class MyMapFragment extends Fragment
 
     public void setCurrentLatLng(LatLng latLng) {
         currentLatLng = latLng;
+        if (!isAdded()) {
+            return;
+        }
+        LatLng plannedLatLng = getPlannedLocationFromPreferences();
+        if (plannedLatLng == null) {
+            onClick(null);
+        }
     }
 
     @Override
@@ -239,7 +246,9 @@ public class MyMapFragment extends Fragment
         if (currentLatLng == null || mMap == null) {
             return;
         }
-        mMap.addMarker(new MarkerOptions().position(currentLatLng).anchor(0.5f,0.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
+
+            mMap.addMarker(new MarkerOptions().position(currentLatLng).anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
+
     }
 
     private void refreshMarkersAndOverlay() {
@@ -250,6 +259,9 @@ public class MyMapFragment extends Fragment
     }
 
     private LatLng getPlannedLocationFromPreferences() {
+        if (getActivity() == null) {
+            return null;
+        }
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         float lat = settings.getFloat(getString(R.string.planned_lat_key),0);
         float lng = settings.getFloat(getString(R.string.planned_lng_key),0);
@@ -282,8 +294,8 @@ public class MyMapFragment extends Fragment
         }
         double distanceKm = EclipsePath.distanceToPathOfTotality(currentLatLng);
         double distanceMiles = (0.621371) * distanceKm;
-        String toastMessage = String.format("You are %.0f miles (%.0f km) from the path of totality",distanceMiles,distanceKm);
-        Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
+        String toastMessage = String.format("You are %.0f miles (%.0f km) from the path of totality.\nGo to Phases to see the eclipse timing.",distanceMiles,distanceKm);
+        Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG).show();
     }
 
     private void showLocationInPathSelectedToast() {

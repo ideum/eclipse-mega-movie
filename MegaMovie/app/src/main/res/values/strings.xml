@@ -176,11 +176,15 @@
     <string name="moon_test_time_mills">moon test mills</string>
     <string name="sun_moon_test_target">sun moon test target</string>
     <string name="calibration_method">calibration method</string>
+    <string name="camera_supported_key">camera supported key</string>
 
     <string name="no_tripod_warning">
         If you plan to attach an external lens to your smartphone, you will also need to mount it
         on a tripod to ensure it is kept steady and pointed in the right direction.
     </string>
+    <string name="camera_not_supported_warning">Unfortunately, your phone\'s camera does not support manual control of its sensors,
+    so the app will be unable to capture images of the eclipse. You can still use the other features of the app, however, including
+    the eclipse map and eclipse timing information.</string>
 
     <!-- Strings related to login -->
     <string name="login_rationale">

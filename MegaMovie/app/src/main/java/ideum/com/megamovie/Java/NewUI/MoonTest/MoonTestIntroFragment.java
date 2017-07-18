@@ -3,11 +3,13 @@ package ideum.com.megamovie.Java.NewUI.MoonTest;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +33,6 @@ import ideum.com.megamovie.R;
 public class MoonTestIntroFragment extends Fragment
 implements CustomNamable{
 
-    CameraHardwareCheckFragment mCameraHardwareCheckFragment;
 
 
     public MoonTestIntroFragment() {
@@ -49,10 +50,11 @@ implements CustomNamable{
         getStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mCameraHardwareCheckFragment.isCameraSupported()) {
+                if(!checkCameraSupported()) {
                     displayCameraNotSupportedWarning();
                     return;
                 }
+
                 MainActivity mainActivity = (MainActivity) getActivity();
                 if (mainActivity != null) {
                     mainActivity.loadFragment(MoonTestTimeSelectionFragment.class);
@@ -60,12 +62,12 @@ implements CustomNamable{
             }
         });
 
-        mCameraHardwareCheckFragment = new CameraHardwareCheckFragment();
-        getChildFragmentManager().beginTransaction().add(mCameraHardwareCheckFragment,"hardwareCheckFragment").commit();
-
-
-
         return rootView;
+    }
+
+    private boolean checkCameraSupported()  {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        return prefs.getBoolean(getString(R.string.camera_supported_key),false);
     }
 
     private void displayCameraNotSupportedWarning() {
