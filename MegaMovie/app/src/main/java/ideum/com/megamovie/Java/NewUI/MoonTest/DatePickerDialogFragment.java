@@ -3,16 +3,13 @@ package ideum.com.megamovie.Java.NewUI.MoonTest;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.text.format.DateFormat;
 import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,8 +41,6 @@ public class DatePickerDialogFragment extends DialogFragment
 
     }
 
-
-
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
@@ -58,13 +53,10 @@ public class DatePickerDialogFragment extends DialogFragment
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor edit = prefs.edit();
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY,i);
-        c.set(Calendar.MINUTE,i1);
-        Long mills = c.getTimeInMillis();
 
-        edit.putInt(getString(R.string.test_time_hour),i);
-        edit.putInt(getString(R.string.test_time_minute),i1);
+        edit.putInt(getString(R.string.test_time_year),i);
+        edit.putInt(getString(R.string.test_time_month),i1);
+        edit.putInt(getString(R.string.test_time_day_of_month),i2);
         edit.commit();
     }
 }

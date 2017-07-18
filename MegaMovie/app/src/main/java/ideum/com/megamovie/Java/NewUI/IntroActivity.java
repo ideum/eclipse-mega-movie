@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -34,6 +35,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import ideum.com.megamovie.Java.CameraControl.CameraHardwareCheckFragment;
 import ideum.com.megamovie.R;
 
 public class IntroActivity extends AppCompatActivity
@@ -41,6 +43,9 @@ public class IntroActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         Button.OnClickListener,
         ViewPager.OnPageChangeListener {
+
+
+    private CameraHardwareCheckFragment mCameraHardwareCheckFragment;
 
 
     private static final int RC_SIGN_IN = 9001;
@@ -80,27 +85,30 @@ public class IntroActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_dots);
         tabLayout.setupWithViewPager(mViewPager);
 
-//        ImageButton rightArrow = (ImageButton) findViewById(R.id.right_chevron);
-//        rightArrow.setOnClickListener(this);
-
-
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestEmail()
-//                .build();
-//
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .enableAutoManage(this, this)
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build();
-//
         signInButton = (Button) findViewById(R.id.get_started_button);
         signInButton.setOnClickListener(this);
         signInButton.setVisibility(View.GONE);
 
+        mCameraHardwareCheckFragment = new CameraHardwareCheckFragment();
+        getSupportFragmentManager().beginTransaction().add(mCameraHardwareCheckFragment,"hardwareCheckFragment").commit();
+
+    }
+
+    private void displayCameraNotSupportedWarning() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Unfortunately, your phone's camera does not support manual control of its sensors, so you will be unable to take pictures with the app.")
+                .setPositiveButton("Got It", null)
+                .setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
     public void onClick(View v) {
+        if (!mCameraHardwareCheckFragment.isCameraSupported()) {
+            displayCameraNotSupportedWarning();
+        }
         loadMainActivity();
 //        loadMainActivity();
     }

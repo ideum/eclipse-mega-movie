@@ -1,14 +1,27 @@
 package ideum.com.megamovie.Java.NewUI.MoonTest;
 
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
+import ideum.com.megamovie.Java.CameraControl.CameraHardwareCheckActivity;
+import ideum.com.megamovie.Java.CameraControl.CameraHardwareCheckFragment;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 
@@ -17,6 +30,8 @@ import ideum.com.megamovie.R;
  */
 public class MoonTestIntroFragment extends Fragment
 implements CustomNamable{
+
+    CameraHardwareCheckFragment mCameraHardwareCheckFragment;
 
 
     public MoonTestIntroFragment() {
@@ -34,6 +49,10 @@ implements CustomNamable{
         getStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!mCameraHardwareCheckFragment.isCameraSupported()) {
+                    displayCameraNotSupportedWarning();
+                    return;
+                }
                 MainActivity mainActivity = (MainActivity) getActivity();
                 if (mainActivity != null) {
                     mainActivity.loadFragment(MoonTestTimeSelectionFragment.class);
@@ -41,17 +60,35 @@ implements CustomNamable{
             }
         });
 
+        mCameraHardwareCheckFragment = new CameraHardwareCheckFragment();
+        getChildFragmentManager().beginTransaction().add(mCameraHardwareCheckFragment,"hardwareCheckFragment").commit();
+
+
+
         return rootView;
+    }
+
+    private void displayCameraNotSupportedWarning() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Unfortunately, your phone's camera does not support manual control of its sensors, so you will be unable to take pictures with the app.")
+                .setPositiveButton("Got It", null)
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
     }
 
     @Override
     public String getTitle() {
         return "Moon Test";
     }
+
+
 
 }

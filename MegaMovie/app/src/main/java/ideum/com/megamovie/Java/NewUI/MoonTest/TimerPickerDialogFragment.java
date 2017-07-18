@@ -44,15 +44,10 @@ implements TimePickerDialog.OnTimeSetListener{
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor edit = prefs.edit();
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY,i);
-        c.set(Calendar.MINUTE,i1);
-        Long mills = c.getTimeInMillis();
 
         edit.putInt(getString(R.string.test_time_hour),i);
         edit.putInt(getString(R.string.test_time_minute),i1);
         edit.commit();
-
     }
 
     @Override

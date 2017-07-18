@@ -1,6 +1,7 @@
 package ideum.com.megamovie.Java.NewUI.MoonTest;
 
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,12 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.List;
 
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment;
@@ -27,29 +25,76 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
     private TextView targetTextView;
     private TextView methodTextView;
     private TextView testTimeTextView;
+    private TextView instructionsTextView;
 
     private Button nextButton;
+    private Button previousButton;
+
     private int state = 0;
+    private static final int MAX_STATE = 1;
 
     private Planet target;
     private int calibrationMethod;
     private String testTimeString;
+    private String instructionsString;
+    private String nextButtonString;
+    private String previousButtonString;
+
+    private List<String> instructions = new ArrayList<>();
+    private List<String> nextButtonStrings = new ArrayList<>();
+    private List<String> previousButtonStrings = new ArrayList<>();
+
+    private void setState(int s) {
+        state = s;
+        if (s > MAX_STATE || s < 0) {
+            finish();
+        }
+        if (s == 0) {
+            useCurrentTime(null);
+//            calibrateDirectionFragment.showView(false);
+
+        }
+        if (s == 1) {
+            useTargetTime(null);
+//            calibrateDirectionFragment.showView(true);
+        }
+
+        if (s < instructions.size() && s >= 0) {
+            instructionsString = instructions.get(s);
+        }
+        if (s < nextButtonStrings.size() && s >= 0) {
+            nextButtonString = nextButtonStrings.get(s);
+        }
+        if (s < previousButtonStrings.size() && s >= 0) {
+            previousButtonString = previousButtonStrings.get(s);
+        }
+        updateUI();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moon_test_calibrate_direction);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        instructions.add(0,getString(R.string.moon_test_calibrate_compass_instructions));
+        instructions.add(1,getString(R.string.moon_test_point_phone_instructions));
+        nextButtonStrings.add(0,"NEXT");
+        nextButtonStrings.add(1,"FINISH");
+        previousButtonStrings.add(0,"CANCEL");
+        previousButtonStrings.add(1,"PREVIOUS");
+
         targetTextView = (TextView) findViewById(R.id.target_text_view);
         methodTextView = (TextView) findViewById(R.id.method_text_view);
         testTimeTextView = (TextView) findViewById(R.id.test_time_text_view);
+        instructionsTextView = (TextView) findViewById(R.id.calibrate_direction_instructions_text_view);
 
         calibrateDirectionFragment = (CalibrateDirectionFragment) getSupportFragmentManager().findFragmentById(R.id.direction_calibration_fragment);
         calibrateDirectionFragment.shouldUseCurrentTime = true;
         setTargetFromSettings();
         setCalibrationMethodFromSettings();
         setTestTimeMillsFromSettings();
-//        calibrateDirectionFragment.showView(false);
 
         mCameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_preview_fragment);
 
@@ -61,10 +106,23 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
             }
         });
 
+        previousButton = (Button) findViewById(R.id.back_button);
+        previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPreviousButtonPressed();
+            }
+        });
+
+        setState(0);
     }
 
     public void calibrateToTarget(View view) {
         calibrateDirectionFragment.calibrateModelToMoon();
+    }
+
+    public void resetCalibration(View view) {
+        calibrateDirectionFragment.resetModelCalibration();
     }
 
     public void useCurrentTime(View view) {
@@ -100,18 +158,27 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
     }
 
     private Long setTestTimeMillsFromSettings() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int hour = preferences.getInt(getString(R.string.test_time_hour), -1);
-        int minute = preferences.getInt(getString(R.string.test_time_minute), -1);
-        if (hour == -1 || minute == -1) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int year = prefs.getInt(getString(R.string.test_time_year),-1);
+        int month = prefs.getInt(getString(R.string.test_time_month),-1);
+        int dayOfMonth = prefs.getInt(getString(R.string.test_time_day_of_month),-1);
+        int hours = prefs.getInt(this.getString(R.string.test_time_hour),-1);
+        int minutes = prefs.getInt(getString(R.string.test_time_minute),-1);
+        if (hours == -1
+                || minutes == -1
+                || year == -1
+                || month == -1
+                || dayOfMonth == -1){
             return null;
         }
-        setTestTimeString(hour,minute);
+        setTestTimeString(hours,minutes);
 
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, hour);
-        c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.MILLISECOND, 0);
+        c.set(Calendar.YEAR,year);
+        c.set(Calendar.MONTH,month);
+        c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+        c.set(Calendar.HOUR_OF_DAY,hours);
+        c.set(Calendar.MINUTE,minutes);
         return c.getTimeInMillis();
     }
 
@@ -122,8 +189,6 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
     }
 
-
-
     private void setTarget(Planet planet) {
         target = planet;
         calibrateDirectionFragment.setTarget(target);
@@ -131,31 +196,40 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        targetTextView.setText("Target: " + target.name());
-        methodTextView.setText("Method: " + String.valueOf(calibrationMethod));
-        testTimeTextView.setText("Test time: " + testTimeString);
+        if (targetTextView != null) {
+            targetTextView.setText("Target: " + target.name());
+        }
+        if (methodTextView != null) {
+            methodTextView.setText("Method: " + String.valueOf(calibrationMethod));
+        }
+        if (testTimeTextView != null) {
+            testTimeTextView.setText("Test time: \n" + testTimeString);
+        }
+        if (instructionsTextView != null) {
+            instructionsTextView.setText(instructionsString);
+        }
+        if (nextButton != null) {
+            nextButton.setText(nextButtonString);
+        }
+        if (previousButton != null) {
+            previousButton.setText(previousButtonString);
+        }
     }
 
     private void onNextButtonPressed() {
         if (state == 0) {
-            nextButton.setText("Finish");
-            calibrateDirectionFragment.showView(true);
-            useCurrentTime(null);
-            state = 1;
-
-            useTargetTime(null);
-
-//            android.app.FragmentManager fragmentManager = getFragmentManager();
-//            android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-//            transaction.remove(mCameraFragment);
-//            transaction.commit();
-
-        } else if (state == 1) {
-            finish();
+            calibrateToTarget(null);
         }
+        setState(state + 1);
     }
 
+    private void onPreviousButtonPressed() {
+        if (state == 1) {
+            resetCalibration(null);
+        }
+        setState(state - 1);
 
+    }
 
     public void dim(View view) {
         if (mCameraFragment != null) {

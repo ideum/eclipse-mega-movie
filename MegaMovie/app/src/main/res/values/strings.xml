@@ -149,8 +149,13 @@
         appears crisp and in focus. You may adjust the brightness of the preview using the buttons
         above.
     </string>
-
-
+    <string name="moon_test_calibrate_compass_instructions">
+        Align the phone so the moon appears in the center of the red crosshairs. Then press NEXT.
+    </string>
+    <string name="moon_test_point_phone_instructions">
+        Use the alignment guide below to point the phone towards the predicted location of the moon.
+        Then press FINISH.
+    </string>
 
 
     <!-- Strings related to Settings -->
@@ -163,6 +168,9 @@
     <string name="planned_lng_key">planned longitude</string>
     <string name="timezone_id">timezone id</string>
     <string name="phases_got_it_visible_key">got it visible</string>
+    <string name="test_time_year">test time year</string>
+    <string name="test_time_month">test time month</string>
+    <string name="test_time_day_of_month">test time day of month</string>
     <string name="test_time_hour">moon test hour</string>
     <string name="test_time_minute">moon test minute</string>
     <string name="moon_test_time_mills">moon test mills</string>

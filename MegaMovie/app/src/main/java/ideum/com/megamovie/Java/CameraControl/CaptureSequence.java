@@ -72,8 +72,12 @@ public class CaptureSequence {
         public Boolean shouldSaveRaw;
         public Boolean shouldSaveJpeg;
 
-        public IntervalProperties(Integer sensorSensitivity, Long sensorExposureTime, Float lensFocusDistance,
-                                  Long spacing, Boolean shouldSaveRaw, Boolean shouldSaveJpeg) {
+        public IntervalProperties(Integer sensorSensitivity,
+                                  Long sensorExposureTime,
+                                  Float lensFocusDistance,
+                                  Long spacing,
+                                  Boolean shouldSaveRaw,
+                                  Boolean shouldSaveJpeg) {
             this.sensorSensitivity = sensorSensitivity;
             this.sensorExposureTime = sensorExposureTime;
             this.lensFocusDistance = lensFocusDistance;
@@ -169,7 +173,7 @@ public class CaptureSequence {
 
 
     // Helper method used for debugging
-    private String timeString(Long mills) {
+    private static String timeString(Long mills) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);
 

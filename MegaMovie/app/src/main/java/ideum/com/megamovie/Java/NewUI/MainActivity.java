@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        loadInitialFragment(MoonTestTimeSelectionFragment.class);
+        loadInitialFragment(EclipseInfoFragment.class);
 
 
         // Shows the safety warning once and then not again

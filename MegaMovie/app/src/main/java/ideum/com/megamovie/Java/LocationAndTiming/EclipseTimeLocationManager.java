@@ -37,27 +37,7 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
     private EclipseTimeCalculator mEclipseTimeCalculator;
     private LatLng currentLatLng;
     private LatLng currentClosestTotalityLatLng;
-    private LatLng plannedLatLng;
     private Context mContext;
-
-
-
-    private LatLng getPlannedLatLngPreference() {
-
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-        float lat = settings.getFloat(mContext.getString(R.string.planned_lat_key), 0);
-        float lng = settings.getFloat(mContext.getString(R.string.planned_lng_key), 0);
-        LatLng result = null;
-        if (lat != 0 && lng != 0) {
-            result = new LatLng(lat, lng);
-        }
-        return result;
-    }
-
-    private void setCurrentClosestTotalityLatLng(LatLng latLng) {
-
-    }
-
 
     public EclipseTimeLocationManager(EclipseTimeCalculator etc, Context context) {
         mEclipseTimeCalculator = etc;
@@ -72,6 +52,7 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         if (time == null) {
             return getDummyEclipseTime(event);
         }
+
         return mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
     }
 
@@ -111,7 +92,6 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         }
 
         return currentClosestTotalityLatLng;
-
     }
 
     private String getTimeZoneId() {
@@ -120,8 +100,6 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
     }
 
     public String getContactTimeString(EclipseTimingMap.Event event) {
-
-
         Long mills = getEclipseTime(event);
         if (mills == null) {
             return "";
@@ -138,6 +116,18 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
 
 
         return formatter.format(calendar.getTime()) + " " + timeZoneDisplayName;
+    }
+
+    private LatLng getPlannedLatLngPreference() {
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+        float lat = settings.getFloat(mContext.getString(R.string.planned_lat_key), 0);
+        float lng = settings.getFloat(mContext.getString(R.string.planned_lng_key), 0);
+        LatLng result = null;
+        if (lat != 0 && lng != 0) {
+            result = new LatLng(lat, lng);
+        }
+        return result;
     }
 
 
