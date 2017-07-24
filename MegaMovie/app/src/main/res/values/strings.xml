@@ -13,7 +13,7 @@
     <string name="about_section_title">About</string>
     <string name="gallery_section_title">Image Gallery</string>
     <string name="settings_section_title">My Eclipse</string>
-    <string name="moon_test_section_title">Moon Test</string>
+    <string name="moon_test_section_title">Practice Mode</string>
     <string name="calibration_section_title">Calibration</string>
     <string name="capture_mode_section_title">Capture Mode</string>
     <string name="megamovie_section_title">Megamovie</string>
@@ -123,21 +123,35 @@
 
     <!--Moon Test Copy-->
     <string name="moon_test_intro">
-        By using the app to capture images of the moon, you\'ll become familiar with how the
+        By using the app to capture images of the moon or sun, you\'ll become familiar with how the
         app works and be ready to use it to photograph the main event: the solar eclipse.
         \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse.
+        \n\nWe recommend that you run through the test indoors first to familiarize yourself with how it works.
+
     </string>
     <string name="moon_test_select_time">
-        When would you like to start taking pictures of the moon? The app will calculate the location of the moon
+        When would you like to start taking pictures of the moon or sun? The app will calculate the location of the moon or sun
         at that time.
     </string>
 
     <string name="moon_test_calibration">
         If you don\'t have any extra equipment like a tripod or external lens, you can now enter Capture Mode and the
-        app will take pictures of the moon at the time you selected.
+        app will take pictures of the moon or sun at the time you selected.
         \n\nIf you have an external lens, the app can help you focus it correctly. If you are attaching your phone to
         a tripod, the app can help you point the phone in the right direction.
     </string>
+
+    <string name="moon_test_calibrate_lens_explanation">
+        If you are using an external lens, the app can help you calibrate it correctly.
+    </string>
+
+    <string name="moon_test_calibrate_direction_explanation">
+        If you aren\'t attaching your phone to a tripod, you can now enter Capture Mode and the app will takes pictures
+        of the moon at the time you selected.
+        \n\nIf you are attaching your phone to a tripod, the app can help you point the phone towards the location
+        where the moon will be at the time you selected for your test.
+    </string>
+
     <string name="moon_test_calibrate_direction">
         Turn your phone in the direction of the red line. As you get closer to the correct direction,
         the blue circle will get larger. The circle will turn green when your phone and tripod
@@ -150,11 +164,21 @@
         above.
     </string>
     <string name="moon_test_calibrate_compass_instructions">
-        Align the phone so the moon appears in the center of the red crosshairs. Then press NEXT.
+        Align the phone so the target appears in the center of the red crosshairs. Then press SET.
     </string>
     <string name="moon_test_point_phone_instructions">
-        Use the alignment guide below to point the phone towards the predicted location of the moon.
-        Then press FINISH.
+        Use the alignment guide to point the phone towards the predicted location of the moon/sun.
+        Then enter Capture Mode.
+    </string>
+    <string name="compass_calibration_intro">
+        The app will use your phone\'s compass to help point your camera in the right direction. To help
+        calibrate the compass, move your phone in a series of quick figure-eight movements until the compass
+        accuracy is high.
+    </string>
+
+    <string name="sun_test_warning">
+        To photograph the sun requires you must cover the lens with a solar filter or eclipse glasses. Also, remember
+        not to look directly at the sun during the test.
     </string>
 
 
@@ -177,6 +201,8 @@
     <string name="sun_moon_test_target">sun moon test target</string>
     <string name="calibration_method">calibration method</string>
     <string name="camera_supported_key">camera supported key</string>
+    <string name="stored_north_key">stored north key</string>
+    <string name="stored_phone_coordinates_key">stored phone coordinates key</string>
 
     <string name="no_tripod_warning">
         If you plan to attach an external lens to your smartphone, you will also need to mount it

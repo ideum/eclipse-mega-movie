@@ -15,6 +15,9 @@
 package ideum.com.megamovie.Java.Util;
 
 
+import android.content.Context;
+
+import ideum.com.megamovie.Java.units.Matrix33;
 import ideum.com.megamovie.Java.units.Vector3;
 
 public class VectorUtil {
@@ -82,5 +85,7 @@ public class VectorUtil {
   
   public static Vector3 scale(Vector3 v, float factor) {
     return scale(factor, v);
-  }  
+  }
+
+
 }

@@ -36,59 +36,59 @@
                 android:background="#f00" />
 
 
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical|left"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/target_text_view"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="#000"-->
+                    <!--android:padding="3dp"-->
+                    <!--android:textColor="#ddd"-->
+                    <!--android:textSize="24dp"-->
+                    <!--android:text="Target: Moon"/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/method_text_view"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:background="#000"-->
+                    <!--android:padding="3dp"-->
+                    <!--android:textSize="24dp"-->
+                    <!--android:text="Method: 1"-->
+                    <!--android:textColor="#ddd" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/test_time_text_view"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_vertical|left"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:background="#000"-->
+                    <!--android:padding="3dp"-->
+                    <!--android:textSize="24dp"-->
+                    <!--android:text="Test Time: \n12:21"-->
+                    <!--android:textColor="#ddd" />-->
+            <!--</LinearLayout>-->
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|left"
-                android:layout_marginRight="5dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/target_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#000"
-                    android:padding="3dp"
-                    android:textColor="#ddd"
-                    android:textSize="24dp"
-                    android:text="Target: Moon"/>
-
-                <TextView
-                    android:id="@+id/method_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="#000"
-                    android:padding="3dp"
-                    android:textSize="24dp"
-                    android:text="Method: 1"
-                    android:textColor="#ddd" />
-
-                <TextView
-                    android:id="@+id/test_time_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|left"
-                    android:layout_marginTop="5dp"
-                    android:background="#000"
-                    android:padding="3dp"
-                    android:textSize="24dp"
-                    android:text="Test Time: \n12:21"
-                    android:textColor="#ddd" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginBottom="4dp"
-                android:orientation="vertical">
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/set_sun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
                     android:onClick="brighten"
                     android:background="#000"
                     android:textColor="#ddd"
@@ -106,26 +106,28 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/calibrate_direction_instructions_text_view"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_margin="5dp"
-                android:background="#000"
-                android:textSize="20dp"
-                android:textColor="#fff"
-                android:text="@string/moon_test_calibrate_compass_instructions"/>
+
 
         </FrameLayout>
+
+
 
         <fragment
             android:id="@+id/direction_calibration_fragment"
             android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="0" />
+
+        <TextView
+            android:id="@+id/calibrate_direction_instructions_text_view"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:textSize="20dp"
+            android:text="@string/moon_test_calibrate_compass_instructions"/>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -155,7 +157,7 @@
                 android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
                 android:elevation="0dp"
                 android:fontFamily="Roboto"
-                android:text="next"
+                android:text="set"
                 android:textColor="#6E6E6E"
                 android:textSize="24dp" />
 

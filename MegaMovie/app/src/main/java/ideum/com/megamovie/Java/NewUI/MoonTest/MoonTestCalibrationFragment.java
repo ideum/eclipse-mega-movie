@@ -2,7 +2,9 @@ package ideum.com.megamovie.Java.NewUI.MoonTest;
 
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,12 +69,15 @@ implements CustomNamable{
                 }
             }
         });
-
-
-
-
         return rootView;
     }
+
+
+//    private boolean checkLensPreference() {
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+//        int lensPref = preferences.getInt(getString(R.string.lens_magnification_pref_key),0);
+//        return lensPref != 0;
+//    }
 
     @Override
     public String getTitle() {

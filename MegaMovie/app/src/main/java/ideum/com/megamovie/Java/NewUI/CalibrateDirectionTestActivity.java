@@ -51,16 +51,16 @@ implements SensorEventListener{
         compassTextView = (TextView) findViewById(R.id.accuracy_text_view);
 
         ToggleButton methodToggleButton = (ToggleButton) findViewById(R.id.calibration_method_toggle_button);
-        methodToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    useMethod2(null);
-                } else {
-                    useMethod1(null);
-                }
-            }
-        });
+//        methodToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if (b) {
+//                    useMethod2(null);
+//                } else {
+//                    useMethod1(null);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -104,13 +104,13 @@ implements SensorEventListener{
         calibrateDirectionFragment.resetModelCalibration();
     }
 
-    public void useMethod1(View view) {
-        calibrateDirectionFragment.useMethod(1);
-    }
-
-    public void useMethod2(View view) {
-        calibrateDirectionFragment.useMethod(2);
-    }
+//    public void useMethod1(View view) {
+//        calibrateDirectionFragment.useMethod(1);
+//    }
+//
+//    public void useMethod2(View view) {
+//        calibrateDirectionFragment.useMethod(2);
+//    }
 
     public void useTargetTime(View view) {
         Long targetTime = getMoonTestTimeMills();
@@ -125,7 +125,7 @@ implements SensorEventListener{
     }
 
     public void calibrateToMoon(View view) {
-        calibrateDirectionFragment.calibrateModelToMoon();
+        calibrateDirectionFragment.calibrateModelToTarget();
     }
 
     @Override

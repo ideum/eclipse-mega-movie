@@ -14,6 +14,7 @@
 
 package ideum.com.megamovie.Java.OrientationController;
 
+import android.content.Context;
 import android.hardware.SensorManager;
 import android.util.Log;
 
@@ -78,7 +79,7 @@ import static ideum.com.megamovie.Java.Util.Geometry.vectorProduct;
  */
 public class AstronomerModelImpl implements AstronomerModel {
 
-    public int CALIBRATION_METHOD = 1;
+//    public int CALIBRATION_METHOD = 1;
 
 
     private static final String TAG = MiscUtil.getTag(AstronomerModelImpl.class);
@@ -150,11 +151,10 @@ public class AstronomerModelImpl implements AstronomerModel {
 
     private Matrix33 correctionMatrix = Matrix33.getIdMatrix();
 
-    private Vector3 storedNorthInPhoneCoordinates = new Vector3(0,1,0);
-    private Matrix33 storedPhoneInLocalCoordinates = Matrix33.getIdMatrix();
-    private Pointing correctedPointingNew = new Pointing();
+    public Vector3 storedNorthInPhoneCoordinates = new Vector3(0,1,0);
+    public Matrix33 storedPhoneInLocalCoordinates = Matrix33.getIdMatrix();
 
-//    private Vector3 localUpInPhoneCoordinates = new Vector3(0)
+    private Pointing correctedPointingNew = new Pointing();
 
     /**
      * [North, Up, East] in celestial coordinates.
@@ -169,7 +169,7 @@ public class AstronomerModelImpl implements AstronomerModel {
         setMagneticDeclinationCalculator(magneticDeclinationCalculator);
     }
 
-    private boolean isCalibrated = false;
+    public boolean isCalibrated = false;
 
     private Vector3 getCalibratedNorthPhone() {
         Matrix33 axesPhone = axesPhoneInverseMatrix.clone().getInverse();
@@ -205,6 +205,8 @@ public class AstronomerModelImpl implements AstronomerModel {
             northInPhoneCoordinates = northInPhoneCoordinates_1;
         }
 
+       // MiscUtil.storeVector3InPreferences();
+
         storedNorthInPhoneCoordinates = northInPhoneCoordinates;
         storedPhoneInLocalCoordinates = axesPhoneInverseMatrix.clone();
 
@@ -230,8 +232,6 @@ public class AstronomerModelImpl implements AstronomerModel {
         return new Matrix33(northPhone,upPhone,eastPhone,false);
     }
 
-
-
     private float quadraticFormula(float a, float b, float c, int root) {
         float d = (float) Math.sqrt(b * b - 4 * a * c);
         if (root == 0) {
@@ -248,12 +248,6 @@ public class AstronomerModelImpl implements AstronomerModel {
         return new Vector3(vx,vy,vz);
 
     }
-
-//  public void updateCorrectionMatrix() {
-//    Matrix33 A = axesPhoneInverseMatrix.clone();
-//    Matrix33 A1 = calibratePointingAtMoon();
-//    correctionMatrix = matrixMultiply(A.getInverse(),A1);
-//  }
 
     private void updateCorrectedPointingNew() {
         Matrix33 calibratedAxesPhoneInverse = getCalibratedAxesPhoneInverse();
@@ -282,14 +276,14 @@ public class AstronomerModelImpl implements AstronomerModel {
     public Pointing getCorrectedPointing() {
 
         if (isCalibrated) {
-            if (CALIBRATION_METHOD == 1) {
-                updateCorrectedPointing();
-                return correctedPointing;
-            } else {
+//            if (CALIBRATION_METHOD == 1) {
+//                updateCorrectedPointing();
+//                return correctedPointing;
+//            } else {
                 updateCorrectedPointingNew();
 
                 return correctedPointingNew;
-            }
+//            }
         }
         return getPointing();
 //        return correctedPointing;

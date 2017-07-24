@@ -8,20 +8,30 @@ package ideum.com.megamovie.Java.CameraControl;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
-import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 
 public class CaptureSequenceSession implements MyTimer.MyTimerListener {
+    public interface CaptureSessionCompletionListerner {
+        public void onSessionCompleted(CaptureSequenceSession session);
+    }
+
     public static final String TAG = "CaptureSequenceSession";
    // private LocationProvider mLocationProvider;
     private Queue<CaptureSequence.TimedCaptureRequest> requestQueue;
     private CaptureSequence.TimedCaptureRequest nextRequest;
     private CameraController mCameraController;
+    private List<CaptureSessionCompletionListerner> listeners = new ArrayList<>();
+
+    public void addListener(CaptureSessionCompletionListerner listener) {
+        listeners.add(listener);
+    }
 
 
     public interface CameraController {
@@ -53,6 +63,7 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
 
     @Override
     public void onTick() {
+
         Long currentTime = getTime();
         if (currentTime == null) {
             return;
@@ -77,6 +88,8 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     private void seekToNextRequest() {
         nextRequest = requestQueue.poll();
         if (nextRequest == null) {
+            onCompleted();
+
             return;
         }
         Long currentTime = getTime();
@@ -90,6 +103,12 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
                 return;
             }
             requestTime = nextRequest.mTime;
+        }
+    }
+
+    private void onCompleted() {
+        for (CaptureSessionCompletionListerner listener : listeners) {
+            listener.onSessionCompleted(this);
         }
     }
 

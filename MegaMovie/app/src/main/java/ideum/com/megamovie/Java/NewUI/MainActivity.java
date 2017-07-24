@@ -25,6 +25,7 @@ import android.view.MenuItem;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
+import ideum.com.megamovie.Java.NewUI.MoonTest.CompassCalibrationFragment;
 import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestIntroFragment;
 import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestTimeSelectionFragment;
 import ideum.com.megamovie.Java.NewUI.Orientation.AssistantEquipmentChoiceInfoFragment;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity
         MyTimer.MyTimerListener,
         FragmentManager.OnBackStackChangedListener {
 
+    private Class initialFragmentClass = MoonTestIntroFragment.class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        loadInitialFragment(EclipseInfoFragment.class);
+        loadInitialFragment(initialFragmentClass);
 
 
         // Shows the safety warning once and then not again

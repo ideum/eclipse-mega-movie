@@ -21,6 +21,7 @@ import javax.inject.Provider;
 
 import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
+import ideum.com.megamovie.Java.Util.MiscUtil;
 import ideum.com.megamovie.Java.Util.VectorUtil;
 import ideum.com.megamovie.Java.Util.smoothers.PlainSmootherModelAdaptor;
 import ideum.com.megamovie.Java.VIews.DirectionCalibrationView;
@@ -28,6 +29,7 @@ import ideum.com.megamovie.Java.provider.ephemeris.Planet;
 import ideum.com.megamovie.Java.provider.ephemeris.SolarPositionCalculator;
 import ideum.com.megamovie.Java.units.GeocentricCoordinates;
 import ideum.com.megamovie.Java.units.LatLong;
+import ideum.com.megamovie.Java.units.Matrix33;
 import ideum.com.megamovie.Java.units.RaDec;
 import ideum.com.megamovie.Java.units.Vector3;
 import ideum.com.megamovie.R;
@@ -40,7 +42,7 @@ public class CalibrateDirectionFragment extends Fragment
 implements MyTimer.MyTimerListener,
         LocationSource.OnLocationChangedListener{
 
-    final AstronomerModel model = new AstronomerModelImpl(new RealMagneticDeclinationCalculator());
+    final AstronomerModelImpl model = new AstronomerModelImpl(new RealMagneticDeclinationCalculator());
     private MyTimer mTimer;
     private GPSFragment mGPSFragment;
     DirectionCalibrationView calibrationView;
@@ -168,21 +170,49 @@ implements MyTimer.MyTimerListener,
         return VectorUtil.difference(lineOfSight,target).length();
     }
 
-    public void useMethod(int methodNumber) {
-        ((AstronomerModelImpl) model).CALIBRATION_METHOD = methodNumber;
+//    public void useMethod(int methodNumber) {
+//        model.CALIBRATION_METHOD = methodNumber;
+//    }
+
+    public void calibrateModelToTarget() {
+        model.calibrate(getTargetGcc());
+
+        storeNorthInPhoneCoordinates();
+        storePhoneInLocalCoordinates();
+
     }
 
-    public void calibrateModelToMoon() {
-        ((AstronomerModelImpl) model).calibrate(getTargetGcc());
+    private void storeNorthInPhoneCoordinates() {
+        Vector3 storedNorthInPhoneCooredinates = model.storedNorthInPhoneCoordinates;
+        MiscUtil.storeVector3InPreferences(getContext(),getString(R.string.stored_north_key),storedNorthInPhoneCooredinates);
+    }
+
+    private void storePhoneInLocalCoordinates() {
+        Matrix33 storedPhoneInLocalCoordinates = model.storedPhoneInLocalCoordinates;
+        MiscUtil.storeMatrix33InPreferences(getContext(),getString(R.string.stored_phone_coordinates_key),storedPhoneInLocalCoordinates);
+    }
+
+    private Vector3 getStoredNorthInPhoneCoordinatesFromPrefs() {
+        return MiscUtil.getVector3FromPreferences(getContext(),getString(R.string.stored_north_key),new Vector3 (0,1,0));
+    }
+
+    private Matrix33 getStoredPhoneCoordinatesFromPrefs() {
+        return MiscUtil.getMatrix33FromPreferences(getContext(),getString(R.string.stored_phone_coordinates_key),Matrix33.getIdMatrix());
+    }
+
+    public void calibrateModelFromSettings() {
+        model.storedNorthInPhoneCoordinates = getStoredNorthInPhoneCoordinatesFromPrefs();
+        model.storedPhoneInLocalCoordinates = getStoredPhoneCoordinatesFromPrefs();
+        model.isCalibrated = true;
     }
 
     public void resetModelCalibration() {
-        ((AstronomerModelImpl) model).resetCalibration();
+        model.resetCalibration();
     }
 
     private AstronomerModel.Pointing pointing() {
 //        return model.getPointing();
-        return ((AstronomerModelImpl)model).getCorrectedPointing();
+        return model.getCorrectedPointing();
     }
 
     private Vector3 getLineOfSightVector() {
@@ -293,9 +323,6 @@ implements MyTimer.MyTimerListener,
 
         sunRaDec.setText("target:\n" + getTargetRaDec().toString());
     }
-
-
-
 
     @Override
     public void onLocationChanged(Location location) {

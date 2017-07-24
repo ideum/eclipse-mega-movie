@@ -31,26 +31,60 @@
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
                 <!--android:layout_marginRight="30dp" />-->
-
-            <Button
-                android:id="@+id/choose_date_button"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
-                android:textColor="#85000000"
-                android:textSize="16sp"
-                android:background="#0000"
-                android:text="choose date"
-                />
+                android:orientation="vertical"
+                android:layout_marginRight="50dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Date"/>
+                <Button
+                    android:id="@+id/choose_date_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#85000000"
+                    android:textSize="16sp"
+                    android:background="#0000"
+                    android:gravity="left"
+                    android:text="Select"
+                    />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/choose_time_button"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#85000000"
-                android:textSize="16sp"
-                android:background="#0000"
-                android:text="choose time" />
+                android:orientation="vertical"
+                android:layout_marginRight="50dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="Time"/>
+                <Button
+                    android:id="@+id/choose_time_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#85000000"
+                    android:textSize="16sp"
+                    android:background="#0000"
+                    android:gravity="left"
+                    android:text="Select"
+                    />
+            </LinearLayout>
+
+            <!--<Button-->
+                <!--android:id="@+id/choose_time_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="#85000000"-->
+                <!--android:textSize="16sp"-->
+                <!--android:background="#0000"-->
+                <!--android:text="choose time" />-->
 
 
         </LinearLayout>
@@ -66,16 +100,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Moon Test"
-                android:checked="true"/>
+                android:checked="false"/>
             <RadioButton
                 android:id="@+id/sun_radio_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sun Test"
+                android:checked="false"
                 />
         </RadioGroup>
 
-        <RadioGroup
+       <!-- <RadioGroup
             android:id="@+id/radio_calibration_method"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:text="Method 2"
                 />
-        </RadioGroup>
+        </RadioGroup>-->
 
 
     </LinearLayout>

@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -22,12 +23,12 @@ import java.util.Queue;
 
 public class CaptureSequence {
     public static class CaptureSettings {
-        public long exposureTime;
-        public int sensitivity;
-        public float focusDistance;
-        public boolean shouldSaveRaw;
-        public boolean shouldSaveJpeg;
-        public static final String TAG = "CaptureSequence";
+            public long exposureTime;
+            public int sensitivity;
+            public float focusDistance;
+            public boolean shouldSaveRaw;
+            public boolean shouldSaveJpeg;
+            public static final String TAG = "CaptureSequence";
 
         public CaptureSettings(long exposureTime, int sensitivity, float focusDistance, boolean shouldSaveRaw, boolean shouldSaveJpeg) {
             this.exposureTime = exposureTime;
@@ -169,6 +170,22 @@ public class CaptureSequence {
 //            queue.addAll(interval.getTimedRequests());
 //        }
         return requestQueue;
+    }
+
+    public int numberCapturesRemaining() {
+        int result = 0;
+        Calendar c = Calendar.getInstance();
+        Long currentTime = c.getTimeInMillis();
+
+        Queue<TimedCaptureRequest> q = getRequestQueue();
+
+       for (TimedCaptureRequest request : q) {
+           if (request.mTime > currentTime) {
+               result = result + 1;
+           }
+       }
+        return result;
+
     }
 
 

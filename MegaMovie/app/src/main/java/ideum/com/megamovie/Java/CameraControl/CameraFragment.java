@@ -64,7 +64,8 @@ import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
 import ideum.com.megamovie.Java.PatagoniaTest.MetadataWriter;
 
 public class CameraFragment extends android.app.Fragment
-        implements FragmentCompat.OnRequestPermissionsResultCallback {
+        implements FragmentCompat.OnRequestPermissionsResultCallback,
+        ManualCamera {
 
     public interface CaptureListener {
         void onCapture();
@@ -154,7 +155,7 @@ public class CameraFragment extends android.app.Fragment
                     if (ALLOWS_JPEG) {
                         ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
 
-                        File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), data_directory_name + "/JPEG");
+                        File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
                         if (!jpegRootPath.exists()) {
                             jpegRootPath.mkdirs();
                         }
@@ -200,8 +201,12 @@ public class CameraFragment extends android.app.Fragment
                          */
                         String fileName = jpegBuilder.getFileName();
                         MetadataWriter writer = new MetadataWriter(result, fileName);
-                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), data_directory_name);
-                        File metadataFile = new File(rootPath, JPEG_METADATA_FILENAME);
+                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), data_directory_name);
+                        if (!rootPath.exists()) {
+                            rootPath.mkdir();
+                        }
+//                        File metadataFile = new File(rootPath, JPEG_METADATA_FILENAME);
+                        File metadataFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), data_directory_name);
                         try {
                             FileOutputStream stream = new FileOutputStream(metadataFile, true);
                             byte[] bytes = writer.getXMLString().getBytes();

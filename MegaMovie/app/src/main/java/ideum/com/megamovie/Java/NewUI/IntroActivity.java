@@ -1,6 +1,7 @@
 package ideum.com.megamovie.Java.NewUI;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -42,7 +43,8 @@ public class IntroActivity extends AppCompatActivity
         implements ViewPager.OnTouchListener,
         GoogleApiClient.OnConnectionFailedListener,
         Button.OnClickListener,
-        ViewPager.OnPageChangeListener {
+        ViewPager.OnPageChangeListener,
+AlertDialog.OnDismissListener{
 
 
     private CameraHardwareCheckFragment mCameraHardwareCheckFragment;
@@ -96,9 +98,10 @@ public class IntroActivity extends AppCompatActivity
 
     private void displayCameraNotSupportedWarning() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Unfortunately, your phone's camera does not support manual control of its sensors, so you will be unable to take pictures with the app.")
+        builder.setMessage(getString(R.string.camera_not_supported_warning))
                 .setPositiveButton("Got It", null)
-                .setCancelable(false);
+                .setCancelable(false)
+        .setOnDismissListener(this);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -108,8 +111,9 @@ public class IntroActivity extends AppCompatActivity
     public void onClick(View v) {
         if (!mCameraHardwareCheckFragment.isCameraSupported()) {
             displayCameraNotSupportedWarning();
+        } else {
+            loadMainActivity();
         }
-        loadMainActivity();
 //        loadMainActivity();
     }
 
@@ -196,6 +200,11 @@ public class IntroActivity extends AppCompatActivity
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        loadMainActivity();
     }
 
 

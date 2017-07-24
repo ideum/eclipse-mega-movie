@@ -75,16 +75,6 @@ public class MyEclipseFragment extends PreferenceFragment {
         }
     }
 
-//    private void showTripodWarning() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMessage(getResources()
-//                .getString(R.string.safety_warning))
-//                .setTitle(getResources().getString(R.string.safety_warning_title))
-//                .setPositiveButton("Got It",null)
-//                .setCancelable(false);
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
-//    }
 
     private static void bindPreferenceSummaryToValue(Preference preference) {
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);

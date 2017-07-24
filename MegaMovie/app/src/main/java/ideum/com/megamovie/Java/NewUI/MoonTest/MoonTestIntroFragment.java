@@ -50,14 +50,14 @@ implements CustomNamable{
         getStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!checkCameraSupported()) {
-                    displayCameraNotSupportedWarning();
-                    return;
-                }
+//                if(!checkCameraSupported()) {
+//                    displayCameraNotSupportedWarning();
+//                    return;
+//                }
 
                 MainActivity mainActivity = (MainActivity) getActivity();
                 if (mainActivity != null) {
-                    mainActivity.loadFragment(MoonTestTimeSelectionFragment.class);
+                    mainActivity.loadFragment(CompassCalibrationFragment.class);
                 }
             }
         });
@@ -67,7 +67,7 @@ implements CustomNamable{
 
     private boolean checkCameraSupported()  {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        return prefs.getBoolean(getString(R.string.camera_supported_key),false);
+        return true;// prefs.getBoolean(getString(R.string.camera_supported_key),false);
     }
 
     private void displayCameraNotSupportedWarning() {
@@ -88,7 +88,7 @@ implements CustomNamable{
 
     @Override
     public String getTitle() {
-        return "Moon Test";
+        return "Practice Mode";
     }
 
 

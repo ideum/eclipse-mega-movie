@@ -125,29 +125,34 @@
         </activity>
         <activity android:name=".Java.NewUI.CalibrateDirectionTestActivity">
 
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCaptureActivity">
 
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateDirectionActivity" />
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateLensActivity" />
         <activity android:name=".Java.CameraControl.CameraHardwareCheckActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
+        <activity android:name=".Java.NewUI.MoonTest.MoonTestHandHeldCaptureActivity" />
+        <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateDirectoryActivity1" />
+        <activity android:name=".Java.NewUI.MoonTest.MoonTestPointingActivity"></activity>
     </application>
 
 </manifest>

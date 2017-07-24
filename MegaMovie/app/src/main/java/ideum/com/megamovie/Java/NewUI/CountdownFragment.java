@@ -17,6 +17,7 @@ import org.w3c.dom.Text;
 
 import java.util.concurrent.TimeUnit;
 
+import ideum.com.megamovie.Java.LocationAndTiming.DateUtil;
 import ideum.com.megamovie.R;
 
 
@@ -105,41 +106,47 @@ public class CountdownFragment extends Fragment {
      */
     private void setCountdownViews() {
 
-        if (!isAdded()) {
+        if (millsRemaining == null || !isAdded()) {
             return;
         }
 
-        String daysString = "";
-        String hoursString = "";
-        String minutesString = "";
-        String secondsString = "";
+        daysTextView.setText(DateUtil.countdownDaysString(millsRemaining));
+        hoursTextView.setText(DateUtil.countdownHoursString(millsRemaining));
+        minutesTextView.setText(DateUtil.countdownMinutesString(millsRemaining));
+        secondsTextView.setText(DateUtil.countdownSecondsString(millsRemaining));
 
-        if (millsRemaining != null) {
-            long days = TimeUnit.MILLISECONDS.toDays(millsRemaining);
-            daysString = String.format("%02d",days);
-            millsRemaining -= TimeUnit.DAYS.toMillis(days);
-            long hours = TimeUnit.MILLISECONDS.toHours(millsRemaining);
-            hoursString = String.format("%02d",hours);
-            millsRemaining = millsRemaining - TimeUnit.HOURS.toMillis(hours);
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(millsRemaining);
-            minutesString = String.format("%02d",minutes);
-            millsRemaining = millsRemaining - TimeUnit.MINUTES.toMillis(minutes);
-            long seconds = TimeUnit.MILLISECONDS.toSeconds(millsRemaining);
-            secondsString = String.format("%02d",seconds);
-        }
-
-        if(daysTextView != null) {
-            daysTextView.setText(daysString);
-        }
-        if (hoursTextView != null) {
-            hoursTextView.setText(hoursString);
-        }
-        if (minutesTextView != null) {
-            minutesTextView.setText(minutesString);
-        }
-        if (secondsTextView != null) {
-            secondsTextView.setText(secondsString);
-        }
+//        String daysString = DateUtil.countdownDaysString(millsRemaining);
+//        String hoursString = DateUtil.countdownHoursString(millsRemaining);
+//        String minutesString = DateUtil.countdownMinutesString(millsRemaining);
+//        String secondsString = DateUtil.countdownSecondsString(millsRemaining);
+//
+//        if (millsRemaining != null) {
+//            long mills = millsRemaining;
+//            long days = TimeUnit.MILLISECONDS.toDays(millsRemaining);
+//            daysString = String.format("%02d",days) +"  " + DateUtil.countdownDaysString(mills);
+//            millsRemaining -= TimeUnit.DAYS.toMillis(days);
+//            long hours = TimeUnit.MILLISECONDS.toHours(millsRemaining);
+//            hoursString = String.format("%02d",hours) + "  " + DateUtil.countdownHoursString(mills);
+//            millsRemaining = millsRemaining - TimeUnit.HOURS.toMillis(hours);
+//            long minutes = TimeUnit.MILLISECONDS.toMinutes(millsRemaining);
+//            minutesString = String.format("%02d",minutes) + "  " + DateUtil.countdownMinutesString(mills);
+//            millsRemaining = millsRemaining - TimeUnit.MINUTES.toMillis(minutes);
+//            long seconds = TimeUnit.MILLISECONDS.toSeconds(millsRemaining);
+//            secondsString = String.format("%02d",seconds) + "  " + DateUtil.countdownSecondsString(mills);
+//        }
+//
+//        if(daysTextView != null) {
+//            daysTextView.setText(daysString);
+//        }
+//        if (hoursTextView != null) {
+//            hoursTextView.setText(hoursString);
+//        }
+//        if (minutesTextView != null) {
+//            minutesTextView.setText(minutesString);
+//        }
+//        if (secondsTextView != null) {
+//            secondsTextView.setText(secondsString);
+//        }
     }
 
 

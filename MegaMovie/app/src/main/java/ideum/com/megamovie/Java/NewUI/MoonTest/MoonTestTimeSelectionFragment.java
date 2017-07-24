@@ -19,8 +19,10 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
+import ideum.com.megamovie.Java.LocationAndTiming.DateUtil;
 import ideum.com.megamovie.Java.NewUI.CalibrateDirectionTestActivity;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.Java.provider.ephemeris.Planet;
@@ -30,8 +32,8 @@ import ideum.com.megamovie.R;
  * A simple {@link Fragment} subclass.
  */
 public class MoonTestTimeSelectionFragment extends Fragment
-implements DialogInterface.OnDismissListener,
-        CustomNamable{
+        implements DialogInterface.OnDismissListener,
+        CustomNamable {
 
     private Button chooseTimeButton;
     private Button chooseDateButton;
@@ -48,6 +50,8 @@ implements DialogInterface.OnDismissListener,
         View rootView = inflater.inflate(R.layout.fragment_moon_test_time_selection, container, false);
 
 
+        deselectTargetPreference();
+
         chooseTimeButton = rootView.findViewById(R.id.choose_time_button);
         chooseTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +60,7 @@ implements DialogInterface.OnDismissListener,
             }
         });
 
-         chooseDateButton = rootView.findViewById(R.id.choose_date_button);
+        chooseDateButton = rootView.findViewById(R.id.choose_date_button);
         chooseDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,14 +72,14 @@ implements DialogInterface.OnDismissListener,
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              onNextButtonPressed();
+                onNextButtonPressed();
             }
         });
 
-                updateUI();
+        updateUI();
 
-        // Set Moon as default target for the test
-        setTestTarget(Planet.Moon);
+//        // Set Moon as default target for the test
+//        setTestTarget(Planet.Moon);
 
         // Set method 1 as default
         setCalibrationMethod(1);
@@ -86,6 +90,7 @@ implements DialogInterface.OnDismissListener,
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     setTestTarget(Planet.Sun);
+                    showSunTestAlert();
                 }
             }
         });
@@ -100,106 +105,210 @@ implements DialogInterface.OnDismissListener,
             }
         });
 
-        RadioButton method1Button = rootView.findViewById(R.id.method_1_radio_button);
-        method1Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    setCalibrationMethod(1);
-                }
-            }
-        });
-
-        RadioButton method2Button = rootView.findViewById(R.id.method_2_radio_button);
-        method2Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    setCalibrationMethod(2);
-                }
-            }
-        });
+//        RadioButton method1Button = rootView.findViewById(R.id.method_1_radio_button);
+//        method1Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if (b) {
+//                    setCalibrationMethod(1);
+//                }
+//            }
+//        });
+//
+//        RadioButton method2Button = rootView.findViewById(R.id.method_2_radio_button);
+//        method2Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if (b) {
+//                    setCalibrationMethod(2);
+//                }
+//            }
+//        });
 
         return rootView;
     }
 
+    private String timeToTestString() {
+        Date tDate = getTargetDateFromSettings();
+        if (tDate == null) {
+            return null;
+        }
+        return DateUtil.countdownStringToDate(tDate);
+    }
+
     private void onNextButtonPressed() {
         if (!checkTimeSet()) {
-//            Toast.makeText(getContext(),"Please set a time and date for the test",Toast.LENGTH_LONG).show();
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setMessage("Please set a time and date for the test")
-                    .setPositiveButton("Got It", null)
-                    .setCancelable(true);
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
+            showTimeNotSetAlert();
             return;
         }
+        if (!checkTargetSet()) {
+            showTargetNotSetAlert();
+            return;
+        }
+
 
         Activity activity = getActivity();
         if (activity instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity) activity;
-//                    mainActivity.loadActivity(CalibrateDirectionTestActivity.class);
             mainActivity.loadFragment(MoonTestCalibrationFragment.class);
         }
+    }
+
+    private void showTimeNotSetAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Please set a time and date for the test")
+                .setPositiveButton("Got It", null)
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showTargetNotSetAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Please select either the sun or moon as a target.")
+                .setPositiveButton("Got It", null)
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showSunTestAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(getString(R.string.sun_test_warning))
+                .setPositiveButton("Got It", null)
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setTestTarget(Planet planet) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = preferences.edit();
         String targetName = planet.name();
-        editor.putString(getString(R.string.sun_moon_test_target),targetName);
+        editor.putString(getString(R.string.sun_moon_test_target), targetName);
         editor.commit();
+    }
+
+    private boolean checkTargetSet() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String planetName = preferences.getString(getString(R.string.sun_moon_test_target),"");
+        if (planetName.equals(Planet.Moon.name()) || planetName.equals(Planet.Sun.name()) ) {
+            return true;
+        }
+
+        return false;
     }
 
     private void setCalibrationMethod(int method) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(getString(R.string.calibration_method),method);
+        editor.putInt(getString(R.string.calibration_method), method);
+        editor.commit();
+    }
+
+    private void deselectTargetPreference() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(getString(R.string.sun_moon_test_target),"");
         editor.commit();
     }
 
     private void updateUI() {
+
+
+        String dateString = targetDateStringFromSettings();
+        if (dateString != null) {
+            chooseDateButton.setText(dateString);
+        } else {
+            chooseDateButton.setText("Select");
+        }
+
+        String timeString = targetTimeStringFromSettings();
+        if (timeString != null) {
+            chooseTimeButton.setText(timeString);
+        } else {
+            chooseTimeButton.setText("Select");
+        }
+    }
+
+    private Date getTargetDateFromSettings() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        int year = prefs.getInt(getString(R.string.test_time_year),-1);
-        int month = prefs.getInt(getString(R.string.test_time_month),-1);
-        int dayOfMonth = prefs.getInt(getString(R.string.test_time_day_of_month),-1);
-        int hours = prefs.getInt(getContext().getString(R.string.test_time_hour),-1);
-        int minutes = prefs.getInt(getContext().getString(R.string.test_time_minute),-1);
+        int year = prefs.getInt(getString(R.string.test_time_year), -1);
+        int month = prefs.getInt(getString(R.string.test_time_month), -1);
+        int dayOfMonth = prefs.getInt(getString(R.string.test_time_day_of_month), -1);
+        int hours = prefs.getInt(getContext().getString(R.string.test_time_hour), -1);
+        int minutes = prefs.getInt(getContext().getString(R.string.test_time_minute), -1);
 
-//        if (hours == -1
-//                || minutes == -1
-//                || year == -1
-//                || month == -1
-//                || dayOfMonth == -1) {
-//            return;
-//        }
+        if (year == -1
+                || month == -1
+                || dayOfMonth == -1
+                || hours == -1
+                || minutes == -1) {
+            return null;
+        }
+
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR,year);
-        c.set(Calendar.MONTH,month);
-        c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-        c.set(Calendar.HOUR_OF_DAY,hours);
-        c.set(Calendar.MINUTE,minutes);
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
 
-        if (month != -1 && dayOfMonth != -1) {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("M/d/yy");
-            chooseDateButton.setText(dateFormatter.format(c.getTime()));
+        return c.getTime();
+    }
+
+    private String targetTimeStringFromSettings() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int hours = prefs.getInt(getContext().getString(R.string.test_time_hour), -1);
+        int minutes = prefs.getInt(getContext().getString(R.string.test_time_minute), -1);
+        if (hours == -1 || minutes == -1) {
+            return null;
         }
-        if (hours != -1 && minutes  != -1) {
-            SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
-            chooseTimeButton.setText(timeFormatter.format(c.getTime()));
-        }
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, 0);
+        c.set(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH, 0);
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
+        c.set(Calendar.SECOND, 0);
+
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm a");
+        return dateFormatter.format(c.getTime());
 
     }
 
+    private String targetDateStringFromSettings() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int year = prefs.getInt(getString(R.string.test_time_year), -1);
+        int month = prefs.getInt(getString(R.string.test_time_month), -1);
+        int dayOfMonth = prefs.getInt(getString(R.string.test_time_day_of_month), -1);
+        if (year == -1 || month == -1 || dayOfMonth == -1) {
+            return null;
+        }
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd");
+        return dateFormatter.format(c.getTime());
+
+    }
+
+
     private boolean checkTimeSet() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean yearSet = prefs.getInt(getString(R.string.test_time_year),-1) != -1;
-        boolean monthSet = prefs.getInt(getString(R.string.test_time_month),-1) != -1;
-        boolean dayOfMonthSet = prefs.getInt(getString(R.string.test_time_day_of_month),-1) != -1;
-        boolean hoursSet = prefs.getInt(getContext().getString(R.string.test_time_hour),-1) != -1;
-        boolean minutesSet = prefs.getInt(getContext().getString(R.string.test_time_minute),-1) != -1;
+        boolean yearSet = prefs.getInt(getString(R.string.test_time_year), -1) != -1;
+        boolean monthSet = prefs.getInt(getString(R.string.test_time_month), -1) != -1;
+        boolean dayOfMonthSet = prefs.getInt(getString(R.string.test_time_day_of_month), -1) != -1;
+        boolean hoursSet = prefs.getInt(getContext().getString(R.string.test_time_hour), -1) != -1;
+        boolean minutesSet = prefs.getInt(getContext().getString(R.string.test_time_minute), -1) != -1;
 
         return yearSet
                 && monthSet
@@ -211,14 +320,14 @@ implements DialogInterface.OnDismissListener,
     private void showTimePickerDialog() {
         TimerPickerDialogFragment dialog = new TimerPickerDialogFragment();
         dialog.addDismissListener(this);
-        dialog.show(getChildFragmentManager(),"timePicker");
+        dialog.show(getChildFragmentManager(), "timePicker");
     }
 
     private void showDatePickerDialog() {
 
         DatePickerDialogFragment dialog = new DatePickerDialogFragment();
         dialog.addDismissListener(this);
-        dialog.show(getChildFragmentManager(),"datePicker");
+        dialog.show(getChildFragmentManager(), "datePicker");
 
     }
 
@@ -230,10 +339,15 @@ implements DialogInterface.OnDismissListener,
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
         updateUI();
+        String timeToTest = timeToTestString();
+        if (timeToTest != null) {
+            String message = "Your test is scheduled to occur in " + timeToTestString() + ".";
+            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public String getTitle() {
-        return "Moon Test";
+        return "Practice Mode";
     }
 }

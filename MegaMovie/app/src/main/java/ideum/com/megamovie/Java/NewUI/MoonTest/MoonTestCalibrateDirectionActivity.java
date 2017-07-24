@@ -1,5 +1,6 @@
 package ideum.com.megamovie.Java.NewUI.MoonTest;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
@@ -22,53 +23,34 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
     private CalibrateDirectionFragment calibrateDirectionFragment;
     private CameraPreviewAndCaptureFragment mCameraFragment;
-    private TextView targetTextView;
-    private TextView methodTextView;
-    private TextView testTimeTextView;
-    private TextView instructionsTextView;
+//    private TextView targetTextView;
+//    private TextView methodTextView;
+//    private TextView testTimeTextView;
+//    private TextView instructionsTextView;
 
     private Button nextButton;
     private Button previousButton;
 
-    private int state = 0;
-    private static final int MAX_STATE = 1;
+//    private int state = 0;
+//    private static final int MAX_STATE = 1;
 
     private Planet target;
-    private int calibrationMethod;
-    private String testTimeString;
-    private String instructionsString;
-    private String nextButtonString;
-    private String previousButtonString;
+//    private int calibrationMethod;
+//    private String testTimeString;
 
-    private List<String> instructions = new ArrayList<>();
-    private List<String> nextButtonStrings = new ArrayList<>();
-    private List<String> previousButtonStrings = new ArrayList<>();
 
-    private void setState(int s) {
-        state = s;
-        if (s > MAX_STATE || s < 0) {
-            finish();
-        }
-        if (s == 0) {
-            useCurrentTime(null);
-//            calibrateDirectionFragment.showView(false);
+//    private List<String> instructions = new ArrayList<>();
+//    private List<String> nextButtonStrings = new ArrayList<>();
+//    private List<String> previousButtonStrings = new ArrayList<>();
 
-        }
-        if (s == 1) {
-            useTargetTime(null);
-//            calibrateDirectionFragment.showView(true);
+
+
+    private void removeCameraFragment() {
+        if (mCameraFragment == null) {
+            return;
         }
 
-        if (s < instructions.size() && s >= 0) {
-            instructionsString = instructions.get(s);
-        }
-        if (s < nextButtonStrings.size() && s >= 0) {
-            nextButtonString = nextButtonStrings.get(s);
-        }
-        if (s < previousButtonStrings.size() && s >= 0) {
-            previousButtonString = previousButtonStrings.get(s);
-        }
-        updateUI();
+        getFragmentManager().beginTransaction().remove(mCameraFragment).commit();
     }
 
     @Override
@@ -78,23 +60,25 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        instructions.add(0,getString(R.string.moon_test_calibrate_compass_instructions));
-        instructions.add(1,getString(R.string.moon_test_point_phone_instructions));
-        nextButtonStrings.add(0,"NEXT");
-        nextButtonStrings.add(1,"FINISH");
-        previousButtonStrings.add(0,"CANCEL");
-        previousButtonStrings.add(1,"PREVIOUS");
-
-        targetTextView = (TextView) findViewById(R.id.target_text_view);
-        methodTextView = (TextView) findViewById(R.id.method_text_view);
-        testTimeTextView = (TextView) findViewById(R.id.test_time_text_view);
-        instructionsTextView = (TextView) findViewById(R.id.calibrate_direction_instructions_text_view);
+//        instructions.add(0,getString(R.string.moon_test_calibrate_compass_instructions));
+//        instructions.add(1,getString(R.string.moon_test_point_phone_instructions));
+//        nextButtonStrings.add(0,"NEXT");
+//        nextButtonStrings.add(1,"CAPTURE MODE");
+//        previousButtonStrings.add(0,"PREVIOUS");
+//        previousButtonStrings.add(1,"PREVIOUS");
+//
+//        targetTextView = (TextView) findViewById(R.id.target_text_view);
+//        methodTextView = (TextView) findViewById(R.id.method_text_view);
+//        testTimeTextView = (TextView) findViewById(R.id.test_time_text_view);
+//        instructionsTextView = (TextView) findViewById(R.id.calibrate_direction_instructions_text_view);
 
         calibrateDirectionFragment = (CalibrateDirectionFragment) getSupportFragmentManager().findFragmentById(R.id.direction_calibration_fragment);
         calibrateDirectionFragment.shouldUseCurrentTime = true;
         setTargetFromSettings();
-        setCalibrationMethodFromSettings();
-        setTestTimeMillsFromSettings();
+//        setCalibrationMethodFromSettings();
+//        setTestTimeMillsFromSettings();
+        calibrateDirectionFragment.resetModelCalibration();
+        calibrateDirectionFragment.showView(false);
 
         mCameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_preview_fragment);
 
@@ -114,11 +98,24 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
             }
         });
 
-        setState(0);
+
+
+//        setState(0);
     }
 
+    private void enterCaptureMode() {
+        Intent intent = new Intent(this, MoonTestCaptureActivity.class);
+        startActivity(intent);
+    }
+
+    private void enterPointingMode() {
+        Intent intent = new Intent(this, MoonTestPointingActivity.class);
+        startActivity(intent);
+    }
+
+
     public void calibrateToTarget(View view) {
-        calibrateDirectionFragment.calibrateModelToMoon();
+        calibrateDirectionFragment.calibrateModelToTarget();
     }
 
     public void resetCalibration(View view) {
@@ -129,11 +126,11 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
         calibrateDirectionFragment.setShouldUseCurrentTime(true);
     }
 
-    public void useTargetTime(View view) {
-        Long targetTime = setTestTimeMillsFromSettings();
-        calibrateDirectionFragment.setTargetTimeMills(targetTime);
-        calibrateDirectionFragment.setShouldUseCurrentTime(false);
-    }
+//    public void useTargetTime(View view) {
+//        Long targetTime = setTestTimeMillsFromSettings();
+//        calibrateDirectionFragment.setTargetTimeMills(targetTime);
+//        calibrateDirectionFragment.setShouldUseCurrentTime(false);
+//    }
 
     private void setTargetFromSettings() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -145,89 +142,92 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
         setTarget(planet);
     }
 
-    private void setCalibrationMethodFromSettings() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int method = preferences.getInt(getString(R.string.calibration_method),0);
-        setCalibrationMethod(method);
-    }
+//    private void setCalibrationMethodFromSettings() {
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        int method = preferences.getInt(getString(R.string.calibration_method),0);
+//        setCalibrationMethod(method);
+//    }
 
-    private void setCalibrationMethod(int method) {
-        calibrationMethod = method;
-        calibrateDirectionFragment.useMethod(method);
-        updateUI();
-    }
+//    private void setCalibrationMethod(int method) {
+//        calibrationMethod = method;
+//        calibrateDirectionFragment.useMethod(method);
+//        updateUI();
+//    }
 
-    private Long setTestTimeMillsFromSettings() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int year = prefs.getInt(getString(R.string.test_time_year),-1);
-        int month = prefs.getInt(getString(R.string.test_time_month),-1);
-        int dayOfMonth = prefs.getInt(getString(R.string.test_time_day_of_month),-1);
-        int hours = prefs.getInt(this.getString(R.string.test_time_hour),-1);
-        int minutes = prefs.getInt(getString(R.string.test_time_minute),-1);
-        if (hours == -1
-                || minutes == -1
-                || year == -1
-                || month == -1
-                || dayOfMonth == -1){
-            return null;
-        }
-        setTestTimeString(hours,minutes);
+//    private Long setTestTimeMillsFromSettings() {
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        int year = prefs.getInt(getString(R.string.test_time_year),-1);
+//        int month = prefs.getInt(getString(R.string.test_time_month),-1);
+//        int dayOfMonth = prefs.getInt(getString(R.string.test_time_day_of_month),-1);
+//        int hours = prefs.getInt(this.getString(R.string.test_time_hour),-1);
+//        int minutes = prefs.getInt(getString(R.string.test_time_minute),-1);
+//        if (hours == -1
+//                || minutes == -1
+//                || year == -1
+//                || month == -1
+//                || dayOfMonth == -1){
+//            return null;
+//        }
+//        setTestTimeString(hours,minutes);
+//
+//        Calendar c = Calendar.getInstance();
+//        c.set(Calendar.YEAR,year);
+//        c.set(Calendar.MONTH,month);
+//        c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+//        c.set(Calendar.HOUR_OF_DAY,hours);
+//        c.set(Calendar.MINUTE,minutes);
+//        return c.getTimeInMillis();
+//    }
 
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR,year);
-        c.set(Calendar.MONTH,month);
-        c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-        c.set(Calendar.HOUR_OF_DAY,hours);
-        c.set(Calendar.MINUTE,minutes);
-        return c.getTimeInMillis();
-    }
-
-    private void setTestTimeString(int hour,int minute) {
-        hour = hour % 12;
-        testTimeString = String.valueOf(hour) + ":" + String.valueOf(minute);
-        updateUI();
-
-    }
+//    private void setTestTimeString(int hour,int minute) {
+//        hour = hour % 12;
+//        testTimeString = String.valueOf(hour) + ":" + String.valueOf(minute);
+//        updateUI();
+//
+//    }
 
     private void setTarget(Planet planet) {
         target = planet;
         calibrateDirectionFragment.setTarget(target);
-        updateUI();
+//        updateUI();
     }
-
-    private void updateUI() {
-        if (targetTextView != null) {
-            targetTextView.setText("Target: " + target.name());
-        }
-        if (methodTextView != null) {
-            methodTextView.setText("Method: " + String.valueOf(calibrationMethod));
-        }
-        if (testTimeTextView != null) {
-            testTimeTextView.setText("Test time: \n" + testTimeString);
-        }
-        if (instructionsTextView != null) {
-            instructionsTextView.setText(instructionsString);
-        }
-        if (nextButton != null) {
-            nextButton.setText(nextButtonString);
-        }
-        if (previousButton != null) {
-            previousButton.setText(previousButtonString);
-        }
-    }
+//
+//    private void updateUI() {
+//        if (targetTextView != null) {
+//            targetTextView.setText("Target: " + target.name());
+//        }
+//        if (methodTextView != null) {
+//            methodTextView.setText("Method: " + String.valueOf(calibrationMethod));
+//        }
+//        if (testTimeTextView != null) {
+//            testTimeTextView.setText("Test time: \n" + testTimeString);
+//        }
+////        if (instructionsTextView != null) {
+////            instructionsTextView.setText(instructionsString);
+////        }
+//        if (nextButton != null) {
+//            nextButton.setText(nextButtonString);
+//        }
+//        if (previousButton != null) {
+//            previousButton.setText(previousButtonString);
+//        }
+//    }
 
     private void onNextButtonPressed() {
-        if (state == 0) {
-            calibrateToTarget(null);
-        }
-        setState(state + 1);
+//        if (state == 0) {
+        calibrateToTarget(null);
+        enterPointingMode();
+
+//        }
+//        setState(state + 1);
     }
 
     private void onPreviousButtonPressed() {
-        if (state == 1) {
-            resetCalibration(null);
-        }
-        setState(state - 1);
+        finish();
+//        if (state == 1) {
+//            resetCalibration(null);
+//        }
+//        setState(state - 1);
 
     }
 
