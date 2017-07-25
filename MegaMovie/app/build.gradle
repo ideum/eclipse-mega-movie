@@ -49,6 +49,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.dagger:dagger:2.0.2'
     testCompile 'junit:junit:4.12'
+    compile files('libs/commons-net-3.6.jar')
 }
 
 apply plugin: 'com.google.gms.google-services'

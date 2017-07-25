@@ -3,18 +3,24 @@ package ideum.com.megamovie.Java.NewUI.MoonTest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.os.Debug;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
+import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment;
 import ideum.com.megamovie.Java.provider.ephemeris.Planet;
 import ideum.com.megamovie.R;
@@ -23,35 +29,16 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
     private CalibrateDirectionFragment calibrateDirectionFragment;
     private CameraPreviewAndCaptureFragment mCameraFragment;
-//    private TextView targetTextView;
-//    private TextView methodTextView;
-//    private TextView testTimeTextView;
-//    private TextView instructionsTextView;
 
     private Button nextButton;
     private Button previousButton;
 
-//    private int state = 0;
-//    private static final int MAX_STATE = 1;
-
     private Planet target;
-//    private int calibrationMethod;
-//    private String testTimeString;
 
+    private static final long EXPOSURE_TIME = 5000000L;
+    private static int SENSOR_SENSITIVITY = 60;
+    private static float FOCUS_DISTANCE = 0f;
 
-//    private List<String> instructions = new ArrayList<>();
-//    private List<String> nextButtonStrings = new ArrayList<>();
-//    private List<String> previousButtonStrings = new ArrayList<>();
-
-
-
-    private void removeCameraFragment() {
-        if (mCameraFragment == null) {
-            return;
-        }
-
-        getFragmentManager().beginTransaction().remove(mCameraFragment).commit();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,23 +47,11 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-//        instructions.add(0,getString(R.string.moon_test_calibrate_compass_instructions));
-//        instructions.add(1,getString(R.string.moon_test_point_phone_instructions));
-//        nextButtonStrings.add(0,"NEXT");
-//        nextButtonStrings.add(1,"CAPTURE MODE");
-//        previousButtonStrings.add(0,"PREVIOUS");
-//        previousButtonStrings.add(1,"PREVIOUS");
-//
-//        targetTextView = (TextView) findViewById(R.id.target_text_view);
-//        methodTextView = (TextView) findViewById(R.id.method_text_view);
-//        testTimeTextView = (TextView) findViewById(R.id.test_time_text_view);
-//        instructionsTextView = (TextView) findViewById(R.id.calibrate_direction_instructions_text_view);
 
         calibrateDirectionFragment = (CalibrateDirectionFragment) getSupportFragmentManager().findFragmentById(R.id.direction_calibration_fragment);
         calibrateDirectionFragment.shouldUseCurrentTime = true;
         setTargetFromSettings();
-//        setCalibrationMethodFromSettings();
-//        setTestTimeMillsFromSettings();
+
         calibrateDirectionFragment.resetModelCalibration();
         calibrateDirectionFragment.showView(false);
 
@@ -90,29 +65,29 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
             }
         });
 
-        previousButton = (Button) findViewById(R.id.back_button);
-        previousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onPreviousButtonPressed();
-            }
-        });
+//        previousButton = (Button) findViewById(R.id.back_button);
+//        previousButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                onPreviousButtonPressed();
+//            }
+//        });
+
+        Long testTime = getTestTimeFromSettings();
+
+        Date testTimeDate = new Date(testTime);
+
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd HH:mm a");
 
 
+        mCameraFragment.setDirectoryName("Megamovie practice " + dateFormatter.format(testTimeDate));
 
-//        setState(0);
-    }
-
-    private void enterCaptureMode() {
-        Intent intent = new Intent(this, MoonTestCaptureActivity.class);
-        startActivity(intent);
     }
 
     private void enterPointingMode() {
         Intent intent = new Intent(this, MoonTestPointingActivity.class);
         startActivity(intent);
     }
-
 
     public void calibrateToTarget(View view) {
         calibrateDirectionFragment.calibrateModelToTarget();
@@ -126,12 +101,6 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
         calibrateDirectionFragment.setShouldUseCurrentTime(true);
     }
 
-//    public void useTargetTime(View view) {
-//        Long targetTime = setTestTimeMillsFromSettings();
-//        calibrateDirectionFragment.setTargetTimeMills(targetTime);
-//        calibrateDirectionFragment.setShouldUseCurrentTime(false);
-//    }
-
     private void setTargetFromSettings() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String targetName = preferences.getString(getString(R.string.sun_moon_test_target), Planet.Moon.name());
@@ -142,93 +111,37 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
         setTarget(planet);
     }
 
-//    private void setCalibrationMethodFromSettings() {
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        int method = preferences.getInt(getString(R.string.calibration_method),0);
-//        setCalibrationMethod(method);
-//    }
-
-//    private void setCalibrationMethod(int method) {
-//        calibrationMethod = method;
-//        calibrateDirectionFragment.useMethod(method);
-//        updateUI();
-//    }
-
-//    private Long setTestTimeMillsFromSettings() {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        int year = prefs.getInt(getString(R.string.test_time_year),-1);
-//        int month = prefs.getInt(getString(R.string.test_time_month),-1);
-//        int dayOfMonth = prefs.getInt(getString(R.string.test_time_day_of_month),-1);
-//        int hours = prefs.getInt(this.getString(R.string.test_time_hour),-1);
-//        int minutes = prefs.getInt(getString(R.string.test_time_minute),-1);
-//        if (hours == -1
-//                || minutes == -1
-//                || year == -1
-//                || month == -1
-//                || dayOfMonth == -1){
-//            return null;
-//        }
-//        setTestTimeString(hours,minutes);
-//
-//        Calendar c = Calendar.getInstance();
-//        c.set(Calendar.YEAR,year);
-//        c.set(Calendar.MONTH,month);
-//        c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-//        c.set(Calendar.HOUR_OF_DAY,hours);
-//        c.set(Calendar.MINUTE,minutes);
-//        return c.getTimeInMillis();
-//    }
-
-//    private void setTestTimeString(int hour,int minute) {
-//        hour = hour % 12;
-//        testTimeString = String.valueOf(hour) + ":" + String.valueOf(minute);
-//        updateUI();
-//
-//    }
-
     private void setTarget(Planet planet) {
         target = planet;
         calibrateDirectionFragment.setTarget(target);
-//        updateUI();
     }
-//
-//    private void updateUI() {
-//        if (targetTextView != null) {
-//            targetTextView.setText("Target: " + target.name());
-//        }
-//        if (methodTextView != null) {
-//            methodTextView.setText("Method: " + String.valueOf(calibrationMethod));
-//        }
-//        if (testTimeTextView != null) {
-//            testTimeTextView.setText("Test time: \n" + testTimeString);
-//        }
-////        if (instructionsTextView != null) {
-////            instructionsTextView.setText(instructionsString);
-////        }
-//        if (nextButton != null) {
-//            nextButton.setText(nextButtonString);
-//        }
-//        if (previousButton != null) {
-//            previousButton.setText(previousButtonString);
-//        }
-//    }
+
+    private void captureImage() {
+        boolean shouldSaveRaw = false;
+        boolean shouldSaveJPEG = true;
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(EXPOSURE_TIME,
+                SENSOR_SENSITIVITY,
+                FOCUS_DISTANCE,
+                shouldSaveRaw,
+                shouldSaveJPEG);
+        mCameraFragment.takePhotoWithSettings(settings);
+    }
 
     private void onNextButtonPressed() {
-//        if (state == 0) {
         calibrateToTarget(null);
-        enterPointingMode();
+        captureImage();
 
-//        }
-//        setState(state + 1);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable(){
+            @Override
+            public void run(){
+                enterPointingMode();
+            }
+        }, 1000);
     }
 
     private void onPreviousButtonPressed() {
         finish();
-//        if (state == 1) {
-//            resetCalibration(null);
-//        }
-//        setState(state - 1);
-
     }
 
     public void dim(View view) {
@@ -242,6 +155,33 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
         if (mCameraFragment != null) {
             mCameraFragment.incrementDuration(10);
         }
+    }
+
+    private Long getTestTimeFromSettings() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int year = prefs.getInt(getString(R.string.test_time_year), -1);
+        int month = prefs.getInt(getString(R.string.test_time_month), -1);
+        int dayOfMonth = prefs.getInt(getString(R.string.test_time_day_of_month), -1);
+        int hours = prefs.getInt(this.getString(R.string.test_time_hour), -1);
+        int minutes = prefs.getInt(getString(R.string.test_time_minute), -1);
+        if (hours == -1
+                || minutes == -1
+                || year == -1
+                || month == -1
+                || dayOfMonth == -1) {
+            return null;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        return c.getTimeInMillis();
     }
 
 

@@ -19,7 +19,7 @@ import ideum.com.megamovie.R;
 
 
 public class DirectionCalibrationView extends View {
-    private static final float TOLERANCE = 0.1f;
+    private static final float TOLERANCE = 0.2f;
 
 
     public static class ScreenVector {
@@ -38,27 +38,20 @@ public class DirectionCalibrationView extends View {
     }
 
    private float arrowX;
-    public float getArrowX() {
-        return arrowX;
-    }
     public void setArrowX(float length) {
         arrowX = length;
         invalidate();
         requestLayout();
     }
     private float arrowY;
-    public float getArrowY() {
-        return arrowY;
-    }
+
     public void setArrowY(float angle) {
         arrowY = angle;
         invalidate();
         requestLayout();
     }
     private float circleRadius;
-    public float getCircleRadius() {
-        return circleRadius;
-    }
+
 
     public void setCircleRadius(float radius) {
         if (radius > 1-TOLERANCE) {
@@ -107,8 +100,6 @@ public class DirectionCalibrationView extends View {
         mFullCirclePaint.setColor(fullCircleColor);
         mFullCirclePaint.setStyle(Paint.Style.STROKE);
         mFullCirclePaint.setStrokeWidth(3.0f);
-
-        //mCirclePaint.setStyle(Paint.Style.FILL);
 
         mArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mArrowPaint.setColor(arrowColor);

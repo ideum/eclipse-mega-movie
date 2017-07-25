@@ -125,14 +125,21 @@
     <string name="moon_test_intro">
         By using the app to capture images of the moon or sun, you\'ll become familiar with how the
         app works and be ready to use it to photograph the main event: the solar eclipse.
-        \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse.
-        \n\nWe recommend that you run through the test indoors first to familiarize yourself with how it works.
+        \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse. You
+        can find tutorial videos explaining how to use the equipment <a>here.</a>
+
 
     </string>
-    <string name="moon_test_select_time">
-        When would you like to start taking pictures of the moon or sun? The app will calculate the location of the moon or sun
-        at that time.
+    <string name="practice_mode_target_selection_prompt">
+        Would you like to test taking pictures of the sun or moon? The conditions for these tests are quite different, so we recommend
+         practicing with both.
     </string>
+    <string name="moon_test_select_time">
+        When would you like to start taking pictures of the moon or sun? We recommend choosing a time at least 20 minutes in the future. Note that the app will start taking pictures
+        3 minutes before your chosen time, and continue for 3 minutes afterwards.
+    </string>
+
+
 
     <string name="moon_test_calibration">
         If you don\'t have any extra equipment like a tripod or external lens, you can now enter Capture Mode and the
@@ -149,13 +156,14 @@
         If you aren\'t attaching your phone to a tripod, you can now enter Capture Mode and the app will takes pictures
         of the moon at the time you selected.
         \n\nIf you are attaching your phone to a tripod, the app can help you point the phone towards the location
-        where the moon will be at the time you selected for your test.
+        where the sun/moon will be at the time you selected for your test. If photographing the sun, you should now cover your
+        lens with your solar filter.
     </string>
 
     <string name="moon_test_calibrate_direction">
         Turn your phone in the direction of the red line. As you get closer to the correct direction,
         the blue circle will get larger. The circle will turn green when your phone and tripod
-        are correctly calibrated.
+        are correctly calibrated. Then press Capture Mode.
     </string>
     <string name="moon_test_calibrate_lens">
         Point the camera at an object that is more than 100 ft away, like a tree or a building (or
@@ -177,8 +185,9 @@
     </string>
 
     <string name="sun_test_warning">
-        To photograph the sun requires you must cover the lens with a solar filter or eclipse glasses. Also, remember
-        not to look directly at the sun during the test.
+        Remember not to look directly at the sun during the test.
+        Photographing the sun requires a solar filter or eclipse glasses to cover the lens. If it is
+        a hot day, be careful not to leave your phone outside for too long.
     </string>
 
 

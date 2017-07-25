@@ -13,6 +13,42 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="4sp"
             android:textColor="#000"
+            android:text="@string/practice_mode_target_selection_prompt"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="24dp"
+            />
+
+        <RadioGroup
+            android:id="@+id/radio_sun_moon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="left"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp">
+            <RadioButton
+                android:id="@+id/moon_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Moon Test"
+                android:layout_marginRight="16dp"
+                android:checked="false"/>
+            <RadioButton
+                android:id="@+id/sun_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sun Test"
+                android:checked="false"
+                />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4sp"
+            android:textColor="#000"
             android:text="@string/moon_test_select_time"
             android:layout_marginBottom="24dp"
             android:layout_marginLeft="32dp"
@@ -77,59 +113,11 @@
                     />
             </LinearLayout>
 
-            <!--<Button-->
-                <!--android:id="@+id/choose_time_button"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textColor="#85000000"-->
-                <!--android:textSize="16sp"-->
-                <!--android:background="#0000"-->
-                <!--android:text="choose time" />-->
 
 
         </LinearLayout>
-        <RadioGroup
-            android:id="@+id/radio_sun_moon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp">
-            <RadioButton
-                android:id="@+id/moon_radio_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Moon Test"
-                android:checked="false"/>
-            <RadioButton
-                android:id="@+id/sun_radio_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sun Test"
-                android:checked="false"
-                />
-        </RadioGroup>
 
-       <!-- <RadioGroup
-            android:id="@+id/radio_calibration_method"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="40dp">
-            <RadioButton
-                android:id="@+id/method_1_radio_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Method 1"
-                android:checked="true"/>
-            <RadioButton
-                android:id="@+id/method_2_radio_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Method 2"
-                />
-        </RadioGroup>-->
+
 
 
     </LinearLayout>

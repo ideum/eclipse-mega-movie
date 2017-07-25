@@ -14,6 +14,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import ideum.com.megamovie.R;
 public class MoonTestIntroFragment extends Fragment
 implements CustomNamable{
 
+    private CameraHardwareCheckFragment mCameraHardwareCheckFragment;
 
 
     public MoonTestIntroFragment() {
@@ -50,10 +53,10 @@ implements CustomNamable{
         getStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(!checkCameraSupported()) {
-//                    displayCameraNotSupportedWarning();
-//                    return;
-//                }
+                if(!checkCameraSupported()) {
+                    displayCameraNotSupportedWarning();
+                    return;
+                }
 
                 MainActivity mainActivity = (MainActivity) getActivity();
                 if (mainActivity != null) {
@@ -62,12 +65,28 @@ implements CustomNamable{
             }
         });
 
+        mCameraHardwareCheckFragment = new CameraHardwareCheckFragment();
+        getChildFragmentManager().beginTransaction().add(mCameraHardwareCheckFragment,"hardwareCheckFragment").commit();
+
+        String bodyString ="By using the app to capture images of the moon or sun, you'll become familiar with how the\n" +
+                "        app works and be ready to use it to photograph the main event: the solar eclipse.\n" +
+                "        \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse. You\n" +
+                "        can find detailed explanations of how to use this equipment in these <a href=\"https://www.youtube.com/watch?v=VhWOx7eW-bI&feature=youtu.be\">video tutorials.</a>";
+
+        TextView body = rootView.findViewById(R.id.body);
+        body.setText(Html.fromHtml(bodyString));
+        body.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+
         return rootView;
     }
 
+
+
     private boolean checkCameraSupported()  {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        return true;// prefs.getBoolean(getString(R.string.camera_supported_key),false);
+            return mCameraHardwareCheckFragment.isCameraSupported();
+
     }
 
     private void displayCameraNotSupportedWarning() {

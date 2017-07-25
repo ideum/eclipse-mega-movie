@@ -36,12 +36,12 @@ public class DateUtil {
             minuteUnit = "minute";
         }
 
-
         return String.valueOf(hours) + " " + hourUnit + ", " + String.valueOf(minutes) + " " + minuteUnit;
 
     }
 
     public static String countdownDaysString(Long mills) {
+        mills = Math.max(mills,0);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("DD", Locale.US);
@@ -51,6 +51,7 @@ public class DateUtil {
     }
 
     public static String countdownHoursString(Long mills) {
+        mills = Math.max(mills,0);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("HH", Locale.US);
@@ -60,6 +61,7 @@ public class DateUtil {
     }
 
     public static String countdownMinutesString(Long mills) {
+        mills = Math.max(mills,0);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("mm", Locale.US);
@@ -70,6 +72,7 @@ public class DateUtil {
 
 
     public static String countdownSecondsString(Long mills) {
+        mills = Math.max(mills,0);
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("ss", Locale.US);

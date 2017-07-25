@@ -35,6 +35,8 @@ public class MoonTestTimeSelectionFragment extends Fragment
         implements DialogInterface.OnDismissListener,
         CustomNamable {
 
+    private static final int LEAD_TIME_MINUTES = 0;
+
     private Button chooseTimeButton;
     private Button chooseDateButton;
 
@@ -105,26 +107,6 @@ public class MoonTestTimeSelectionFragment extends Fragment
             }
         });
 
-//        RadioButton method1Button = rootView.findViewById(R.id.method_1_radio_button);
-//        method1Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                if (b) {
-//                    setCalibrationMethod(1);
-//                }
-//            }
-//        });
-//
-//        RadioButton method2Button = rootView.findViewById(R.id.method_2_radio_button);
-//        method2Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                if (b) {
-//                    setCalibrationMethod(2);
-//                }
-//            }
-//        });
-
         return rootView;
     }
 
@@ -146,6 +128,11 @@ public class MoonTestTimeSelectionFragment extends Fragment
             return;
         }
 
+        if (!checkTimeGreaterThanLead()) {
+            showNeedMoreLeadTimeAlert();
+            return;
+        }
+
 
         Activity activity = getActivity();
         if (activity instanceof MainActivity) {
@@ -157,6 +144,16 @@ public class MoonTestTimeSelectionFragment extends Fragment
     private void showTimeNotSetAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("Please set a time and date for the test")
+                .setPositiveButton("Got It", null)
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showNeedMoreLeadTimeAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Please schedule your test at least 5 minutes in the future.")
                 .setPositiveButton("Got It", null)
                 .setCancelable(true);
 
@@ -277,6 +274,20 @@ public class MoonTestTimeSelectionFragment extends Fragment
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm a");
         return dateFormatter.format(c.getTime());
+
+    }
+
+    private boolean checkTimeGreaterThanLead() {
+        Date target = getTargetDateFromSettings();
+        long targetMills = target.getTime();
+
+        long currentMills = Calendar.getInstance().getTimeInMillis();
+
+        long intervalMills = targetMills - currentMills;
+
+        long intervalMinutes = intervalMills/(1000 * 60);
+        return intervalMinutes >= LEAD_TIME_MINUTES;
+
 
     }
 

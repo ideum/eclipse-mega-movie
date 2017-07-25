@@ -135,30 +135,31 @@
             android:layout_gravity="bottom"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/back_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:background="#00000000"
-                android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"
-                android:elevation="0dp"
-                android:fontFamily="Roboto"
-                android:text="back"
-                android:textColor="#6E6E6E"
-                android:textSize="24dp" />
+            <!--<Button-->
+                <!--android:id="@+id/back_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="left"-->
+                <!--android:background="#00000000"-->
+                <!--android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"-->
+                <!--android:elevation="0dp"-->
+                <!--android:fontFamily="Roboto"-->
+                <!--android:text="back"-->
+                <!--android:textColor="#6E6E6E"-->
+                <!--android:textSize="24dp" />-->
 
             <Button
                 android:id="@+id/next_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:background="#00000000"
-                android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
+                android:background="@color/colorPrimary"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="#fff"
                 android:elevation="0dp"
                 android:fontFamily="Roboto"
                 android:text="set"
-                android:textColor="#6E6E6E"
                 android:textSize="24dp" />
 
         </FrameLayout>

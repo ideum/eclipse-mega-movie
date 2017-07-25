@@ -170,9 +170,7 @@ implements MyTimer.MyTimerListener,
         return VectorUtil.difference(lineOfSight,target).length();
     }
 
-//    public void useMethod(int methodNumber) {
-//        model.CALIBRATION_METHOD = methodNumber;
-//    }
+
 
     public void calibrateModelToTarget() {
         model.calibrate(getTargetGcc());
@@ -298,11 +296,12 @@ implements MyTimer.MyTimerListener,
 
         float arrowX = getErrorVector().x;
         float arrowY = getErrorVector().y;
+        float error = 0.5f * (float) Math.sqrt(arrowX * arrowX + arrowY * arrowY);
 
-        float r = (float) Math.sqrt(arrowX*arrowX + arrowY*arrowY);
+
         calibrationView.setArrowX(arrowX);
         calibrationView.setArrowY(arrowY);
-        calibrationView.setCircleRadius(1.0f/(error() + 0.1f)/10.0f);
+        calibrationView.setCircleRadius(1.0f/(error + 0.1f)/10.0f);
     }
     @Override
     public void onTick() {

@@ -19,6 +19,7 @@
             android:text="@string/moon_test_calibrate_lens_explanation"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
+            android:textSize="16sp"
             android:textColor="#000" />
 
         <Button
@@ -30,6 +31,7 @@
             android:paddingRight="5dp"
             android:paddingLeft="5dp"
             android:textAllCaps="false"
+            android:textSize="24dp"
             android:text="Calibrate Lens"/>
 
         <TextView
@@ -39,6 +41,7 @@
             android:text="@string/moon_test_calibrate_direction_explanation"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
+            android:textSize="16sp"
             android:textColor="#000" />
 
         <Button
@@ -50,6 +53,7 @@
             android:paddingRight="5dp"
             android:paddingLeft="5dp"
             android:textAllCaps="false"
+            android:textSize="24dp"
             android:text="Calibrate Direction"/>
 
 
@@ -60,7 +64,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#EEEEEE"
         android:orientation="horizontal">
 
         <Button
@@ -68,13 +71,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:background="#00000000"
-            android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
-            android:elevation="0dp"
-            android:fontFamily="Roboto"
+            android:background="@color/colorPrimary"
             android:text="capture mode"
-            android:textColor="#6E6E6E"
-            android:textSize="14dp" />
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="#fff"
+            android:textSize="24dp" />
 
     </FrameLayout>
 

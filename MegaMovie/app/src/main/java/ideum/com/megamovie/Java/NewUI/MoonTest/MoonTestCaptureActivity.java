@@ -3,6 +3,7 @@ package ideum.com.megamovie.Java.NewUI.MoonTest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,18 +13,23 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.apache.commons.net.ftp.FTPClient;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import ideum.com.megamovie.Java.CameraControl.ManualCamera;
+import ideum.com.megamovie.Java.LocationAndTiming.DateUtil;
 import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.CameraControl.CameraFragment;
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequenceSession;
+import ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
+import ideum.com.megamovie.Java.Util.FTPUtil;
 import ideum.com.megamovie.R;
 
 public class MoonTestCaptureActivity extends AppCompatActivity
@@ -44,11 +50,16 @@ public class MoonTestCaptureActivity extends AppCompatActivity
     private static int SENSOR_SENSITIVITY = 60;
     private static float FOCUS_DISTANCE = 0f;
 
+    private Long targetTimeMills;
+
     private TextView testTimeTextView;
     //    private TextView leadTimeTextView;
 //    private TextView durationTextView;
     //private TextView countdownTextView;
     private TextView progressTextView;
+//    private TextView countdownTextView;
+
+    private SmallCountdownFragment countdownFragment;
     private Button finishButton;
 
     private int numCaptures = 0;
@@ -60,18 +71,18 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         setContentView(R.layout.activity_moon_test_capture);
 
 
+
+
         // Set portrait mode and keep phone from sleeping
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        targetTimeMills = getTestTimeFromSettings();
 
         // gps just used for image metadata in practice mode
         GPSFragment mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
-
-//        cameraFragment = new CameraFragment();
-//        getFragmentManager().beginTransaction().add(
-//                android.R.id.content, (android.app.Fragment) cameraFragment).commit();
 
         cameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
 
@@ -80,9 +91,6 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         cameraFragment.addCaptureListener(this);
 
         testTimeTextView = (TextView) findViewById(R.id.test_time_text_view);
-//        leadTimeTextView = (TextView) findViewById(R.id.lead_time_text_view);
-//        //countdownTextView = (TextView) findViewById(R.id.capture_countdown_text_view);
-//        durationTextView = (TextView) findViewById(R.id.duration_text_view);
 
         progressTextView = (TextView) findViewById(R.id.capture_progress_text_view);
         finishButton = (Button) findViewById(R.id.finish_button);
@@ -92,6 +100,9 @@ public class MoonTestCaptureActivity extends AppCompatActivity
                onFinishButtonPressed();
             }
         });
+
+        countdownFragment = (SmallCountdownFragment) getSupportFragmentManager().findFragmentById(R.id.countdown_fragment);
+        countdownFragment.setTargetTimeMills(getTestTimeFromSettings());
 
         Long testTime = getTestTimeFromSettings();
 
@@ -114,23 +125,22 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         String leadTimeString = "Lead time: " + leadTimeMinutesString + ":" + leadTimeSecondsString;
 //        leadTimeTextView.setText(leadTimeString);
 
-        int durationMinutes = (int) SESSION_LENGTH_SECONDS / 60;
-        int durationSeconds = (int) SESSION_LENGTH_SECONDS - 60 * durationMinutes;
-        String durationMinutesString = String.format("%02d", durationMinutes);
-        String durationSecondsString = String.format("%02d", durationSeconds);
-        String durationString = "Duration: " + durationMinutesString + ":" + durationSecondsString;
+//        int durationMinutes = (int) SESSION_LENGTH_SECONDS / 60;
+//        int durationSeconds = (int) SESSION_LENGTH_SECONDS - 60 * durationMinutes;
+//        String durationMinutesString = String.format("%02d", durationMinutes);
+//        String durationSecondsString = String.format("%02d", durationSeconds);
+//        String durationString = "Duration: " + durationMinutesString + ":" + durationSecondsString;
 //        durationTextView.setText(durationString);
 
+
     }
+
+
+
 
     private void onFinishButtonPressed() {
-        Intent intent = new Intent(this, MoonTestPointingActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-    }
-
-    private int getMethodNumFromSettings() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        return pref.getInt(getString(R.string.calibration_method), -1);
     }
 
 
@@ -161,7 +171,8 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
         mTimer = new MyTimer();
         mTimer.addListener(mSession);
-
+        mTimer.addListener(this);
+        mTimer.addListener(countdownFragment);
         mTimer.startTicking();
     }
 
@@ -223,6 +234,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     }
 
+
     @Override
     public void onCapture() {
         numCaptures += 1;
@@ -239,7 +251,15 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     @Override
     public void onTick() {
+//        countdownTextView.setText(countdownString());
+    }
 
+    private String countdownString() {
+        Long millsRemaining = targetTimeMills - getCurrentTimeMills();
+        String hours = DateUtil.countdownHoursString(millsRemaining);
+        String minutes = DateUtil.countdownMinutesString(millsRemaining);
+        String seconds = DateUtil.countdownSecondsString(millsRemaining);
+        return hours + ":" + minutes + ":" + seconds;
     }
 
     @Override

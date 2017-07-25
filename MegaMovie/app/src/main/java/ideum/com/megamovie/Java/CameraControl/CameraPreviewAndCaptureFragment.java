@@ -64,6 +64,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
 import ideum.com.megamovie.Java.PatagoniaTest.MetadataWriter;
+import ideum.com.megamovie.Java.Util.FTPUtil;
 import ideum.com.megamovie.R;
 
 public class CameraPreviewAndCaptureFragment extends android.app.Fragment
@@ -78,6 +79,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     private static final String JPEG_METADATA_FILENAME = "metadata_jpeg.txt";
     private static final String DATA_DIRECTORY_NAME = "MegaMovie";
     private String data_directory_name = "MegaMovie";
+
 
     @Override
     public void setDirectoryName(String directoryName) {
@@ -294,6 +296,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
+
+
+
 
 
                     int requestId = (int) request.getTag();
@@ -770,7 +775,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
 
         @Override
         public void run() {
-
             boolean success = false;
             int format = mImage.getFormat();
             switch (format) {
