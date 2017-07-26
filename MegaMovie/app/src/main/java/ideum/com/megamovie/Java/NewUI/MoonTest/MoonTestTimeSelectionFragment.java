@@ -35,7 +35,7 @@ public class MoonTestTimeSelectionFragment extends Fragment
         implements DialogInterface.OnDismissListener,
         CustomNamable {
 
-    private static final int LEAD_TIME_MINUTES = 0;
+    private static final int LEAD_TIME_MINUTES = 5;
 
     private Button chooseTimeButton;
     private Button chooseDateButton;
@@ -353,7 +353,7 @@ public class MoonTestTimeSelectionFragment extends Fragment
         String timeToTest = timeToTestString();
         if (timeToTest != null) {
             String message = "Your test is scheduled to occur in " + timeToTestString() + ".";
-            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
     }
 

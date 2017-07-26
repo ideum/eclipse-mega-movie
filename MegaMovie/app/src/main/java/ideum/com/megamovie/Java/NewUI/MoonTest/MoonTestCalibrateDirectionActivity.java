@@ -137,7 +137,7 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
             public void run(){
                 enterPointingMode();
             }
-        }, 1000);
+        }, 200);
     }
 
     private void onPreviousButtonPressed() {

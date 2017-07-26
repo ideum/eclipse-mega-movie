@@ -19,7 +19,7 @@ import ideum.com.megamovie.R;
 
 
 public class DirectionCalibrationView extends View {
-    private static final float TOLERANCE = 0.2f;
+    private static final float TOLERANCE = 0.23f;
 
 
     public static class ScreenVector {

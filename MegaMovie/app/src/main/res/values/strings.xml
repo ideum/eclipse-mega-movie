@@ -127,11 +127,13 @@
         app works and be ready to use it to photograph the main event: the solar eclipse.
         \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse. You
         can find tutorial videos explaining how to use the equipment <a>here.</a>
-
-
     </string>
+    <string name="remove_case">Do you use a phone case? Calibration accuracy may be improved if you remove it.</string>
+
+    <string name="practice_mode_ftp_request">To help the developers of this app, you can upload practice images
+        to ftp://apollo.ssl.berkeley.edu/pub/megamovie/incoming</string>
     <string name="practice_mode_target_selection_prompt">
-        Would you like to test taking pictures of the sun or moon? The conditions for these tests are quite different, so we recommend
+        Would you like to practice by taking pictures of the moon or sun? The conditions for these tests are quite different, so we recommend
          practicing with both.
     </string>
     <string name="moon_test_select_time">
@@ -153,10 +155,10 @@
     </string>
 
     <string name="moon_test_calibrate_direction_explanation">
-        If you aren\'t attaching your phone to a tripod, you can now enter Capture Mode and the app will takes pictures
-        of the moon at the time you selected.
+        If you aren\'t attaching your phone to a tripod, you can now enter Capture Mode and the app will take pictures
+        of the sun/moon at the time you selected.
         \n\nIf you are attaching your phone to a tripod, the app can help you point the phone towards the location
-        where the sun/moon will be at the time you selected for your test. If photographing the sun, you should now cover your
+        where the sun/moon will be at the time you selected. If photographing the sun, you should now cover your
         lens with your solar filter.
     </string>
 
@@ -166,8 +168,8 @@
         are correctly calibrated. Then press Capture Mode.
     </string>
     <string name="moon_test_calibrate_lens">
-        Point the camera at an object that is more than 100 ft away, like a tree or a building (or
-        the moon itself!). Adjust the focus of the external lens until the object in the preview
+        Point the camera at an object that is more than 100 feet away, like a tree or a building.
+        Adjust the focus of the external lens until the object in the preview
         appears crisp and in focus. You may adjust the brightness of the preview using the buttons
         above.
     </string>

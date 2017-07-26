@@ -17,8 +17,8 @@ android {
         applicationId "ideum.com.megamovie"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 4
-        versionName "1.03"
+        versionCode 5
+        versionName "1.04"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

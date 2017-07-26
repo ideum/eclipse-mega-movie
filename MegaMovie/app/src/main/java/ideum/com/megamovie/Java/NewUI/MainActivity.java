@@ -23,12 +23,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.NewUI.MoonTest.CompassCalibrationFragment;
 import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestIntroFragment;
 import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestTimeSelectionFragment;
 import ideum.com.megamovie.Java.NewUI.Orientation.AssistantEquipmentChoiceInfoFragment;
+import ideum.com.megamovie.Java.Util.TimeUtil;
+import ideum.com.megamovie.Java.provider.ephemeris.Planet;
+import ideum.com.megamovie.Java.provider.ephemeris.SolarPositionCalculator;
+import ideum.com.megamovie.Java.units.RaDec;
 import ideum.com.megamovie.R;
 
 public class MainActivity extends AppCompatActivity
@@ -37,7 +45,7 @@ public class MainActivity extends AppCompatActivity
         MyTimer.MyTimerListener,
         FragmentManager.OnBackStackChangedListener {
 
-    private Class initialFragmentClass = MoonTestIntroFragment.class;
+    private Class initialFragmentClass = EclipseInfoFragment.class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +53,20 @@ public class MainActivity extends AppCompatActivity
 
         // The first time the app is opened it shows the intro activity, but afterwards
         // skips it.
+
+        Calendar c = Calendar.getInstance();
+//        c.setTimeZone(TimeZone.getTimeZone("UTC"));
+//
+//        c.set(Calendar.HOUR_OF_DAY,0);
+//        c.set(Calendar.MINUTE,0);
+//        c.set(Calendar.SECOND,0);
+//        c.set(Calendar.YEAR,2017);
+//        c.set(Calendar.MONTH,7);
+//        c.set(Calendar.DAY_OF_MONTH,21);
+
+        Date date = c.getTime();
+        RaDec coordinates = Planet.calculateLunarGeocentricLocation(date);
+
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean previouslyStarted = prefs.getBoolean(getResources().getString(R.string.previously_started_key), false);
