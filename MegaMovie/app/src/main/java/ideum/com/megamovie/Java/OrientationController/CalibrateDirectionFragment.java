@@ -80,7 +80,6 @@ implements MyTimer.MyTimerListener,
 
     }
 
-
     public static CalibrateDirectionFragment newInstance() {
         CalibrateDirectionFragment fragment = new CalibrateDirectionFragment();
         return fragment;

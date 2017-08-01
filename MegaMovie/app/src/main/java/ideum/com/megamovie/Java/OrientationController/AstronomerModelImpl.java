@@ -213,6 +213,7 @@ public class AstronomerModelImpl implements AstronomerModel {
 
         Vector3 eastInPhoneCoordinates = VectorUtil.crossProduct(northInPhoneCoordinates, upPhone);
         Vector3 perpInLocalCoordinates = matrixVectorMultiply(A, getPointing().getPerpendicular());
+
         perpInLocalCoordinates = VectorUtil.difference(perpInLocalCoordinates, VectorUtil.scale(lineOfSightInPhoneCoordinates, VectorUtil.dotProduct(perpInLocalCoordinates, lineOfSightInPhoneCoordinates)));
         perpInLocalCoordinates.normalize();
         Vector3 v1 = VectorUtil.crossProduct(perpInLocalCoordinates, lineOfSightInPhoneCoordinates);
@@ -242,7 +243,7 @@ public class AstronomerModelImpl implements AstronomerModel {
     }
 
     private Vector3 findPerpendicular(float vz,Vector3 w,int root) {
-        float vx = quadraticFormula(w.x*w.x + w.y*w.y,2*w.x*w.z*vz,vz*vz*w.z*w.z+vz*vz*w.y*w.y-w.y*w.y,root);
+        float vx = quadraticFormula(w.x*w.x + w.y*w.y, 2*w.x*w.z*vz, vz*vz*w.z*w.z+vz*vz*w.y*w.y-w.y*w.y, root);
         float vy = (-vx*w.x - vz*w.z)/w.y;
 
         return new Vector3(vx,vy,vz);
@@ -451,6 +452,7 @@ public class AstronomerModelImpl implements AstronomerModel {
         }
         celestialCoordsLastUpdated = currentTime;
         updateMagneticCorrection();
+
         RaDec up = calculateRADecOfZenith(getTime(), location);
         upCelestial = GeocentricCoordinates.getInstance(up);
         Vector3 z = AXIS_OF_EARTHS_ROTATION;

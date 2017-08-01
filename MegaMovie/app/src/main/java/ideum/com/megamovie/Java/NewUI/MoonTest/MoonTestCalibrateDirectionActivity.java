@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Debug;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -82,6 +83,22 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
         mCameraFragment.setDirectoryName("Megamovie practice " + dateFormatter.format(testTimeDate));
 
+        if (target == Planet.Sun) {
+            showSolarFilterAlert();
+        }
+
+    }
+
+    private void showSolarFilterAlert() {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Make sure your lens is covered with a solar filter.")
+                .setPositiveButton("Got It", null)
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void enterPointingMode() {

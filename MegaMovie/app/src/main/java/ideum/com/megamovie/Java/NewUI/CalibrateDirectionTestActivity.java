@@ -25,7 +25,7 @@ import ideum.com.megamovie.R;
 public class CalibrateDirectionTestActivity extends AppCompatActivity
 implements SensorEventListener{
 
-    private CameraPreviewAndCaptureFragment mCameraFragment;
+//    private CameraPreviewAndCaptureFragment mCameraFragment;
     private SensorManager mSensorManager;
     private Sensor mMagneticField;
 
@@ -43,7 +43,7 @@ implements SensorEventListener{
         calibrateDirectionFragment.setTarget(Planet.Moon);
 
         android.app.FragmentManager fragmentManager = getFragmentManager();
-        mCameraFragment = (CameraPreviewAndCaptureFragment) fragmentManager.findFragmentById(R.id.camera_preview_fragment);
+//        mCameraFragment = (CameraPreviewAndCaptureFragment) fragmentManager.findFragmentById(R.id.camera_preview_fragment);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mMagneticField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -76,16 +76,16 @@ implements SensorEventListener{
     }
 
     public void dim(View view) {
-        if (mCameraFragment != null) {
-            mCameraFragment.decrementDuration(10);
-
-        }
+//        if (mCameraFragment != null) {
+//            mCameraFragment.decrementDuration(10);
+//
+//        }
     }
 
     public void brighten(View view) {
-        if (mCameraFragment != null) {
-            mCameraFragment.incrementDuration(10);
-        }
+//        if (mCameraFragment != null) {
+//            mCameraFragment.incrementDuration(10);
+//        }
     }
 
     public void setTargetSun(View view) {
@@ -124,7 +124,7 @@ implements SensorEventListener{
 
     }
 
-    public void calibrateToMoon(View view) {
+    public void calibrateToTarget(View view) {
         calibrateDirectionFragment.calibrateModelToTarget();
     }
 

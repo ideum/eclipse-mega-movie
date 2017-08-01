@@ -142,10 +142,8 @@
     </string>
 
 
-
     <string name="moon_test_calibration">
-        If you don\'t have any extra equipment like a tripod or external lens, you can now enter Capture Mode and the
-        app will take pictures of the moon or sun at the time you selected.
+        If you don\'t have any extra equipment like a tripod or external lens, you can now enter Capture Mode.
         \n\nIf you have an external lens, the app can help you focus it correctly. If you are attaching your phone to
         a tripod, the app can help you point the phone in the right direction.
     </string>
@@ -155,11 +153,9 @@
     </string>
 
     <string name="moon_test_calibrate_direction_explanation">
-        If you aren\'t attaching your phone to a tripod, you can now enter Capture Mode and the app will take pictures
-        of the sun/moon at the time you selected.
+        If you aren\'t attaching your phone to a tripod, you can now enter Capture Mode.
         \n\nIf you are attaching your phone to a tripod, the app can help you point the phone towards the location
-        where the sun/moon will be at the time you selected. If photographing the sun, you should now cover your
-        lens with your solar filter.
+        where the sun/moon will be at the time you selected.
     </string>
 
     <string name="moon_test_calibrate_direction">
@@ -230,6 +226,7 @@
         enable scientists and the public to make discoveries about the Moon and about the Sun.
     </string>
     <string name="email_preference_key">email</string>
+    <string name="user_id_key">google user id</string>
 
     <!--Shared Preferences-->
     <string name="previously_started_key">previously started</string>

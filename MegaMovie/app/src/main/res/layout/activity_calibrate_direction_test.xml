@@ -13,11 +13,11 @@
         android:layout_height="0dp"
         android:layout_weight="2">
 
-        <fragment
-            android:id="@+id/camera_preview_fragment"
-            android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <!--<fragment-->
+            <!--android:id="@+id/camera_preview_fragment"-->
+            <!--android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
+import ideum.com.megamovie.Java.Application.MegamovieProfileCreator;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.NewUI.MoonTest.CompassCalibrationFragment;
 import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestIntroFragment;
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
+
         // The first time the app is opened it shows the intro activity, but afterwards
         // skips it.
 
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity
 //        c.set(Calendar.DAY_OF_MONTH,21);
 
         Date date = c.getTime();
-        RaDec coordinates = Planet.calculateLunarGeocentricLocation(date);
+        RaDec coordinates = SolarPositionCalculator.getSolarPosition(date);
 
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -78,6 +83,13 @@ public class MainActivity extends AppCompatActivity
             finish();
             return;
         }
+
+
+        String id = prefs.getString(getString(R.string.user_id_key),"none");
+        MegamovieProfileCreator mpc = new MegamovieProfileCreator(this,id);
+       mpc.uploadFile();
+
+
         setContentView(R.layout.activity_main);
 
         /**

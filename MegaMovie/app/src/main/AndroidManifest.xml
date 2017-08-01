@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ideum.com.megamovie"
-    android:versionCode="5"
-    android:versionName="1.04">
+    android:versionCode="6"
+    android:versionName="2.1">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -78,11 +78,13 @@
             android:name=".Java.NewUI.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".Java.NewUI.IntroActivity"
@@ -116,21 +118,19 @@
         </activity>
         <activity android:name=".Java.NewUI.SignInActivity">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN" />-->
 
 
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <!--<category android:name="android.intent.category.LAUNCHER" />-->
+             <!--</intent-filter>-->
         </activity>
         <activity android:name=".Java.NewUI.CalibrateDirectionTestActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCaptureActivity">
 
@@ -151,8 +151,15 @@
             <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestHandHeldCaptureActivity" />
-        <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateDirectoryActivity1" />
-        <activity android:name=".Java.NewUI.MoonTest.MoonTestPointingActivity"></activity>
+        <activity android:name=".Java.NewUI.MoonTest.MoonTestPointingActivity" />
+        <activity android:name=".Java.NewUI.SensorTestActivity">
+
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
     </application>
 
 </manifest>

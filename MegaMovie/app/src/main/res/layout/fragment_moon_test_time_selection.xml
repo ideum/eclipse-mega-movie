@@ -7,146 +7,189 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="4sp"
-            android:textColor="#000"
-            android:text="@string/practice_mode_target_selection_prompt"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="24dp"
             android:layout_marginTop="24dp"
-            />
-
-        <RadioGroup
-            android:id="@+id/radio_sun_moon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="left"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp">
-            <RadioButton
-                android:id="@+id/moon_radio_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Moon Test"
-                android:layout_marginRight="16dp"
-                android:checked="false"/>
-            <RadioButton
-                android:id="@+id/sun_radio_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sun Test"
-                android:checked="false"
-                />
-        </RadioGroup>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:lineSpacingExtra="4sp"
-            android:textColor="#000"
             android:text="@string/moon_test_select_time"
-            android:layout_marginBottom="24dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="24dp"
-            />
+            android:textColor="#000"
+            android:textSize="16dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <!--<TextView-->
-                <!--android:id="@+id/moon_test_target_time_text_view"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginRight="30dp" />-->
+            <!--android:id="@+id/moon_test_target_time_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginRight="30dp" />-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginRight="50dp">
+                android:layout_marginRight="50dp"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:text="Date"/>
+                    android:textColor="#000"
+                    android:textSize="18dp"
+                    android:text="Date" />
+
                 <Button
                     android:id="@+id/choose_date_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textColor="#85000000"
-                    android:textSize="16sp"
                     android:background="#0000"
                     android:gravity="left"
                     android:text="Select"
-                    />
+                    android:textColor="#000"
+
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginRight="50dp">
+                android:layout_marginRight="50dp"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:text="Time"/>
+                    android:textColor="#000"
+                    android:textSize="18dp"
+                    android:text="Time" />
+
                 <Button
                     android:id="@+id/choose_time_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textColor="#85000000"
-                    android:textSize="16sp"
                     android:background="#0000"
                     android:gravity="left"
                     android:text="Select"
-                    />
+                    android:textColor="#000"
+                    android:textSize="18dp" />
             </LinearLayout>
-
 
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="0dp"
+            android:textSize="16dp"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/practice_mode_target_selection_prompt"
+            android:textColor="#000" />
 
 
+
+        <!--<RadioGroup-->
+        <!--android:id="@+id/radio_sun_moon"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_gravity="left"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginTop="20dp">-->
+        <!--<RadioButton-->
+        <!--android:id="@+id/moon_radio_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Moon Test"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:checked="false"/>-->
+        <!--<RadioButton-->
+        <!--android:id="@+id/sun_radio_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Sun Test"-->
+        <!--android:checked="false"-->
+        <!--/>-->
+        <!--</RadioGroup>-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/choose_moon_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:background="#0598ff"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="moon"
+                android:textColor="#fff"
+                android:textSize="30dp" />
+
+            <Button
+                android:id="@+id/choose_sun_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:background="#ff6b05"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="sun"
+                android:textColor="#fff"
+                android:textSize="30dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
 
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#EEEEEE"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/next_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="#00000000"
-            android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
-            android:elevation="0dp"
-            android:fontFamily="Roboto"
-            android:text="next"
-            android:textColor="#6E6E6E"
-            android:textSize="14dp" />
-
-    </FrameLayout>
 
 
+
+
+    <!--<FrameLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:background="#EEEEEE"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<Button-->
+    <!--android:id="@+id/next_button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="right"-->
+    <!--android:background="#00000000"-->
+    <!--android:drawableRight="@drawable/ic_chevron_right_gray_24dp"-->
+    <!--android:elevation="0dp"-->
+    <!--android:fontFamily="Roboto"-->
+    <!--android:text="next"-->
+    <!--android:textColor="#6E6E6E"-->
+    <!--android:textSize="14dp" />-->
+
+    <!--</FrameLayout>-->
 
 
 </FrameLayout>

@@ -70,13 +70,7 @@ public class MoonTestTimeSelectionFragment extends Fragment
             }
         });
 
-        Button nextButton = rootView.findViewById(R.id.next_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onNextButtonPressed();
-            }
-        });
+
 
         updateUI();
 
@@ -86,24 +80,24 @@ public class MoonTestTimeSelectionFragment extends Fragment
         // Set method 1 as default
         setCalibrationMethod(1);
 
-        RadioButton sunButton = rootView.findViewById(R.id.sun_radio_button);
-        sunButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+
+        Button sunButton = rootView.findViewById(R.id.choose_sun_button);
+        sunButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    setTestTarget(Planet.Sun);
-                    showSunTestAlert();
-                }
+            public void onClick(View view) {
+                setTestTarget(Planet.Sun);
+                showSunTestAlert();
+                onNextButtonPressed();
             }
         });
 
-        RadioButton moonButton = rootView.findViewById(R.id.moon_radio_button);
-        moonButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        Button moonButton = rootView.findViewById(R.id.choose_moon_button);
+        moonButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    setTestTarget(Planet.Moon);
-                }
+            public void onClick(View view) {
+                setTestTarget(Planet.Moon);
+                onNextButtonPressed();
             }
         });
 
