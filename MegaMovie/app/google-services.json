@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "668463149127",
-    "project_id": "firebase-megamovie"
+    "firebase_url": "https://fir-megamovie.firebaseio.com",
+    "project_id": "firebase-megamovie",
+    "storage_bucket": "firebase-megamovie.appspot.com"
   },
   "client": [
     {
@@ -12,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "668463149127-qg58ehudklpmibfm716v5d5aqjqlkncc.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "668463149127-fj3qfbrpa0jdcop9snhr58vq62hsf952.apps.googleusercontent.com",
+          "client_type": 3
+        },
         {
           "client_id": "668463149127-s1fhse3bdkod8sjj2i2lvsrqool6js7v.apps.googleusercontent.com",
           "client_type": 1,
@@ -35,11 +45,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "668463149127-qg58ehudklpmibfm716v5d5aqjqlkncc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

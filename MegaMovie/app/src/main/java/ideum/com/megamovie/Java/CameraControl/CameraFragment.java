@@ -199,35 +199,35 @@ public class CameraFragment extends android.app.Fragment
                         /**
                          * Write metadata to file
                          */
-                        String fileName = jpegBuilder.getFileName();
-                        MetadataWriter writer = new MetadataWriter(result, fileName);
-                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), data_directory_name);
-                        if (!rootPath.exists()) {
-                            rootPath.mkdir();
-                        }
-//                        File metadataFile = new File(rootPath, JPEG_METADATA_FILENAME);
-                        File metadataFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), data_directory_name);
-                        try {
-                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
-                            byte[] bytes = writer.getXMLString().getBytes();
-                            stream.write(bytes);
-                            MediaScannerConnection.scanFile(getActivity(), new String[]{metadataFile.getPath()},
-                                    null, new MediaScannerConnection.MediaScannerConnectionClient() {
-                                        @Override
-                                        public void onMediaScannerConnected() {
-                                            // Do nothing
-                                        }
-
-                                        @Override
-                                        public void onScanCompleted(String path, Uri uri) {
-                                            Log.i(TAG, "Scanned" + path + ":");
-                                            Log.i(TAG, "-> uri=" + uri);
-                                        }
-                                    });
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+//                        String fileName = jpegBuilder.getFileName();
+//                        MetadataWriter writer = new MetadataWriter(result, fileName);
+//                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), data_directory_name);
+//                        if (!rootPath.exists()) {
+//                            rootPath.mkdir();
+//                        }
+////                        File metadataFile = new File(rootPath, JPEG_METADATA_FILENAME);
+//                        File metadataFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), data_directory_name);
+//                        try {
+//                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
+//                            byte[] bytes = writer.getXMLString().getBytes();
+//                            stream.write(bytes);
+//                            MediaScannerConnection.scanFile(getActivity(), new String[]{metadataFile.getPath()},
+//                                    null, new MediaScannerConnection.MediaScannerConnectionClient() {
+//                                        @Override
+//                                        public void onMediaScannerConnected() {
+//                                            // Do nothing
+//                                        }
+//
+//                                        @Override
+//                                        public void onScanCompleted(String path, Uri uri) {
+//                                            Log.i(TAG, "Scanned" + path + ":");
+//                                            Log.i(TAG, "-> uri=" + uri);
+//                                        }
+//                                    });
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
                     }
 
                     ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
@@ -237,17 +237,17 @@ public class CameraFragment extends android.app.Fragment
                         /**
                          * Write metadata to file
                          */
-                        String fileName = rawBuilder.getFileName();
-                        MetadataWriter writer = new MetadataWriter(result, fileName);
-                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), data_directory_name);
-                        File metadataFile = new File(rootPath, RAW_METADATA_FILENAME);
-                        try {
-                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
-                            byte[] bytes = writer.getXMLString().getBytes();
-                            stream.write(bytes);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+//                        String fileName = rawBuilder.getFileName();
+//                        MetadataWriter writer = new MetadataWriter(result, fileName);
+//                        File rootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), data_directory_name);
+//                        File metadataFile = new File(rootPath, RAW_METADATA_FILENAME);
+//                        try {
+//                            FileOutputStream stream = new FileOutputStream(metadataFile, true);
+//                            byte[] bytes = writer.getXMLString().getBytes();
+//                            stream.write(bytes);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
                     }
                 }
             };

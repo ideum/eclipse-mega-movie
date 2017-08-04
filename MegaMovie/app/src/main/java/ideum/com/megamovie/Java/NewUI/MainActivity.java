@@ -85,10 +85,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        String id = prefs.getString(getString(R.string.user_id_key),"none");
-        MegamovieProfileCreator mpc = new MegamovieProfileCreator(this,id);
-       mpc.uploadFile();
-
 
         setContentView(R.layout.activity_main);
 

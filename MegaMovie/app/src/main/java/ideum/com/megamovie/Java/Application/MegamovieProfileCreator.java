@@ -128,9 +128,8 @@ public class MegamovieProfileCreator {
     }
 
     private String generatedIdToken() {
-        return "eyJhbGciOiJSUzI1NiIsImtpZCI6IjU2NjE5YWRiMjJkMWE1NDU2MjAzNmJmNTEwODBmZjZjZjdjZTNjZjIifQ.eyJhenAiOiIyOTA4Mjg5NzkyNzItOGEyMDQzZjBmNnBkbjg2ODhxb29pNTYyM2hpZTF1MWcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyOTA4Mjg5NzkyNzItOGEyMDQzZjBmNnBkbjg2ODhxb29pNTYyM2hpZTF1MWcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTE2MzgyMzM2NDgzMTMxNDY4NTYiLCJlbWFpbCI6Im1lZ2Ftb3ZpZWFwcHRlc3RAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJCaTYxZ19objFvV0oyMnNlbnUwMV9nIiwiaXNzIjoiYWNjb3VudHMuZ29vZ2xlLmNvbSIsImlhdCI6MTUwMTYxMzAzNSwiZXhwIjoxNTAxNjE2NjM1LCJuYW1lIjoiQnJheHRvbiBDb2xsaWVyIiwicGljdHVyZSI6Imh0dHBzOi8vbGg0Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tOHREM1VWcFd2a28vQUFBQUFBQUFBQUkvQUFBQUFBQUFBQUEvQU1wNVZVcnpaeEhLTW85OXRXeFEyY2lNcE9qNTU2eGtndy9zOTYtYy9waG90by5qcGciLCJnaXZlbl9uYW1lIjoiQnJheHRvbiIsImZhbWlseV9uYW1lIjoiQ29sbGllciIsImxvY2FsZSI6ImVuIn0.SKLiqzkjisxkOyjdU1XO9_E2-tge6dhKJmWv1MQdZjLrmXxWjnlCmysLi6Eopm2iSmaiJDYB-waTXkE66brOQYSVaSNcNtNy44A-FZOkFwWDaaB6YPiCaBzEemQvp7GbGcHfPyYgrQGYANZsQloYN-1zQrrhe02wos4baKBRVuIdLT6wcn6HD-poc4ZIpCP-TszEWbvCMnQaz04cKs1TuonPcInyyMuIs0iStpoG-UlEk1rgYS5uf1L-bXbDjrmcBPF24HSrs5iZT57dqgEcR-YH1YjtTjYEOXANRcquaJg1j-_mfJJ-iHUEmkYS5gy2k9LTQP6SCt-UUzw8TeQbvA";
+        return "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM0ZDA5YWNmNGY2ZWNmM2Q3ODdiMjFhOTI0NWVhYmM1ZjA3ZjU2YjYifQ.eyJhenAiOiIyOTA4Mjg5NzkyNzItOGEyMDQzZjBmNnBkbjg2ODhxb29pNTYyM2hpZTF1MWcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyOTA4Mjg5NzkyNzItOGEyMDQzZjBmNnBkbjg2ODhxb29pNTYyM2hpZTF1MWcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTE2MzgyMzM2NDgzMTMxNDY4NTYiLCJlbWFpbCI6Im1lZ2Ftb3ZpZWFwcHRlc3RAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJWUW9XZjJkMmhRanItS1lJTjVPcGR3IiwiaXNzIjoiYWNjb3VudHMuZ29vZ2xlLmNvbSIsImlhdCI6MTUwMTcwNzkwNCwiZXhwIjoxNTAxNzExNTA0LCJuYW1lIjoiQnJheHRvbiBDb2xsaWVyIiwicGljdHVyZSI6Imh0dHBzOi8vbGg0Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tOHREM1VWcFd2a28vQUFBQUFBQUFBQUkvQUFBQUFBQUFBQUEvQU1wNVZVcnpaeEhLTW85OXRXeFEyY2lNcE9qNTU2eGtndy9zOTYtYy9waG90by5qcGciLCJnaXZlbl9uYW1lIjoiQnJheHRvbiIsImZhbWlseV9uYW1lIjoiQ29sbGllciIsImxvY2FsZSI6ImVuIn0.KNyHHJrH5HaLScL14X_ch-PoeZJEtkebO5OYnITwp-i2hZBqnHMIAsC6r6UwQFh2mVIz4wBYNVfSL1GLgYBuchQWQel9GhQhsQadBszRspqB4o5rToLuu8OmEv40-0I9SmjmQYW1TIH3oKtcFpkHZTfvglg8X6DL9fiaIOjFUNEZYHSK81p1NfkK1HUg2zMalksEMCWJIz79zsbkH8Xrflbvfa7K1BSBAM_6J9JxJMneyPi8yTnrXQaromdsY-6-rSPeywGrNMZsiyNjI9UXTSf8ll-7oEV5z1SjwXWi-UIBFw4Q7aqmugvKh0JfO2UOzYYlpUbwOYhRA_X89D0u0A";
     }
-
     private String generateSessionId() {
         Random random = new Random();
 
@@ -157,8 +156,8 @@ public class MegamovieProfileCreator {
 
 
         com.squareup.okhttp.Request request = new Request.Builder()
-                .header("Authorization","Basic dGVzdDpkYXJrZW4=")
-                .header("x-idtoken",token)
+                .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
+                .header("x-idtoken", token)
                 .url(url)
                 .build();
 
@@ -173,52 +172,14 @@ public class MegamovieProfileCreator {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 } else {
-                    if(response.code() == 200) {
-                       profileExists = true;
+                    if (response.code() == 200) {
+                        profileExists = true;
                     }
                 }
             }
         });
 
-//         RequestQueue queue = Volley.newRequestQueue(mContext);
-//         String url = "https://test.eclipsemega.movie/services/user/profile/" + getSHA256Hash(userId);
-//
-//         Map<String,String> headers = new HashMap<>();
-//
-//         headers.put("authorization", "Basic dGVzdDpkYXJrZW4=");
-//
-//         StringRequestWithHeaders stringRequest = new StringRequestWithHeaders(Request.Method.GET, headers, url, new Response.Listener<String>() {
-//             @Override
-//             public void onResponse(String response) {
-//                Log.i(TAG,response.toString());
-//
-//             }
-//         }, new Response.ErrorListener() {
-//             @Override
-//             public void onErrorResponse(VolleyError error) {
-//                 Log.i(TAG,error.toString());
-//             }
-//         });
-//
-//         queue.add(stringRequest);
-//         // Return dummy value for now
-
     }
-
-//    class StringRequestWithHeaders extends StringRequest {
-//        private Map<String, String> headers;
-//
-//        public StringRequestWithHeaders(int method, Map<String, String> headers, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-//
-//            super(method, url, listener, errorListener);
-//            this.headers = headers;
-//        }
-//
-//        @Override
-//        public Map<String, String> getHeaders() throws AuthFailureError {
-//            return headers;
-//        }
-//    }
 
     static String getSHA256Hash(String text) {
         try {

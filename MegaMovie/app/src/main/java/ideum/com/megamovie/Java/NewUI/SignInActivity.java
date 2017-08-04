@@ -19,8 +19,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import ideum.com.megamovie.Java.Application.MegamovieProfileCreator;
+import ideum.com.megamovie.Java.Application.UploadActivity;
 import ideum.com.megamovie.R;
 
 public class SignInActivity extends AppCompatActivity
@@ -29,7 +38,9 @@ implements GoogleApiClient.OnConnectionFailedListener,
 
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
-//    private TextView signInResultTextView;
+
+    private static final String TAG = "SignInActivity";
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +48,7 @@ implements GoogleApiClient.OnConnectionFailedListener,
         setContentView(R.layout.activity_sign_in);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -48,7 +60,6 @@ implements GoogleApiClient.OnConnectionFailedListener,
 
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
-//        signInButton.setSize(SignInButton.SizeW);
 
         Button continueButton = (Button) findViewById(R.id.continue_button);
         continueButton.setOnClickListener(new View.OnClickListener() {
@@ -58,21 +69,9 @@ implements GoogleApiClient.OnConnectionFailedListener,
             }
         });
 
-//        for (int i = 0; i < continueButton.getChildCount(); i++) {
-//            View v = signInButton.getChildAt(i);
-//
-//            if (v instanceof TextView) {
-//                TextView tv = (TextView) v;
-//                tv.setText("Continue without sign in");
-//            }
-//            if (v instanceof ImageView) {
-//                continueButton.removeView(v);
-//            }
-//        }
-
-//        signInResultTextView = (TextView) findViewById(R.id.sign_in_result_text_view);
-
+        mAuth = FirebaseAuth.getInstance();
     }
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -103,14 +102,32 @@ implements GoogleApiClient.OnConnectionFailedListener,
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
 
-           storeUserId(acct.getId());
+           // MegamovieProfileCreator mpc = new MegamovieProfileCreator(this,acct.getId());
+
+            storeUserId(acct.getId());
             storeEmail(acct.getEmail());
+            firebaseAuthWithGoogle(acct);
 
 
         }
-        loadMainActivity();
-
+        startActivity(new Intent(this, UploadActivity.class));
     }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(),null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                        }
+                    }
+                });
+    }
+
 
     private void storeUserId(String id) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

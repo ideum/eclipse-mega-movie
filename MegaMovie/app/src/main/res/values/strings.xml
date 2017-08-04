@@ -1,4 +1,6 @@
 <resources>
+
+
     <!--Manifest-->
     <string name="app_name">Eclipse Megamovie Mobile</string>
     <string name="google_maps_key">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
