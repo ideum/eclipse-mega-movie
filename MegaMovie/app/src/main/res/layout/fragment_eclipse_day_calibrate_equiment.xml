@@ -1,0 +1,87 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayCalibrateEquimentFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/moon_test_calibrate_lens_explanation"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="18dp"
+            android:textSize="16dp"
+            android:textColor="#000" />
+
+        <Button
+            android:id="@+id/calibrate_lens_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="#fff"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:text="Calibrate Lens"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/eclipse_day_calibrate_direction_explanation"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="24dp"
+            android:textSize="16dp"
+            android:textColor="#000" />
+
+        <Button
+            android:id="@+id/calibrate_direction_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="#fff"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:text="Calibrate Direction"/>
+
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/capture_mode_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:text="Capture Mode"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="#fff"
+            android:textAllCaps="false"
+
+            android:textSize="20dp" />
+
+    </FrameLayout>
+
+</FrameLayout>

@@ -819,10 +819,13 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                 }
                 break;
                 case ImageFormat.RAW_SENSOR: {
+
+
                     DngCreator dngCreator = new DngCreator(mCharacteristics, mCaptureResult);
                     if (mLocation != null) {
                         dngCreator.setLocation(mLocation);
                     }
+                    dngCreator.setDescription("Some random description");
 
 
                     FileOutputStream output = null;
@@ -837,6 +840,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                         mImage.close();
                         closeOutput(output);
                     }
+
 
 
                 }

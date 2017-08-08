@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestCalibrateDirectionActivity">
+    tools:context="ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayCalibrateDirectionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,11 +64,7 @@
 
             </LinearLayout>
 
-
-
         </FrameLayout>
-
-
 
         <fragment
             android:id="@+id/direction_calibration_fragment"
@@ -85,26 +81,13 @@
             android:padding="5dp"
             android:layout_margin="5dp"
             android:textSize="20dp"
-            android:text="@string/moon_test_calibrate_compass_instructions"/>
+            android:text="@string/eclipse_day_calibrate_compass_instructions"/>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="horizontal">
-
-            <!--<Button-->
-                <!--android:id="@+id/back_button"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="left"-->
-                <!--android:background="#00000000"-->
-                <!--android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"-->
-                <!--android:elevation="0dp"-->
-                <!--android:fontFamily="Roboto"-->
-                <!--android:text="back"-->
-                <!--android:textColor="#6E6E6E"-->
-                <!--android:textSize="24dp" />-->
 
             <Button
                 android:id="@+id/next_button"

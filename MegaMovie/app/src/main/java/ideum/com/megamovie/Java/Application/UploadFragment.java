@@ -116,30 +116,11 @@ public class UploadFragment extends Fragment
     }
 
     public void uploadFilesInDirectory(String directoryName) {
+        sessionID = generateSessionId();
         UploadFilesTask task = new UploadFilesTask();
-        task.execute(directoryName,generateSessionId(),idToken);
+        task.execute(directoryName,sessionID,idToken);
     }
 
-//    void uploadFilesInDirectory(File directory) {
-//        if(!directory.isDirectory()) {
-//            return;
-//        }
-//        File[] files = directory.listFiles();
-//        if (files == null) {
-//            return;
-//        }
-//
-//
-//        sessionID = generateSessionId();
-//        fileQueue.clear();
-//        uploadedFileNames.clear();
-//
-//        for(int i = 0 ; i < files.length;i ++) {
-//            fileQueue.add(files[i]);
-//        }
-//
-//        uploadNext();
-//    }
 
     private void uploadNext() {
         File nextFile = fileQueue.poll();
@@ -186,13 +167,20 @@ public class UploadFragment extends Fragment
 
 
         RequestBody requestBody = RequestBody.create(JSON,json.toString());
+        Log.i(TAG,"json string: " + json);
 
         final Request request = new Request.Builder()
                 .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
                 .header("x-idtoken", idToken)
+                .header("x-image-bucket", "app")
                 .url(url)
                 .post(requestBody)
                 .build();
+
+        Log.i(TAG,"Request url: " + request.urlString());
+        Log.i(TAG,"Request body: " + request.body().toString());
+        Log.i(TAG,"Request headers: " + request.headers().toString());
+
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -202,10 +190,11 @@ public class UploadFragment extends Fragment
 
             @Override
             public void onResponse(Response response) throws IOException {
+                Log.i(TAG,"response headers: " + response.headers().toString());
+                Log.i(TAG,"response body " + response.body().toString());
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 } else {
-                    Log.i("UploadFragment",String.valueOf(response.code()));
                     if (response.code() == 200) {
                         Toast.makeText(getActivity(),"Upload Successful",Toast.LENGTH_SHORT);
                     } else {
@@ -214,8 +203,6 @@ public class UploadFragment extends Fragment
                 }
             }
         });
-
-
     }
 
     private void onUploadComplete() {
@@ -271,8 +258,6 @@ public class UploadFragment extends Fragment
 
     }
 
-
-
     private void signIn() {
 
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -295,7 +280,6 @@ public class UploadFragment extends Fragment
             idToken = acct.getIdToken();
 
         }
-
     }
 
     private String generateSessionId() {
@@ -307,7 +291,6 @@ public class UploadFragment extends Fragment
         }
 
         return id;
-
     }
 
 
@@ -410,9 +393,6 @@ public class UploadFragment extends Fragment
                     }
                 }
             });
-
-
-
         }
     }
 

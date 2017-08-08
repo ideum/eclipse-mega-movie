@@ -38,6 +38,7 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
     private LatLng currentLatLng;
     private LatLng currentClosestTotalityLatLng;
     private Context mContext;
+    public boolean shouldUseCurrentLocation = false;
 
     public EclipseTimeLocationManager(EclipseTimeCalculator etc, Context context) {
         mEclipseTimeCalculator = etc;
@@ -87,7 +88,7 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
 
     private LatLng referenceLatLng() {
         LatLng plannedLatLng = getPlannedLatLngPreference();
-        if (plannedLatLng != null) {
+        if (plannedLatLng != null && !shouldUseCurrentLocation) {
             return plannedLatLng;
         }
 

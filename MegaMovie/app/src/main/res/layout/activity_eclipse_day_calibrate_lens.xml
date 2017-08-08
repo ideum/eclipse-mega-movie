@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayCalibrateLensActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <fragment
+                android:id="@+id/camera_preview_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="4dp">
+                <Button
+                    android:id="@+id/set_moon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dimmer"
+                    android:onClick="dim"/>
+                <Button
+                    android:id="@+id/set_sun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="brighter"
+                    android:onClick="brighten"/>
+
+
+            </LinearLayout>
+        </FrameLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
+            android:lineSpacingExtra="4sp"
+            android:textColor="#000"
+            android:text="@string/moon_test_calibrate_lens"/>
+        <Button
+            android:id="@+id/done_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:background="@color/colorPrimary"
+            android:textColor="#fff"
+            android:layout_marginBottom="24dp"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -40,23 +40,5 @@ public class UploadTestActivity extends AppCompatActivity {
             }
         });
 
-//        List<String> uploadedFileNames = new ArrayList<>();
-//        uploadedFileNames.add("file1");
-//        uploadedFileNames.add("file2");
-//        String sessionID = "some sessions id";
-//
-//        JSONObject json = new JSONObject();
-//
-//        JSONArray jsonNames = new JSONArray(uploadedFileNames);
-//
-//        try {
-//            json.put("filesnames",jsonNames);
-//            json.put("upload_session_id",sessionID);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        String jsonString = json.toString();
-
     }
 }

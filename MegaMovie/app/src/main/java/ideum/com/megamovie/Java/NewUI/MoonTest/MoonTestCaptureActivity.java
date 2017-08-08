@@ -120,23 +120,8 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
         int leadTimeMinutes = LEAD_TIME_SECONDS / 60;
         int leadTimeSeconds = LEAD_TIME_SECONDS - 60 * leadTimeMinutes;
-        String leadTimeMinutesString = String.format("%02d", leadTimeMinutes);
-        String leadTimeSecondsString = String.format("%02d", leadTimeSeconds);
-        String leadTimeString = "Lead time: " + leadTimeMinutesString + ":" + leadTimeSecondsString;
-//        leadTimeTextView.setText(leadTimeString);
-
-//        int durationMinutes = (int) SESSION_LENGTH_SECONDS / 60;
-//        int durationSeconds = (int) SESSION_LENGTH_SECONDS - 60 * durationMinutes;
-//        String durationMinutesString = String.format("%02d", durationMinutes);
-//        String durationSecondsString = String.format("%02d", durationSeconds);
-//        String durationString = "Duration: " + durationMinutesString + ":" + durationSecondsString;
-//        durationTextView.setText(durationString);
-
 
     }
-
-
-
 
     private void onFinishButtonPressed() {
         Intent intent = new Intent(this, MainActivity.class);

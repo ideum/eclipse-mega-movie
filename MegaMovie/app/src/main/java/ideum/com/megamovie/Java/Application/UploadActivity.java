@@ -69,12 +69,12 @@ implements GoogleApiClient.OnConnectionFailedListener{
         sessionID = generateSessionId();
 
         Button uploadButton = (Button) findViewById(R.id.upload_button);
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uploadFile();
-            }
-        });
+//        uploadButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                uploadFile();
+//            }
+//        });
 
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +106,7 @@ implements GoogleApiClient.OnConnectionFailedListener{
     protected void onStart() {
         super.onStart();
 
-        signIn();
+       // signIn();
 
     }
 

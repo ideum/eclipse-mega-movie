@@ -151,7 +151,7 @@
     </string>
 
     <string name="moon_test_calibrate_lens_explanation">
-        If you are using an external lens, the app can help you calibrate it correctly.
+        If you are using an external lens, the app can help you focus it correctly.
     </string>
 
     <string name="moon_test_calibrate_direction_explanation">
@@ -190,6 +190,35 @@
         a hot day, be careful not to leave your phone outside for too long.
     </string>
 
+    <!--Eclipse Day-->
+
+    <string name="eclipse_day_intro">The app can help you capture photos of the eclipse, and share them to the Megamovie Archive for scientific study.
+        \n\nThe app will capture about 1GB worth of images, so make sure you have enough storage available on your phone.</string>
+    <string name="eclipse_day_instructions">
+        The app will take pictures only during totality, when the sun is completely covered by the moon. During totality, you just not cover the
+        lens with a solar filter. However, before totality you will need a filter to protect your phone. The app will remind you with an audio
+        cue to remove the filter 15 seconds before the start of totality.
+    </string>
+
+    <string name="eclipse_day_equipment_intro">The app can help you set up your equipment. If you don\'t need help with this, you can go
+        directly to capture mode.
+        \n\nRemember to use a solar filter when pointing your lens. The app will remind you to remove it 15 seconds before the start of totality.</string>
+
+    <string name="eclipse_day_skip_set_up">If you have already set up your equipment or would like to skip this step, you can go
+    directly to capture mode</string>
+
+    <string name="eclipse_day_no_equipment">
+        It looks you aren\'t using any extra equipment, so do not have to do any additional set-up.
+    </string>
+
+    <string name="eclipse_day_calibrate_direction_explanation">
+        If you are using a tripod, the app can help you point your phone towards the point
+        in the sky where the eclipse will occur.
+    </string>
+
+    <string name="eclipse_day_calibrate_compass_instructions">
+        Align the phone so the sun appears in the center of the red crosshairs. Then press SET.
+    </string>
 
     <!-- Strings related to Settings -->
     <string name="user_mode_default">Phone only</string>
