@@ -157,10 +157,10 @@ public class UploadFragment extends Fragment
         JSONArray jsonNames = new JSONArray(uploadedFileNames);
 
         try {
-            json.put("filesnames",jsonNames);
+            json.put("filenames",jsonNames);
             json.put("upload_session_id",sessionID);
-            json.put("anonymous_photo","false");
-            json.put("equatorial_mount","false");
+            json.put("anonymous_photo",false);
+            json.put("equatorial_mount",false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -172,14 +172,12 @@ public class UploadFragment extends Fragment
         final Request request = new Request.Builder()
                 .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
                 .header("x-idtoken", idToken)
-                .header("x-image-bucket", "app")
                 .url(url)
                 .post(requestBody)
                 .build();
 
-        Log.i(TAG,"Request url: " + request.urlString());
-        Log.i(TAG,"Request body: " + request.body().toString());
-        Log.i(TAG,"Request headers: " + request.headers().toString());
+//        Log.i(TAG,"Session id for confirm: " + sessionID);
+//        Log.i(TAG,"idtoken for confirm: " + idToken);
 
 
         client.newCall(request).enqueue(new Callback() {
@@ -190,13 +188,13 @@ public class UploadFragment extends Fragment
 
             @Override
             public void onResponse(Response response) throws IOException {
-                Log.i(TAG,"response headers: " + response.headers().toString());
-                Log.i(TAG,"response body " + response.body().toString());
+
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 } else {
                     if (response.code() == 200) {
-                        Toast.makeText(getActivity(),"Upload Successful",Toast.LENGTH_SHORT);
+                        Log.i(TAG,"Success!");
+//                        Toast.makeText(getActivity(),"Upload Successful",Toast.LENGTH_SHORT);
                     } else {
                         onUploadFailed();
                     }
@@ -225,6 +223,9 @@ public class UploadFragment extends Fragment
                     .build();
 
             String url = "https://test.eclipsemega.movie/services/upload/";
+
+        Log.i(TAG,"session id for upload: " + sessionID);
+        Log.i(TAG,"idtoken for upload: " + idToken);
 
             final Request request = new Request.Builder()
                     .header("x-uploadsessionid", sessionID)
@@ -363,6 +364,9 @@ public class UploadFragment extends Fragment
                     .build();
 
             String url = "https://test.eclipsemega.movie/services/upload/";
+
+            Log.i(TAG,"session id for upload: " + sessionId);
+            Log.i(TAG,"idtoken for upload: " + token);
 
             final Request request = new Request.Builder()
                     .header("x-uploadsessionid", sessionId)

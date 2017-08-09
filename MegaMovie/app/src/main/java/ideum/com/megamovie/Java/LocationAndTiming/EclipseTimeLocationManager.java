@@ -23,6 +23,7 @@ import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -73,11 +74,17 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
     }
 
     public void calibrateTime(Long correctTime) {
-        timeCorrection = correctTime - Calendar.getInstance().getTimeInMillis();
+        Long systemTime = Calendar.getInstance().getTimeInMillis();
+        Date date = new Date(systemTime);
+        timeCorrection = correctTime - systemTime;
+        Log.i("TIME",date.toString());
     }
 
     private Long getCurrentCalibrateTimeMills() {
-        return Calendar.getInstance().getTimeInMillis();// + timeCorrection;
+                Long mills = Calendar.getInstance().getTimeInMillis() + timeCorrection;
+        Date date = new Date(mills);
+        Log.i("DATE",date.toString());
+        return Calendar.getInstance().getTimeInMillis() + timeCorrection;
 
     }
 
