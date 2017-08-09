@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import ideum.com.megamovie.Java.Util.TimeUtil;
+
 /**
  * Created by MT_User on 7/19/2017.
  */
@@ -42,12 +44,14 @@ public class DateUtil {
 
     public static String countdownDaysString(Long mills) {
         mills = Math.max(mills,0);
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(mills);
-        DateFormat formatter = new SimpleDateFormat("DD", Locale.US);
-
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return formatter.format(c.getTime());
+        long days = TimeUnit.MILLISECONDS.toDays(mills);
+        return String.format("%02d",days);
+//        Calendar c = Calendar.getInstance();
+//        c.setTimeInMillis(mills);
+//        DateFormat formatter = new SimpleDateFormat("DD", Locale.US);
+//
+//        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+//        return formatter.format(c.getTime());
     }
 
     public static String countdownHoursString(Long mills) {

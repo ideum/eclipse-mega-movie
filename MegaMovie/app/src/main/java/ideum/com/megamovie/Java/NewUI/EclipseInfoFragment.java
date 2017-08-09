@@ -157,6 +157,7 @@ public class EclipseInfoFragment extends Fragment
         CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         double distance = EclipsePath.distanceToPathOfTotality(location);
         cdf.setDistanceToPathOfTotality(distance);
+        mEclipseTimeManager.calibrateTime(location.getTime());
     }
 
     @Override

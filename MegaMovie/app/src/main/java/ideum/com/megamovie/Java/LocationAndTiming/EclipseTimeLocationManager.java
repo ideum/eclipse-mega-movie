@@ -39,6 +39,7 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
     private LatLng currentClosestTotalityLatLng;
     private Context mContext;
     public boolean shouldUseCurrentLocation = false;
+    private Long timeCorrection = 0L;
 
     public EclipseTimeLocationManager(EclipseTimeCalculator etc, Context context) {
         mEclipseTimeCalculator = etc;
@@ -66,9 +67,18 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         Long result = null;
         Long eclipseTime = getEclipseTime(event);
         if (eclipseTime != null) {
-            result = eclipseTime - Calendar.getInstance().getTimeInMillis();
+            result = eclipseTime - getCurrentCalibrateTimeMills();
         }
         return result;
+    }
+
+    public void calibrateTime(Long correctTime) {
+        timeCorrection = correctTime - Calendar.getInstance().getTimeInMillis();
+    }
+
+    private Long getCurrentCalibrateTimeMills() {
+        return Calendar.getInstance().getTimeInMillis();// + timeCorrection;
+
     }
 
     public void setAsLocationListener(LocationSource source) {
