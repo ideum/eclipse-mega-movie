@@ -36,7 +36,8 @@ public class UploadTestActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mUploadFragment.uploadFilesInDirectory("Megamovie practice Jul 24 18:35 PM");
+//                mUploadFragment.uploadFilesInDirectory("Megamovie practice Jul 24 18:35 PM");
+                mUploadFragment.checkIfAccountExists();
             }
         });
 

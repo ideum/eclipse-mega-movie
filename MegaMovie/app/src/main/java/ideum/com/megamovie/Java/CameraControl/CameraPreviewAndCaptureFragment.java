@@ -50,6 +50,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -73,7 +74,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         ManualCamera {
 
     public static final boolean ALLOWS_RAW = true;
-    public static final boolean ALLOWS_JPEG = false;
+    public static final boolean ALLOWS_JPEG = true;
     public static final String TAG = "PreviewCapture";
 
     private static final String RAW_METADATA_FILENAME = "metadata_raw.txt";
@@ -284,7 +285,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     }
 
                     if (ALLOWS_RAW) {
-                        File rawRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name + "/RAW");
+                        File rawRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
                         if (!rawRootPath.exists()) {
                             rawRootPath.mkdirs();
                         }
@@ -950,10 +951,11 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     }
 
     private static String generateTimeStamp() {
-        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd HH:mm:ss:SS ");
+//        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
         Calendar c = Calendar.getInstance();
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return formatter.format(c.getTime());
+        return formatter.format(c.getTime()) + "UTC";
     }
 
     /**

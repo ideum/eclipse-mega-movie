@@ -19,14 +19,14 @@ import ideum.com.megamovie.R;
 
 
 
-public class TotalityStartTimeProvider extends Fragment
+public class EclipseTimeProvider extends Fragment
 implements LocationSource.OnLocationChangedListener{
 
 
     private GPSFragment mGPSFragment;
     private EclipseTimeLocationManager mEclipseTimeManager;
 
-    public TotalityStartTimeProvider() {
+    public EclipseTimeProvider() {
         // Required empty public constructor
     }
 
@@ -60,6 +60,13 @@ implements LocationSource.OnLocationChangedListener{
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
         mEclipseTimeManager.setCurrentLatLng(latLng);
+    }
+
+    public Long getPhaseTimeMills(EclipseTimingMap.Event event) {
+        if (mEclipseTimeManager == null) {
+            return null;
+        }
+        return mEclipseTimeManager.getEclipseTime(event);
     }
 
     public Long getStartOfTotalityMills() {

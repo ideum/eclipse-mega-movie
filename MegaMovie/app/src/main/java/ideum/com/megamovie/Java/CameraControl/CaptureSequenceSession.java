@@ -19,7 +19,21 @@ import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 
 public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public interface CaptureSessionCompletionListerner {
-        public void onSessionCompleted(CaptureSequenceSession session);
+         void onSessionCompleted(CaptureSequenceSession session);
+    }
+
+    private MyTimer mTimer;
+
+    public void start() {
+        mTimer = new MyTimer();
+        mTimer.addListener(this);
+        mTimer.startTicking();
+    }
+
+    public void stop() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
     }
 
     public static final String TAG = "CaptureSequenceSession";

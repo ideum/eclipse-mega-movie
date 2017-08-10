@@ -104,7 +104,6 @@ public class EclipsePath {
 
     private static LatLng closestPointOnBoundary(LatLng pos, int boundary) {
 
-
         double parameter = 0;
         LatLng endpoint = getLatLngForParameter(parameter,boundary);
         double minDistance = greatCircleDistance(pos,endpoint);

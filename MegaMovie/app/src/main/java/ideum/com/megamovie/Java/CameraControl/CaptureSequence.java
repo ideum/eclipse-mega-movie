@@ -132,8 +132,61 @@ public class CaptureSequence {
         }
     }
 
+    public static class SteppedInterval {
+        CaptureSettings baseSettings;
+        Long startTime;
+        Long endTime;
+        Long spacing;
+        Double[] exposureFractions;
+
+        public SteppedInterval(CaptureSettings baseSettings,Double[] exposureFractions, Long startTime,Long endTime,long spacing){
+            this.baseSettings = baseSettings;
+            this.exposureFractions = exposureFractions;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.spacing = spacing;
+        }
+
+        public Queue<TimedCaptureRequest> getRequests() {
+            LinkedList<TimedCaptureRequest> q = new LinkedList<>();
+            Long captureTime = startTime;
+            int captureNumber = 0;
+            while (captureTime < endTime) {
+                CaptureSettings settings = baseSettings.makeCopy();
+                settings.exposureTime = (long)(baseSettings.exposureTime * exposureFractions[captureNumber % exposureFractions.length]);
+                q.add(new TimedCaptureRequest(captureTime,settings));
+                captureTime += spacing;
+                captureNumber++;
+            }
+            return q;
+        }
+    }
+
     //public List<CaptureInterval> mCaptureIntervals;
     private Queue<TimedCaptureRequest> requestQueue;
+
+    public CaptureSequence(SteppedInterval[] intervals) {
+        requestQueue = new LinkedList<>();
+        for(int i = 0;i< intervals.length;i++) {
+            requestQueue.addAll(intervals[i].getRequests());
+        }
+    }
+
+
+    public CaptureSequence(CaptureSettings baseSettings,Double[] exposureFractions,Long startTimeMills,Long endTimeMills,Long spacing) {
+        requestQueue = new LinkedList<>();
+        Long captureTime = startTimeMills;
+        int captureNumber = 0;
+        while (captureTime < endTimeMills) {
+            CaptureSettings settings = baseSettings.makeCopy();
+            settings.exposureTime = (long)(baseSettings.exposureTime * exposureFractions[captureNumber % exposureFractions.length]);
+            requestQueue.add(new TimedCaptureRequest(captureTime,settings));
+            captureTime += spacing;
+            captureNumber++;
+        }
+    }
+
+
 
     public CaptureSequence(List<CaptureInterval> captureIntervals) {
 //        mCaptureIntervals = captureIntervals;

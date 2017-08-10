@@ -40,7 +40,7 @@ public class MyTimer {
 
     // Timer runs for one year
     private static long COUNTDOWN_DURATION = Long.MAX_VALUE;
-    public  long TICK_INTERVAL = 100; //milliseconds
+    public  long TICK_INTERVAL = 10; //milliseconds
     public static final String TAG = "MyTimer";
 
     public interface MyTimerListener {

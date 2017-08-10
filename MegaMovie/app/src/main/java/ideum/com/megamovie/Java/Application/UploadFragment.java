@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 
@@ -38,6 +39,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,17 +62,18 @@ public class UploadFragment extends Fragment
     }
 
     private List<CompletionListener> completionListeners = new ArrayList<>();
-    public void addCompletionListener(CompletionListener listener) {
-        completionListeners.add(listener);
-    }
+
 
 
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
 
     private final static String TAG = "UploadFragment";
+    private String userId;
     String idToken;
     private String sessionID;
+    private String email;
+    private String name;
     private FirebaseAuth mAuth;
 
     private static final int REQUEST_PERMISSIONS = 0;
@@ -113,6 +118,83 @@ public class UploadFragment extends Fragment
     public void onStart() {
         super.onStart();
         signIn();
+    }
+
+    public void createMegamovieAccount() {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://test.eclipsemega.movie/services/user/profile/" + getSHA256Hash(userId);
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        JSONObject json = new JSONObject();
+
+
+        try {
+            json.put("name",name);
+            json.put("email",email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody requestBody = RequestBody.create(JSON,json.toString());
+
+        final Request request = new Request.Builder()
+                .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
+                .header("x-idtoken", idToken)
+                .url(url)
+                .put(requestBody)
+                .build();
+
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    if (response.code() == 200) {
+                        Log.i(TAG,"Success!");
+                    } else {
+                        onUploadFailed();
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void checkIfAccountExists() {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://test.eclipsemega.movie/services/user/profile/" + getSHA256Hash(userId);
+
+        com.squareup.okhttp.Request request = new Request.Builder()
+                .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
+                .header("x-idtoken", idToken)
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    if (response.code() == 200) {
+
+                    }
+                }
+            }
+        });
     }
 
     public void uploadFilesInDirectory(String directoryName) {
@@ -172,12 +254,10 @@ public class UploadFragment extends Fragment
         final Request request = new Request.Builder()
                 .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
                 .header("x-idtoken", idToken)
+                .header("X-IDEUM-APP-SECRET", "abf31acfccb6194e4a4c888764e2b426403a380f75cb0a038d875ed1c5ca572c")
                 .url(url)
                 .post(requestBody)
                 .build();
-
-//        Log.i(TAG,"Session id for confirm: " + sessionID);
-//        Log.i(TAG,"idtoken for confirm: " + idToken);
 
 
         client.newCall(request).enqueue(new Callback() {
@@ -215,19 +295,26 @@ public class UploadFragment extends Fragment
             Toast.makeText(getActivity(),"Upload failed",Toast.LENGTH_SHORT);
     }
 
+    public static String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
+
     void uploadFile(File file) {
+        String mediaType = getMimeType(file.getAbsolutePath());
 
         RequestBody requestBody = new MultipartBuilder()
                     .type(MultipartBuilder.FORM)
-                    .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("jpg"), file))
+                    .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("dng"), file))
                     .build();
 
             String url = "https://test.eclipsemega.movie/services/upload/";
 
-        Log.i(TAG,"session id for upload: " + sessionID);
-        Log.i(TAG,"idtoken for upload: " + idToken);
-
-            final Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                     .header("x-uploadsessionid", sessionID)
                     .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
                     .header("x-image-bucket", "app")
@@ -279,6 +366,9 @@ public class UploadFragment extends Fragment
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
             idToken = acct.getIdToken();
+            userId = acct.getId();
+            email = acct.getEmail();
+            name = acct.getDisplayName();
 
         }
     }
@@ -313,6 +403,25 @@ public class UploadFragment extends Fragment
             }
         }
         return true;
+    }
+
+    static String getSHA256Hash(String text) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            md.update(text.getBytes());
+            byte[] digest = md.digest();
+
+            return bin2hex(digest);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    static String bin2hex(byte[] data) {
+        return String.format("%0" + (data.length * 2) + 'x', new BigInteger(1, data));
     }
 
     private class UploadFilesTask extends AsyncTask<String,String,Integer> {
@@ -360,13 +469,12 @@ public class UploadFragment extends Fragment
 
             RequestBody requestBody = new MultipartBuilder()
                     .type(MultipartBuilder.FORM)
-                    .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("jpg"), file))
+                    .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), file))
                     .build();
 
             String url = "https://test.eclipsemega.movie/services/upload/";
 
-            Log.i(TAG,"session id for upload: " + sessionId);
-            Log.i(TAG,"idtoken for upload: " + token);
+
 
             final Request request = new Request.Builder()
                     .header("x-uploadsessionid", sessionId)
@@ -390,15 +498,15 @@ public class UploadFragment extends Fragment
                     } else {
                         Log.i("UploadFileTask",String.valueOf(response.code()));
                         if (response.code() == 200) {
-                            //uploadNext();
                         } else {
-                            //onUploadFailed();
                         }
                     }
                 }
             });
         }
     }
+
+
 
 
 }
