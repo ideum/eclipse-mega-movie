@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         MyTimer.MyTimerListener,
         FragmentManager.OnBackStackChangedListener {
 
-    //private Class initialFragmentClass = EclipseDayIntroFragment.class;
+//    private Class initialFragmentClass = EclipseInfoFragment.class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

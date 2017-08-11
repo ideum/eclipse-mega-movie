@@ -164,8 +164,8 @@ public class MoonTestCaptureActivity extends AppCompatActivity
     private CaptureSequence createCaptureSequence() {
         Long startTimeMills = getTestTimeFromSettings() - LEAD_TIME_SECONDS * 1000;
 
-        boolean shouldSaveRaw = true;
-        boolean shouldSaveJpeg = false;
+        boolean shouldSaveRaw = false;
+        boolean shouldSaveJpeg = true;
         Long spacing = SPACING_SECONDS * 1000L;
         Long duration = SESSION_LENGTH_SECONDS * 1000;
 

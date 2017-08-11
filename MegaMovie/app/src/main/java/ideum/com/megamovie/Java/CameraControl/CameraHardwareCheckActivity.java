@@ -42,9 +42,7 @@ public class CameraHardwareCheckActivity extends AppCompatActivity {
      * Permissions required to take a picture.
      */
     private static final String[] CAMERA_PERMISSIONS = {Manifest.permission.CAMERA,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            Manifest.permission.ACCESS_FINE_LOCATION};
 
     private CameraManager mCameraManager;
     private int hardwareLevel;

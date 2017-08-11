@@ -73,7 +73,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback,
         ManualCamera {
 
-    public static final boolean ALLOWS_RAW = true;
+    public static final boolean ALLOWS_RAW = false;
     public static final boolean ALLOWS_JPEG = true;
     public static final String TAG = "PreviewCapture";
 

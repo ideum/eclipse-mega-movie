@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -30,10 +31,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import ideum.com.megamovie.Java.CameraControl.CameraHardwareCheckFragment;
@@ -53,6 +52,34 @@ AlertDialog.OnDismissListener{
     private static final int RC_SIGN_IN = 9001;
     private int REQUEST_LOCATION_PERMISSIONS = 0;
 
+
+
+    /**
+     * Permissions required to take a picture.
+     */
+
+
+    private static final int REQUEST_PERMISSIONS = 0;
+
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSIONS);
+    }
+
+    private boolean hasAllPermissionsGranted() {
+        for (String permission : PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private GoogleApiClient mGoogleApiClient;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -68,11 +95,15 @@ AlertDialog.OnDismissListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSIONS);
+        if (!hasAllPermissionsGranted()) {
+            requestPermissions();
         }
+
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                    REQUEST_LOCATION_PERMISSIONS);
+//        }
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

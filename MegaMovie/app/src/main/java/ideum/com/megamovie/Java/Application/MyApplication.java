@@ -18,7 +18,7 @@ public class MyApplication extends Application {
     public EclipseTimeCalculator getEclipseTimeCalculator() {
         return mEclipseTimeCalculator;
     }
-    public Class currentFragment = EclipseInfoFragment.class;
+    public Class currentFragment = EclipseDayIntroFragment.class;
 
 
 

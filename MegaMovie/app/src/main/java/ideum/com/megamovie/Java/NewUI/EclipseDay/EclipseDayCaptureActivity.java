@@ -219,9 +219,9 @@ implements MyTimer.MyTimerListener,
     @Override
     public void onTick() {
         Long millsRemaining = getC2Time();
-        if (millsRemaining != null && mSession == null) {
-            setUpCaptureSequenceSession();
-        }
+//        if (millsRemaining != null && mSession == null) {
+//            setUpCaptureSequenceSession();
+//        }
         countdownFragment.setTargetTimeMills(millsRemaining);
         countdownFragment.onTick();
     }

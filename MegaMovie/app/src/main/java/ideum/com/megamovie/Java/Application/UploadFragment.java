@@ -1,27 +1,17 @@
 package ideum.com.megamovie.Java.Application;
 
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,43 +36,42 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Random;
-
-import ideum.com.megamovie.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class UploadFragment extends Fragment
-        implements GoogleApiClient.OnConnectionFailedListener{
+        implements GoogleApiClient.OnConnectionFailedListener {
 
 
-    public interface CompletionListener {
-        public void onUploadComplete(List<String> uploadedFileNames);
+    public interface UploadListener {
+        void onUploadProgress(Integer filesUploaded,Integer filesTotal);
+        void onUploadComplete(List<String> uploadedFileNames);
+        void onConfirmationResponseReceived(Boolean isSuccess);
+        void onUploadFailed();
     }
 
-    private List<CompletionListener> completionListeners = new ArrayList<>();
-
+    public void addListener(UploadListener listener) {
+        completionListeners.add(listener);
+    }
+    private List<UploadListener> completionListeners = new ArrayList<>();
 
 
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
 
     private final static String TAG = "UploadFragment";
-    private String userId;
-    String idToken;
-    private String sessionID;
-    private String email;
-    private String name;
+    //    private String userId;
+//    private String idToken;
+//    private String sessionID;
+//    private String email;
+//    private String name;
     private FirebaseAuth mAuth;
 
-    private static final int REQUEST_PERMISSIONS = 0;
 
-    private static final String[] PERMISSIONS = {
-            Manifest.permission.READ_EXTERNAL_STORAGE};
 
     private Queue<File> fileQueue = new LinkedList<>();
-    private List<String> uploadedFileNames = new ArrayList<>();
+    //    private List<String> uploadedFileNames = new ArrayList<>();
     private OkHttpClient client = new OkHttpClient();
 
     public UploadFragment() {
@@ -94,33 +83,19 @@ public class UploadFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!hasAllPermissionsGranted()) {
-            requestCameraPermissions();
-            return;
-        }
 
         mAuth = FirebaseAuth.getInstance();
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity(),this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build();
-        mGoogleApiClient.connect();
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        signIn();
+        //signIn();
     }
 
-    public void createMegamovieAccount() {
+    public void createMegamovieAccount(String userId, String name, String email, String idToken) {
         OkHttpClient client = new OkHttpClient();
         String url = "https://test.eclipsemega.movie/services/user/profile/" + getSHA256Hash(userId);
 
@@ -129,13 +104,13 @@ public class UploadFragment extends Fragment
 
 
         try {
-            json.put("name",name);
-            json.put("email",email);
+            json.put("name", name);
+            json.put("email", email);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        RequestBody requestBody = RequestBody.create(JSON,json.toString());
+        RequestBody requestBody = RequestBody.create(JSON, json.toString());
 
         final Request request = new Request.Builder()
                 .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
@@ -158,7 +133,7 @@ public class UploadFragment extends Fragment
                     throw new IOException("Unexpected code " + response);
                 } else {
                     if (response.code() == 200) {
-                        Log.i(TAG,"Success!");
+                        Log.i(TAG, "Success!");
                     } else {
                         onUploadFailed();
                     }
@@ -167,132 +142,68 @@ public class UploadFragment extends Fragment
         });
     }
 
-
-    public void checkIfAccountExists() {
-        OkHttpClient client = new OkHttpClient();
-        String url = "https://test.eclipsemega.movie/services/user/profile/" + getSHA256Hash(userId);
-
-        com.squareup.okhttp.Request request = new Request.Builder()
-                .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
-                .header("x-idtoken", idToken)
-                .url(url)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
-                } else {
-                    if (response.code() == 200) {
-
-                    }
-                }
-            }
-        });
-    }
-
-    public void uploadFilesInDirectory(String directoryName) {
-        sessionID = generateSessionId();
+    public void uploadFilesInDirectory(String directoryName, String sessionId, String idToken) {
         UploadFilesTask task = new UploadFilesTask();
-        task.execute(directoryName,sessionID,idToken);
+        task.execute(directoryName, sessionId, idToken);
     }
 
 
-    private void uploadNext() {
-        File nextFile = fileQueue.poll();
-        if (nextFile != null) {
-            uploadedFileNames.add(nextFile.getName());
-            uploadFile(nextFile);
-        } else {
-            onUploadComplete();
-        }
-    }
+    void sendConfirmation(String sessionId, String idToken, List<String> uploadedFileNames) {
+        ConfirmationTask task = new ConfirmationTask(sessionId,idToken,uploadedFileNames);
+        task.execute();
 
-    private void showConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Would you like to submit your images to the MegamovieArchive?")
-                .setTitle(getResources().getString(R.string.safety_warning_title))
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        sendConfirmation();
-                    }
-                })
-                .setNegativeButton("No",null)
-                .setCancelable(false);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void sendConfirmation()  {
-
-        String url = "https://test.eclipsemega.movie/services/photo/confirm";
-         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        JSONObject json = new JSONObject();
-
-        JSONArray jsonNames = new JSONArray(uploadedFileNames);
-
-        try {
-            json.put("filenames",jsonNames);
-            json.put("upload_session_id",sessionID);
-            json.put("anonymous_photo",false);
-            json.put("equatorial_mount",false);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        RequestBody requestBody = RequestBody.create(JSON,json.toString());
-        Log.i(TAG,"json string: " + json);
-
-        final Request request = new Request.Builder()
-                .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
-                .header("x-idtoken", idToken)
-                .header("X-IDEUM-APP-SECRET", "abf31acfccb6194e4a4c888764e2b426403a380f75cb0a038d875ed1c5ca572c")
-                .url(url)
-                .post(requestBody)
-                .build();
-
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
-                } else {
-                    if (response.code() == 200) {
-                        Log.i(TAG,"Success!");
-//                        Toast.makeText(getActivity(),"Upload Successful",Toast.LENGTH_SHORT);
-                    } else {
-                        onUploadFailed();
-                    }
-                }
-            }
-        });
-    }
-
-    private void onUploadComplete() {
-        showConfirmationDialog();
-
-        for(CompletionListener listener : completionListeners) {
-            listener.onUploadComplete(uploadedFileNames);
-        }
+//        String url = "https://test.eclipsemega.movie/services/photo/confirm";
+//        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+//        JSONObject json = new JSONObject();
+//
+//        JSONArray jsonNames = new JSONArray(uploadedFileNames);
+//
+//        try {
+//            json.put("filenames", jsonNames);
+//            json.put("upload_session_id", sessionId);
+//            json.put("anonymous_photo", false);
+//            json.put("equatorial_mount", false);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        RequestBody requestBody = RequestBody.create(JSON, json.toString());
+//        Log.i(TAG, "json string: " + json);
+//
+//        final Request request = new Request.Builder()
+//                .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
+//                .header("x-idtoken", idToken)
+//                .header("X-IDEUM-APP-SECRET", "abf31acfccb6194e4a4c888764e2b426403a380f75cb0a038d875ed1c5ca572c")
+//                .url(url)
+//                .post(requestBody)
+//                .build();
+//
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Request request, IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onResponse(Response response) throws IOException {
+//
+//                if (!response.isSuccessful()) {
+//                    throw new IOException("Unexpected code " + response);
+//                } else {
+//                    if (response.code() == 200) {
+//                        Log.i(TAG, "Success!");
+//                    } else {
+//                        onUploadFailed();
+//                    }
+//                }
+//            }
+//        });
     }
 
     private void onUploadFailed() {
-            Toast.makeText(getActivity(),"Upload failed",Toast.LENGTH_SHORT);
+        Toast.makeText(getActivity(), "Upload failed", Toast.LENGTH_SHORT);
     }
 
     public static String getMimeType(String url) {
@@ -304,86 +215,28 @@ public class UploadFragment extends Fragment
         return type;
     }
 
-    void uploadFile(File file) {
-        String mediaType = getMimeType(file.getAbsolutePath());
 
-        RequestBody requestBody = new MultipartBuilder()
-                    .type(MultipartBuilder.FORM)
-                    .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("dng"), file))
-                    .build();
-
-            String url = "https://test.eclipsemega.movie/services/upload/";
-
-        final Request request = new Request.Builder()
-                    .header("x-uploadsessionid", sessionID)
-                    .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
-                    .header("x-image-bucket", "app")
-                    .header("x-idtoken", idToken)
-                    .url(url)
-                    .post(requestBody)
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    if (!response.isSuccessful()) {
-                        throw new IOException("Unexpected code " + response);
-                    } else {
-                        Log.i("UploadFragment",String.valueOf(response.code()));
-                        if (response.code() == 200) {
-                            uploadNext();
-                        } else {
-                            onUploadFailed();
-                        }
-                    }
-                }
-            });
+    public void createProfileIfNecessary(String userId,String name,String email,  String idToken) {
+        CheckMMProfileExistsTask task = new CheckMMProfileExistsTask();
+        task.execute(userId, name, email, idToken);
 
     }
 
-    private void signIn() {
-
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent,RC_SIGN_IN);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-    private void handleSignInResult(GoogleSignInResult result) {
-//        signInResultTextView.setText("Sign in Result: " + result.isSuccess());
-
-        if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            idToken = acct.getIdToken();
-            userId = acct.getId();
-            email = acct.getEmail();
-            name = acct.getDisplayName();
-
+    private void onProfileChecked(boolean result, String userId, String name,String email, String idToken) {
+        Toast.makeText(getActivity(), "profile exists: " + String.valueOf(result), Toast.LENGTH_LONG).show();
+        if (!result) {
+            createMMProfile(userId,name,email,idToken);
         }
     }
 
-    private String generateSessionId() {
-        Random random = new Random();
-
-        String id = "";
-        while(id.length() < 64) {
-            id = id + Integer.toHexString(random.nextInt());
-        }
-
-        return id;
+    public void createMMProfile(String userId, String name, String email, String idToken) {
+        CreateMMProfileTask task = new CreateMMProfileTask();
+        task.execute(userId, name, email, idToken);
     }
 
+    private void onProfileCreated(boolean result) {
+        Toast.makeText(getActivity(), "profile created successfully: " + String.valueOf(result), Toast.LENGTH_LONG).show();
+    }
 
 
     @Override
@@ -391,19 +244,7 @@ public class UploadFragment extends Fragment
 
     }
 
-    private void requestCameraPermissions() {
-        ActivityCompat.requestPermissions(getActivity(), PERMISSIONS, REQUEST_PERMISSIONS);
-    }
 
-    private boolean hasAllPermissionsGranted() {
-        for (String permission : PERMISSIONS) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     static String getSHA256Hash(String text) {
         try {
@@ -424,48 +265,221 @@ public class UploadFragment extends Fragment
         return String.format("%0" + (data.length * 2) + 'x', new BigInteger(1, data));
     }
 
-    private class UploadFilesTask extends AsyncTask<String,String,Integer> {
+    private class ConfirmationTask extends AsyncTask<Void,Void,Boolean> {
         private String sessionId;
-//        private List<String> uploadedFileNames = new ArrayList<>();
+        private String idToken;
+        private List<String> fileNames;
+
+        public ConfirmationTask(String sessionId,String idToken,List<String> fileNames) {
+            this.sessionId = sessionId;
+            this.idToken = idToken;
+            this.fileNames = fileNames;
+        }
+
 
         @Override
-        protected Integer doInBackground(String... strings) {
-            uploadedFileNames.clear();
+        protected Boolean doInBackground(Void... voids) {
+            return sendConfirmation(sessionId,idToken,fileNames);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            for(UploadListener listener : completionListeners) {
+                listener.onConfirmationResponseReceived(aBoolean);
+            }
+        }
+
+        boolean sendConfirmation(String sessionId, String idToken, List<String> fileNames) {
+
+            String url = "https://test.eclipsemega.movie/services/photo/confirm";
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            JSONObject json = new JSONObject();
+
+            JSONArray jsonNames = new JSONArray(fileNames);
+
+            try {
+                json.put("filenames", jsonNames);
+                json.put("upload_session_id", sessionId);
+                json.put("anonymous_photo", false);
+                json.put("equatorial_mount", false);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            RequestBody requestBody = RequestBody.create(JSON, json.toString());
+            Log.i(TAG, "json string: " + json);
+
+            final Request request = new Request.Builder()
+                    .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
+                    .header("x-idtoken", idToken)
+                    .header("X-IDEUM-APP-SECRET", "abf31acfccb6194e4a4c888764e2b426403a380f75cb0a038d875ed1c5ca572c")
+                    .url(url)
+                    .post(requestBody)
+                    .build();
+
+            boolean isSuccess = false;
+            try {
+                Response response = client.newCall(request).execute();
+                Log.i("upload","confirmation response: " + String.valueOf(response.code()));
+                if (response.code() == 200) {
+                    isSuccess = true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return isSuccess;
+        }
+
+    }
+
+
+    private class CreateMMProfileTask extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            OkHttpClient client = new OkHttpClient();
+            String userId = strings[0];
+            String name = strings[1];
+            String email = strings[2];
+            String idToken = strings[3];
+            String url = "https://test.eclipsemega.movie/services/user/profile/" + getSHA256Hash(userId);
+
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            JSONObject json = new JSONObject();
+
+
+            try {
+                json.put("name", name);
+                json.put("email", email);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            RequestBody requestBody = RequestBody.create(JSON, json.toString());
+
+            final Request request = new Request.Builder()
+                    .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
+                    .header("x-idtoken", idToken)
+                    .url(url)
+                    .put(requestBody)
+                    .build();
+
+            Boolean isSuccess = false;
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.code() == 200) {
+                    isSuccess = true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return isSuccess;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            onProfileCreated(aBoolean);
+        }
+    }
+
+    private class CheckMMProfileExistsTask extends AsyncTask<String, Void, Boolean> {
+
+        private String userId;
+        private String idToken;
+        private String email;
+        private String name;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            userId = strings[0];
+            name = strings[1];
+            email = strings[2];
+            idToken = strings[3];
+
+
+            OkHttpClient client = new OkHttpClient();
+            String url = "https://test.eclipsemega.movie/services/user/profile/" + getSHA256Hash(userId);
+
+            com.squareup.okhttp.Request request = new Request.Builder()
+                    .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
+                    .header("x-idtoken", idToken)
+                    .url(url)
+                    .build();
+
+            boolean profileExists = false;
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.code() == 200) {
+                    profileExists = true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return profileExists;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            onProfileChecked(result, userId, name, email, idToken);
+        }
+    }
+
+    private class UploadFilesTask extends AsyncTask<String, Integer, List<String>> {
+        private String sessionId;
+        private List<String> uploadedFileNames = new ArrayList<>();
+
+        @Override
+        protected List<String> doInBackground(String... strings) {
             String directoryName = strings[0];
             sessionId = strings[1];
             String idToken = strings[2];
 
-            File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),directoryName);
-            if(!directory.isDirectory()) {
+            File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), directoryName);
+            if (!directory.isDirectory()) {
                 return null;
             }
             File[] files = directory.listFiles();
-            if(files == null) {
+            if (files == null) {
                 return null;
             }
 
-            for(int i = 0; i < files.length;i++) {
-                uploadFile(files[i],sessionId,idToken);
-                publishProgress(files[i].getName());
+            int uploadNumber = 0;
+            int totalUploads = files.length;
+
+            for (int i = 0; i < files.length; i++) {
+                File file = files[i];
+                Boolean isSuccess = uploadFile(file, sessionId, idToken);
+                if (isSuccess) {
+                    uploadedFileNames.add(file.getName());
+                    publishProgress(uploadNumber,totalUploads);
+                    uploadNumber++;
+                }
             }
-
-
-            return files.length;
+            return uploadedFileNames;
         }
 
         @Override
-        protected void onProgressUpdate(String... values) {
+        protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            uploadedFileNames.add(values[0]);
+            for (UploadListener listener : completionListeners) {
+                listener.onUploadProgress(values[0],values[1]);
+            }
         }
 
         @Override
-        protected void onPostExecute(Integer integer) {
-            super.onPostExecute(integer);
-            showConfirmationDialog();
+        protected void onPostExecute(List<String> fileNames) {
+
+            for (UploadListener listener : completionListeners) {
+                listener.onUploadComplete(fileNames);
+            }
         }
 
-        void uploadFile(File file, String sessionId, String token) {
+        Boolean uploadFile(File file, String sessionId, String token) {
 
             RequestBody requestBody = new MultipartBuilder()
                     .type(MultipartBuilder.FORM)
@@ -473,7 +487,6 @@ public class UploadFragment extends Fragment
                     .build();
 
             String url = "https://test.eclipsemega.movie/services/upload/";
-
 
 
             final Request request = new Request.Builder()
@@ -485,28 +498,20 @@ public class UploadFragment extends Fragment
                     .post(requestBody)
                     .build();
 
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-                    e.printStackTrace();
-                }
+            Boolean isSuccess = false;
 
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    if (!response.isSuccessful()) {
-                        throw new IOException("Unexpected code " + response);
-                    } else {
-                        Log.i("UploadFileTask",String.valueOf(response.code()));
-                        if (response.code() == 200) {
-                        } else {
-                        }
-                    }
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.code() == 200) {
+                    isSuccess = true;
+                    Log.i("upload", "file uploaded");
                 }
-            });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return isSuccess;
         }
     }
-
-
 
 
 }
