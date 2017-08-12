@@ -1,6 +1,8 @@
 package ideum.com.megamovie.Java.NewUI.EclipseDay;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import ideum.com.megamovie.Java.Application.UploadTestActivity;
 import ideum.com.megamovie.Java.CameraControl.CameraFragment;
@@ -33,15 +33,16 @@ implements MyTimer.MyTimerListener,
 
     private static final String TAG = "CaptureActivity";
 
-    private static final Long BEADS_EXPOSURE_TIME = 5000000L;
-    private static final Long TOTALITY_EXPOSURE_TIME = 5000000L;
+    private static final Long BEADS_EXPOSURE_TIME = 10000000L;
+    private static final Long TOTALITY_EXPOSURE_TIME = 1000000L;
 
-    private static final Double[] EXPOSURE_FRACTIONS = {1.0/16.0,1.0/4.0,1.0,4.0,16.0};
+    private static final Double[] BEADS_FRACTIONS = {1.0/16.0,1.0/4.0,1.0,4.0,16.0};
+    private static final Double[] TOTALITY_FRACTIONS = {1.0,3.0,10.0,30.0,100.0,300.0};
     private static final Long BEADS_LEAD_TIME = 1000L;
     private static final Long BEADS_DURATION = 10000L;
     private static final Long BEADS_SPACING = 200L;
     private static final Long MARGIN = 1000L;
-    private static final Long minRAWMargin = 1000l;
+    private static final Long minRAWMargin = 1200l;
 
 
     //estimated max size of single jpeg in megabytes
@@ -82,9 +83,10 @@ implements MyTimer.MyTimerListener,
         cameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
         cameraFragment.addCaptureListener(this);
 
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd HH:mm a");
 
-        cameraFragment.setDirectoryName("Eclipse Day Practice " + dateFormatter.format(new Date(Calendar.getInstance().getTimeInMillis())));
+        cameraFragment.setDirectoryName(getDirectoryNameFromPreferences());
+        cameraFragment.setLocationProvider(eclipseTimeProvider);
+
 
 
         Button uploadButton = (Button) findViewById(R.id.upload_button);
@@ -97,19 +99,32 @@ implements MyTimer.MyTimerListener,
 
     }
 
+    private int getLensMagnificationFromPreferences() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int storedValue = preferences.getInt(getString(R.string.lens_magnification_pref_key),1);
+        return Math.max(storedValue,1);
+    }
+
+    private String getDirectoryNameFromPreferences() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString(getString(R.string.megamovie_directory_name),"Megamovie_Images");
+    }
+
     private Long getC2Time() {
         return eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
     }
 
     private Long getC3Time() {
-        return eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT3);//targetTimeMills + 120 * 1000;
+        Long c3Time = eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT3);
+        Long c3MinTime = getC2Time() + 120 * 1000L;// 3 * BEADS_DURATION;
+        return Math.max(c3Time,c3MinTime);//targetTimeMills + 120 * 1000;
     }
 
     private CaptureSequence createCaptureSequence() {
 
         long c2Time = getC2Time();//    eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
         long c3Time = getC3Time();//    eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT3);
-        float magnification = 1.0f;
+        float magnification = (float)getLensMagnificationFromPreferences();
         return makeSequence(c2Time,c3Time,magnification);
 
     }
@@ -128,7 +143,7 @@ implements MyTimer.MyTimerListener,
         long c2Spacing = BEADS_SPACING;
 
         CaptureSequence.CaptureSettings c2BaseSettings = new CaptureSequence.CaptureSettings(c2BaseExposureTime,sensitivity,focusDistance,c2ShouldSaveRaw,c2ShouldSaveJpeg);
-        CaptureSequence.SteppedInterval c2Interval = new CaptureSequence.SteppedInterval(c2BaseSettings,EXPOSURE_FRACTIONS,c2StartTime,c2EndTime,c2Spacing);
+        CaptureSequence.SteppedInterval c2Interval = new CaptureSequence.SteppedInterval(c2BaseSettings, BEADS_FRACTIONS,c2StartTime,c2EndTime,c2Spacing);
 
 
 
@@ -142,7 +157,7 @@ implements MyTimer.MyTimerListener,
 
 
 
-        long totalityBaseExposureTime = (long)( TOTALITY_EXPOSURE_TIME/(magnification * magnification));
+        long totalityBaseExposureTime =  TOTALITY_EXPOSURE_TIME;
         boolean totalityShouldSaveRaw = true;
         boolean totalityShouldSaveJpeg = false;
 
@@ -154,15 +169,13 @@ implements MyTimer.MyTimerListener,
         long totalitySpacing = getTotalitySpacing(totalityEndTime - totalityStartTime);
 
         CaptureSequence.CaptureSettings totalityBaseSettings = new CaptureSequence.CaptureSettings(totalityBaseExposureTime,sensitivity,focusDistance,totalityShouldSaveRaw,totalityShouldSaveJpeg);
-        CaptureSequence.SteppedInterval totalityInterval = new CaptureSequence.SteppedInterval(totalityBaseSettings,EXPOSURE_FRACTIONS,totalityStartTime,totalityEndTime,totalitySpacing);
+        CaptureSequence.SteppedInterval totalityInterval = new CaptureSequence.SteppedInterval(totalityBaseSettings, TOTALITY_FRACTIONS,totalityStartTime,totalityEndTime,totalitySpacing);
 
         CaptureSequence.CaptureSettings c3BaseSettings = new CaptureSequence.CaptureSettings(c3BaseExposureTime,sensitivity,focusDistance,c3ShouldSaveRaw,c3ShouldSaveJpeg);
-        CaptureSequence.SteppedInterval c3Interval = new CaptureSequence.SteppedInterval(c3BaseSettings,EXPOSURE_FRACTIONS,c3StartTime,c3EndTime,c3Spacing);
+        CaptureSequence.SteppedInterval c3Interval = new CaptureSequence.SteppedInterval(c3BaseSettings, BEADS_FRACTIONS,c3StartTime,c3EndTime,c3Spacing);
 
         CaptureSequence.SteppedInterval[] intervals = {c2Interval,totalityInterval,c3Interval};
-        Log.i("CAPTURES","jpeg :" + String.valueOf(c2Interval.getRequests().size()));
-        Log.i("CAPTURES","raw :" + String.valueOf(totalityInterval.getRequests().size()));
-        Log.i("CAPTURES","jpeg :" + String.valueOf(c3Interval.getRequests().size()));
+
 
 
         return new CaptureSequence(intervals);
@@ -220,13 +233,26 @@ implements MyTimer.MyTimerListener,
     @Override
     public void onTick() {
         Long millsRemaining = getC2Time();
+        if (millsRemaining!= null) {
+            if (mSession == null) {
+                setUpCaptureSequenceSession();
+            }
 
-        countdownFragment.setTargetTimeMills(millsRemaining);
-        countdownFragment.onTick();
+            countdownFragment.setTargetTimeMills(millsRemaining);
+            countdownFragment.onTick();
+        }
     }
 
     @Override
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
+        Float duration = ((float)settings.exposureTime)/1000000;
+        String type = "jpg";
+        if(settings.shouldSaveRaw) {
+            type = "raw";
+        }
+
+        Log.i("exposure",type + ": " + String.valueOf(duration));
+
         cameraFragment.takePhotoWithSettings(settings);
     }
 

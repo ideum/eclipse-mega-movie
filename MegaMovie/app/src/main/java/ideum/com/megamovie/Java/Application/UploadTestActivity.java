@@ -3,13 +3,18 @@ package ideum.com.megamovie.Java.Application;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,9 +30,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 
+import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 
 public class UploadTestActivity extends AppCompatActivity
@@ -58,9 +65,12 @@ public class UploadTestActivity extends AppCompatActivity
     Button signOutButton;
     Button uploadButton;
     TextView uploadProgressTextView;
+    TextView fileSummaryTextView;
 
     int filesUploaded = 0;
     int totalFiles = 0;
+
+    String directoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +81,13 @@ public class UploadTestActivity extends AppCompatActivity
             requestCameraPermissions();
             return;
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Image Upload");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        directoryName = getDirectoryNameFromPreferences();
 
 
 
@@ -92,7 +109,7 @@ public class UploadTestActivity extends AppCompatActivity
                 .build();
         mGoogleApiClient.connect();
 
-
+        fileSummaryTextView = (TextView) findViewById(R.id.file_summary_text_view);
         uploadProgressTextView = (TextView) findViewById(R.id.upload_progress_text_view);
 
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
@@ -123,9 +140,32 @@ public class UploadTestActivity extends AppCompatActivity
             }
         });
 
-        signIn();
-        //updateUI();
+        totalFiles = checkNumberOfFilesInDirectory();
+        if (totalFiles == 0) {
+            fileSummaryTextView.setText("You do not currently have any eclipse iamges to upload. You can return after photographing the eclipse.");
+        } else {
+            fileSummaryTextView.setText(String.format("You currently have %d files reading to upload to the archive",totalFiles));
+        }
 
+        signIn();
+        updateUI();
+    }
+
+    private Integer checkNumberOfFilesInDirectory() {
+        File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), directoryName);
+
+        if (directory == null) {
+            return 0;
+        }
+        if (!directory.isDirectory()) {
+            return 0;
+        }
+        File[] files = directory.listFiles();
+        if (files == null) {
+            return 0;
+        }
+
+        return files.length;
     }
 
     @Override
@@ -133,9 +173,15 @@ public class UploadTestActivity extends AppCompatActivity
         super.onResume();
     }
 
+    private String getDirectoryNameFromPreferences() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString(getString(R.string.megamovie_directory_name),"Megamovie_Images");
+    }
+
+
     private void startUpload() {
         sessionID = generateSessionId();
-        mUploadFragment.uploadFilesInDirectory("Megamovie practice Jul 24 18:35 PM",sessionID,idToken);
+        mUploadFragment.uploadFilesInDirectory(getDirectoryNameFromPreferences(),sessionID,idToken);
         uploadButton.setEnabled(false);
         uploadInProgress = true;
         updateUI();
@@ -147,13 +193,13 @@ public class UploadTestActivity extends AppCompatActivity
 
     private void updateUI() {
         if (uploadInProgress) {
-            uploadProgressTextView.setText("upload progress: " + String.valueOf(filesUploaded) + "\\" + String.valueOf(totalFiles));
+            uploadProgressTextView.setText("Upload in Progress");
         }
         if (isSignedIn()) {
             emailTextView.setText("You are signed in as: \n\n" + email);
             signInButton.setVisibility(View.GONE);
             signOutButton.setVisibility(View.VISIBLE);
-            if (!uploadInProgress) {
+            if (!uploadInProgress && totalFiles != 0) {
                 uploadButton.setEnabled(true);
             }
         } else {
@@ -264,7 +310,7 @@ public class UploadTestActivity extends AppCompatActivity
     @Override
     public void onUploadComplete(List<String> uploadedFileNames) {
         showConfirmationDialog(uploadedFileNames);
-        uploadProgressTextView.setText("Upload Completed: " + String.valueOf(uploadedFileNames.size()) + " images");
+        uploadProgressTextView.setText("Upload Completed!");
         uploadInProgress = false;
         updateUI();
     }
@@ -281,5 +327,17 @@ public class UploadTestActivity extends AppCompatActivity
     @Override
     public void onUploadFailed() {
         Toast.makeText(this, "UploadFailed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

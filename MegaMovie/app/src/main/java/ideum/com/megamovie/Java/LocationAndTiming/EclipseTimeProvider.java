@@ -24,11 +24,13 @@ import ideum.com.megamovie.R;
 
 
 public class EclipseTimeProvider extends Fragment
-implements LocationSource.OnLocationChangedListener{
+implements LocationSource.OnLocationChangedListener,
+LocationProvider{
 
-    private static final Boolean USE_DUMMY_C2 = true;
+    private static final Boolean USE_DUMMY_C2 = false;
 
     private Long dummyC2Time;
+    private Location mLocation;
 
     private GPSFragment mGPSFragment;
     private EclipseTimeLocationManager mEclipseTimeManager;
@@ -41,7 +43,7 @@ implements LocationSource.OnLocationChangedListener{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dummyC2Time = Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000;
+        dummyC2Time = Calendar.getInstance().getTimeInMillis() + 5 * 1000;
     }
 
 
@@ -66,6 +68,7 @@ implements LocationSource.OnLocationChangedListener{
 
     @Override
     public void onLocationChanged(Location location) {
+        mLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
         mEclipseTimeManager.setCurrentLatLng(latLng);
     }
@@ -78,20 +81,12 @@ implements LocationSource.OnLocationChangedListener{
         if (eventTime == null) {
             return null;
         }
-//        Date realEventDate = new Date(eventTime);
 
         if (USE_DUMMY_C2) {
             Long correction = dummyC2Time - mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
             eventTime += correction;
         }
-//
-//        Date c2DummyDate = new Date(dummyC2Time);
-//        Date c2RealDate = new Date(mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2));
-//        Date eventDate = new Date(eventTime);
-//
-//        Log.i("DATE","c2: " + c2DummyDate.toString());
-//
-//        Log.i("DATE","mid: " + eventDate.toString());
+
 
         return eventTime;
     }
@@ -101,5 +96,10 @@ implements LocationSource.OnLocationChangedListener{
             return null;
         }
         return mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
+    }
+
+    @Override
+    public Location getLocation() {
+        return mLocation;
     }
 }

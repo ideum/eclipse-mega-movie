@@ -27,10 +27,12 @@ import java.util.Calendar;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
+import ideum.com.megamovie.Java.Application.UploadTestActivity;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProvider;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment;
+import ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayEquipmentIntroFragment;
 import ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayIntroFragment;
 import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestIntroFragment;
 import ideum.com.megamovie.Java.NewUI.Orientation.AssistantEquipmentChoiceInfoFragment;
@@ -202,13 +204,17 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.full_moon_test) {
             loadFragment(MoonTestIntroFragment.class);
         }
-        else if (id == R.id.capture_mode) {
+        else if (id == R.id.eclipse_day) {
             loadFragment(EclipseDayIntroFragment.class);
         }
-
-        else if (id == R.id.gallery) {
-            loadFragment(GalleryFragment.class);
+        else if (id == R.id.upload_mode) {
+            loadActivity(UploadTestActivity.class);
         }
+//        } else if (id == R.id.calibration_mode) {
+//            loadFragment(EclipseDayEquipmentIntroFragment.class);
+//        }
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

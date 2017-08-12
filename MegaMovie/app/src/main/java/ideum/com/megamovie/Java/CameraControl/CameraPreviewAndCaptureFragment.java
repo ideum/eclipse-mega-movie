@@ -64,16 +64,18 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ideum.com.megamovie.Java.LocationAndTiming.GPS;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
 import ideum.com.megamovie.Java.PatagoniaTest.MetadataWriter;
 import ideum.com.megamovie.Java.Util.FTPUtil;
 import ideum.com.megamovie.R;
 
+
 public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback,
         ManualCamera {
 
-    public static final boolean ALLOWS_RAW = false;
+    public static final boolean ALLOWS_RAW = true;
     public static final boolean ALLOWS_JPEG = true;
     public static final String TAG = "PreviewCapture";
 
@@ -624,9 +626,10 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
             captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, settings.exposureTime);
             captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, settings.focusDistance);
 
-            if (mLocationProvider != null) {
-                captureRequestBuilder.set(CaptureRequest.JPEG_GPS_LOCATION, mLocationProvider.getLocation());
-            }
+
+//            if (mLocationProvider != null) {
+//                captureRequestBuilder.set(CaptureRequest.JPEG_GPS_LOCATION, mLocationProvider.getLocation());
+//            }
 
             captureRequestBuilder.setTag(mRequestCounter.getAndIncrement());
 
@@ -817,6 +820,32 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                         mImage.close();
                         closeOutput(fileOutputStream);
                     }
+
+                    if (false) {
+                        Location location = mLocation;
+                        try {
+
+
+                            ExifInterface exif = new ExifInterface((mFile.getAbsolutePath()));
+
+                            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, GPS.latitudeRef(location.getLatitude()));
+                            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, GPS.convert(location.getLatitude()));
+
+                            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, GPS.longitudeRef(-location.getLongitude()));
+
+                            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, GPS.convert(-location.getLongitude()));
+
+                            SimpleDateFormat fmt_Exif = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                            exif.setAttribute(ExifInterface.TAG_DATETIME,fmt_Exif.format(new Date(location.getTime())));
+
+
+
+                            exif.saveAttributes();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 }
                 break;
                 case ImageFormat.RAW_SENSOR: {
@@ -826,7 +855,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     if (mLocation != null) {
                         dngCreator.setLocation(mLocation);
                     }
-                    dngCreator.setDescription("Some random description");
 
 
                     FileOutputStream output = null;
@@ -951,11 +979,11 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     }
 
     private static String generateTimeStamp() {
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd HH:mm:ss:SSS ");
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM_dd_HH_mm_ss_SSS");
 //        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
         Calendar c = Calendar.getInstance();
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return formatter.format(c.getTime()) + "UTC";
+        return formatter.format(c.getTime()) + "_UTC";
     }
 
     /**

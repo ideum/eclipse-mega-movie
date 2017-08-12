@@ -152,54 +152,6 @@ public class UploadFragment extends Fragment
         ConfirmationTask task = new ConfirmationTask(sessionId,idToken,uploadedFileNames);
         task.execute();
 
-//        String url = "https://test.eclipsemega.movie/services/photo/confirm";
-//        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-//        JSONObject json = new JSONObject();
-//
-//        JSONArray jsonNames = new JSONArray(uploadedFileNames);
-//
-//        try {
-//            json.put("filenames", jsonNames);
-//            json.put("upload_session_id", sessionId);
-//            json.put("anonymous_photo", false);
-//            json.put("equatorial_mount", false);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        RequestBody requestBody = RequestBody.create(JSON, json.toString());
-//        Log.i(TAG, "json string: " + json);
-//
-//        final Request request = new Request.Builder()
-//                .header("Authorization", "Basic dGVzdDpkYXJrZW4=")
-//                .header("x-idtoken", idToken)
-//                .header("X-IDEUM-APP-SECRET", "abf31acfccb6194e4a4c888764e2b426403a380f75cb0a038d875ed1c5ca572c")
-//                .url(url)
-//                .post(requestBody)
-//                .build();
-//
-//
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Request request, IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Response response) throws IOException {
-//
-//                if (!response.isSuccessful()) {
-//                    throw new IOException("Unexpected code " + response);
-//                } else {
-//                    if (response.code() == 200) {
-//                        Log.i(TAG, "Success!");
-//                    } else {
-//                        onUploadFailed();
-//                    }
-//                }
-//            }
-//        });
     }
 
     private void onUploadFailed() {
@@ -466,6 +418,7 @@ public class UploadFragment extends Fragment
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
+            Log.i("progress","progress update");
             for (UploadListener listener : completionListeners) {
                 listener.onUploadProgress(values[0],values[1]);
             }
@@ -500,11 +453,14 @@ public class UploadFragment extends Fragment
 
             Boolean isSuccess = false;
 
+            Log.i("upload","starting upload: " + file.getName());
             try {
                 Response response = client.newCall(request).execute();
                 if (response.code() == 200) {
                     isSuccess = true;
-                    Log.i("upload", "file uploaded");
+                    Log.i("upload", "file uploaded : " + file.getName());
+                } else {
+                    Log.i("upload", "upload failed: " + String.valueOf(response.code()));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
