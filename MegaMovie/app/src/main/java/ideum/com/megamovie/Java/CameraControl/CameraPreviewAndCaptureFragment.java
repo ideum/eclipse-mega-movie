@@ -951,7 +951,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     }
 
     private static String generateTimeStamp() {
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd HH:mm:ss:SS ");
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd HH:mm:ss:SSS ");
 //        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
         Calendar c = Calendar.getInstance();
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));

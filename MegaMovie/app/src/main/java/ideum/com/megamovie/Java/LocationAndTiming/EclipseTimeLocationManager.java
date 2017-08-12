@@ -77,14 +77,11 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         Long systemTime = Calendar.getInstance().getTimeInMillis();
         Date date = new Date(systemTime);
         timeCorrection = correctTime - systemTime;
-        Log.i("TIME",date.toString());
+       // Log.i("TIME",date.toString());
     }
 
     private Long getCurrentCalibrateTimeMills() {
-                Long mills = Calendar.getInstance().getTimeInMillis() + timeCorrection;
-        Date date = new Date(mills);
-        Log.i("DATE",date.toString());
-        return Calendar.getInstance().getTimeInMillis() + timeCorrection;
+        return Calendar.getInstance().getTimeInMillis();// + timeCorrection;
 
     }
 

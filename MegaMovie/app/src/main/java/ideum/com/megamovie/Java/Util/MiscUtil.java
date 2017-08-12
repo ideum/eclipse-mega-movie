@@ -47,7 +47,7 @@ public class MiscUtil {
     editor.putFloat(key + "xz",m.xz);
     editor.putFloat(key + "yx",m.yx);
     editor.putFloat(key + "yy",m.yy);
-    editor.putFloat(key + "yz",m.zz);
+    editor.putFloat(key + "yz",m.yz);
     editor.putFloat(key + "zx",m.zx);
     editor.putFloat(key + "zy",m.zy);
     editor.putFloat(key + "zz",m.zz);

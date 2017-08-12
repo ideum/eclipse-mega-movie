@@ -37,8 +37,7 @@
             android:id="@+id/capture_mode"
             android:icon="@drawable/ic_camera_gray_24dp"
             android:title="@string/capture_mode_section_title"
-            app:actionLayout="@layout/coming_soon"
-            android:enabled="false"/>
+            android:enabled="true"/>
         <item
             android:id="@+id/gallery"
             android:icon="@drawable/ic_camera_roll_24dp"

@@ -149,7 +149,7 @@ public class AstronomerModelImpl implements AstronomerModel {
      */
     private Matrix33 axesPhoneInverseMatrix = Matrix33.getIdMatrix();
 
-    private Matrix33 correctionMatrix = Matrix33.getIdMatrix();
+    public Matrix33 correctionMatrix = Matrix33.getIdMatrix();
 
     public Vector3 storedNorthInPhoneCoordinates = new Vector3(0,1,0);
     public Matrix33 storedPhoneInLocalCoordinates = Matrix33.getIdMatrix();
@@ -187,38 +187,38 @@ public class AstronomerModelImpl implements AstronomerModel {
         Matrix33 A = axesMagneticCelestialMatrix.getInverse();
         Vector3 lineOfSightInPhoneCoordinates = VectorUtil.negate(matrixVectorMultiply(A, targetCoordinates));
 
-        float nz = lineOfSightInPhoneCoordinates.x;
+        //float nz = lineOfSightInPhoneCoordinates.x;
 
-        Vector3 northInPhoneCoordinates_0 = findPerpendicular(nz,upPhone,0);
-        Vector3 northInPhoneCoordinates_1 = findPerpendicular(nz,upPhone,1);
+        //Vector3 northInPhoneCoordinates_0 = findPerpendicular(nz,upPhone,0);
+        //Vector3 northInPhoneCoordinates_1 = findPerpendicular(nz,upPhone,1);
 
-        Vector3 east_0 = VectorUtil.crossProduct(northInPhoneCoordinates_0,upPhone);
-        Vector3 east_1 = VectorUtil.crossProduct(northInPhoneCoordinates_1,upPhone);
+        //Vector3 east_0 = VectorUtil.crossProduct(northInPhoneCoordinates_0,upPhone);
+        //Vector3 east_1 = VectorUtil.crossProduct(northInPhoneCoordinates_1,upPhone);
 
         float eastZ = lineOfSightInPhoneCoordinates.z;
 
-        float error_0 = Math.abs(east_0.z - eastZ);
-        float error_1 = Math.abs(east_1.z - eastZ);
+        //float error_0 = Math.abs(east_0.z - eastZ);
+        //float error_1 = Math.abs(east_1.z - eastZ);
 
-        Vector3 northInPhoneCoordinates = northInPhoneCoordinates_0;
-        if (error_1 < error_0) {
-            northInPhoneCoordinates = northInPhoneCoordinates_1;
-        }
+//        Vector3 northInPhoneCoordinates = northInPhoneCoordinates_0;
+//        if (error_1 < error_0) {
+//            northInPhoneCoordinates = northInPhoneCoordinates_1;
+//        }
 
        // MiscUtil.storeVector3InPreferences();
 
-        storedNorthInPhoneCoordinates = northInPhoneCoordinates;
-        storedPhoneInLocalCoordinates = axesPhoneInverseMatrix.clone();
+        //storedNorthInPhoneCoordinates = northInPhoneCoordinates;
+        //storedPhoneInLocalCoordinates = axesPhoneInverseMatrix.clone();
 
 
-        Vector3 eastInPhoneCoordinates = VectorUtil.crossProduct(northInPhoneCoordinates, upPhone);
+        //Vector3 eastInPhoneCoordinates = VectorUtil.crossProduct(northInPhoneCoordinates, upPhone);
         Vector3 perpInLocalCoordinates = matrixVectorMultiply(A, getPointing().getPerpendicular());
 
         perpInLocalCoordinates = VectorUtil.difference(perpInLocalCoordinates, VectorUtil.scale(lineOfSightInPhoneCoordinates, VectorUtil.dotProduct(perpInLocalCoordinates, lineOfSightInPhoneCoordinates)));
         perpInLocalCoordinates.normalize();
         Vector3 v1 = VectorUtil.crossProduct(perpInLocalCoordinates, lineOfSightInPhoneCoordinates);
         Matrix33 B = axesPhoneInverseMatrix.clone();
-        Matrix33 B1 = new Matrix33(northInPhoneCoordinates, upPhone, eastInPhoneCoordinates, false);
+       // Matrix33 B1 = new Matrix33(northInPhoneCoordinates, upPhone, eastInPhoneCoordinates, false);
         Matrix33 B2 = new Matrix33(v1, perpInLocalCoordinates, lineOfSightInPhoneCoordinates);
         correctionMatrix = matrixMultiply(B2, B.getInverse());
         isCalibrated = true;
@@ -277,14 +277,9 @@ public class AstronomerModelImpl implements AstronomerModel {
     public Pointing getCorrectedPointing() {
 
         if (isCalibrated) {
-//            if (CALIBRATION_METHOD == 1) {
-//                updateCorrectedPointing();
-//                return correctedPointing;
-//            } else {
-                updateCorrectedPointingNew();
-
-                return correctedPointingNew;
-//            }
+                updateCorrectedPointing();
+            //Log.i("pointing",String.valueOf( correctedPointing.getLineOfSight().getRa()));
+                return correctedPointing;
         }
         return getPointing();
 //        return correctedPointing;

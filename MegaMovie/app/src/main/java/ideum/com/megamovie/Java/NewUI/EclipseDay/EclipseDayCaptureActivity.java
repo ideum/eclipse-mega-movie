@@ -12,9 +12,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Queue;
 
-import ideum.com.megamovie.Java.Application.UploadActivity;
+import ideum.com.megamovie.Java.Application.UploadTestActivity;
 import ideum.com.megamovie.Java.CameraControl.CameraFragment;
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
@@ -53,7 +52,9 @@ implements MyTimer.MyTimerListener,
     private static final float DATA_BUDGET = 1000f;
 
     private MyTimer mTimer;
-    private EclipseTimeProvider startTimeProvider;
+    private EclipseTimeProvider eclipseTimeProvider;
+    private SmallCountdownFragment countdownFragment;
+
     private ManualCamera cameraFragment;
     private CaptureSequenceSession mSession;
     private Long targetTimeMills;
@@ -63,7 +64,7 @@ implements MyTimer.MyTimerListener,
 
     private TextView progressTextView;
 
-    private SmallCountdownFragment countdownFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,9 +72,9 @@ implements MyTimer.MyTimerListener,
 
         progressTextView = (TextView) findViewById(R.id.capture_progress_text_view);
 
-        startTimeProvider = new EclipseTimeProvider();
+        eclipseTimeProvider = new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
-                android.R.id.content, startTimeProvider).commit();
+                android.R.id.content, eclipseTimeProvider).commit();
 
         targetTimeMills = Calendar.getInstance().getTimeInMillis() + 15000;
 
@@ -97,17 +98,17 @@ implements MyTimer.MyTimerListener,
     }
 
     private Long getC2Time() {
-        return targetTimeMills;
+        return eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
     }
 
     private Long getC3Time() {
-        return targetTimeMills + 120 * 1000;
+        return eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT3);//targetTimeMills + 120 * 1000;
     }
 
     private CaptureSequence createCaptureSequence() {
 
-        long c2Time = getC2Time();//    startTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
-        long c3Time = getC3Time();//    startTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT3);
+        long c2Time = getC2Time();//    eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
+        long c3Time = getC3Time();//    eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT3);
         float magnification = 1.0f;
         return makeSequence(c2Time,c3Time,magnification);
 
@@ -212,16 +213,14 @@ implements MyTimer.MyTimerListener,
     }
 
     public void goToUploadActivity() {
-        Intent intent = new Intent(this, UploadActivity.class);
+        Intent intent = new Intent(this, UploadTestActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void onTick() {
         Long millsRemaining = getC2Time();
-//        if (millsRemaining != null && mSession == null) {
-//            setUpCaptureSequenceSession();
-//        }
+
         countdownFragment.setTargetTimeMills(millsRemaining);
         countdownFragment.onTick();
     }

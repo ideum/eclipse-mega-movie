@@ -27,7 +27,10 @@ import java.util.Calendar;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProvider;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
+import ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment;
 import ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayIntroFragment;
 import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestIntroFragment;
 import ideum.com.megamovie.Java.NewUI.Orientation.AssistantEquipmentChoiceInfoFragment;
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity
         FragmentManager.OnBackStackChangedListener {
 
 //    private Class initialFragmentClass = EclipseInfoFragment.class;
+
+//    private MyTimer mTimer;
+//    private EclipseTimeProvider eclipseTimeProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,10 @@ public class MainActivity extends AppCompatActivity
             requestAllPermissions();
         }
 
+//        eclipseTimeProvider = new EclipseTimeProvider();
+//        getFragmentManager().beginTransaction().add(
+//                android.R.id.content, eclipseTimeProvider).commit();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,6 +116,22 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
     }
+
+
+
+//    private Long getC2Time() {
+//        if (eclipseTimeProvider == null) {
+//            return null;
+//        }
+//        return eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
+//    }
+//
+//    private Long getC3Time() {
+//        if (eclipseTimeProvider == null) {
+//            return null;
+//        }
+//        return eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
+//    }
 
 
     public void onAssistantButtonPressed(View view) {
@@ -175,6 +201,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.full_moon_test) {
             loadFragment(MoonTestIntroFragment.class);
+        }
+        else if (id == R.id.capture_mode) {
+            loadFragment(EclipseDayIntroFragment.class);
         }
 
         else if (id == R.id.gallery) {

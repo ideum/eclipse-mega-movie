@@ -174,9 +174,20 @@ implements MyTimer.MyTimerListener,
     public void calibrateModelToTarget() {
         model.calibrate(getTargetGcc());
 
-        storeNorthInPhoneCoordinates();
-        storePhoneInLocalCoordinates();
+        //storeNorthInPhoneCoordinates();
+        //storePhoneInLocalCoordinates();
 
+        storeCorrectionMatrix();
+
+    }
+
+    private void storeCorrectionMatrix() {
+        Matrix33 correctionMatrix = model.correctionMatrix;
+        MiscUtil.storeMatrix33InPreferences(getContext(),getString(R.string.stored_correction_matrix_key),correctionMatrix);
+    }
+
+    private Matrix33 getStoredCorrectionMatrixFromPrefs() {
+        return MiscUtil.getMatrix33FromPreferences(getContext(),getString(R.string.stored_correction_matrix_key),Matrix33.getIdMatrix());
     }
 
     private void storeNorthInPhoneCoordinates() {
@@ -198,8 +209,9 @@ implements MyTimer.MyTimerListener,
     }
 
     public void calibrateModelFromSettings() {
-        model.storedNorthInPhoneCoordinates = getStoredNorthInPhoneCoordinatesFromPrefs();
-        model.storedPhoneInLocalCoordinates = getStoredPhoneCoordinatesFromPrefs();
+       // model.storedNorthInPhoneCoordinates = getStoredNorthInPhoneCoordinatesFromPrefs();
+       // model.storedPhoneInLocalCoordinates = getStoredPhoneCoordinatesFromPrefs();
+        model.correctionMatrix = getStoredCorrectionMatrixFromPrefs();
         model.isCalibrated = true;
     }
 
@@ -236,6 +248,7 @@ implements MyTimer.MyTimerListener,
     public RaDec getPhoneRaDec() {
         float ra = pointing().getLineOfSight().getRa();
         float dec = pointing().getLineOfSight().getDec();
+        //Log.i("calibration",String.valueOf(ra));
         return new RaDec(ra,dec);
     }
 
@@ -304,6 +317,9 @@ implements MyTimer.MyTimerListener,
     }
     @Override
     public void onTick() {
+    Date date = getDate();
+
+
         updateUI();
         updateCalibrationView();
     }
@@ -316,6 +332,7 @@ implements MyTimer.MyTimerListener,
         if (date == null) {
             return;
         }
+
 
 //        sunRaDec.setText(((AstronomerModelImpl)model).inverseMatrix());
 

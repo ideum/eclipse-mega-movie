@@ -32,7 +32,6 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
     private CameraPreviewAndCaptureFragment mCameraFragment;
 
     private Button nextButton;
-    private Button previousButton;
 
     private Planet target;
 
@@ -66,13 +65,6 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
             }
         });
 
-//        previousButton = (Button) findViewById(R.id.back_button);
-//        previousButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onPreviousButtonPressed();
-//            }
-//        });
 
         Long testTime = getTestTimeFromSettings();
 
@@ -157,9 +149,6 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
         }, 200);
     }
 
-    private void onPreviousButtonPressed() {
-        finish();
-    }
 
     public void dim(View view) {
         if (mCameraFragment != null) {

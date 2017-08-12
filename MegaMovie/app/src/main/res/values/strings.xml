@@ -241,6 +241,7 @@
     <string name="camera_supported_key">camera supported key</string>
     <string name="stored_north_key">stored north key</string>
     <string name="stored_phone_coordinates_key">stored phone coordinates key</string>
+    <string name="stored_correction_matrix_key">stored correction matrix</string>
 
     <string name="no_tripod_warning">
         If you plan to attach an external lens to your smartphone, you will also need to mount it
