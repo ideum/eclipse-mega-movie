@@ -6,28 +6,76 @@
     android:layout_height="match_parent"
     tools:context="ideum.com.megamovie.Java.Application.UploadActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Once you have captured images of the eclipse, you can upload them here to the Megamovie Archive. This database, hosted by Google, will provide an invaluable tool for scientists studying our sun."/>
+
+        <TextView
+            android:id="@+id/file_summary_text_view"
+            android:layout_width="match_parent"
+            android:layout_marginTop="36dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="You do not currently have any images to upload. You can return later after photographing the eclipse. "
+            />
+
+
+        <TextView
+            android:id="@+id/upload_progress_text_view"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="48dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Progress"
+            />
+
+        <TextView
+            android:id="@+id/upload_errors_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@id/upload_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:layout_gravity="center_horizontal"
-            app:buttonSize="wide"
-            android:layout_marginBottom="24dp" />
-
-        <Button
-            android:id="@+id/upload_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="upload"/>
-    </LinearLayout>
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="60dp"
+        android:background="@color/colorPrimary"
+        android:textSize="24dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:text="upload"
+        android:textColor="#fff" />
 
 
 </FrameLayout>
