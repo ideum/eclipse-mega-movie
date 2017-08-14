@@ -57,9 +57,10 @@ implements MyTimer.MyTimerListener{
             return null;
         }
         Long millsRemaining = targetTimeMills - Calendar.getInstance().getTimeInMillis();
+        String days = DateUtil.countdownDaysString(millsRemaining);
         String hours = DateUtil.countdownHoursString(millsRemaining);
         String minutes = DateUtil.countdownMinutesString(millsRemaining);
         String seconds = DateUtil.countdownSecondsString(millsRemaining);
-        return hours + ":" + minutes + ":" + seconds;
+        return days + ":" + hours + ":" + minutes + ":" + seconds;
     }
 }

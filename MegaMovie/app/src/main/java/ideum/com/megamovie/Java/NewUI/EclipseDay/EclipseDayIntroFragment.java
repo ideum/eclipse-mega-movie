@@ -1,12 +1,15 @@
 package ideum.com.megamovie.Java.NewUI.EclipseDay;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
@@ -30,7 +33,20 @@ implements CustomNamable {
             }
         });
 
+        if(checkIfInPath()) {
+            Toast.makeText(getActivity(),"You are in the path",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(),"You are not in the path",Toast.LENGTH_SHORT).show();
+        }
+
         return rootView;
+
+
+    }
+
+    private boolean checkIfInPath() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return prefs.getBoolean(getString(R.string.in_path_key),false);
     }
 
 

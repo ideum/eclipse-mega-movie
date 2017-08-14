@@ -1,86 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayCaptureActivity">
-    <FrameLayout
+
+
+    <fragment
+        android:id="@+id/camera_fragment"
+        android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_height="match_parent" />
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
 
         <fragment
-            android:id="@+id/camera_fragment"
-            android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-
-        <LinearLayout
+            android:id="@+id/countdown_fragment"
+            android:name="ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|bottom"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="bottom|center_horizontal" />
+
+        <TextView
+            android:id="@+id/start_time_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:visibility="visible"
+            android:padding="8dp"
+            android:text="Start of Totality: "
+            android:textColor="#fff"
+            android:textSize="20sp" />
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp">
+        <TextView
+            android:id="@+id/capture_progress_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="Images Captured: "
+            android:textColor="#fff"
 
-                <fragment
-                    android:id="@+id/countdown_fragment"
-                    android:name="ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    />
+            android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/test_time_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+        <Button
+            android:id="@+id/upload_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Go to upload screen"
+            android:visibility="gone" />
 
-                    android:textColor="#fff"
-                    android:padding="8dp"
-                    android:textSize="30sp"
-                    android:text="Test Time: " />
-
-
-                <TextView
-                    android:id="@+id/capture_progress_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#fff"
-                    android:padding="8dp"
-                    android:textSize="30sp"
-
-                    android:text="Images Captured: " />
-
-                <Button
-                    android:id="@+id/upload_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Go to upload screen"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_gravity="center_horizontal"/>
-
-            </LinearLayout>
+        <Button
+            android:id="@+id/finish_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorPrimary"
+            android:textColor="#fff"
+            android:layout_marginTop="16dp"
+            android:text="Finish" />
 
 
+    </LinearLayout>
 
-        </LinearLayout>
-
-
-    </FrameLayout>
-</LinearLayout>
+</FrameLayout>

@@ -1,6 +1,7 @@
 package ideum.com.megamovie.Java.Application;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -8,13 +9,18 @@ import android.graphics.Color;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +28,7 @@ import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferType;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
@@ -30,14 +37,16 @@ import com.amazonaws.services.s3.AmazonS3Client;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 
-public class UploadActivity extends AppCompatActivity{
+public class UploadActivity extends AppCompatActivity {
 
     public static final String TAG = "UploadTestActivity";
 
@@ -48,30 +57,54 @@ public class UploadActivity extends AppCompatActivity{
             Manifest.permission.INTERNET};
 
 
-Button uploadButton;
+    Button uploadButton;
+
+    CheckBox licenseAgreementCheckBox;
+    CheckBox privacyAgreementCheckBox;
 
     TextView uploadProgressTextView;
     TextView fileSummaryTextView;
     TextView uploadErrorsTextView;
+
     int totalFiles = 0;
+
+    private boolean agreedToLicense = false;
+    private boolean agreedToPrivacy = false;
 
 
     String directoryName;
+    private String sessionId;
 
-    private Set<Integer> initializedUploadIds;
-    private Set<Integer> inProgressUploadIds;
-    private Set<Integer> completedUploadIds;
-    private Set<Integer> errorUploadIds;
+//    private Set<Integer> initializedUploadIds;
+//    private Set<Integer> inProgressUploadIds;
+//    private Set<Integer> completedUploadIds;
+//    private Set<Integer> errorUploadIds;
+//    private Set<Integer> waitingForNetworkIds;
+
+    private List<TransferObserver> observers;
+    private TransferUtility transferUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-        initializedUploadIds = new HashSet<>();
-        completedUploadIds = new HashSet<>();
-        inProgressUploadIds = new HashSet<>();
-        errorUploadIds = new HashSet<>();
+//        initializedUploadIds = new HashSet<>();
+//        completedUploadIds = new HashSet<>();
+//        inProgressUploadIds = new HashSet<>();
+//        errorUploadIds = new HashSet<>();
+//        waitingForNetworkIds = new HashSet<>();
+
+        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                getString(R.string.sw3_identity_pool_id_bc),
+                Regions.US_EAST_1);
+
+        AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
+
+        transferUtility = new TransferUtility(s3, getApplicationContext());
+
+        observers = new ArrayList<>();
 
         if (!hasAllPermissionsGranted()) {
             requestCameraPermissions();
@@ -82,6 +115,7 @@ Button uploadButton;
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Image Upload");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         directoryName = getDirectoryNameFromPreferences();
 
@@ -93,16 +127,49 @@ Button uploadButton;
             }
         });
 
+        licenseAgreementCheckBox = (CheckBox) findViewById(R.id.license_agreement_check_box);
+        licenseAgreementCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkUserAcknowledgement();
+            }
+        });
+
+        privacyAgreementCheckBox = (CheckBox) findViewById(R.id.privacy_agreement_check_box);
+        privacyAgreementCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkUserAcknowledgement();
+            }
+        });
+
+
         fileSummaryTextView = (TextView) findViewById(R.id.file_summary_text_view);
-
         uploadProgressTextView = (TextView) findViewById(R.id.upload_progress_text_view);
-
         uploadErrorsTextView = (TextView) findViewById(R.id.upload_errors_text_view);
+
 
         totalFiles = checkNumberOfFilesInDirectory();
 
         initiateUI();
 
+        checkUserAcknowledgement();
+
+        sessionId = generateSessionId();
+
+    }
+
+
+
+
+
+    private void checkUserAcknowledgement() {
+        boolean acknowledged = licenseAgreementCheckBox.isChecked() && privacyAgreementCheckBox.isChecked();
+        if (acknowledged) {
+            enableUploadButton();
+        } else {
+            disableUploadButton();
+        }
     }
 
     private void enableUploadButton() {
@@ -115,16 +182,33 @@ Button uploadButton;
         uploadButton.setBackgroundColor(Color.parseColor("#dddddd"));
     }
 
+    private void showNoImagesAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You do not currently have any images to upload. Please return after photographing the eclipse.")
+                .setPositiveButton("Got it", null)
+                .setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private void initiateUI() {
-        if (totalFiles == 0) {
-            fileSummaryTextView.setText("You do not currently have any eclipse iamges to upload. You can return after photographing the eclipse.");
-            disableUploadButton();
-            uploadProgressTextView.setVisibility(View.GONE);
-            uploadErrorsTextView.setVisibility(View.GONE);
-        } else {
-            fileSummaryTextView.setText(String.format("You currently have %d files reading to upload to the archive",totalFiles));
-        }
+
+        String licenseText = "I verify that I own these photos and am licensing them under the <a href=\"https://creativecommons.org/publicdomain/zero/1.0/ \">CC0 license.</a>";
+
+        licenseAgreementCheckBox.setText(Html.fromHtml(licenseText));
+        licenseAgreementCheckBox.setMovementMethod(LinkMovementMethod.getInstance());
+
+        fileSummaryTextView.setText(String.format("You currently have %d files ready to upload to the archive.", totalFiles));
+//        if (totalFiles == 0) {
+//            fileSummaryTextView.setText("You do not currently have any eclipse iamges to upload. You can return after photographing the eclipse.");
+//            //disableUploadButton();
+//            uploadProgressTextView.setVisibility(View.GONE);
+//            uploadErrorsTextView.setVisibility(View.GONE);
+//        } else {
+//            fileSummaryTextView.setText(String.format("You currently have %d files ready to upload to the archive", totalFiles));
+//        }
 
         //uploadProgressTextView.setText("You do not currently have any uploads in progress");
         updateUI();
@@ -133,16 +217,28 @@ Button uploadButton;
 
     private void updateUI() {
 
-        uploadProgressTextView.setText(String.format("Files Uploaded: %d/%d",numCompleted(),totalFiles));
+        uploadProgressTextView.setText(String.format("Files Uploaded: %d/%d", numCompleted(), totalFiles));
 
         if (numErrors() > 0) {
-            uploadErrorsTextView.setText(String.format("Upload errors: %d",numErrors()));
+            uploadErrorsTextView.setText(String.format("Upload errors: %d", numErrors()));
         } else {
             uploadErrorsTextView.setText("");
         }
     }
 
+    private void onNetworkWaiting() {
+        cancelUpload();
+        clearListeners();
+        Toast.makeText(getApplicationContext(), "No network connection found", Toast.LENGTH_SHORT).show();
+       Log.i("upload","Canceling");
+    }
+
     private void checkProgressStatus() {
+        if (numWaitingForNetwork() != 0) {
+            onNetworkWaiting();
+            return;
+        }
+        Log.i("upload","in progress: " + String.valueOf(numInProgress()));
         if (numInProgress() == 0) {
             onUploadComplete();
         } else {
@@ -151,93 +247,152 @@ Button uploadButton;
         updateUI();
     }
 
+    private void cancelUpload() {
+        transferUtility.cancelAllWithType(TransferType.UPLOAD);
+    }
+
     private void onUploadInProgress() {
-        disableUploadButton();
+      //  disableUploadButton();
     }
 
     private void onUploadComplete() {
         enableUploadButton();
-        Log.i(TAG,"uploading finished");
-        Toast.makeText(getApplicationContext(),"Upload Complete",Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "uploading finished");
+        Toast.makeText(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
     }
 
-    private int numInitialized() {
-        return initializedUploadIds.size();
-    }
+//    private int numInitialized() {
+//        return initializedUploadIds.size();
+//    }
 
     private int numCompleted() {
-        return completedUploadIds.size();
+        int count = 0;
+        for(TransferObserver obs : observers) {
+            if (obs.getState() == TransferState.COMPLETED) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private int numInProgress() {
-        return inProgressUploadIds.size();
+        int count = 0;
+        for(TransferObserver obs : observers) {
+            if (obs.getState() == TransferState.IN_PROGRESS) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private int numErrors() {
-        return errorUploadIds.size();
+        int count = 0;
+        for(TransferObserver obs : observers) {
+            if (obs.getState() == TransferState.FAILED) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private int numWaitingForNetwork() {
+        int count = 0;
+        for(TransferObserver obs : observers) {
+            if (obs.getState() == TransferState.WAITING_FOR_NETWORK) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void clearListeners() {
+        if (observers != null && !observers.isEmpty()) {
+            for (TransferObserver observer : observers) {
+                observer.cleanTransferListener();
+            }
+        }
+
+        observers.clear();
     }
 
 
-
-
     private void startUpload() {
+        if (totalFiles == 0) {
+            showNoImagesAlert();
+            return;
+        }
+        clearListeners();
 
-        initializedUploadIds.clear();
-        inProgressUploadIds.clear();
-        completedUploadIds.clear();
-        errorUploadIds.clear();
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                getString(R.string.sw3_identity_pool_id_bc),
-                Regions.US_EAST_1);
 
-        AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
+        disableUploadButton();
+//        waitingForNetworkIds.clear();
+//        initializedUploadIds.clear();
+//        inProgressUploadIds.clear();
+//        completedUploadIds.clear();
+//        errorUploadIds.clear();
 
-        TransferUtility transferUtility = new TransferUtility(s3, getApplicationContext());
         File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), directoryName);
 
         File[] files = directory.listFiles();
 
-        for (int i = 0; i < files.length;i ++ ) {
+        for (int i = 0; i < files.length; i++) {
             File imageFile = directory.listFiles()[i];
 
             TransferObserver observer = transferUtility.upload(
                     getString(R.string.sw_bucket_bc),
-                    imageFile.getName(),
+                    sessionId + "_" + imageFile.getName(),
                     imageFile);
-            Log.i(TAG, "starting upload: " + String.valueOf(observer.getId()) );
-            initializedUploadIds.add(observer.getId());
+            Log.i(TAG, "starting upload: " + String.valueOf(observer.getId()));
+           // initializedUploadIds.add(observer.getId());
+            observers.add(observer);
 
             observer.setTransferListener(new TransferListener() {
                 @Override
                 public void onStateChanged(int id, TransferState state) {
-                    Log.i(TAG, String.valueOf(id) + " state: " + state.toString() );
-                     if (state == TransferState.IN_PROGRESS) {
-                        inProgressUploadIds.add(id);
-                    }
-                    else if (state == TransferState.COMPLETED) {
-                        inProgressUploadIds.remove(id);
-                         completedUploadIds.add(id);
+                    Log.i(TAG, String.valueOf(id) + " state: " + state.toString());
 
-                    }
+//                    if (state == TransferState.WAITING_FOR_NETWORK) {
+//                        waitingForNetworkIds.add(id);
+//                    }
+//
+//                    if (state == TransferState.IN_PROGRESS) {
+//                        inProgressUploadIds.add(id);
+//                    } else if (state == TransferState.COMPLETED) {
+//                        inProgressUploadIds.remove(id);
+//                        completedUploadIds.add(id);
+//
+//                    }
                     checkProgressStatus();
                 }
 
                 @Override
                 public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                    checkProgressStatus();
                     //Log.i(TAG, "progress changed:" + String.valueOf(id) + " " + String.valueOf(bytesCurrent) + "/" + String.valueOf(bytesTotal));
                 }
 
                 @Override
                 public void onError(int id, Exception ex) {
                     Log.i(TAG, "Error: " + String.valueOf(id) + " " + ex.toString());
-                    inProgressUploadIds.remove(id);
-                    errorUploadIds.add(id);
+//                    inProgressUploadIds.remove(id);
+//                    errorUploadIds.add(id);
                     checkProgressStatus();
                 }
             });
 
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (observers != null && !observers.isEmpty()) {
+            for (TransferObserver observer : observers) {
+                observer.cleanTransferListener();
+            }
+        }
+
     }
 
     private Integer checkNumberOfFilesInDirectory() {
@@ -265,20 +420,19 @@ Button uploadButton;
 
     private String getDirectoryNameFromPreferences() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(getString(R.string.megamovie_directory_name),"Megamovie_Images");
+        return preferences.getString(getString(R.string.megamovie_directory_name), "Megamovie_Images");
     }
 
     private String generateSessionId() {
         Random random = new Random();
 
         String id = "";
-        while(id.length() < 64) {
+        while (id.length() < 64) {
             id = id + Integer.toHexString(random.nextInt());
         }
 
         return id;
     }
-
 
 
     private void requestCameraPermissions() {
@@ -294,7 +448,6 @@ Button uploadButton;
         }
         return true;
     }
-
 
 
     @Override

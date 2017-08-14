@@ -13,14 +13,18 @@
             android:icon="@drawable/ic_camera_gray_24dp"
             android:title="Eclipse Day Image Capture"
             />
+
+        <item
+            android:id="@+id/upload_mode"
+            android:icon="@drawable/ic_file_upload_gray_24dp"
+            android:title="Data Upload"
+            android:enabled="true"/>
+
         <item
             android:id="@+id/assistant"
             android:icon="@drawable/ic_assistant_gray_24dp"
             android:title="@string/orientation_section_title" />
-        <item
-            android:id="@+id/about_eclipse_app"
-            android:icon="@drawable/ic_info_gray_24dp"
-            android:title="@string/about_section_title" />
+
         <item
             android:id="@+id/full_moon_test"
             android:icon="@drawable/ic_camera_enhance_gray_24dp"
@@ -32,22 +36,23 @@
             android:icon="@drawable/ic_list_gray_24dp"
             android:title="@string/settings_section_title" />
 
-        <item
-            android:id="@+id/calibration_mode"
-            android:icon="@drawable/ic_filter_center_focus_gray_24dp"
-            android:title="@string/calibration_section_title"
-            android:enabled="true"/>
+        <!--<item-->
+            <!--android:id="@+id/calibration_mode"-->
+            <!--android:icon="@drawable/ic_filter_center_focus_gray_24dp"-->
+            <!--android:title="@string/calibration_section_title"-->
+            <!--android:enabled="true"/>-->
         <!--<item-->
             <!--android:id="@+id/capture_mode"-->
             <!--android:icon="@drawable/ic_camera_gray_24dp"-->
             <!--android:title="@string/capture_mode_section_title"-->
             <!--android:enabled="true"/>-->
 
+
+
         <item
-            android:id="@+id/upload_mode"
-            android:icon="@drawable/ic_file_upload_gray_24dp"
-            android:title="Data Upload"
-            android:enabled="true"/>
+            android:id="@+id/about_eclipse_app"
+            android:icon="@drawable/ic_info_gray_24dp"
+            android:title="@string/about_section_title" />
         <!--<item-->
             <!--android:id="@+id/gallery"-->
             <!--android:icon="@drawable/ic_camera_roll_24dp"-->

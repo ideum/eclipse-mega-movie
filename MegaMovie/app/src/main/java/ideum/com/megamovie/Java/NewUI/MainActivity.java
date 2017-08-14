@@ -27,6 +27,7 @@ import java.util.Calendar;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
+import ideum.com.megamovie.Java.Application.UploadActivity;
 import ideum.com.megamovie.Java.Application.UploadTestActivity;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProvider;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
@@ -46,8 +47,8 @@ public class MainActivity extends AppCompatActivity
 
 //    private Class initialFragmentClass = EclipseInfoFragment.class;
 
-//    private MyTimer mTimer;
-//    private EclipseTimeProvider eclipseTimeProvider;
+    private MyTimer mTimer;
+    private EclipseTimeProvider eclipseTimeProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,6 @@ public class MainActivity extends AppCompatActivity
 
         // The first time the app is opened it shows the intro activity, but afterwards
         // skips it.
-
-        Calendar c = Calendar.getInstance();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean previouslyStarted = prefs.getBoolean(getResources().getString(R.string.previously_started_key), false);
@@ -73,6 +72,13 @@ public class MainActivity extends AppCompatActivity
 
 
         setContentView(R.layout.activity_main);
+
+
+        eclipseTimeProvider = new EclipseTimeProvider();
+        getFragmentManager().beginTransaction().add(
+                android.R.id.content, eclipseTimeProvider).commit();
+
+
 
         /**
          * Keep activity in portrait mode
@@ -208,7 +214,7 @@ public class MainActivity extends AppCompatActivity
             loadFragment(EclipseDayIntroFragment.class);
         }
         else if (id == R.id.upload_mode) {
-            loadActivity(UploadTestActivity.class);
+            loadActivity(UploadActivity.class);
         }
 //        } else if (id == R.id.calibration_mode) {
 //            loadFragment(EclipseDayEquipmentIntroFragment.class);

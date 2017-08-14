@@ -821,7 +821,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                         closeOutput(fileOutputStream);
                     }
 
-                    if (false) {
+                    if (mLocation != null) {
                         Location location = mLocation;
                         try {
 
@@ -983,7 +983,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
 //        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
         Calendar c = Calendar.getInstance();
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return formatter.format(c.getTime()) + "_UTC";
+        String timeStamp = formatter.format(c.getTime()) + "_UTC";
+        Log.i("timestamp",timeStamp);
+        return timeStamp;
     }
 
     /**

@@ -22,15 +22,19 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
          void onSessionCompleted(CaptureSequenceSession session);
     }
 
+    private boolean inProgress = false;
+
     private MyTimer mTimer;
 
     public void start() {
+        inProgress = true;
         mTimer = new MyTimer();
         mTimer.addListener(this);
         mTimer.startTicking();
     }
 
     public void stop() {
+        inProgress = false;
         if (mTimer != null) {
             mTimer.cancel();
         }
@@ -67,12 +71,6 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     private Long getTime() {
         Calendar c = Calendar.getInstance();
         return c.getTimeInMillis();
-
-//        Location currentLocation = mLocationProvider.getLocation();
-//        if (currentLocation == null) {
-//            return null;
-//        }
-//        return currentLocation.getTime();
     }
 
     @Override
@@ -121,6 +119,10 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     }
 
     private void onCompleted() {
+        if (!inProgress) {
+            return;
+        }
+        stop();
         for (CaptureSessionCompletionListerner listener : listeners) {
             listener.onSessionCompleted(this);
         }
