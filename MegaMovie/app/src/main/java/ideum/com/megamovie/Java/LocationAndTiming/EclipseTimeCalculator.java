@@ -170,6 +170,7 @@ public class EclipseTimeCalculator {
     }
 
     private void refreshTimingMap() throws IOException {
+        Log.d(TAG,"refreshing timing map");
         refreshTimingMapWithLatLng(mostRecentLatLng);
     }
 

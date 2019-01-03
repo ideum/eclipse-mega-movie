@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,8 +25,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
@@ -43,12 +51,19 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CalibrationFragment.OnFragmentInteractionListener,
         MyTimer.MyTimerListener,
-        FragmentManager.OnBackStackChangedListener {
+        FragmentManager.OnBackStackChangedListener{
 
 //    private Class initialFragmentClass = EclipseInfoFragment.class;
 
     private MyTimer mTimer;
     private EclipseTimeProvider eclipseTimeProvider;
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +85,11 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
         setContentView(R.layout.activity_main);
-
 
         eclipseTimeProvider = new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, eclipseTimeProvider).commit();
-
 
 
         /**
@@ -88,10 +100,6 @@ public class MainActivity extends AppCompatActivity
         if (!hasAllPermissionsGranted()) {
             requestAllPermissions();
         }
-
-//        eclipseTimeProvider = new EclipseTimeProvider();
-//        getFragmentManager().beginTransaction().add(
-//                android.R.id.content, eclipseTimeProvider).commit();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -125,24 +133,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
-
-//    private Long getC2Time() {
-//        if (eclipseTimeProvider == null) {
-//            return null;
-//        }
-//        return eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
-//    }
-//
-//    private Long getC3Time() {
-//        if (eclipseTimeProvider == null) {
-//            return null;
-//        }
-//        return eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
-//    }
-
-
     public void onAssistantButtonPressed(View view) {
+
         loadFragment(OrientationIntroFragment.class);
 
     }
@@ -306,7 +298,7 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
-    private void showSafetyWarning() {
+    public void showSafetyWarning() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources()
                 .getString(R.string.safety_warning))
@@ -353,4 +345,6 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
+
 }

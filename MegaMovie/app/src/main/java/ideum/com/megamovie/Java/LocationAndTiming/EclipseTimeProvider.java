@@ -50,7 +50,7 @@ LocationProvider{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dummyC2Time = Calendar.getInstance().getTimeInMillis() + 10 * 1000;
+        dummyC2Time = Calendar.getInstance().getTimeInMillis() + 15 * 1000;
     }
 
 
@@ -84,7 +84,6 @@ LocationProvider{
         }
 
 
-
         mEclipseTimeManager.setCurrentLatLng(latLng);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
@@ -104,9 +103,6 @@ LocationProvider{
         }
 
         editor.commit();
-
-
-
 
     }
 

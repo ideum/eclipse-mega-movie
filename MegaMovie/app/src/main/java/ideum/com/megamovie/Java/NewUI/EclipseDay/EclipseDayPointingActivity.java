@@ -1,7 +1,9 @@
 package ideum.com.megamovie.Java.NewUI.EclipseDay;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +43,11 @@ implements MyTimer.MyTimerListener{
         calibrateDirectionFragment.calibrateModelFromSettings();
         calibrateDirectionFragment.setTarget(Planet.Sun);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Long midTime = preferences.getLong(getString(R.string.mid_time_key),0);
+        calibrateDirectionFragment.setTargetTimeMills(midTime);
+        calibrateDirectionFragment.setShouldUseCurrentTime(false);
+
         Button captureModeButton = (Button) findViewById(R.id.capture_mode_button);
         captureModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,14 +62,16 @@ implements MyTimer.MyTimerListener{
     @Override
     protected void onResume() {
         super.onResume();
-        mTimer = new MyTimer();
-        mTimer.addListener(this);
-        mTimer.startTicking();
+//        mTimer = new MyTimer();
+//        mTimer.addListener(this);
+//        mTimer.startTicking();
     }
 
     @Override
     protected void onPause() {
-        mTimer.cancel();
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
         super.onPause();
     }
 

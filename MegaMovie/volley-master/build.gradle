@@ -13,26 +13,29 @@
 // this instead:
 //     include(":volley")
 //     project(':volley').buildFileName = 'rules.gradle'
-
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
-
 apply plugin: 'com.android.library'
-
 repositories {
     jcenter()
+    google()
 }
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion = '25.0.2'
+    defaultConfig {
+        minSdkVersion 21
+    }
+    compileSdkVersion 26
+    buildToolsVersion = '28.0.3'
 }
-
 apply from: 'rules.gradle'
 apply from: 'bintray.gradle'
+
+dependencies {
+}

@@ -54,7 +54,7 @@ public class EclipseInfoFragment extends Fragment
     private SectionsPagerAdapter mSectionsPagerAdapter;
     public ViewPager mViewPager;
 
-    private MyMapFragment mMyMapFragment;
+   // private MyMapFragment mMyMapFragment;
     private CountdownFragment mCountdownFragment;
     private PhasesFragment mPhasesFragment;
 
@@ -75,7 +75,7 @@ public class EclipseInfoFragment extends Fragment
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
-        mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
+        //mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
         mCountdownFragment = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         mPhasesFragment = (PhasesFragment) mSectionsPagerAdapter.getItem(2);
 
@@ -109,7 +109,7 @@ public class EclipseInfoFragment extends Fragment
 
     public void refresh() {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
-        mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
+      //  mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
         mCountdownFragment = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         mPhasesFragment = (PhasesFragment) mSectionsPagerAdapter.getItem(2);
         mViewPager.setAdapter(mSectionsPagerAdapter);

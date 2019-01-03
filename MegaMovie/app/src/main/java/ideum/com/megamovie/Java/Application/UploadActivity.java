@@ -58,6 +58,7 @@ public class UploadActivity extends AppCompatActivity {
 
 
     Button uploadButton;
+    Button cancelButton;
 
     CheckBox licenseAgreementCheckBox;
     CheckBox privacyAgreementCheckBox;
@@ -123,9 +124,19 @@ public class UploadActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                disableUploadButton();
                 startUpload();
             }
         });
+
+        cancelButton = (Button) findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelUpload();
+            }
+        });
+        cancelButton.setVisibility(View.INVISIBLE);
 
         licenseAgreementCheckBox = (CheckBox) findViewById(R.id.license_agreement_check_box);
         licenseAgreementCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -155,13 +166,10 @@ public class UploadActivity extends AppCompatActivity {
 
         checkUserAcknowledgement();
 
-        sessionId = generateSessionId();
+        sessionId = getSessionId();
+        Log.i("session_id",sessionId);
 
     }
-
-
-
-
 
     private void checkUserAcknowledgement() {
         boolean acknowledged = licenseAgreementCheckBox.isChecked() && privacyAgreementCheckBox.isChecked();
@@ -249,6 +257,8 @@ public class UploadActivity extends AppCompatActivity {
 
     private void cancelUpload() {
         transferUtility.cancelAllWithType(TransferType.UPLOAD);
+        enableUploadButton();
+        cancelButton.setVisibility(View.INVISIBLE);
     }
 
     private void onUploadInProgress() {
@@ -257,6 +267,7 @@ public class UploadActivity extends AppCompatActivity {
 
     private void onUploadComplete() {
         enableUploadButton();
+        cancelButton.setVisibility(View.INVISIBLE);
         Log.i(TAG, "uploading finished");
         Toast.makeText(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
     }
@@ -321,10 +332,11 @@ public class UploadActivity extends AppCompatActivity {
             showNoImagesAlert();
             return;
         }
+//        cancelButton.setVisibility(View.VISIBLE);
         clearListeners();
 
 
-        disableUploadButton();
+
 //        waitingForNetworkIds.clear();
 //        initializedUploadIds.clear();
 //        inProgressUploadIds.clear();
@@ -421,6 +433,20 @@ public class UploadActivity extends AppCompatActivity {
     private String getDirectoryNameFromPreferences() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         return preferences.getString(getString(R.string.megamovie_directory_name), "Megamovie_Images");
+    }
+
+    private String getSessionId() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String sessionId = prefs.getString(getString(R.string.session_id_key),"");
+        if (sessionId.equals("")) {
+            sessionId = generateSessionId();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(getString(R.string.session_id_key),sessionId);
+            editor.commit();
+        }
+
+        return sessionId;
+
     }
 
     private String generateSessionId() {
