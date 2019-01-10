@@ -2,6 +2,7 @@ package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Debug;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -23,11 +24,11 @@ public class EclipseTimeCalculator {
     private LatLng mostRecentLatLng;
     private boolean refreshPending = false;
 
-    private List<EclipseTimingMap.EclipseTimingFile> c1_timing_files = new ArrayList<>();
-    private List<EclipseTimingMap.EclipseTimingFile> c2_timing_files = new ArrayList<>();
-    private List<EclipseTimingMap.EclipseTimingFile> cm_timing_files = new ArrayList<>();
-    private List<EclipseTimingMap.EclipseTimingFile> c3_timing_files = new ArrayList<>();
-    private List<EclipseTimingMap.EclipseTimingFile> c4_timing_files = new ArrayList<>();
+    public List<EclipseTimingMap.EclipseTimingFile> c1_timing_files = new ArrayList<>();
+    public List<EclipseTimingMap.EclipseTimingFile> c2_timing_files = new ArrayList<>();
+    public List<EclipseTimingMap.EclipseTimingFile> cm_timing_files = new ArrayList<>();
+    public List<EclipseTimingMap.EclipseTimingFile> c3_timing_files = new ArrayList<>();
+    public List<EclipseTimingMap.EclipseTimingFile> c4_timing_files = new ArrayList<>();
 
 
     public EclipseTimeCalculator(Context context) {
@@ -75,9 +76,17 @@ public class EclipseTimeCalculator {
             if (contact.equals("c4")) {
                 c4_timing_files.add(etf);
             }
+
         }
 
-        Log.i("TAG", String.valueOf(c1_timing_files.size()));
+    }
+
+    public List<EclipseTimingMap> getAllMaps() throws IOException {
+        List<EclipseTimingMap> maps = new ArrayList<>();
+        for (int i = 0; i < c4_timing_files.size(); i++) {
+            maps.add (new EclipseTimingMap(context, c1_timing_files.get(i), c2_timing_files.get(i), cm_timing_files.get(i), c3_timing_files.get(i), c4_timing_files.get(i)));
+        }
+       return maps;
     }
 
 
@@ -130,7 +139,13 @@ public class EclipseTimeCalculator {
         setMostRecentLatLng(latLng);
         Long result = null;
         if (mEclipseTimingMap != null) {
+
             result = mEclipseTimingMap.getEclipseTime(event, latLng);
+            if (result == null) {
+               // Log.i(TAG, "eclipse time null");
+            } else {
+               // Log.i(TAG, "eclipse time " + String.valueOf((result)));
+            }
         }
         return result;
     }
@@ -170,7 +185,7 @@ public class EclipseTimeCalculator {
     }
 
     private void refreshTimingMap() throws IOException {
-        Log.d(TAG,"refreshing timing map");
+        //Log.d(TAG,"refreshing timing map");
         refreshTimingMapWithLatLng(mostRecentLatLng);
     }
 
@@ -188,7 +203,7 @@ public class EclipseTimeCalculator {
             EclipseTimingMap etm = null;
 
             try {
-                etm = new EclipseTimingMap(context,c1_etf, c2_etf, cm_etf, c3_etf, c4_etf);
+                etm = new EclipseTimingMap(context, c1_etf, c2_etf, cm_etf, c3_etf, c4_etf);
             } catch (IOException e) {
                 e.printStackTrace();
             }

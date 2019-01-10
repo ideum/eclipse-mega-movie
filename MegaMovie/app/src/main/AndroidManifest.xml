@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ideum.com.megamovie"
     android:versionCode="9"
     android:versionName="3.01">
@@ -8,7 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!--<uses-permission android:name="android.permission.WRITE_SETTINGS" />-->
     <uses-permission android:name="android.permission.INTERNET" />
 
 
@@ -28,7 +29,8 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
 
         <service
@@ -44,43 +46,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB0mm9X7tEIxtV-2DAS1LRMhmhGwLQPl-8" />
 
-        <activity android:name=".Java.PatagoniaTest.MapActivity">
-            android:screenOrientation="portrait"
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity android:name=".Java.PatagoniaTest.CalibrationActivity">
-            android:screenOrientation="portrait"
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-
-        </activity>
-        <activity android:name=".Java.PatagoniaTest.CaptureActivity">
-            android:screenOrientation="portrait"
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-
-        </activity>
-        <activity android:name=".Java.PatagoniaTest.CameraTestActivity">
-            android:screenOrientation="portrait"
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
         <activity
             android:name=".Java.NewUI.MainActivity"
             android:label="@string/app_name"
@@ -91,139 +57,62 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".Java.NewUI.IntroActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.AboutActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.MyEclipseActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.SignInActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.CalibrateDirectionTestActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCaptureActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateDirectionActivity" />
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateLensActivity" />
         <activity android:name=".Java.CameraControl.CameraHardwareCheckActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestHandHeldCaptureActivity" />
         <activity android:name=".Java.NewUI.MoonTest.MoonTestPointingActivity" />
         <activity android:name=".Java.NewUI.SensorTestActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.Application.UploadActivity">
-
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
-
-
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
         </activity>
         <activity android:name=".Java.Application.UploadTestActivity">
-
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
-
-
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
-
         </activity>
-
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayInstructions" />
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayMainActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayMyEclipseActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCaptureActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
         </activity>
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCalibrateDirectionActivity">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-
-            </activity>
+        </activity>
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayPointingActivity" />
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCalibrateLensActivity"></activity>
+
+        <activity android:name=".Java.PatagoniaTest.MapActivity">
+
+        </activity>
+        <activity android:name=".Java.PatagoniaTest.CalibrationActivity">
+            android:screenOrientation="portrait"
+
+        </activity>
+        <activity android:name=".Java.PatagoniaTest.CaptureActivity">
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".Java.PatagoniaTest.CameraTestActivity">
+            android:screenOrientation="portrait"
+
+        </activity>
     </application>
 
 </manifest>

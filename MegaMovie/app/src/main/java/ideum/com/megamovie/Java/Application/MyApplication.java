@@ -1,11 +1,16 @@
 package ideum.com.megamovie.Java.Application;
 
 import android.app.Application;
-import android.support.v4.app.Fragment;
+import android.os.Environment;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
-import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
-import ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayIntroFragment;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.NewUI.EclipseInfoFragment;
 
 /**
@@ -15,17 +20,27 @@ import ideum.com.megamovie.Java.NewUI.EclipseInfoFragment;
 public class MyApplication extends Application {
 
     private EclipseTimeCalculator mEclipseTimeCalculator;
+
     public EclipseTimeCalculator getEclipseTimeCalculator() {
         return mEclipseTimeCalculator;
     }
+    public EclipseTimes eclipseTimes;
     public Class currentFragment = EclipseInfoFragment.class;
-
-
 
     @Override
     public void onCreate() {
         super.onCreate();
         mEclipseTimeCalculator = new EclipseTimeCalculator(this);
+        try {
+            eclipseTimes = new EclipseTimes(this);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
     }
+
 
 }

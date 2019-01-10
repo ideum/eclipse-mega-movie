@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,23 +22,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
-import java.util.Calendar;
-import java.util.Locale;
-
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.Application.UploadActivity;
-import ideum.com.megamovie.Java.Application.UploadTestActivity;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProvider;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
-import ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment;
-import ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayEquipmentIntroFragment;
 import ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayIntroFragment;
 import ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestIntroFragment;
 import ideum.com.megamovie.Java.NewUI.Orientation.AssistantEquipmentChoiceInfoFragment;
@@ -53,11 +38,7 @@ public class MainActivity extends AppCompatActivity
         MyTimer.MyTimerListener,
         FragmentManager.OnBackStackChangedListener{
 
-//    private Class initialFragmentClass = EclipseInfoFragment.class;
-
-    private MyTimer mTimer;
     private EclipseTimeProvider eclipseTimeProvider;
-
 
 
     @Override
@@ -69,9 +50,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        // The first time the app is opened it shows the intro activity, but afterwards
-        // skips it.
+        /**
+         * The first time the app is opened it shows the intro activity, but
+         * afterwards skips it
+         */
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean previouslyStarted = prefs.getBoolean(getResources().getString(R.string.previously_started_key), false);
@@ -84,22 +66,25 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-
         setContentView(R.layout.activity_main);
+        /**
+         * Keep activity in portrait mode
+         */
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        /**
+         * Get all necessary permission right away. Could wait until they are needed but this makes
+         * it easier to avoid bugs the first time the app is opened
+         */
+        if (!hasAllPermissionsGranted()) {
+            requestAllPermissions();
+        }
 
         eclipseTimeProvider = new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, eclipseTimeProvider).commit();
 
 
-        /**
-         * Keep activity in portrait mode
-         */
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        if (!hasAllPermissionsGranted()) {
-            requestAllPermissions();
-        }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -208,9 +193,7 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.upload_mode) {
             loadActivity(UploadActivity.class);
         }
-//        } else if (id == R.id.calibration_mode) {
-//            loadFragment(EclipseDayEquipmentIntroFragment.class);
-//        }
+
 
 
 
