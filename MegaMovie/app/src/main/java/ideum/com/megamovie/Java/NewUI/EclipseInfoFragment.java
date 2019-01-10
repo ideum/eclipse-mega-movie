@@ -54,7 +54,6 @@ public class EclipseInfoFragment extends Fragment
     private SectionsPagerAdapter mSectionsPagerAdapter;
     public ViewPager mViewPager;
 
-   // private MyMapFragment mMyMapFragment;
     private CountdownFragment mCountdownFragment;
     private PhasesFragment mPhasesFragment;
 
@@ -75,7 +74,6 @@ public class EclipseInfoFragment extends Fragment
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
-        //mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
         mCountdownFragment = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         mPhasesFragment = (PhasesFragment) mSectionsPagerAdapter.getItem(2);
 
@@ -109,7 +107,6 @@ public class EclipseInfoFragment extends Fragment
 
     public void refresh() {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
-      //  mMyMapFragment = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
         mCountdownFragment = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         mPhasesFragment = (PhasesFragment) mSectionsPagerAdapter.getItem(2);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -129,16 +126,11 @@ public class EclipseInfoFragment extends Fragment
                 android.R.id.content, mGPSFragment).commit();
         mGPSFragment.activate(this);
 
-
         MyApplication ma = (MyApplication) getActivity().getApplication();
         EclipseTimeCalculator eclipseTimeCalculator = ma.getEclipseTimeCalculator();
 
-
         mEclipseTimeManager = new EclipseTimeLocationManager(eclipseTimeCalculator,getActivity().getApplicationContext());
         mEclipseTimeManager.setAsLocationListener(mGPSFragment);
-
-//        MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
-        //mEclipseTimeManager.setPlannedLatLngProvider(mmf);
     }
 
     @Override

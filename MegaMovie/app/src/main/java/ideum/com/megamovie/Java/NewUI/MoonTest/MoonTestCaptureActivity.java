@@ -53,11 +53,8 @@ public class MoonTestCaptureActivity extends AppCompatActivity
     private Long targetTimeMills;
 
     private TextView testTimeTextView;
-    //    private TextView leadTimeTextView;
-//    private TextView durationTextView;
-    //private TextView countdownTextView;
+
     private TextView progressTextView;
-//    private TextView countdownTextView;
 
     private SmallCountdownFragment countdownFragment;
     private Button finishButton;
@@ -69,9 +66,6 @@ public class MoonTestCaptureActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moon_test_capture);
-
-
-
 
         // Set portrait mode and keep phone from sleeping
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

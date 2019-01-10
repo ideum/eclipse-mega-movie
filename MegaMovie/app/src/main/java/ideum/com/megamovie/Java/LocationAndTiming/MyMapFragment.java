@@ -95,7 +95,6 @@ public class MyMapFragment extends Fragment
 
         FragmentManager fm = getChildFragmentManager();
 
-//        SupportMapFragment smf = (SupportMapFragment) fm.findFragmentById(R.id.support_map);
 
         SupportMapFragment smf = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
         if (smf == null) {

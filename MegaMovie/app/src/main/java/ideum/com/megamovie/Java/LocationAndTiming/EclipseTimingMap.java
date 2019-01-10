@@ -1,7 +1,6 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.content.Context;
-import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -12,25 +11,24 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import ideum.com.megamovie.Java.Application.Config;
+
 /**
  * Created by MT_User on 5/10/2017.
+ * Stores a dictionary of eclipse times for a collection of gps coordinates in a given region. These values
+ * are parsed from a text file with integers arranged in rows and columns delimited by spaces and newlines, which
+ * correspond to time offsets from a base time.
  */
 
 public class EclipseTimingMap {
-
-    private final static boolean USE_DUMMY_ECLIPSE_TIME = false;
-
+    /*Used to convert a row-column position in the text file to a latlng coordinate */
     private static final Double LATLNG_INTERVAL = 0.01;
-
-    private final static int BASETIME_YEAR = 2019;
-    private final static int BASETIME_MONTH = 03;
-    private final static int BASETIME_DAY = 21;
-    private final static int BASETIME_HOUR = 0;
-    private final static int BASETIME_MINUTE = 0;
-
+    /*Used to convert integers read from raw text file to milliseconds */
+    private static final long MILLISECONDS_PER_TIME_UNIT = 100;
     private EclipseTimingFile c1EclipseTimingFile;
     private EclipseTimingFile c2EclipseTimingFile;
     private EclipseTimingFile cmEclipseTimingFile;
@@ -44,6 +42,16 @@ public class EclipseTimingMap {
     public Map<MyKey, Double> eclipseTimeMapC4;
 
     private Context context;
+
+    public List<Integer> getIntList() {
+        List<Integer> ints = new ArrayList<>();
+
+        for(MyKey key : eclipseTimeMapC1.keySet()) {
+            ints.add((int)Math.round(eclipseTimeMapC1.get(key)));
+        }
+
+        return ints;
+    }
 
     public EclipseTimingMap(Context context,
                             EclipseTimingFile c1File,
@@ -83,11 +91,8 @@ public class EclipseTimingMap {
     }
 
     public Long getEclipseTime(EclipseTimingMap.Event event, LatLng location) {
-        if (USE_DUMMY_ECLIPSE_TIME) {
-            return dummyEclipseTime(event);
-        }
 
-        if (eclipseTimeMapC2 == null || eclipseTimeMapC3 == null) {
+        if (eclipseTimeMapC2 == null || cmEclipseTimingFile == null || eclipseTimeMapC3 == null || c4EclipseTimingFile == null) {
             return null;
         }
 
@@ -98,31 +103,31 @@ public class EclipseTimingMap {
         int y = (int) (lng / LATLNG_INTERVAL);
 
         MyKey key = new MyKey(x, y);
-        Double tenthsOfSecondsAfterBasetime = 0.0;
+        Double timeUnitsAfterBaseTime = 0.0;
         switch (event) {
             case CONTACT1:
-                tenthsOfSecondsAfterBasetime = eclipseTimeMapC1.get(key);
-                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
+                timeUnitsAfterBaseTime = eclipseTimeMapC1.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
                     return null;
                 }
                 break;
             case CONTACT2:
-                tenthsOfSecondsAfterBasetime = eclipseTimeMapC2.get(key);
-                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
+                timeUnitsAfterBaseTime = eclipseTimeMapC2.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
                     return null;
                 }
                 break;
 
             case MIDDLE:
-                tenthsOfSecondsAfterBasetime = eclipseTimeMapCm.get(key);
-                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
+                timeUnitsAfterBaseTime = eclipseTimeMapCm.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
                     return null;
                 }
                 break;
 
             case CONTACT3:
-                tenthsOfSecondsAfterBasetime = eclipseTimeMapC3.get(key);
-                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
+                timeUnitsAfterBaseTime = eclipseTimeMapC3.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
                     return null;
                 }
                 break;
@@ -130,14 +135,14 @@ public class EclipseTimingMap {
                 return null;
 
             case CONTACT4:
-                tenthsOfSecondsAfterBasetime = eclipseTimeMapC4.get(key);
-                if (tenthsOfSecondsAfterBasetime == null || tenthsOfSecondsAfterBasetime == 0) {
+                timeUnitsAfterBaseTime = eclipseTimeMapC4.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
                     return null;
                 }
                 break;
         }
 
-        long millsAfterBaseTime = 100 * Math.round(tenthsOfSecondsAfterBasetime);
+        long millsAfterBaseTime = MILLISECONDS_PER_TIME_UNIT * Math.round(timeUnitsAfterBaseTime);
         return getBaseTime() + millsAfterBaseTime;
     }
 
@@ -145,35 +150,14 @@ public class EclipseTimingMap {
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
         calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.set(Calendar.YEAR, BASETIME_YEAR);
-        calendar.set(Calendar.MONTH, BASETIME_MONTH);
-        calendar.set(Calendar.DAY_OF_MONTH, BASETIME_DAY);
-        calendar.set(Calendar.HOUR, BASETIME_HOUR);
-        calendar.set(Calendar.MINUTE, BASETIME_MINUTE);
+        calendar.set(Calendar.YEAR, Config.ECLIPSE_BASETIME_YEAR);
+        calendar.set(Calendar.MONTH, Config.ECLIPSE_BASETIME_MONTH);
+        calendar.set(Calendar.DAY_OF_MONTH, Config.ECLIPSE_BASETIME_DAY);
+        calendar.set(Calendar.HOUR, Config.ECLIPSE_BASETIME_HOUR);
+        calendar.set(Calendar.MINUTE, Config.ECLIPSE_BASETIME_MINUTE);
         return calendar.getTimeInMillis();
     }
 
-    public long dummyEclipseTime(EclipseTimingMap.Event event) {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.set(Calendar.MINUTE, 45);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        long startTime = calendar.getTimeInMillis();
-        long contactTime = 0;
-
-        switch (event) {
-
-            case CONTACT2:
-                contactTime = startTime;
-                break;
-            case CONTACT3:
-                contactTime = startTime + 60000;
-                break;
-        }
-        return contactTime;
-    }
 
     private class MyKey {
         final int x;
@@ -262,14 +246,6 @@ public class EclipseTimingMap {
             this.endingLat = endingLat;
             this.startingLng = startingLng;
             this.endingLng = endingLng;
-        }
-
-        public EclipseTimingFile(int fileID, int startingLat, int endingLat, int startingLng, int endingLng) {
-            this.fileId = fileID;
-            this.startingLat = (double) startingLat;
-            this.endingLat = (double) endingLat;
-            this.startingLng = (double) startingLng;
-            this.endingLng = (double) endingLng;
         }
 
         public boolean contains(LatLng location) {

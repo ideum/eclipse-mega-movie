@@ -8,6 +8,9 @@ import android.view.MenuItem;
 
 import ideum.com.megamovie.R;
 
+/**
+ * Shows stored equipment preferences, e.g. whether user is using an external lens
+ */
 public class MyEclipseActivity extends AppCompatActivity {
 
     @Override

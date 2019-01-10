@@ -30,7 +30,9 @@ import java.util.TimeZone;
 import ideum.com.megamovie.R;
 
 /**
- * Created by MT_User on 6/2/2017.
+ * Provides the time of eclipse phases based on a stored location, which can either be the user's current
+ * location provided by gps, or an arbitrary location selected on a map. If the location is not in the
+ * path of totality, the closest point in the path is used to calculate the eclipse time.
  */
 
 public class EclipseTimeLocationManager implements LocationSource.OnLocationChangedListener {
@@ -51,16 +53,8 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         if (referenceLatLng() == null) {
             return null;
         }
-        Long time = mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
-        if (time == null) {
-            return getDummyEclipseTime(event);
-        }
 
         return mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
-    }
-
-    private Long getDummyEclipseTime(EclipseTimingMap.Event event) {
-        return null;//mEclipseTimeCalculator.getEclipseTime(event,new LatLng(42.263,-104.0462));
     }
 
     public Long getTimeToEclipse(EclipseTimingMap.Event event) {
@@ -77,12 +71,10 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         Long systemTime = Calendar.getInstance().getTimeInMillis();
         Date date = new Date(systemTime);
         timeCorrection = correctTime - systemTime;
-       // Log.i("TIME",date.toString());
     }
 
     private Long getCurrentCalibrateTimeMills() {
         return Calendar.getInstance().getTimeInMillis();// + timeCorrection;
-
     }
 
     public void setAsLocationListener(LocationSource source) {

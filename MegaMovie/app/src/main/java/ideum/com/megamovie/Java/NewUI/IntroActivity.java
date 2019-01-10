@@ -38,6 +38,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import ideum.com.megamovie.Java.CameraControl.CameraHardwareCheckFragment;
 import ideum.com.megamovie.R;
 
+/**
+ * This activity is shown once, the first time the application is opened. It is launched from
+ * MainActivity
+ */
 public class IntroActivity extends AppCompatActivity
         implements ViewPager.OnTouchListener,
         GoogleApiClient.OnConnectionFailedListener,
@@ -50,7 +54,6 @@ AlertDialog.OnDismissListener{
 
 
     private static final int RC_SIGN_IN = 9001;
-    private int REQUEST_LOCATION_PERMISSIONS = 0;
 
 
 
@@ -80,7 +83,6 @@ AlertDialog.OnDismissListener{
         return true;
     }
 
-    private GoogleApiClient mGoogleApiClient;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private Button signInButton;
@@ -98,12 +100,6 @@ AlertDialog.OnDismissListener{
         if (!hasAllPermissionsGranted()) {
             requestPermissions();
         }
-
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-//                    REQUEST_LOCATION_PERMISSIONS);
-//        }
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -145,13 +141,9 @@ AlertDialog.OnDismissListener{
         } else {
             loadMainActivity();
         }
-//        loadMainActivity();
     }
 
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -173,31 +165,16 @@ AlertDialog.OnDismissListener{
     }
 
 
-//    @Override
-//    public void onClick(View v) {
-//        int currentPage = mViewPager.getCurrentItem();
-//        if (currentPage < mSectionsPagerAdapter.getCount() - 1) {
-//            mViewPager.setCurrentItem(currentPage + 1);
-//        } else {
-//            loadMainActivity();
-//        }
-//    }
 
     private void loadMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
 
     }
 
-    private void loadSignInActivity() {
-        startActivity(new Intent(this, SignInActivity.class));
-    }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-//        switch (event.getAction()) {
-//            case: MotionEvent.
-//        }
+
 
         int currentPage = mViewPager.getCurrentItem();
         if (currentPage < mSectionsPagerAdapter.getCount() - 1) {

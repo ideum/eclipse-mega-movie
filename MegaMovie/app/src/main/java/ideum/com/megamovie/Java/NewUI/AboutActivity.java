@@ -15,6 +15,9 @@ import org.w3c.dom.Text;
 
 import ideum.com.megamovie.R;
 
+/**
+ * Gives description of app and megamovie project, lists partners, and provides link to privacy policy.
+ */
 public class AboutActivity extends AppCompatActivity {
 
     @Override

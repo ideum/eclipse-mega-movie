@@ -26,7 +26,6 @@ public class EclipseDayNoEquipmentFragment extends Fragment {
             }
         });
 
-
         return rootView;
     }
 
