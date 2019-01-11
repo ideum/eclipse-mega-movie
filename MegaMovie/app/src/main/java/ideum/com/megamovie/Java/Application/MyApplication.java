@@ -31,11 +31,11 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mEclipseTimeCalculator = new EclipseTimeCalculator(this);
-        try {
-            eclipseTimes = new EclipseTimes(this);
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            eclipseTimes = new EclipseTimes(this);
+//        } catch(IOException e) {
+//            e.printStackTrace();
+//        }
 
 
 
