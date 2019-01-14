@@ -26,6 +26,9 @@ public class EclipseTimingPatch {
     }
 
     public boolean contains(LatLng p) {
+        if (p == null) {
+            return false;
+        }
         double lat = p.latitude;
         double lng = p.longitude;
         return lat >= latMin && lat <= latMax && lng >= lngMin && lng <= lngMax;

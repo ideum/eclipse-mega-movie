@@ -122,33 +122,6 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         return currentClosestTotalityLatLng;
     }
 
-    private String getTimeZoneId() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return settings.getString(mContext.getString(R.string.timezone_id), "");
-    }
-
-    public String getContactTimeString(EclipseTimes.Phase phase) {
-        if (mEclipseTimes == null) {
-            return "";
-        }
-        Long mills = getEclipseTime(phase);
-        if (mills == null) {
-            return "";
-        }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(mills);
-        DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
-        String timeZoneId = getTimeZoneId();
-        String timeZoneDisplayName = "";
-        if (timeZoneId != null) {
-            formatter.setTimeZone(TimeZone.getTimeZone(timeZoneId));
-            timeZoneDisplayName = TimeZone.getTimeZone(timeZoneId).getDisplayName(true, TimeZone.SHORT, Locale.US);
-        }
-
-
-        return formatter.format(calendar.getTime()) + " " + timeZoneDisplayName;
-    }
-
     private LatLng getPlannedLatLngPreference() {
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);

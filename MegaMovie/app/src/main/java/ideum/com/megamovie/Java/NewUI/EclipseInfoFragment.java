@@ -57,11 +57,7 @@ public class EclipseInfoFragment extends Fragment
     private CountdownFragment mCountdownFragment;
     private PhasesFragment mPhasesFragment;
 
-    //    private Long c1ContactTime;
-//    private Long c2ContactTime;
-//    private Long cmContactTime;
-//    private Long c3ContactTime;
-//    private Long c4ContactTime;
+
     private Long millsToC2;
 
     @Override
@@ -124,7 +120,6 @@ public class EclipseInfoFragment extends Fragment
         mGPSFragment.activate(this);
 
         MyApplication ma = (MyApplication) getActivity().getApplication();
-        //EclipseTimeCalculator eclipseTimeCalculator = ma.getEclipseTimeCalculator();
         mEclipseTimes = ma.eclipseTimes;
         mEclipseTimeManager = new EclipseTimeLocationManager(mEclipseTimes, getActivity().getApplicationContext());
         mEclipseTimeManager.setAsLocationListener(mGPSFragment);

@@ -28,7 +28,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        EclipseTimingMap etm = null;
 
         try {
             eclipseTimes = new EclipseTimes(this);

@@ -15,7 +15,7 @@ public class Config {
 
 
     /*used in EclipseTimingMap*/
-    public final static int ECLIPSE_BASETIME_YEAR = 2017;
+    public final static int ECLIPSE_BASETIME_YEAR = 2019;
     public final static int ECLIPSE_BASETIME_MONTH = 8;
     public final static int ECLIPSE_BASETIME_DAY = 21;
     public final static int ECLIPSE_BASETIME_HOUR = 0;

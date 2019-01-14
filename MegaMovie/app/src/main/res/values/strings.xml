@@ -3,9 +3,11 @@
 
 
     <string name="in_path_key">in path of totality</string>
+    <string name="c1_time_key">c1 time key</string>
     <string name="c2_time_key">c2 time key</string>
     <string name="mid_time_key">mid totality key</string>
     <string name="c3_time_key">c3 time key</string>
+    <string name="c4_time_key">c4 time key</string>
 
     <!--Uploading-->
     <string name="privacy_agreement">I acknowledge that these photos and their locations will be part of a public database.</string>
