@@ -19,9 +19,9 @@ public class EclipseTimes {
 
     private static final String DATA_PATH = "timing_files";
     private static final double LAT_LNG_INTERVAL = 0.01;
-    EnumMap<Phase, List<EclipseTimingPatch>> patches = new EnumMap<>(Phase.class);
+    public EnumMap<Phase, List<EclipseTimingPatch>> patches = new EnumMap<>(Phase.class);
 
-    public Long GetEclipseTime(Phase phase, LatLng p) {
+    public Long getEclipseTime(Phase phase, LatLng p) {
         for(EclipseTimingPatch patch : patches.get(phase)) {
             if(patch.contains(p)){
                 return patch.getEclipseTimeMills(p);

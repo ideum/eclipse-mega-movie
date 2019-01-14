@@ -42,6 +42,9 @@ import ideum.com.megamovie.Java.NewUI.EclipseInfoFragment;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c2;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c3;
+
 public class EclipseDayCaptureActivity extends AppCompatActivity
 implements MyTimer.MyTimerListener,
         CaptureSequenceSession.CameraController,
@@ -265,11 +268,11 @@ implements MyTimer.MyTimerListener,
 
 
     private Long getC2Time() {
-        return  eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
+        return  eclipseTimeProvider.getPhaseTimeMills(c2);
     }
 
     private Long getC3Time() {
-        Long c3Time = eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.CONTACT3);
+        Long c3Time = eclipseTimeProvider.getPhaseTimeMills(c3);
         Long c3MinTime = getC2Time() + 30 * 1000L;
         return Math.max(c3Time,c3MinTime);
     }

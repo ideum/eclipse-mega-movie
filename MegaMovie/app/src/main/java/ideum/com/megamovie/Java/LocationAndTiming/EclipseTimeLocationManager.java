@@ -37,30 +37,34 @@ import ideum.com.megamovie.R;
 
 public class EclipseTimeLocationManager implements LocationSource.OnLocationChangedListener {
 
-    private EclipseTimeCalculator mEclipseTimeCalculator;
+    //private EclipseTimeCalculator mEclipseTimeCalculator;
+    private EclipseTimes mEclipseTimes;
     private LatLng currentLatLng;
     private LatLng currentClosestTotalityLatLng;
     private Context mContext;
     public boolean shouldUseCurrentLocation = false;
     private Long timeCorrection = 0L;
 
-    public EclipseTimeLocationManager(EclipseTimeCalculator etc, Context context) {
-        mEclipseTimeCalculator = etc;
+    public EclipseTimeLocationManager(EclipseTimes eclipseTimes, Context context) {
+        //mEclipseTimeCalculator = etc;
         mContext = context;
+        this.mEclipseTimes = eclipseTimes;
     }
 
-    public Long getEclipseTime(EclipseTimingMap.Event event) {
-        if (referenceLatLng() == null) {
+    public Long getEclipseTime(EclipseTimes.Phase phase) {
+        if (referenceLatLng() == null || mEclipseTimes == null) {
             return null;
         }
 
-        return mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
+        return mEclipseTimes.getEclipseTime(phase, referenceLatLng());//  mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
     }
 
-    public Long getTimeToEclipse(EclipseTimingMap.Event event) {
-
+    public Long getTimeToEclipse(EclipseTimes.Phase phase) {
+        if (mEclipseTimes == null) {
+            return null;
+        }
         Long result = null;
-        Long eclipseTime = getEclipseTime(event);
+        Long eclipseTime = getEclipseTime(phase);
         if (eclipseTime != null) {
             result = eclipseTime - getCurrentCalibrateTimeMills();
         }
@@ -92,7 +96,7 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         setCurrentLatLng(latLng);
     }
 
-    private LatLng referenceLatLng() {
+    public LatLng referenceLatLng() {
         LatLng plannedLatLng = getPlannedLatLngPreference();
         if (plannedLatLng != null && !shouldUseCurrentLocation) {
             return plannedLatLng;
@@ -103,11 +107,14 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
 
     private String getTimeZoneId() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return settings.getString(mContext.getString(R.string.timezone_id),"");
+        return settings.getString(mContext.getString(R.string.timezone_id), "");
     }
 
-    public String getContactTimeString(EclipseTimingMap.Event event) {
-        Long mills = getEclipseTime(event);
+    public String getContactTimeString(EclipseTimes.Phase phase) {
+        if (mEclipseTimes == null) {
+            return "";
+        }
+        Long mills = getEclipseTime(phase);
         if (mills == null) {
             return "";
         }
@@ -118,7 +125,7 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         String timeZoneDisplayName = "";
         if (timeZoneId != null) {
             formatter.setTimeZone(TimeZone.getTimeZone(timeZoneId));
-            timeZoneDisplayName = TimeZone.getTimeZone(timeZoneId).getDisplayName(true,TimeZone.SHORT,Locale.US);
+            timeZoneDisplayName = TimeZone.getTimeZone(timeZoneId).getDisplayName(true, TimeZone.SHORT, Locale.US);
         }
 
 

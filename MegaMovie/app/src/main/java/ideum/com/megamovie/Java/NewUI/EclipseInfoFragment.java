@@ -1,7 +1,6 @@
 package ideum.com.megamovie.Java.NewUI;
 
 import android.Manifest;
-import android.content.Context;
 import android.location.Location;
 
 import android.support.design.widget.FloatingActionButton;
@@ -11,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +23,7 @@ import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeLocationManager;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes;
 import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyMapFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
@@ -49,6 +48,7 @@ public class EclipseInfoFragment extends Fragment
     private GPSFragment mGPSFragment;
     private Location mLocation;
     private EclipseTimeLocationManager mEclipseTimeManager;
+    private EclipseTimes mEclipseTimes;
     private MyTimer mTimer;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -63,9 +63,6 @@ public class EclipseInfoFragment extends Fragment
     private Long c3ContactTime;
     private Long c4ContactTime;
     private Long millsToC2;
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,9 +124,9 @@ public class EclipseInfoFragment extends Fragment
         mGPSFragment.activate(this);
 
         MyApplication ma = (MyApplication) getActivity().getApplication();
-        EclipseTimeCalculator eclipseTimeCalculator = ma.getEclipseTimeCalculator();
-
-        mEclipseTimeManager = new EclipseTimeLocationManager(eclipseTimeCalculator,getActivity().getApplicationContext());
+        //EclipseTimeCalculator eclipseTimeCalculator = ma.getEclipseTimeCalculator();
+        mEclipseTimes = ma.eclipseTimes;
+        mEclipseTimeManager = new EclipseTimeLocationManager(mEclipseTimes, getActivity().getApplicationContext());
         mEclipseTimeManager.setAsLocationListener(mGPSFragment);
     }
 
@@ -159,7 +156,12 @@ public class EclipseInfoFragment extends Fragment
             return;
         }
 
-        Long timeRemaining = mEclipseTimeManager.getTimeToEclipse(EclipseTimingMap.Event.CONTACT2);
+        Long timeRemaining = mEclipseTimeManager.getTimeToEclipse(EclipseTimes.Phase.c2);
+        Long t1 = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c2);
+        Long t2 = mEclipseTimes.getEclipseTime(EclipseTimes.Phase.c2,mEclipseTimeManager.referenceLatLng());
+        if(t1 != null) {
+            long dt = t1 - t2;
+        }
         int item = mViewPager.getCurrentItem();
         if (item == 1) {
 
@@ -181,7 +183,7 @@ public class EclipseInfoFragment extends Fragment
         if (item == 2) {
 
             // Todo: refactor this code
-            Long c1Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT1);
+            Long c1Time = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c1);
 
             boolean c1Changed = false;
             if (c1ContactTime == null) {
@@ -193,11 +195,11 @@ public class EclipseInfoFragment extends Fragment
             }
             if (c1Changed) {
                 c1ContactTime = c1Time;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT1,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.CONTACT1));
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT1,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.c1));
 
             }
 
-            Long c2Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
+            Long c2Time = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c2);
 
             boolean c2Changed = false;
             if (c2ContactTime == null) {
@@ -209,11 +211,11 @@ public class EclipseInfoFragment extends Fragment
             }
             if (c2Changed) {
                 c2ContactTime = c2Time;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT2,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.CONTACT2));
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT2,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.c2));
                 //mPhasesFragment.setC2Mills(c2ContactTime);
             }
 
-            Long cmTime = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.MIDDLE);
+            Long cmTime = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.cm);
 
             boolean cmChanged = false;
             if (cmContactTime == null) {
@@ -225,12 +227,12 @@ public class EclipseInfoFragment extends Fragment
             }
             if (cmChanged) {
                 cmContactTime = cmTime;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.MIDDLE,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.MIDDLE));
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.MIDDLE,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.cm));
                 //mPhasesFragment.setCmMills(cmContactTime);
             }
 
 
-            Long c3Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT3);
+            Long c3Time = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c3);
             boolean c3Changed = false;
             if (c3ContactTime == null) {
                 if (c3Time != null) {
@@ -241,12 +243,12 @@ public class EclipseInfoFragment extends Fragment
             }
             if (c3Changed) {
                 c3ContactTime = c3Time;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT3,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.CONTACT3));
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT3,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.c3));
                 //mPhasesFragment.setC3Mills(c3ContactTime);
 
             }
 
-            Long c4Time = mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT4);
+            Long c4Time = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c4);
             boolean c4Changed = false;
             if (c4ContactTime == null) {
                 if (c4Time != null) {
@@ -257,7 +259,7 @@ public class EclipseInfoFragment extends Fragment
             }
             if (c4Changed) {
                 c4ContactTime = c4Time;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT4,mEclipseTimeManager.getContactTimeString(EclipseTimingMap.Event.CONTACT4));
+                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT4,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.c4));
                 //mPhasesFragment.setC4Mills(c4ContactTime);
 
             }

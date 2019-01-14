@@ -19,6 +19,8 @@ import ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment
 import ideum.com.megamovie.Java.provider.ephemeris.Planet;
 import ideum.com.megamovie.R;
 
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.cm;
+
 public class EclipseDayPointingActivity extends AppCompatActivity
 implements MyTimer.MyTimerListener{
 
@@ -82,7 +84,7 @@ implements MyTimer.MyTimerListener{
 
     @Override
     public void onTick() {
-        midTotalityTime = eclipseTimeProvider.getPhaseTimeMills(EclipseTimingMap.Event.MIDDLE);
+        midTotalityTime = eclipseTimeProvider.getPhaseTimeMills(cm);
         if (midTotalityTime != null && calibrateDirectionFragment.shouldUseCurrentTime) {
             calibrateDirectionFragment.setTargetTimeMills(midTotalityTime);
             calibrateDirectionFragment.setShouldUseCurrentTime(false);

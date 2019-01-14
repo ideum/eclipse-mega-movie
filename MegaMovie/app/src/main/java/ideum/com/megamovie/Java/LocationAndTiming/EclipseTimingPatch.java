@@ -1,5 +1,7 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Calendar;
@@ -32,9 +34,21 @@ public class EclipseTimingPatch {
     public Long getEclipseTimeMills(LatLng p) {
         int row = (int)((p.latitude - latMin)/latLngInterval);
         int col = (int)((p.longitude - lngMin)/latLngInterval);
-        int index = row * numCols() + col;
+        int index = (row * numCols() + col);
+       // Log.i("EclipseTimingPatch","row " + String.valueOf(row) + " col " + String.valueOf(col));
         if (index >= 0 && index < timeOffsets.length) {
             return getBaseTime() + MILLSEC_PER_TIME_UNIT * timeOffsets[index];
+        } else {
+            return null;
+        }
+    }
+
+    public Long timeUnitsAfterBasetime(LatLng p) {
+        long row = Math.round((p.latitude - latMin)/latLngInterval);
+        long col = Math.round((p.longitude - lngMin)/latLngInterval);
+        int index = (int)(row * numCols() + col);
+        if (index >= 0 && index < timeOffsets.length) {
+            return 1l*timeOffsets[index];
         } else {
             return null;
         }
@@ -43,7 +57,7 @@ public class EclipseTimingPatch {
     public EclipseTimingPatch(double latMin, double latMax, double lngMin, double lngMax, double latLngInterval, int[] timeOffsets) {
         this.latMin = latMin;
         this.latMax = latMax;
-        this.lngMin  = lngMax;
+        this.lngMin  = lngMin;
         this.lngMax = lngMax;
         this.latLngInterval = latLngInterval;
         this.timeOffsets = timeOffsets;

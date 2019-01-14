@@ -1,6 +1,7 @@
 package ideum.com.megamovie.Java.LocationAndTiming;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -102,6 +103,11 @@ public class EclipseTimingMap {
         int x = (int) (lat / LATLNG_INTERVAL);
         int y = (int) (lng / LATLNG_INTERVAL);
 
+        int row = x - (int)(100 * c2EclipseTimingFile.startingLat);
+        int col = y - (int)(100 * c2EclipseTimingFile.startingLng);
+       // Log.i("EclipseTimingMap","row " + String.valueOf(row) + " col " + String.valueOf(col));
+
+
         MyKey key = new MyKey(x, y);
         Double timeUnitsAfterBaseTime = 0.0;
         switch (event) {
@@ -144,6 +150,61 @@ public class EclipseTimingMap {
 
         long millsAfterBaseTime = MILLISECONDS_PER_TIME_UNIT * Math.round(timeUnitsAfterBaseTime);
         return getBaseTime() + millsAfterBaseTime;
+    }
+
+    public Long timeUnitsAfterBasetime(EclipseTimingMap.Event event, LatLng location){
+        if (eclipseTimeMapC2 == null || cmEclipseTimingFile == null || eclipseTimeMapC3 == null || c4EclipseTimingFile == null) {
+            return null;
+        }
+
+        double lat = location.latitude;
+        double lng = location.longitude;
+
+        int x = (int) (lat / LATLNG_INTERVAL);
+        int y = (int) (lng / LATLNG_INTERVAL);
+
+
+        MyKey key = new MyKey(x, y);
+        Double timeUnitsAfterBaseTime = 0.0;
+        switch (event) {
+            case CONTACT1:
+                timeUnitsAfterBaseTime = eclipseTimeMapC1.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
+                    return null;
+                }
+                break;
+            case CONTACT2:
+                timeUnitsAfterBaseTime = eclipseTimeMapC2.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
+                    return null;
+                }
+                break;
+
+            case MIDDLE:
+                timeUnitsAfterBaseTime = eclipseTimeMapCm.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
+                    return null;
+                }
+                break;
+
+            case CONTACT3:
+                timeUnitsAfterBaseTime = eclipseTimeMapC3.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
+                    return null;
+                }
+                break;
+            default:
+                return null;
+
+            case CONTACT4:
+                timeUnitsAfterBaseTime = eclipseTimeMapC4.get(key);
+                if (timeUnitsAfterBaseTime == null || timeUnitsAfterBaseTime == 0) {
+                    return null;
+                }
+                break;
+        }
+
+        return Math.round(timeUnitsAfterBaseTime);
     }
 
     private long getBaseTime() {

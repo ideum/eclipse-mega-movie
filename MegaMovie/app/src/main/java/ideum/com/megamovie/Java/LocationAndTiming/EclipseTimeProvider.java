@@ -17,6 +17,10 @@ import ideum.com.megamovie.Java.Application.Config;
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.R;
 
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c2;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c3;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.cm;
+
 /**
  * Returns the time of the eclipse phases based on the phone's most recent gps location,
  * and caches the result as persistent settings data
@@ -50,8 +54,8 @@ public class EclipseTimeProvider extends Fragment
                 android.R.id.content, mGPSFragment).commit();
         mGPSFragment.activate(this);
         MyApplication ma = (MyApplication) getActivity().getApplication();
-        EclipseTimeCalculator eclipseTimeCalculator = ma.getEclipseTimeCalculator();
-        mEclipseTimeManager = new EclipseTimeLocationManager(eclipseTimeCalculator, getActivity().getApplicationContext());
+        //EclipseTimeCalculator eclipseTimeCalculator = ma.getEclipseTimeCalculator();
+        mEclipseTimeManager = new EclipseTimeLocationManager(ma.eclipseTimes, getActivity().getApplicationContext());
         mEclipseTimeManager.setAsLocationListener(mGPSFragment);
         mEclipseTimeManager.shouldUseCurrentLocation = true;
     }
@@ -72,9 +76,9 @@ public class EclipseTimeProvider extends Fragment
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(getString(R.string.in_path_key), inPathOfTotality);
 
-        Long c2Time = getPhaseTimeMills(EclipseTimingMap.Event.CONTACT2);
-        Long middleTime = getPhaseTimeMills(EclipseTimingMap.Event.MIDDLE);
-        Long c3Time = getPhaseTimeMills(EclipseTimingMap.Event.CONTACT3);
+        Long c2Time = getPhaseTimeMills(c2);
+        Long middleTime = getPhaseTimeMills(cm);
+        Long c3Time = getPhaseTimeMills(c3);
         if (c2Time != null) {
             editor.putLong(getString(R.string.c2_time_key), c2Time);
             Log.i("EclipseTimeProvider","storing c2 time " + String.valueOf(c2Time));
@@ -90,28 +94,28 @@ public class EclipseTimeProvider extends Fragment
 
     }
 
-    public Long getPhaseTimeMills(EclipseTimingMap.Event event) {
+    public Long getPhaseTimeMills(EclipseTimes.Phase phase) {
         if (mEclipseTimeManager == null) {
             return null;
         }
-        Long eventTime = mEclipseTimeManager.getEclipseTime(event);
+        Long eventTime = mEclipseTimeManager.getEclipseTime(phase);
         if (eventTime == null) {
             return null;
         }
 
         if (Config.USE_DUMMY_TIME_C2) {
-            Long correction = dummyC2Time - mEclipseTimeManager.getEclipseTime(EclipseTimingMap.Event.CONTACT2);
+            Long correction = dummyC2Time - mEclipseTimeManager.getEclipseTime(c2);
             eventTime += correction;
         }
         if (Config.USE_DUMMY_TIME_ALL_CONTACTS) {
-            switch (event) {
-                case CONTACT2:
+            switch (phase) {
+                case c2:
                     return dummyC2Time;
-                case MIDDLE:
+                case cm:
                     return dummyC2Time + 3000;
-                case CONTACT3:
+                case c3:
                     return dummyC2Time + 6000;
-                case CONTACT4:
+                case c4:
                     return dummyC2Time + 9000;
             }
         }
