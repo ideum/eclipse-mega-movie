@@ -29,6 +29,7 @@ import java.util.TimeZone;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationNotifier;
 import ideum.com.megamovie.R;
@@ -77,7 +78,7 @@ public class PhasesFragment extends Fragment {
 
         final LinearLayout intro_layout = (LinearLayout) rootView.findViewById(R.id.phases_intro);
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        boolean gotItVisible = settings.getBoolean(getString(R.string.phases_got_it_visible_key),true);
+        boolean gotItVisible = settings.getBoolean(getString(R.string.phases_got_it_visible_key), true);
 
 
         if (gotItVisible) {
@@ -90,7 +91,7 @@ public class PhasesFragment extends Fragment {
                     bottom.animate().translationY(-intro_layout.getHeight());
                     intro_layout.animate().alpha(0);
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean(getString(R.string.phases_got_it_visible_key),false);
+                    editor.putBoolean(getString(R.string.phases_got_it_visible_key), false);
                     editor.commit();
                 }
             });
@@ -141,7 +142,7 @@ public class PhasesFragment extends Fragment {
             }
         });
 
-        View c4View =  rootView.findViewById(R.id.c4_view);
+        View c4View = rootView.findViewById(R.id.c4_view);
         c4View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +151,17 @@ public class PhasesFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public void setContactTimes(Long[] times) {
+        if ((times[0] != c1Mills) || (times[1] != c2Mills) || (times[2] != cmMills) || (times[3] != c3Mills) || (times[4] != c4Mills)) {
+            c1Mills = times[0];
+            c2Mills = times[1];
+            cmMills = times[2];
+            c3Mills = times[3];
+            c4Mills = times[4];
+            updateUi();
+        }
     }
 
     private void onLearnMoreTapped(EclipseTimingMap.Event event) {
@@ -222,11 +234,11 @@ public class PhasesFragment extends Fragment {
         if (!isAdded()) {
             return;
         }
-        String s1 = "First Contact: " + timeOfDayString(c1Mills);
-        String s2 = "Second Contact: " + timeOfDayString(c2Mills);
-        String sm = "Mid Eclipse: " + timeOfDayString(cmMills);
-        String s3 = "Third Contact: " + timeOfDayString(c3Mills);
-        String s4 = "Fourth Contact: " + timeOfDayString(c4Mills);
+        String s1 = "First Contact: " + getContactTimeString(c1Mills);
+        String s2 = "Second Contact: " + getContactTimeString(c2Mills);
+        String sm = "Mid Eclipse: " + getContactTimeString(cmMills);
+        String s3 = "Third Contact: " + getContactTimeString(c3Mills);
+        String s4 = "Fourth Contact: " + getContactTimeString(c4Mills);
 
 
         if (c1TextView != null) {
@@ -251,46 +263,43 @@ public class PhasesFragment extends Fragment {
         }
     }
 
-    public void setC1Mills(Long mills) {
-        c1Mills = mills;
-        updateUi();
+//
+//    private String timeOfDayString(Long mills) {
+//        if (mills == null) {
+//            return "";
+//        }
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(mills);
+//        DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
+//
+//        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+//
+//
+//        return formatter.format(calendar.getTime());
+//    }
+
+    private String getTimeZoneId() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        return settings.getString(getActivity().getString(R.string.timezone_id), "");
     }
 
-    public void setC2Mills(Long mills) {
+    public String getContactTimeString(Long mills) {
 
-        c2Mills = mills;
-        updateUi();
-    }
-
-    public void setCmMills(Long mills) {
-        cmMills = mills;
-        updateUi();
-    }
-
-    public void setC3Mills(Long mills) {
-        c3Mills = mills;
-        updateUi();
-    }
-
-    public void setC4Mills(Long mills) {
-        c4Mills = mills;
-        updateUi();
-    }
-
-
-
-    private String timeOfDayString(Long mills) {
         if (mills == null) {
             return "";
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mills);
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
+        String timeZoneId = getTimeZoneId();
+        String timeZoneDisplayName = "";
+        if (timeZoneId != null) {
+            formatter.setTimeZone(TimeZone.getTimeZone(timeZoneId));
+            timeZoneDisplayName = TimeZone.getTimeZone(timeZoneId).getDisplayName(true, TimeZone.SHORT, Locale.US);
+        }
 
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-
-        return formatter.format(calendar.getTime());
+        return formatter.format(calendar.getTime()) + " " + timeZoneDisplayName;
     }
 
 }

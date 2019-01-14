@@ -29,6 +29,12 @@ import java.util.TimeZone;
 
 import ideum.com.megamovie.R;
 
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c1;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c2;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c3;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c4;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.cm;
+
 /**
  * Provides the time of eclipse phases based on a stored location, which can either be the user's current
  * location provided by gps, or an arbitrary location selected on a map. If the location is not in the
@@ -57,6 +63,17 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
         }
 
         return mEclipseTimes.getEclipseTime(phase, referenceLatLng());//  mEclipseTimeCalculator.getEclipseTime(event, referenceLatLng());
+    }
+
+    public Long[] getEclipseTimes() {
+        Long[] times = new Long[5];
+        times[0] = mEclipseTimes.getEclipseTime(c1,referenceLatLng());
+        times[1] = mEclipseTimes.getEclipseTime(c2,referenceLatLng());
+        times[2] = mEclipseTimes.getEclipseTime(cm,referenceLatLng());
+        times[3] = mEclipseTimes.getEclipseTime(c3,referenceLatLng());
+        times[4] = mEclipseTimes.getEclipseTime(c4,referenceLatLng());
+
+        return times;
     }
 
     public Long getTimeToEclipse(EclipseTimes.Phase phase) {

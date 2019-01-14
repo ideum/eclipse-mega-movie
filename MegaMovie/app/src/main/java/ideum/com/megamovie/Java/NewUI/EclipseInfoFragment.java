@@ -34,7 +34,7 @@ import ideum.com.megamovie.R;
 public class EclipseInfoFragment extends Fragment
         implements LocationSource.OnLocationChangedListener,
         MyTimer.MyTimerListener,
-        CustomNamable{
+        CustomNamable {
 
     /**
      * Request code for permissions
@@ -57,11 +57,11 @@ public class EclipseInfoFragment extends Fragment
     private CountdownFragment mCountdownFragment;
     private PhasesFragment mPhasesFragment;
 
-    private Long c1ContactTime;
-    private Long c2ContactTime;
-    private Long cmContactTime;
-    private Long c3ContactTime;
-    private Long c4ContactTime;
+    //    private Long c1ContactTime;
+//    private Long c2ContactTime;
+//    private Long cmContactTime;
+//    private Long c3ContactTime;
+//    private Long c4ContactTime;
     private Long millsToC2;
 
     @Override
@@ -142,7 +142,7 @@ public class EclipseInfoFragment extends Fragment
     public void onLocationChanged(Location location) {
         mLocation = location;
         MyMapFragment mmf = (MyMapFragment) mSectionsPagerAdapter.getItem(0);
-        mmf.setCurrentLatLng(new LatLng(mLocation.getLatitude(),mLocation.getLongitude()));
+        mmf.setCurrentLatLng(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
         CountdownFragment cdf = (CountdownFragment) mSectionsPagerAdapter.getItem(1);
         double distance = EclipsePath.distanceToPathOfTotality(location);
         cdf.setDistanceToPathOfTotality(distance);
@@ -157,11 +157,7 @@ public class EclipseInfoFragment extends Fragment
         }
 
         Long timeRemaining = mEclipseTimeManager.getTimeToEclipse(EclipseTimes.Phase.c2);
-        Long t1 = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c2);
-        Long t2 = mEclipseTimes.getEclipseTime(EclipseTimes.Phase.c2,mEclipseTimeManager.referenceLatLng());
-        if(t1 != null) {
-            long dt = t1 - t2;
-        }
+
         int item = mViewPager.getCurrentItem();
         if (item == 1) {
 
@@ -175,94 +171,11 @@ public class EclipseInfoFragment extends Fragment
             }
             if (changed) {
                 millsToC2 = timeRemaining;
-                //CountdownFragment ctf = (CountdownFragment) mSectionsPagerAdapter.getItem(item);
-
                 mCountdownFragment.setMillsRemaining(millsToC2);
             }
         }
         if (item == 2) {
-
-            // Todo: refactor this code
-            Long c1Time = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c1);
-
-            boolean c1Changed = false;
-            if (c1ContactTime == null) {
-                if (c1Time != null) {
-                    c1Changed = true;
-                }
-            } else {
-                c1Changed = !c1ContactTime.equals(c1Time);
-            }
-            if (c1Changed) {
-                c1ContactTime = c1Time;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT1,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.c1));
-
-            }
-
-            Long c2Time = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c2);
-
-            boolean c2Changed = false;
-            if (c2ContactTime == null) {
-                if (c2Time != null) {
-                    c2Changed = true;
-                }
-            } else {
-                c2Changed = !c2ContactTime.equals(c2Time);
-            }
-            if (c2Changed) {
-                c2ContactTime = c2Time;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT2,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.c2));
-                //mPhasesFragment.setC2Mills(c2ContactTime);
-            }
-
-            Long cmTime = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.cm);
-
-            boolean cmChanged = false;
-            if (cmContactTime == null) {
-                if (cmTime != null) {
-                    cmChanged = true;
-                }
-            } else {
-                cmChanged = !cmContactTime.equals(cmTime);
-            }
-            if (cmChanged) {
-                cmContactTime = cmTime;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.MIDDLE,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.cm));
-                //mPhasesFragment.setCmMills(cmContactTime);
-            }
-
-
-            Long c3Time = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c3);
-            boolean c3Changed = false;
-            if (c3ContactTime == null) {
-                if (c3Time != null) {
-                    c3Changed = true;
-                }
-            } else {
-                c3Changed = !c3ContactTime.equals(c3Time);
-            }
-            if (c3Changed) {
-                c3ContactTime = c3Time;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT3,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.c3));
-                //mPhasesFragment.setC3Mills(c3ContactTime);
-
-            }
-
-            Long c4Time = mEclipseTimeManager.getEclipseTime(EclipseTimes.Phase.c4);
-            boolean c4Changed = false;
-            if (c4ContactTime == null) {
-                if (c4Time != null) {
-                    c4Changed = true;
-                }
-            } else {
-                c4Changed = !c4ContactTime.equals(c4Time);
-            }
-            if (c4Changed) {
-                c4ContactTime = c4Time;
-                mPhasesFragment.setContactTimeString(EclipseTimingMap.Event.CONTACT4,mEclipseTimeManager.getContactTimeString(EclipseTimes.Phase.c4));
-                //mPhasesFragment.setC4Mills(c4ContactTime);
-
-            }
+            mPhasesFragment.setContactTimes(mEclipseTimeManager.getEclipseTimes());
         }
     }
 
