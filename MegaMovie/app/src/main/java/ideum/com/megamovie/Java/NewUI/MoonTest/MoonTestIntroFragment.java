@@ -21,10 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
-import ideum.com.megamovie.Java.CameraControl.CameraHardwareCheckActivity;
 import ideum.com.megamovie.Java.CameraControl.CameraHardwareCheckFragment;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;

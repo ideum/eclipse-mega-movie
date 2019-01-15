@@ -69,14 +69,11 @@
         <activity android:name=".Java.NewUI.MyEclipseActivity">
 
         </activity>
-        <activity android:name=".Java.NewUI.CalibrateDirectionTestActivity">
-        </activity>
+
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCaptureActivity">
         </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateDirectionActivity" />
         <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateLensActivity" />
-        <activity android:name=".Java.CameraControl.CameraHardwareCheckActivity">
-        </activity>
         <activity android:name=".Java.NewUI.MoonTest.MoonTestHandHeldCaptureActivity" />
         <activity android:name=".Java.NewUI.MoonTest.MoonTestPointingActivity" />
         <activity android:name=".Java.NewUI.SensorTestActivity">

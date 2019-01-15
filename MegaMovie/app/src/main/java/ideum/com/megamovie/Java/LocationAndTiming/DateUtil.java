@@ -46,12 +46,6 @@ public class DateUtil {
         mills = Math.max(mills,0);
         long days = TimeUnit.MILLISECONDS.toDays(mills);
         return String.format("%02d",days);
-//        Calendar c = Calendar.getInstance();
-//        c.setTimeInMillis(mills);
-//        DateFormat formatter = new SimpleDateFormat("DD", Locale.US);
-//
-//        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-//        return formatter.format(c.getTime());
     }
 
     public static String countdownHoursString(Long mills) {

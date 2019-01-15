@@ -3,12 +3,10 @@ package ideum.com.megamovie.Java.NewUI;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.ButtonBarLayout;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,23 +14,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
-import java.security.cert.Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLPeerUnverifiedException;
+
 
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
-import ideum.com.megamovie.Java.LocationAndTiming.LocationNotifier;
 import ideum.com.megamovie.R;
+
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c1;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c2;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c3;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c4;
+import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.cm;
 
 public class PhasesFragment extends Fragment {
 
@@ -114,7 +111,7 @@ public class PhasesFragment extends Fragment {
         c1View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLearnMoreTapped(EclipseTimingMap.Event.CONTACT1);
+                onLearnMoreTapped(c1);
             }
         });
 
@@ -122,7 +119,7 @@ public class PhasesFragment extends Fragment {
         c2View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLearnMoreTapped(EclipseTimingMap.Event.CONTACT2);
+                onLearnMoreTapped(c2);
             }
         });
 
@@ -131,14 +128,14 @@ public class PhasesFragment extends Fragment {
         cmView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLearnMoreTapped(EclipseTimingMap.Event.MIDDLE);
+                onLearnMoreTapped(cm);
             }
         });
         View c3View = rootView.findViewById(R.id.c3_view);
         c3View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLearnMoreTapped(EclipseTimingMap.Event.CONTACT3);
+                onLearnMoreTapped(c3);
             }
         });
 
@@ -146,7 +143,7 @@ public class PhasesFragment extends Fragment {
         c4View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLearnMoreTapped(EclipseTimingMap.Event.CONTACT4);
+                onLearnMoreTapped(c4);
             }
         });
 
@@ -164,28 +161,28 @@ public class PhasesFragment extends Fragment {
         }
     }
 
-    private void onLearnMoreTapped(EclipseTimingMap.Event event) {
+    private void onLearnMoreTapped(EclipseTimes.Phase event) {
         String caption = "";
         String title = "";
         // Todo: refactor this
         switch (event) {
-            case CONTACT1:
+            case c1:
                 caption = getResources().getString(R.string.first_contact_dialog_message);
                 title = "First Contact";
                 break;
-            case CONTACT2:
+            case c2:
                 caption = getResources().getString(R.string.second_contact_dialog_message);
                 title = "Second Contact";
                 break;
-            case MIDDLE:
+            case cm:
                 caption = getResources().getString(R.string.mid_eclipse_dialog_message);
                 title = "Totality";
                 break;
-            case CONTACT3:
+            case c3:
                 caption = getResources().getString(R.string.third_contact_dialog_message);
                 title = "Third Contact";
                 break;
-            case CONTACT4:
+            case c4:
                 caption = getResources().getString(R.string.fourth_contact_dialog_message);
                 title = "Fourth Contact";
 
@@ -203,31 +200,6 @@ public class PhasesFragment extends Fragment {
 
     }
 
-    public void setContactTimeString(EclipseTimingMap.Event event, String timeOfDayString) {
-        switch (event) {
-            case CONTACT1:
-                if (c1TextView != null) {
-                    c1TextView.setText("First Contact: " + timeOfDayString);
-                }
-            case CONTACT2:
-                if (c2TextView != null) {
-                    c2TextView.setText("Second Contact: " + timeOfDayString);
-                }
-            case MIDDLE:
-                if (cmTextView != null) {
-                    cmTextView.setText("Mid Eclipse: " + timeOfDayString);
-                }
-            case CONTACT3:
-                if (c3TextView != null) {
-                    c3TextView.setText("Third Contact: " + timeOfDayString);
-                }
-            case CONTACT4:
-                if (c4TextView != null) {
-                    c4TextView.setText("Fourth Contact: " + timeOfDayString);
-                }
-
-        }
-    }
 
 
     public void updateUi() {

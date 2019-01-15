@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
-import ideum.com.megamovie.Java.NewUI.CalibrateDirectionTestActivity;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 

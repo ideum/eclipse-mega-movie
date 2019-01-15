@@ -43,7 +43,6 @@ import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.cm;
 
 public class EclipseTimeLocationManager implements LocationSource.OnLocationChangedListener {
 
-    //private EclipseTimeCalculator mEclipseTimeCalculator;
     private EclipseTimes mEclipseTimes;
     private LatLng currentLatLng;
     private LatLng currentClosestTotalityLatLng;
@@ -52,7 +51,6 @@ public class EclipseTimeLocationManager implements LocationSource.OnLocationChan
     private Long timeCorrection = 0L;
 
     public EclipseTimeLocationManager(EclipseTimes eclipseTimes, Context context) {
-        //mEclipseTimeCalculator = etc;
         mContext = context;
         this.mEclipseTimes = eclipseTimes;
     }

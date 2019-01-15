@@ -13,7 +13,6 @@ import android.widget.Button;
 import java.util.Date;
 
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProvider;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment;
 import ideum.com.megamovie.Java.provider.ephemeris.Planet;

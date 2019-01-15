@@ -29,16 +29,11 @@ public class GPSFragment extends Fragment
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         LocationProvider,
-        TimeProvider,
         LocationSource{
 
     public long gpsInterval = 1000 * 30;
     public long fastestGpsInterval = 1000 * 20;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
-    //private static final boolean SHOULD_USE_DUMMY_LOCATION = Config.SHOULD_USE_DUMMY_LOCATION;
-    //private static final double DUMMY_LATITUDE = 44.5646;// 36.209;
-    //private static final double DUMMY_LONGITUDE = -123.2620;//-86.761;
-
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;
     private GoogleApiClient mGoogleApiClient;
@@ -100,12 +95,7 @@ public class GPSFragment extends Fragment
     }
 
 
-    @Override
-    public Long getTime() {
-        Calendar calendar = Calendar.getInstance();
 
-        return calendar.getTimeInMillis();
-    }
 
     @Override
     public void onConnected(Bundle bundle) {

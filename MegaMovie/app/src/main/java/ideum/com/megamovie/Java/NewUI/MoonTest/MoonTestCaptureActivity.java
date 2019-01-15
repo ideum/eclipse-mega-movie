@@ -3,7 +3,6 @@ package ideum.com.megamovie.Java.NewUI.MoonTest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,33 +12,28 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.apache.commons.net.ftp.FTPClient;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import ideum.com.megamovie.Java.CameraControl.ManualCamera;
 import ideum.com.megamovie.Java.LocationAndTiming.DateUtil;
 import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
-import ideum.com.megamovie.Java.CameraControl.CameraFragment;
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequenceSession;
 import ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
-import ideum.com.megamovie.Java.Util.FTPUtil;
 import ideum.com.megamovie.R;
 
 public class MoonTestCaptureActivity extends AppCompatActivity
         implements CaptureSequenceSession.CameraController,
-        CameraFragment.CaptureListener,
+        CameraPreviewAndCaptureFragment.CameraCaptureListener,
         MyTimer.MyTimerListener,
         CaptureSequenceSession.CaptureSessionCompletionListerner {
 
     private static final int CONFIG_ID = R.xml.moon_test_config;
-    private ManualCamera cameraFragment;
+    private CameraPreviewAndCaptureFragment cameraFragment;
     private MyTimer mTimer;
     private CaptureSequenceSession mSession;
     private static final long SESSION_LENGTH_SECONDS = 360;

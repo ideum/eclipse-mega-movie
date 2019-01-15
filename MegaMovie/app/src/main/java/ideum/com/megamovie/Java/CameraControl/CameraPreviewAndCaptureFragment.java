@@ -58,7 +58,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -66,13 +65,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ideum.com.megamovie.Java.LocationAndTiming.GPS;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
-import ideum.com.megamovie.Java.Util.FTPUtil;
 import ideum.com.megamovie.R;
 
 
 public class CameraPreviewAndCaptureFragment extends android.app.Fragment
-        implements FragmentCompat.OnRequestPermissionsResultCallback,
-        ManualCamera {
+        implements FragmentCompat.OnRequestPermissionsResultCallback
+        //ManualCamera
+{
 
     public static final boolean ALLOWS_RAW = true;
     public static final boolean ALLOWS_JPEG = true;
@@ -84,12 +83,12 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     private String data_directory_name = "MegaMovieTestImages";
 
 
-    @Override
+   // @Override
     public void setDirectoryName(String directoryName) {
         data_directory_name = directoryName;
     }
 
-    private List<CameraFragment.CaptureListener> listeners = new ArrayList<>();
+    private List<CameraCaptureListener> listeners = new ArrayList<>();
 
     private LocationProvider mLocationProvider;
 
@@ -100,12 +99,12 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         return mLocationProvider.getLocation();
     }
 
-    @Override
+   // @Override
     public void setLocationProvider(LocationProvider provider) {
         mLocationProvider = provider;
     }
 
-    public void addCaptureListener(CameraFragment.CaptureListener listener) {
+    public void addCaptureListener(CameraCaptureListener listener) {
         listeners.add(listener);
     }
 
@@ -608,7 +607,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         takePhotoWithSettings(settings);
     }
 
-    @Override
+   // @Override
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
         try {
             final CaptureRequest.Builder captureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
@@ -643,7 +642,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                 mRawResultQueue.put((int) request.getTag(), rawBuilder);
             }
 
-            for (CameraFragment.CaptureListener listener : listeners) {
+            for (CameraCaptureListener listener : listeners) {
                 listener.onCapture();
             }
 
@@ -761,8 +760,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         if(loc != null) {
             builder.setLocation(loc);
         }
-
-
         handleCompletionLocked(entry.getKey(), builder, pendingQueue);
     }
 
@@ -775,7 +772,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
             AsyncTask.THREAD_POOL_EXECUTOR.execute(saver);
         }
     }
-
     private static class ImageSaver implements Runnable {
 
         private final Image mImage;
@@ -1046,6 +1042,10 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                 }
             }
         }
+    }
+
+    public static interface CameraCaptureListener {
+        void onCapture();
     }
 }
 

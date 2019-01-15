@@ -23,7 +23,6 @@ import java.util.Date;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.LocationAndTiming.DateUtil;
-import ideum.com.megamovie.Java.NewUI.CalibrateDirectionTestActivity;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.Java.provider.ephemeris.Planet;
 import ideum.com.megamovie.R;

@@ -1,6 +1,5 @@
 package ideum.com.megamovie.Java.NewUI.EclipseDay;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
@@ -19,8 +18,7 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
+
 import java.util.Locale;
 import java.util.Queue;
 import java.util.TimeZone;
@@ -28,12 +26,9 @@ import java.util.TimeZone;
 import ideum.com.megamovie.Java.Application.Config;
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.Application.UploadActivity;
-import ideum.com.megamovie.Java.CameraControl.CameraFragment;
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequenceSession;
-import ideum.com.megamovie.Java.CameraControl.ManualCamera;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProvider;
@@ -47,7 +42,7 @@ import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c3;
 public class EclipseDayCaptureActivity extends AppCompatActivity
 implements MyTimer.MyTimerListener,
         CaptureSequenceSession.CameraController,
-        CameraFragment.CaptureListener,
+        CameraPreviewAndCaptureFragment.CameraCaptureListener,
         CaptureSequenceSession.CaptureSessionCompletionListerner{
 
     private static final String TAG = "CaptureActivity";
@@ -56,7 +51,7 @@ implements MyTimer.MyTimerListener,
     private EclipseTimeProvider eclipseTimeProvider;
     private SmallCountdownFragment countdownFragment;
 
-    private ManualCamera cameraFragment;
+    private CameraPreviewAndCaptureFragment cameraFragment;
     private CaptureSequenceSession mSession;
 
     private int numCaptures = 0;

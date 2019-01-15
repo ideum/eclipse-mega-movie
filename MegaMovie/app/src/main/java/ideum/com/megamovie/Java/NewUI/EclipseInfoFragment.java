@@ -21,14 +21,12 @@ import com.google.android.gms.maps.model.LatLng;
 
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeCalculator;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeLocationManager;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes;
 import ideum.com.megamovie.Java.LocationAndTiming.GPSFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyMapFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipsePath;
-import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimingMap;
 import ideum.com.megamovie.R;
 
 public class EclipseInfoFragment extends Fragment

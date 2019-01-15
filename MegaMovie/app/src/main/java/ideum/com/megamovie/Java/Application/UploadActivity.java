@@ -56,7 +56,6 @@ public class UploadActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.INTERNET};
 
-
     Button uploadButton;
     Button cancelButton;
 
@@ -68,8 +67,6 @@ public class UploadActivity extends AppCompatActivity {
     TextView uploadErrorsTextView;
 
     int totalFiles = 0;
-
-
 
     String directoryName;
     private String sessionId;
