@@ -3,19 +3,19 @@ package ideum.com.megamovie.Java.LocationAndTiming;
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import com.amazonaws.util.IOUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
-import ideum.com.megamovie.Java.Application.TimingDataReaderWriter;
-
 
 public class EclipseTimes {
-    public enum Phase {c1,c2,cm,c3,c4};
+    public enum Phase {c1,c2,cm,c3,c4}
 
     private static final String DATA_PATH = "timing_files";
     private static final double LAT_LNG_INTERVAL = 0.01;
@@ -56,7 +56,7 @@ public class EclipseTimes {
                 Double latMax = Double.valueOf(parts[4]);
 
                 InputStream inputStream = assetManager.open(DATA_PATH + "/" + file);
-                int[] ints = TimingDataReaderWriter.readIntsFromStream(inputStream);
+                int[] ints = readIntsFromStream(inputStream);
                 EclipseTimingPatch patch = new EclipseTimingPatch(latMin,latMax,lngMin,lngMax, LAT_LNG_INTERVAL,ints);
                 patches.get(phase).add(patch);
 
@@ -64,5 +64,18 @@ public class EclipseTimes {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static int[] readIntsFromStream(InputStream inputStream) throws IOException {
+        byte[] bytes = IOUtils.toByteArray(inputStream);
+        inputStream.close();
+
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+
+        int[] ints = new int[bytes.length / 4];
+        for (int i = 0; i < bytes.length / 4; i++) {
+            ints[i] = bb.getInt(i * 4);
+        }
+        return ints;
     }
 }

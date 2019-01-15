@@ -66,7 +66,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ideum.com.megamovie.Java.LocationAndTiming.GPS;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
-import ideum.com.megamovie.Java.PatagoniaTest.MetadataWriter;
 import ideum.com.megamovie.Java.Util.FTPUtil;
 import ideum.com.megamovie.R;
 

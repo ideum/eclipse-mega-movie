@@ -69,18 +69,12 @@ public class UploadActivity extends AppCompatActivity {
 
     int totalFiles = 0;
 
-    private boolean agreedToLicense = false;
-    private boolean agreedToPrivacy = false;
 
 
     String directoryName;
     private String sessionId;
 
-//    private Set<Integer> initializedUploadIds;
-//    private Set<Integer> inProgressUploadIds;
-//    private Set<Integer> completedUploadIds;
-//    private Set<Integer> errorUploadIds;
-//    private Set<Integer> waitingForNetworkIds;
+
 
     private List<TransferObserver> observers;
     private TransferUtility transferUtility;
@@ -90,11 +84,6 @@ public class UploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-//        initializedUploadIds = new HashSet<>();
-//        completedUploadIds = new HashSet<>();
-//        inProgressUploadIds = new HashSet<>();
-//        errorUploadIds = new HashSet<>();
-//        waitingForNetworkIds = new HashSet<>();
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 getApplicationContext(),

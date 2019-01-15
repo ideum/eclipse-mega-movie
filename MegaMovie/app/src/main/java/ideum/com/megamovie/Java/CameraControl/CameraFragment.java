@@ -61,7 +61,6 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
-import ideum.com.megamovie.Java.PatagoniaTest.MetadataWriter;
 
 public class CameraFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback,

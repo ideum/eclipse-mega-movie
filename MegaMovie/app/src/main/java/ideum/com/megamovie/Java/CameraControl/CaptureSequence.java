@@ -171,12 +171,6 @@ public class CaptureSequence {
         }
     }
 
-    public CaptureSequence(List<CaptureInterval> captureIntervals) {
-        requestQueue = new LinkedList<>();
-        for (CaptureInterval interval : captureIntervals) {
-            requestQueue.addAll(interval.getTimedRequests());
-        }
-    }
 
     public CaptureSequence(CaptureInterval interval) {
         requestQueue = new LinkedList<>();

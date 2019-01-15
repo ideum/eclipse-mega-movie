@@ -67,8 +67,7 @@
         <activity android:name=".Java.NewUI.AboutActivity">
         </activity>
         <activity android:name=".Java.NewUI.MyEclipseActivity">
-        </activity>
-        <activity android:name=".Java.NewUI.SignInActivity">
+
         </activity>
         <activity android:name=".Java.NewUI.CalibrateDirectionTestActivity">
         </activity>
@@ -84,8 +83,6 @@
         </activity>
         <activity android:name=".Java.Application.UploadActivity">
         </activity>
-        <activity android:name=".Java.Application.UploadTestActivity">
-        </activity>
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayInstructions" />
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayMainActivity">
         </activity>
@@ -99,20 +96,7 @@
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayPointingActivity" />
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCalibrateLensActivity"></activity>
 
-        <activity android:name=".Java.PatagoniaTest.MapActivity">
 
-        </activity>
-        <activity android:name=".Java.PatagoniaTest.CalibrationActivity">
-            android:screenOrientation="portrait"
-
-        </activity>
-        <activity android:name=".Java.PatagoniaTest.CaptureActivity">
-            android:screenOrientation="portrait"
-        </activity>
-        <activity android:name=".Java.PatagoniaTest.CameraTestActivity">
-            android:screenOrientation="portrait"
-
-        </activity>
     </application>
 
 </manifest>

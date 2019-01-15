@@ -28,7 +28,6 @@ import java.util.TimeZone;
 import ideum.com.megamovie.Java.Application.Config;
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.Application.UploadActivity;
-import ideum.com.megamovie.Java.Application.UploadTestActivity;
 import ideum.com.megamovie.Java.CameraControl.CameraFragment;
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
