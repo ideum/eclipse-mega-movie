@@ -88,10 +88,10 @@ public class CaptureSequence {
         }
     }
 
-    // Properties for interval where exposure is varied in steps
-    public static class SteppedIntervalProperties {
-
-    }
+//    // Properties for interval where exposure is varied in steps
+//    public static class SteppedIntervalProperties {
+//
+//    }
 
     public static class CaptureInterval {
 
@@ -162,7 +162,6 @@ public class CaptureSequence {
         }
     }
 
-    //public List<CaptureInterval> mCaptureIntervals;
     private Queue<TimedCaptureRequest> requestQueue;
 
     public CaptureSequence(SteppedInterval[] intervals) {
@@ -172,56 +171,21 @@ public class CaptureSequence {
         }
     }
 
-
-    public CaptureSequence(CaptureSettings baseSettings,Double[] exposureFractions,Long startTimeMills,Long endTimeMills,Long spacing) {
-        requestQueue = new LinkedList<>();
-        Long captureTime = startTimeMills;
-        int captureNumber = 0;
-        while (captureTime < endTimeMills) {
-            CaptureSettings settings = baseSettings.makeCopy();
-            settings.exposureTime = (long)(baseSettings.exposureTime * exposureFractions[captureNumber % exposureFractions.length]);
-            requestQueue.add(new TimedCaptureRequest(captureTime,settings));
-            captureTime += spacing;
-            captureNumber++;
-        }
-    }
-
-
-
     public CaptureSequence(List<CaptureInterval> captureIntervals) {
-//        mCaptureIntervals = captureIntervals;
         requestQueue = new LinkedList<>();
         for (CaptureInterval interval : captureIntervals) {
             requestQueue.addAll(interval.getTimedRequests());
         }
-
     }
 
     public CaptureSequence(CaptureInterval interval) {
         requestQueue = new LinkedList<>();
         requestQueue.addAll(interval.getTimedRequests());
-//        mCaptureIntervals = new ArrayList<>();
-//        mCaptureIntervals.add(interval);
+
     }
 
-    public CaptureSequence(CaptureSettings[] settings,long startTime) {
-        requestQueue = new LinkedList<>();
-        long time = startTime;
-
-        for(int i = 0; i < settings.length; i++) {
-            requestQueue.add(new TimedCaptureRequest(time,settings[i]));
-            // the term of 500000 mills gives a bit of spacing between the captures.
-            time = time + settings[i].exposureTime/1000000 + 200;
-            Log.i("CaptureSequence",String.valueOf(time));
-        }
-        Log.i("CaptureSequence","finished loop!");
-    }
 
     public Queue<TimedCaptureRequest> getRequestQueue() {
-//        Queue<TimedCaptureRequest> queue = new LinkedList<>();
-//        for (CaptureInterval interval : mCaptureIntervals) {
-//            queue.addAll(interval.getTimedRequests());
-//        }
         return requestQueue;
     }
 
@@ -240,7 +204,6 @@ public class CaptureSequence {
         return result;
 
     }
-
 
     // Helper method used for debugging
     private static String timeString(Long mills) {

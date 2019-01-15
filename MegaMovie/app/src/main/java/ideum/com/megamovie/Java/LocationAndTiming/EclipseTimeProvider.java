@@ -36,7 +36,7 @@ public class EclipseTimeProvider extends Fragment
     private Long dummyC2Time;
 
     EnumMap<EclipseTimes.Phase,Long> contactTimes = new EnumMap<>(EclipseTimes.Phase.class);
-
+    boolean inPathOfTotality;
     public EclipseTimeProvider() {
         // Required empty public constructor
     }
@@ -46,6 +46,8 @@ public class EclipseTimeProvider extends Fragment
         super.onCreate(savedInstanceState);
         dummyC2Time = Calendar.getInstance().getTimeInMillis() + 15 * 1000;
     }
+
+
 
 
     @Override
@@ -64,6 +66,7 @@ public class EclipseTimeProvider extends Fragment
         contactTimes.put(cm, preferences.getLong(getString(R.string.mid_time_key), 0));
         contactTimes.put(c3, preferences.getLong(getString(R.string.c3_time_key), 0));
         contactTimes.put(c4, preferences.getLong(getString(R.string.c4_time_key), 0));
+        inPathOfTotality = preferences.getBoolean(getString(R.string.in_path_key),true);
     }
 
     private LatLng getLatLng() {
@@ -76,7 +79,7 @@ public class EclipseTimeProvider extends Fragment
     @Override
     public void onLocationChanged(Location location) {
         mLocation = location;
-        boolean inPathOfTotality = !(EclipsePath.distanceToPathOfTotality(location) > 0);
+        inPathOfTotality = !(EclipsePath.distanceToPathOfTotality(location) > 0);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
@@ -111,6 +114,10 @@ public class EclipseTimeProvider extends Fragment
         contactTimes.put(cm,cmTime);
         contactTimes.put(c3,c3Time);
         contactTimes.put(c4,c4Time);
+    }
+
+    public boolean inPath() {
+        return inPathOfTotality;
     }
 
     public Long getPhaseTimeMills(EclipseTimes.Phase phase) {
