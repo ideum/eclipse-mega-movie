@@ -5,6 +5,7 @@
 
 package ideum.com.megamovie.Java.CameraControl;
 
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,8 +14,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
-
-import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 
 public class CaptureSequenceSession implements MyTimer.MyTimerListener {
@@ -24,28 +23,28 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
 
     private boolean inProgress = false;
 
-    private MyTimer mTimer;
+  //  private MyTimer mTimer;
 
     public void start() {
         inProgress = true;
-        mTimer = new MyTimer();
-        mTimer.addListener(this);
-        mTimer.startTicking();
     }
 
     public void stop() {
         inProgress = false;
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
+
     }
 
     public static final String TAG = "CaptureSequenceSession";
-   // private LocationProvider mLocationProvider;
     private Queue<CaptureSequence.TimedCaptureRequest> requestQueue;
     private CaptureSequence.TimedCaptureRequest nextRequest;
     private CameraController mCameraController;
     private List<CaptureSessionCompletionListerner> listeners = new ArrayList<>();
+
+    public CaptureSequenceSession(CaptureSequence captureSequence, CameraController controller) {
+        requestQueue = captureSequence.getRequestQueue();
+        mCameraController = controller;
+        Log.i(TAG,"creating new session");
+    }
 
     public void addListener(CaptureSessionCompletionListerner listener) {
         listeners.add(listener);
@@ -56,18 +55,6 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
         void takePhotoWithSettings(CaptureSequence.CaptureSettings settings);
     }
 
-    public CaptureSequenceSession(CaptureSequence captureSequence, LocationProvider locationProvider, CameraController controller) {
-       // mLocationProvider = locationProvider;
-        requestQueue = captureSequence.getRequestQueue();
-        mCameraController = controller;
-    }
-
-    public CaptureSequenceSession(CaptureSequence captureSequence, CameraController controller) {
-        requestQueue = captureSequence.getRequestQueue();
-        mCameraController = controller;
-    }
-
-
     private Long getTime() {
         Calendar c = Calendar.getInstance();
         return c.getTimeInMillis();
@@ -75,7 +62,9 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
 
     @Override
     public void onTick() {
-
+        if(!inProgress) {
+            return;
+        }
         Long currentTime = getTime();
         if (currentTime == null) {
             return;
@@ -85,7 +74,6 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
         }
         if (nextRequest != null) {
             Long requestTime = nextRequest.mTime;
-
 
             if (currentTime >= requestTime) {
                 mCameraController.takePhotoWithSettings(nextRequest.mSettings);

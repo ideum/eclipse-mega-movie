@@ -2,6 +2,7 @@ package ideum.com.megamovie.Java.NewUI.EclipseDay;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -18,9 +19,8 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
+import java.util.EnumMap;
 import java.util.Locale;
-import java.util.Queue;
 import java.util.TimeZone;
 
 import ideum.com.megamovie.Java.Application.Config;
@@ -28,7 +28,10 @@ import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.Application.UploadActivity;
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
+import ideum.com.megamovie.Java.CameraControl.CaptureSequenceBuilder;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequenceSession;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProviderOffset;
+import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProvider;
@@ -40,10 +43,11 @@ import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c2;
 import static ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes.Phase.c3;
 
 public class EclipseDayCaptureActivity extends AppCompatActivity
-implements MyTimer.MyTimerListener,
+        implements MyTimer.MyTimerListener,
         CaptureSequenceSession.CameraController,
         CameraPreviewAndCaptureFragment.CameraCaptureListener,
-        CaptureSequenceSession.CaptureSessionCompletionListerner{
+        CaptureSequenceSession.CaptureSessionCompletionListerner,
+        EclipseTimeProvider.Listener {
 
     private static final String TAG = "CaptureActivity";
 
@@ -64,22 +68,25 @@ implements MyTimer.MyTimerListener,
     Button finishedButton;
 
     Boolean audioAlertGiven = false;
+    private Long startTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eclipse_day_capture);
-
+        /**
+         * Keep activity in portrait mode
+         */
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         progressTextView = (TextView) findViewById(R.id.capture_progress_text_view);
         startTimeTextView = (TextView) findViewById(R.id.start_time_text_view);
 
-        eclipseTimeProvider = new EclipseTimeProvider();
+        eclipseTimeProvider = Config.USE_DUMMY_TIME_C2? new EclipseTimeProviderOffset() : new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, eclipseTimeProvider).commit();
 
-        if (!eclipseTimeProvider.inPath()) {
-            progressTextView.setVisibility(View.GONE);
-        }
+        eclipseTimeProvider.addListener(this);
 
         countdownFragment = (SmallCountdownFragment) getSupportFragmentManager().findFragmentById(R.id.countdown_fragment);
         cameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
@@ -105,6 +112,22 @@ implements MyTimer.MyTimerListener,
                 goToMainActivity();
             }
         });
+
+    }
+
+
+    @Override
+    public void onEclipseTimesUpdated(EnumMap<EclipseTimes.Phase, Long> contactTimes) {
+        if (timeRemaining() != null && timeRemaining() < Config.GPS_UPDATE_CUTOFF_TIME) {
+            if(mSession != null) {
+                return;
+            }
+        }
+        Long c2Time = contactTimes.get(c2);
+        Long c3Time = contactTimes.get(c3);
+        startTime = c2Time;
+            setUpCaptureSequenceSession(c2Time,c3Time);
+
     }
 
     @Override
@@ -112,7 +135,7 @@ implements MyTimer.MyTimerListener,
         super.onResume();
         mTimer = new MyTimer();
         mTimer.addListener(this);
-        mTimer.addListener(countdownFragment);
+        //mTimer.addListener(countdownFragment);
         mTimer.startTicking();
     }
 
@@ -121,144 +144,79 @@ implements MyTimer.MyTimerListener,
         mTimer.cancel();
         if (mSession != null) {
             mSession.stop();
+            mSession = null;
         }
         super.onPause();
     }
 
-
     @Override
     public void onTick() {
-        Long startTime = getC2Time();
-        if (startTime!= null) {
-            if (mSession == null) {
-                if(!eclipseTimeProvider.inPath()) {
-                    showNotInPathDialog();
-                }
-                setUpCaptureSequenceSession();
-                startTimeTextView.setText("Start of Totality: " + getStartTimeString(startTime));
-            }
+        if (startTime == null) {
+            return;
+        }
+        if (mSession != null) {
+            mSession.onTick();
+        }
+        if (startTime != null) {
+
             countdownFragment.setTargetTimeMills(startTime);
             countdownFragment.onTick();
 
             Long timeRemaining = startTime - Calendar.getInstance().getTimeInMillis();
-            if (timeRemaining <= 18000 && !audioAlertGiven) {
+            if (timeRemaining <= Config.AUDIO_ALERT_TIME && !audioAlertGiven) {
                 giveAudioAlert();
                 audioAlertGiven = true;
             }
         }
     }
 
-    private void setUpCaptureSequenceSession() {
-        CaptureSequence sequence = createCaptureSequence();
+    private Long timeRemaining() {
+        if (startTime == null) {
+            return null;
+        }
+        return startTime - Calendar.getInstance().getTimeInMillis();
+    }
+
+    private void setUpCaptureSequenceSession(long c2Time, long c3Time) {
+
+        CaptureSequence sequence = createCaptureSequence(c2Time, c3Time);
         if (sequence == null) {
             return;
+        }
+        if (mSession != null) {
+            mSession.stop();
         }
         mSession = new CaptureSequenceSession(sequence, this);
         totalNumCaptures = sequence.numberCapturesRemaining();
         updateCaptureTextView();
 
         if (eclipseTimeProvider.inPath()) {
-
             mSession.addListener(this);
             mSession.start();
         }
-
     }
 
-    private CaptureSequence createCaptureSequence() {
+    private CaptureSequence createCaptureSequence(long c2Time, long c3Time) {
 
         if (Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE) {
             return dummySequence();
         }
 
-        long c2Time = getC2Time();
-        long c3Time = getC3Time();
-        float magnification = (float)getLensMagnificationFromPreferences();
-        return makeSequence(c2Time,c3Time,magnification);
-
+        float magnification = (float) getLensMagnificationFromPreferences();
+        return CaptureSequenceBuilder.makeSequence(c2Time, c3Time, magnification);
     }
 
-    private CaptureSequence makeSequence(long c2Time,long c3Time,float magnification) {
-
-        int sensitivity = 60;
-        float focusDistance = 0f;
-
-        long c2BaseExposureTime = (long)( Config.BEADS_EXPOSURE_TIME/(magnification * magnification));
-        boolean c2ShouldSaveRaw = Config.beadsShouldCaptureRaw;
-        boolean c2ShouldSaveJpeg = Config.beadsShouldCaptureJpeg;
-
-        long c2StartTime = c2Time - Config.BEADS_LEAD_TIME;
-        long c2EndTime = c2StartTime + Config.BEADS_DURATION;
-        long c2Spacing = Config.BEADS_SPACING;
-
-        CaptureSequence.CaptureSettings c2BaseSettings = new CaptureSequence.CaptureSettings(c2BaseExposureTime,sensitivity,focusDistance,c2ShouldSaveRaw,c2ShouldSaveJpeg);
-        CaptureSequence.SteppedInterval c2Interval = new CaptureSequence.SteppedInterval(c2BaseSettings, Config.BEADS_FRACTIONS,c2StartTime,c2EndTime,c2Spacing);
-
-        long c3BaseExposureTime = (long)( Config.BEADS_EXPOSURE_TIME/(magnification * magnification));
-        boolean c3ShouldSaveRaw = false;
-        boolean c3ShouldSaveJpeg = true;
-
-        long c3StartTime = c3Time - Config.BEADS_LEAD_TIME;
-        long c3EndTime = c3StartTime + Config.BEADS_DURATION;
-        long c3Spacing = Config.BEADS_SPACING;
-
-        long totalityBaseExposureTime =  Config.TOTALITY_EXPOSURE_TIME;
-
-        long totalityStartTime = c2EndTime + Config.MARGIN;
-        long totalityEndTime = c3StartTime - Config.MARGIN;
-
-        long totalitySpacing = getTotalitySpacing(totalityEndTime - totalityStartTime);
-
-        CaptureSequence.CaptureSettings totalityBaseSettings = new CaptureSequence.CaptureSettings(totalityBaseExposureTime,sensitivity,focusDistance,Config.totalityShouldCaptureRaw,Config.totalityShouldCaptureJpeg);
-        CaptureSequence.SteppedInterval totalityInterval = new CaptureSequence.SteppedInterval(totalityBaseSettings, Config.TOTALITY_FRACTIONS,totalityStartTime,totalityEndTime,totalitySpacing);
-
-        CaptureSequence.CaptureSettings c3BaseSettings = new CaptureSequence.CaptureSettings(c3BaseExposureTime,sensitivity,focusDistance,c3ShouldSaveRaw,c3ShouldSaveJpeg);
-        CaptureSequence.SteppedInterval c3Interval = new CaptureSequence.SteppedInterval(c3BaseSettings, Config.BEADS_FRACTIONS,c3StartTime,c3EndTime,c3Spacing);
-
-        CaptureSequence.SteppedInterval[] intervals = {c2Interval,totalityInterval,c3Interval};
-
-        Queue<CaptureSequence.TimedCaptureRequest> requests = totalityInterval.getRequests();
-
-        return new CaptureSequence(intervals);
-    }
-
-
-
-    private Long getC2Time() {
-        return  eclipseTimeProvider.getPhaseTimeMills(c2);
-    }
-
-    private Long getC3Time() {
-        Long c3Time = eclipseTimeProvider.getPhaseTimeMills(c3);
-        Long c3MinTime = getC2Time() + 30 * 1000L;
-        return Math.max(c3Time,c3MinTime);
-    }
 
     private int getLensMagnificationFromPreferences() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int storedValue = preferences.getInt(getString(R.string.lens_magnification_pref_key),1);
-        return Math.max(storedValue,1);
+        int storedValue = preferences.getInt(getString(R.string.lens_magnification_pref_key), 1);
+        return Math.max(storedValue, 1);
     }
 
     private String getDirectoryNameFromPreferences() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(getString(R.string.megamovie_directory_name),"Megamovie_Images");
+        return preferences.getString(getString(R.string.megamovie_directory_name), "Megamovie_Images");
     }
-
-
-
-    private long getTotalitySpacing(long duration) {
-        int numTotalityCaptures = (int)(totalityDataBudget()/Config.RAW_SIZE);
-        long idealSpacing = (long)(duration/(float)numTotalityCaptures);
-        return Math.max(idealSpacing,Config.minRAWMargin);
-    }
-
-    private float totalityDataBudget() {
-        float beadsDataUsage = 2 * Config.JPEG_SIZE * Config.BEADS_DURATION /(float)Config.BEADS_SPACING;
-        return Config.DATA_BUDGET - beadsDataUsage;
-    }
-
-
 
     public void goToUploadActivity() {
         Intent intent = new Intent(this, UploadActivity.class);
@@ -271,7 +229,6 @@ implements MyTimer.MyTimerListener,
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-
 
 
     private void showNotInPathDialog() {
@@ -290,15 +247,12 @@ implements MyTimer.MyTimerListener,
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss a", Locale.US);
 
         formatter.setTimeZone(TimeZone.getDefault());
-        String   timeZoneDisplayName = TimeZone.getDefault().getDisplayName(true,TimeZone.SHORT,Locale.US);
-
-
-        return formatter.format(calendar.getTime());// + " " + timeZoneDisplayName;
+        return formatter.format(calendar.getTime());
     }
 
 
     private void giveAudioAlert() {
-                try {
+        try {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
             r.play();
@@ -310,13 +264,13 @@ implements MyTimer.MyTimerListener,
 
     @Override
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
-        Float duration = ((float)settings.exposureTime)/1000000;
+        Float duration = ((float) settings.exposureTime) / 1000000;
         String type = "jpg";
-        if(settings.shouldSaveRaw) {
+        if (settings.shouldSaveRaw) {
             type = "raw";
         }
 
-        Log.i("exposure",type + ": " + String.valueOf(duration));
+        Log.i("exposure", type + ": " + String.valueOf(duration));
 
         cameraFragment.takePhotoWithSettings(settings);
     }
@@ -330,11 +284,11 @@ implements MyTimer.MyTimerListener,
     @Override
     public void onSessionCompleted(CaptureSequenceSession session) {
         Log.i("CAPTURE", "session completed");
-        Toast.makeText(this,"SessionCompleted!",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "SessionCompleted!", Toast.LENGTH_LONG).show();
         finishedButton.setVisibility(View.VISIBLE);
         uploadButton.setVisibility(View.VISIBLE);
         mTimer.cancel();
-        progressTextView.setText(String.format("Congratulations! You captured %d images of the eclipse. You can upload them now or any time later on.",numCaptures));
+        progressTextView.setText(String.format("Congratulations! You captured %d images of the eclipse. You can upload them now or any time later on.", numCaptures));
         startTimeTextView.setVisibility(View.GONE);
 
 
@@ -355,11 +309,11 @@ implements MyTimer.MyTimerListener,
         boolean shouldUseJpeg = true;
         boolean shouldUseRaw = false;
 
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(duration,sensitivity,focusDistance,shouldUseRaw,shouldUseJpeg);
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(duration, sensitivity, focusDistance, shouldUseRaw, shouldUseJpeg);
 
-        Long startTime = Calendar.getInstance().getTimeInMillis() + 2000;
+        Long startTime = Calendar.getInstance().getTimeInMillis() + 6000;
         Long spacing = 500L;
-        CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(settings,spacing,startTime,1500L);
+        CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(settings, spacing, startTime, 10000L);
 
 
         return new CaptureSequence(interval);
