@@ -12,13 +12,10 @@ public class EclipsePath {
 
     // Number of sample point to calculate closest point in path of totality
     private static final int NUM_SAMPLE_POINTS = 10000;
-
     private static final double RADIUS_EARTH_KM = 6371;
-
     public static final int SOUTH_BOUNDARY = 0;
     public static final int CENTER_LINE = 1;
     public static final int NORTH_BOUNDARY = 2;
-
 
     // Polynomial coefficients for south boundary, center line, and north boundary of path of totality
     // for latitude as a function of longitude
@@ -48,7 +45,6 @@ public class EclipsePath {
             result += c[d] * Math.pow(t,d);
         }
 
-
         return result;
     }
 
@@ -58,7 +54,7 @@ public class EclipsePath {
         return new LatLng(lat,lng);
     }
 
-    // Formula for the distance (in km) between two points on the earth'SOUTH_BOUNDARY_COEFFS surface,
+    // Formula for the distance (in km) between two points on the earth's SOUTH_BOUNDARY_COEFFS surface,
     // travelling along a great circle (geodesic distance)
 
     public static double greatCircleDistance(LatLng p_1, LatLng p_2) {

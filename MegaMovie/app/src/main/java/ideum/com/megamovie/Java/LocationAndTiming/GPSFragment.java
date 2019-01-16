@@ -40,8 +40,6 @@ public class GPSFragment extends Fragment
     private LocationRequest mLocationRequest;
     private List<OnLocationChangedListener> locationListeners = new ArrayList<>();
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +91,6 @@ public class GPSFragment extends Fragment
         }
         return lastLocation;
     }
-
-
-
 
     @Override
     public void onConnected(Bundle bundle) {

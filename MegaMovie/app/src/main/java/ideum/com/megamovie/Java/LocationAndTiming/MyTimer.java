@@ -65,30 +65,10 @@ public class MyTimer {
     public void startTicking() {
         mService = Executors.newScheduledThreadPool(1);
 
-//        Runnable myRunnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.i("TAG", "Tick");
-//                for (MyTimerListener l : mListeners)
-//                    l.onTick();
-//            }
-//        };
 
         mService.scheduleAtFixedRate(mMyTimerListenerRunnable, 0, TICK_INTERVAL, TimeUnit.MILLISECONDS);
 
-//        if (mCountDownTimer != null) {
-//            mCountDownTimer.cancel();
-//        }
-//        mCountDownTimer = new CountDownTimer(COUNTDOWN_DURATION, TICK_INTERVAL) {
-//
-//                public void onTick(long millisUntilFinished) {
-//                    for(MyTimerListener l : mListeners)
-//                    l.onTick();
-//                }
-//
-//                public void onFinish() {
-//                }
-//            }.start();
+
     }
 
     public void cancel() {
