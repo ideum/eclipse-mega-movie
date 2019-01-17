@@ -119,12 +119,24 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        setUpCaptureSequenceSession();
+        if (mSession == null) {
+            setUpCaptureSequenceSession();
+        }
+        mTimer = new MyTimer();
+        mTimer.addListener(mSession);
+        mTimer.addListener(this);
+        mTimer.addListener(countdownFragment);
+        mTimer.startTicking();
+
+        mSession.start();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
+        if(mSession!= null) {
+            mSession.stop();
+        }
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
@@ -142,11 +154,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         mSession = new CaptureSequenceSession(sequence, this);
         mSession.addListener(this);
 
-        mTimer = new MyTimer();
-        mTimer.addListener(mSession);
-        mTimer.addListener(this);
-        mTimer.addListener(countdownFragment);
-        mTimer.startTicking();
+
     }
 
     private CaptureSequence createCaptureSequence() {

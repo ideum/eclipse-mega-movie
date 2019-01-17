@@ -43,7 +43,6 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public CaptureSequenceSession(CaptureSequence captureSequence, CameraController controller) {
         requestQueue = captureSequence.getRequestQueue();
         mCameraController = controller;
-        Log.i(TAG,"creating new session");
     }
 
     public void addListener(CaptureSessionCompletionListerner listener) {

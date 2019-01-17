@@ -7,9 +7,6 @@ import ideum.com.megamovie.Java.Application.Config;
 public class CaptureSequenceBuilder {
 
     public static CaptureSequence makeSequence(long c2Time,long c3Time,float magnification) {
-        if (Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE) {
-            return dummySequence(c2Time);
-        }
 
 
         c3Time = Math.max(c3Time,c2Time + Config.MIN_TOTALITY_DURATION);
@@ -54,22 +51,6 @@ public class CaptureSequenceBuilder {
         return new CaptureSequence(intervals);
     }
 
-    private static CaptureSequence dummySequence(long c2Time) {
-        Long duration = 5000000L;
-        int sensitivity = 60;
-        float focusDistance = 0f;
-        boolean shouldUseJpeg = true;
-        boolean shouldUseRaw = false;
-
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(duration, sensitivity, focusDistance, shouldUseRaw, shouldUseJpeg);
-
-        Long startTime = c2Time;// Calendar.getInstance().getTimeInMillis() + 6000;
-        Long spacing = 500L;
-        CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(settings, spacing, startTime, 10000L);
-
-
-        return new CaptureSequence(interval);
-    }
 
     private static long getTotalitySpacing(long duration) {
         int numTotalityCaptures = (int)(totalityDataBudget()/Config.RAW_SIZE);

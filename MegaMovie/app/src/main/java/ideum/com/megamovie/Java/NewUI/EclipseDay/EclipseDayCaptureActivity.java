@@ -29,6 +29,7 @@ import ideum.com.megamovie.Java.Application.UploadActivity;
 import ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequence;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequenceBuilder;
+import ideum.com.megamovie.Java.CameraControl.CaptureSequenceBuilderDummy;
 import ideum.com.megamovie.Java.CameraControl.CaptureSequenceSession;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProviderOffset;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimes;
@@ -135,7 +136,6 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         super.onResume();
         mTimer = new MyTimer();
         mTimer.addListener(this);
-        //mTimer.addListener(countdownFragment);
         mTimer.startTicking();
     }
 
@@ -201,9 +201,9 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         if (Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE) {
             return dummySequence();
         }
-
         float magnification = (float) getLensMagnificationFromPreferences();
-        return CaptureSequenceBuilder.makeSequence(c2Time, c3Time, magnification);
+        return Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE? CaptureSequenceBuilderDummy.makeSequence(c2Time) :
+        CaptureSequenceBuilder.makeSequence(c2Time, c3Time, magnification);
     }
 
 
