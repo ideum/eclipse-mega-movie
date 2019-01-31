@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="#000"
-            android:text="@string/eclipse_day_equipment_intro"
+            android:text="@string/"
             android:layout_marginTop="16dp"/>
 
 

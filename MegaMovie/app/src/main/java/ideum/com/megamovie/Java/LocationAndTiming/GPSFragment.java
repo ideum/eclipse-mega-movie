@@ -122,15 +122,24 @@ public class GPSFragment extends Fragment
         mLocationRequest.setPriority(locationRequestPriority);
     }
 
+
+    private Location mLocation;
+    private Location getAdjustedLocation() {
+        Location aLocation = new Location(mLocation);
+        if (Config.SHOULD_USE_DUMMY_LOCATION) {
+            aLocation.setLatitude(Config.DUMMY_LATITUDE);
+            aLocation.setLongitude(Config.DUMMY_LONGITUDE);
+        }
+
+        return aLocation;
+    }
+
     @Override
     public void onLocationChanged(Location location) {
-       // Toast.makeText(getActivity(),"location changed",Toast.LENGTH_SHORT).show();
-        if (Config.SHOULD_USE_DUMMY_LOCATION) {
-            location.setLatitude(Config.DUMMY_LATITUDE);
-            location.setLongitude(Config.DUMMY_LONGITUDE);
-        }
+      mLocation = location;
+
         for (OnLocationChangedListener listener : locationListeners) {
-            listener.onLocationChanged(location);
+            listener.onLocationChanged(getAdjustedLocation());
         }
     }
 

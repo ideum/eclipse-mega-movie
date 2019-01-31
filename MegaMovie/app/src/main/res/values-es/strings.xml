@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="safety_warning">Incluso una breve mirada al sol puede causar daños permanentes en los ojos. Eso también es cierto durante el primer y último fases de un eclipse cuando el disco solar está parcialmente cubierto. Así que mientras la luz tenue de un parcial El eclipse puede tentarlo, la única vez que puede ver el sol de manera segura es en el corto período llamado totalidad, cuando El sol está completamente cubierto por la luna.</string>
+    <string name="eclipse_info_section_title">¿Donde y cuando?</string>
+</resources>

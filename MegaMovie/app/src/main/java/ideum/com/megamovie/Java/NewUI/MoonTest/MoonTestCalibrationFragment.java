@@ -79,7 +79,7 @@ implements CustomNamable{
 //    }
 
     @Override
-    public String getTitle() {
-        return "Calibration";
+    public int getTitleId() {
+        return R.string.calibration_section_title;
     }
 }

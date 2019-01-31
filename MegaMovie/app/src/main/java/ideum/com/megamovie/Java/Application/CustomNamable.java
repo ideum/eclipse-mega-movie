@@ -5,6 +5,6 @@ package ideum.com.megamovie.Java.Application;
  */
 
 public interface CustomNamable {
-    public String getTitle();
+     int getTitleId();
 
 }

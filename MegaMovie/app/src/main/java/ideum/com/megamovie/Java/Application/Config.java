@@ -10,10 +10,9 @@ public class Config {
 
     //Used in EclipseTimeProvider
     public static final Boolean USE_DUMMY_TIME_C2 = true;
-    public static final Boolean USE_DUMMY_TIME_ALL_CONTACTS = false;
     public static long  DUMMY_C2_LEAD_TIME = 20000;
     // Used in EclipseDayCaptureActivity
-    public static final Boolean ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE = false;
+    public static final Boolean ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE = true;
 
     /* OTHER PARAMETERS */
 

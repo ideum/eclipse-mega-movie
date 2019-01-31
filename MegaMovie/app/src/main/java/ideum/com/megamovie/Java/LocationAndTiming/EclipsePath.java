@@ -19,12 +19,16 @@ public class EclipsePath {
 
     // Polynomial coefficients for south boundary, center line, and north boundary of path of totality
     // for latitude as a function of longitude
+//    private static final double[] SOUTH_BOUNDARY_COEFFS = {-5.5536e+01,-2.7494e-01,-1.2773e-03,-6.1105e-05,-3.8590e-07};
+//    private static final double[] CENTERLINE_COEFFS = {-6.7982e+01,-1.0794e+00,-2.0007e-02,-2.5639e-04,-1.1500e-06};
+//    private static final double[] NORTH_BOUNDARY_COEFFS = {1.6155e+01,4.1655e+00,1.0321e-01,1.0270e-03,3.8562e-06};
+
     private static final double[] SOUTH_BOUNDARY_COEFFS = {209.07217, 11.207175, 0.24183656, 0.0023871380, 1.1327374e-05, 2.1152977e-08};
     private static final double[] CENTERLINE_COEFFS = {195.41727, 10.557370, 0.23023880, 0.0022852060, 1.0882614e-05, 2.0380168e-08};
     private static final double[] NORTH_BOUNDARY_COEFFS = {182.12413, 9.9208717, 0.21882740, 0.0021844822, 1.0441281e-05, 1.9610047e-08};
 
-    private static final double minLongitude = -126.0;
-    private static final double maxLongitude = -78.00;
+    private static final double minLongitude = -126;//-72;
+    private static final double maxLongitude = -78;//-57;
 
     public static double getLatForLng(double lng,int boundary) {
        double[] coefficients = {};

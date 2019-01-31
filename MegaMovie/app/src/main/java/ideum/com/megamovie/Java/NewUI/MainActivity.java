@@ -84,9 +84,6 @@ public class MainActivity extends AppCompatActivity
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, eclipseTimeProvider).commit();
 
-
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -243,7 +240,8 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
 
         if (fragment instanceof CustomNamable) {
-            getSupportActionBar().setTitle(((CustomNamable) fragment).getTitle());
+            int titleId = ((CustomNamable) fragment).getTitleId();
+            getSupportActionBar().setTitle(getString(titleId));
         }
     }
 
@@ -323,7 +321,7 @@ public class MainActivity extends AppCompatActivity
 
         if (current instanceof CustomNamable) {
             CustomNamable cn = (CustomNamable) current;
-            getSupportActionBar().setTitle(cn.getTitle());
+            getSupportActionBar().setTitle(getString( cn.getTitleId()));
 
 
         }

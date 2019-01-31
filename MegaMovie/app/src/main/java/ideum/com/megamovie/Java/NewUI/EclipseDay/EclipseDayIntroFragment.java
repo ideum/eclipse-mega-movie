@@ -99,7 +99,7 @@ implements CustomNamable {
     }
 
     @Override
-    public String getTitle() {
-        return "Eclipse Image Capture";
+    public int getTitleId() {
+        return R.string.eclipse_day_intro_fragment_title;
     }
 }

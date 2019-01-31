@@ -173,8 +173,8 @@ public class EclipseInfoFragment extends Fragment
     }
 
     @Override
-    public String getTitle() {
-        return "Where and When?";
+    public int getTitleId() {
+        return R.string.eclipse_info_section_title;
     }
 
 

@@ -11,11 +11,9 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.EnumMap;
 import java.util.List;
 
-import ideum.com.megamovie.Java.Application.Config;
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.R;
 

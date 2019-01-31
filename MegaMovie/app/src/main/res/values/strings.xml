@@ -2,12 +2,14 @@
 
 
 
-    <string name="in_path_key">in path of totality</string>
-    <string name="c1_time_key">c1 time key</string>
-    <string name="c2_time_key">c2 time key</string>
+    <string name="in_path_key" translatable="false">in path of totality</string>
+    <string name="c1_time_key" translatable="false">c1 time key</string>
+    <string name="c2_time_key" translatable="false">c2 time key</string>
     <string name="mid_time_key">mid totality key</string>
-    <string name="c3_time_key">c3 time key</string>
-    <string name="c4_time_key">c4 time key</string>
+    <string name="c3_time_key" translatable="false">c3 time key</string>
+    <string name="c4_time_key" translatable="false">c4 time key</string>
+    <string name="current_lat_key" translatable="false">current lat key</string>
+    <string name="current_lng_key" translatable="false">current lng key</string>
 
     <!--Uploading-->
     <string name="privacy_agreement">I acknowledge that these photos and their locations will be part of a public database.</string>
@@ -17,7 +19,7 @@
     <string name="upload_intro">Once you have captured images of the eclipse, you can upload them here to the Megamovie Archive.
         This database will provide an invaluable tool for scientists studying our sun.</string>
 
-    <string name="session_id_key">session id key</string>
+    <string name="session_id_key" translatable="false">session id key</string>
 
     <string name="upload_notes">
     Please note, it may take several seconds for the upload to start after pressing the button. Some files are large, so the upload
@@ -26,29 +28,29 @@
 
 
 
-    <string name="sw3_identity_pool_id_bc">us-east-1:0245a165-48e2-48de-9735-9c0ad3260039</string>
-    <string name="sw_bucket_bc">megamovie</string>
+    <string name="sw3_identity_pool_id_bc" translatable="false">us-east-1:0245a165-48e2-48de-9735-9c0ad3260039</string>
+    <string name="sw_bucket_bc" translatable="false">megamovie</string>
 
-    <string name="sw3_identity_pool_id_js">us-east-1:0615fec8-4785-42f6-beae-917f0bdca55f</string>
-    <string name="sw_bucket_js">eclipse-megamovie</string>
+    <string name="sw3_identity_pool_id_js" translatable="false">us-east-1:0615fec8-4785-42f6-beae-917f0bdca55f</string>
+    <string name="sw_bucket_js" translatable="false">eclipse-megamovie</string>
 
 
     <!--Manifest-->
-    <string name="app_name">Eclipse Megamovie Mobile</string>
-    <string name="google_maps_key">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
+    <string name="app_name" translatable="false">Eclipse Megamovie Mobile</string>
+    <string name="google_maps_key" translatable="false">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_intro">IntroActivity</string>
     <string name="title_activity_settings">Settings</string>
 
 
     <!--Section Titles-->
-    <string name="eclipse_info_section_title">Where and When?</string>
     <string name="orientation_section_title">Orientation</string>
     <string name="about_section_title">About</string>
     <string name="gallery_section_title">Image Gallery</string>
     <string name="settings_section_title">My Eclipse</string>
     <string name="moon_test_section_title">Practice Mode</string>
     <string name="calibration_section_title">Calibration</string>
+
     <string name="capture_mode_section_title">Capture Mode</string>
     <string name="megamovie_section_title">Megamovie</string>
     <string name="credits_section_title">Credits</string>
@@ -115,7 +117,7 @@
         The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
         It tells you when and where to see the eclipse, how to aim your camera when the eclipse is about to start, and automatically controls your camera’s settings
         and shutter to take a series of photos during the event. All you’ll have to do is be ready and follow a few simple instructions when the time comes.\n\nThe
-        app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon. Go to Moon-test to try it out.
+        app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon or sun. Go to practice mode to try it out.
     </string>
     <string name="equipment_info_equipment">
         Holding a camera by hand can cause tiny vibrations that blur photos.
@@ -223,6 +225,8 @@
 
     <!--Eclipse Day-->
 
+    <string name="eclipse_day_intro_fragment_title">Eclipse Image Capture</string>
+
     <string name="eclipse_day_intro">The app can help you capture photos of the eclipse, and share them to the Megamovie Archive for scientific study.
         \n\nThe app will capture about 1GB worth of images, so make sure you have enough storage available on your phone.\n\nOnce you have entered Capture Mode,
     the app will give an audio alert 15 seconds before the start of totality reminding you to remove your solar filter.</string>
@@ -235,7 +239,7 @@
         cue to remove the filter 15 seconds before the start of totality.
     </string>
 
-    <string name="eclipse_day_equipment_intro">The app can help you set up your equipment. If you don\'t need help with this, you can go
+    <string name="equipment_intro">The app can help you set up your equipment. If you don\'t need help with this, you can go
         directly to Capture Mode.
         \n\nRemember to use a solar filter when pointing your lens. The app will remind you to remove it 15 seconds before the start of totality.</string>
 
@@ -332,5 +336,6 @@
 
     <string name="moon">moon</string>
     <string name="sun">sun</string>
+    <string name="eclipse_info_section_title">Where and When?</string>
 
 </resources>

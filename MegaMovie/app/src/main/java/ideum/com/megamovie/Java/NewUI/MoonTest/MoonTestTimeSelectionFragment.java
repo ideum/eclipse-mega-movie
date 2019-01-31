@@ -351,7 +351,7 @@ public class MoonTestTimeSelectionFragment extends Fragment
     }
 
     @Override
-    public String getTitle() {
-        return "Practice Mode";
+    public int getTitleId() {
+        return R.string.moon_test_section_title;
     }
 }

@@ -189,8 +189,8 @@ implements AdapterView.OnItemSelectedListener,
     }
 
     @Override
-    public String getTitle() {
-        return "Orientation";
+    public int getTitleId() {
+        return R.string.orientation_section_title;
     }
 
 
