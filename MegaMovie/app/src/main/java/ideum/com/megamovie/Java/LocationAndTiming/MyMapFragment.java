@@ -160,7 +160,6 @@ public class MyMapFragment extends Fragment
                 } else {
                     showLocationNotInPathToast();
                 }
-
             }
         });
 
@@ -293,7 +292,7 @@ public class MyMapFragment extends Fragment
         }
         double distanceKm = EclipsePath.distanceToPathOfTotality(currentLatLng);
         double distanceMiles = (0.621371) * distanceKm;
-        String toastMessage = String.format("You are %.0f miles (%.0f km) from the path of totality.\nGo to Phases to see the eclipse timing.",distanceMiles,distanceKm);
+        String toastMessage = String.format(getResources().getString(R.string.distance_from_path_toast),distanceMiles,distanceKm);
         Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG).show();
     }
 
@@ -303,12 +302,13 @@ public class MyMapFragment extends Fragment
         }
         double distanceKm = EclipsePath.greatCircleDistance(currentLatLng,plannedLatLng);
         double distanceMiles = (0.621371) * distanceKm;
-        String toastMessage = String.format("This location is in the path of totality! \nGo to Phases to see the eclipse timing.\nThis location is %.0f miles (%.0f km) away.",distanceMiles, distanceKm);
+        String message = getResources().getString(R.string.not_in_path_toast_1);
+        String toastMessage = String.format(message,distanceMiles, distanceKm);
         Toast.makeText(getContext(),toastMessage,Toast.LENGTH_LONG).show();
     }
 
     private void showLocationNotInPathToast() {
-        Toast.makeText(getContext(),"This location is not within the path of totality",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),getResources().getString(R.string.not_in_path_toast),Toast.LENGTH_SHORT).show();
     }
 
     @Override

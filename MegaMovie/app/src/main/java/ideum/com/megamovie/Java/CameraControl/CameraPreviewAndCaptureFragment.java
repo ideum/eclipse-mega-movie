@@ -70,7 +70,6 @@ import ideum.com.megamovie.R;
 
 public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         implements FragmentCompat.OnRequestPermissionsResultCallback
-        //ManualCamera
 {
 
     public static final boolean ALLOWS_RAW = true;
@@ -187,6 +186,41 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_camera_preview, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mTextureView = (TextureView) view.findViewById(R.id.preview_texture_view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        openBackgroundThread();
+
+        if (mTextureView.isAvailable()) {
+            setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            openCamera();
+        } else {
+            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        Log.i(TAG,"pausing camera");
+        closeCamera();
+        closeBackgroundThread();
+        super.onPause();
+    }
+
+
     private TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -355,38 +389,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_camera_preview, container, false);
-    }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mTextureView = (TextureView) view.findViewById(R.id.preview_texture_view);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        openBackgroundThread();
-
-        if (mTextureView.isAvailable()) {
-            setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-            openCamera();
-        } else {
-            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        Log.i(TAG,"pausing camera");
-        closeCamera();
-        closeBackgroundThread();
-        super.onPause();
-    }
 
     private void setupCamera(int width, int height) {
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);

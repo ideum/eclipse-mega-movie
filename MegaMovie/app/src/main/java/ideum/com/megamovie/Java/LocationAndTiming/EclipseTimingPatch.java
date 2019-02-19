@@ -18,7 +18,7 @@ public class EclipseTimingPatch {
     private double lngMax;
     private double latLngInterval;
     private int[] timeOffsets;
-    private static final int MILLSEC_PER_TIME_UNIT = 100;
+    private static final int MILLSEC_PER_TIME_UNIT = 1000;
 
 
     private int numCols() {

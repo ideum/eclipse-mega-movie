@@ -1,31 +1,31 @@
 <resources>
 
 
-
+    <string name="map">MAPA</string>
+    <string name="countdown">cuenta regresiva</string>
+    <string name="phases">Las fases</string>
+    <string name="not_in_path_toast">Esta ubicación no está dentro del camino de la totalidad.</string>
+    <string name="not_in_path_toast_1">Esta ubicación está en el camino de la totalidad!\n\nVe a Fases para ver el tiempo del eclipse.\n\nEsta ubicación está a% .0f millas (% .0f km) de distancia.</string>
+    <string name="distance_from_path_toast">Está a% .0f millas (% .0f km) del camino de la totalidad.\n\nVe a Fases para ver el tiempo del eclipse.</string>
     <string name="in_path_key" translatable="false">in path of totality</string>
     <string name="c1_time_key" translatable="false">c1 time key</string>
     <string name="c2_time_key" translatable="false">c2 time key</string>
-    <string name="mid_time_key">mid totality key</string>
+    <string name="mid_time_key" translatable="false">mid totality key</string>
     <string name="c3_time_key" translatable="false">c3 time key</string>
     <string name="c4_time_key" translatable="false">c4 time key</string>
     <string name="current_lat_key" translatable="false">current lat key</string>
     <string name="current_lng_key" translatable="false">current lng key</string>
 
     <!--Uploading-->
-    <string name="privacy_agreement">I acknowledge that these photos and their locations will be part of a public database.</string>
+    <string name="privacy_agreement">Reconozco que estas fotos y sus ubicaciones formarán parte de una base de datos pública.</string>
 
-    <string name="megamovie_directory_name">Megamovie_Images</string>
+    <string name="megamovie_directory_name">Imágenes_de_la_cámara_Eclipse</string>
 
-    <string name="upload_intro">Once you have captured images of the eclipse, you can upload them here to the Megamovie Archive.
-        This database will provide an invaluable tool for scientists studying our sun.</string>
+    <string name="upload_intro">Una vez que haya capturado imágenes del eclipse, puede subirlas aquí al Megamovie Archive. Esta base de datos proporcionará una herramienta invaluable para los científicos que estudian nuestro sol.</string>
 
     <string name="session_id_key" translatable="false">session id key</string>
 
-    <string name="upload_notes">
-    Please note, it may take several seconds for the upload to start after pressing the button. Some files are large, so the upload
-        may take a few minutes.
-    </string>
-
+    <string name="upload_notes">Tenga en cuenta que la carga puede tardar varios segundos en iniciarse después de presionar el botón. Algunos archivos son grandes, por lo que la carga puede tardar unos minutos.</string>
 
 
     <string name="sw3_identity_pool_id_bc" translatable="false">us-east-1:0245a165-48e2-48de-9735-9c0ad3260039</string>
@@ -38,304 +38,162 @@
     <!--Manifest-->
     <string name="app_name" translatable="false">Eclipse Megamovie Mobile</string>
     <string name="google_maps_key" translatable="false">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_intro">IntroActivity</string>
-    <string name="title_activity_settings">Settings</string>
 
 
     <!--Section Titles-->
-    <string name="orientation_section_title">Orientation</string>
-    <string name="about_section_title">About</string>
-    <string name="gallery_section_title">Image Gallery</string>
-    <string name="settings_section_title">My Eclipse</string>
-    <string name="moon_test_section_title">Practice Mode</string>
-    <string name="calibration_section_title">Calibration</string>
+    <string name="orientation_section_title">Orientación</string>
+    <string name="about_section_title">Acerca de</string>
+    <string name="gallery_section_title">galería de imágenes</string>
+    <string name="settings_section_title">Mi eclipse</string>
+    <string name="moon_test_section_title">Modo de práctica</string>
+    <string name="calibration_section_title">Calibración</string>
 
-    <string name="capture_mode_section_title">Capture Mode</string>
-    <string name="megamovie_section_title">Megamovie</string>
-    <string name="credits_section_title">Credits</string>
+    <string name="capture_mode_section_title">Modo de captura</string>
+    <string name="megamovie_section_title" translatable="false">Megamovie</string>
+    <string name="credits_section_title">Creditos</string>
 
     <!--Generated-->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
     <!--Intro Copy-->
 
-    <string name="intro_text">On August 21, 2017, a solar eclipse will be visible in North America. People in the narrow <b>path of totality</b>
-        will see the sun\'s disk completely covered by the moon. This app makes it easy
-        to capture images of the eclipse. Your images can also become part of an exciting citizen science project.</string>
-    <string name="intro_text_1">Everyone! This app does all the hard work of controlling your smartphone
-        camera to capture images of the eclipse at just the right times. You can use it with just your phone
-    or with an external lens and tripod to get even sharper images of this once-in-a-lifetime event.</string>
-    <string name="intro_text_2">The app is very easy to use. You just have to point your phone in the right direction during the eclipse
-    and the app takes the pictures for you. If you have an external lens and tripod, the app will help you set everything up
-    to get the best shots possible.</string>
-    <string name="sign_in_prompt">Sign in?</string>
+    <string name="welcome_title">Cámara eclipse 2019</string>
+    <string name="welcome_text">Ciencia ciudadana &amp; El archivo de imágenes solares de Megamovie.</string>
+    <string name="get_started">Empezar</string>
+    <string name="got_it">Lo tengo</string>
+    <string name="intro_text">El 2 de julio de 2019, un eclipse solar total será visible en América del Sur. La gente en el camino estrecho de la totalidad verá el disco del sol completamente cubierto por la luna. Esta aplicación hace que sea fácil ser parte de un emocionante proyecto de ciencia ciudadana y capturar excelentes imágenes de este increíble evento.</string>
+    <string name="intro_text_1">¡Todo el mundo! Esta aplicación hace todo el trabajo de controlar la cámara de su teléfono inteligente para capturar imágenes del eclipse en el momento justo. Puede usarlo solo con su teléfono o con una lente externa y un trípode para obtener imágenes aún más nítidas de este evento único en la vida.</string>
+    <string name="intro_text_2">La aplicación es muy fácil de usar. Solo tienes que apuntar tu teléfono en la dirección correcta durante el eclipse y la aplicación toma las fotos por ti. Si tiene una lente externa y un trípode, la aplicación lo ayudará a configurar todo para obtener las mejores tomas posibles.</string>
+    <string name="sign_in_prompt" translatable="false">Sign in?</string>
 
-    <string name="intro_title_0">Welcome to Megamovie Mobile</string>
-    <string name="intro_title_1">Who is this app for?</string>
-    <string name="intro_title_2">How do I use the app?</string>
+    <string name="intro_title_0">¡Bienvenido a Eclipse Camera 2019!</string>
+    <string name="intro_title_1">¿Para quién es esta aplicación?</string>
+    <string name="intro_title_2">¿Cómo uso la aplicación?</string>
 
     <!--Warning message-->
-    <string name="safety_warning_title">
-        Safety Warning
-    </string>
-    <string name="safety_warning">
-        Even a short glance at the sun can cause permanent eye damage. That’s also true during the first and last
-        phases of an eclipse when the sun’s disk is partially covered. So while the dimmer light of a partial
-        eclipse may tempt you, the only time you can safely view the sun is the short period called totality, when
-        the sun is completely covered by the moon.
-    </string>
+    <string name="safety_warning_title">Advertencia de seguridad</string>
 
     <!--When and Where Copy-->
-    <string name="distance_to_totality_format">You are %1$d kilometers from the path of totality.</string>
-    <string name="in_the_path_of_totality_string">You are in the path of totality!</string>
-    <string name="search_bar_hint">Eclipse viewing location?</string>
+    <string name="distance_to_totality_format">Estás a %1$d km de la ruta de la totalidad.</string>
+    <string name="in_the_path_of_totality_string">¡Estás en el camino de la totalidad!</string>
+    <string name="search_bar_hint">¿Eclipse viendo la ubicación?</string>
     <!--About Megamovie Mobile Copy-->
-    <string name="about_megamovie">About this app
-        \n\nThis app allows you to capture images of the solar eclipse on August 21, 2017.
-        It also lets you share your photos with scientists for a citizen-science project led by the Space Sciences Laboratory and Google.
-        Click <a href="https://eclipsemega.movie/">here</a> to learn more about the Megamovie Project. The Eclipse Megamovie Mobile app
-        was created by Ideum and the Space Sciences Laboratory at UC Berkeley.
-        \n\nThe app can capture valuable scientific information without additional equipment.
-        But you can obtain even better results with an external lens and tripod. If you already have this equipment or want to learn more,
-        use our built-in Eclipse Orientation Mode to customize the app.
-        \n\nIf you are using an external lens and tripod, the app will
-        help you focus the lens and point the camera in the right direction before the eclipse. You can practice by capturing images of the moon.
-
-    </string>
+    <string name="about_megamovie">La aplicación Eclipse Camera 2019 fue creada por Ideum, Inc. y el Laboratorio de Ciencias del Espacio de la Universidad de Berkeley.  Esta aplicación le permite capturar imágenes del eclipse solar el 2 de julio de 2019. La aplicación puede capturar información científica valiosa sin equipo adicional. Pero puede obtener incluso mejores resultados con una lente externa y un trípode. Si ya tiene este equipo o desea obtener más información, utilice nuestra Orientación Eclipse incorporada para personalizar la aplicación.  Si está utilizando una lente y un trípode externos, la aplicación tiene un modo de calibración que le ayudará a enfocar la lente y apuntar la cámara en la dirección correcta. Puedes practicar capturando imágenes de la luna.</string>
 
     <!--Orientation Copy-->
-    <string name="orientation_intro">
-        The Orientation mode helps you determine how best to use the app.
-        \n\nAnswer a few questions on the next screen to optimize your eclipse experience.
-    </string>
+    <string name="orientation_intro">El modo de orientación le ayuda a determinar la mejor manera de usar la aplicación. Responda algunas preguntas en la siguiente pantalla para optimizar su experiencia de eclipse.</string>
 
-    <string name="equipment_info_phone">
-        The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
-        It tells you when and where to see the eclipse, how to aim your camera when the eclipse is about to start, and automatically controls your camera’s settings
-        and shutter to take a series of photos during the event. All you’ll have to do is be ready and follow a few simple instructions when the time comes.\n\nThe
-        app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon or sun. Go to practice mode to try it out.
-    </string>
-    <string name="equipment_info_equipment">
-        Holding a camera by hand can cause tiny vibrations that blur photos.
-        This can be especially troublesome with astronomical images. Mounting your phone on a tripod is an easy way to improve your photos.
-        There are many kinds of tripods available for cell phones, including inexpensive ones made by Joby, Square Jellyfish, and Charger City.
-        Also, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens like those
-        made by Apexel, Hsini, and Neewer. We recommend using a lens with a magnification of at least 20x, although the app is
-        compatible with any lens. Lenses like these are very portable and can help you take great photos of many things in addition to the eclipse.
-        \n\nOnce you’ve decided on the equipment you’ll use, go to My Eclipse to enter your choice (you can change it at any time).
-        \n\nIf you’re using an especially high-powered lens, you might consider using a tracking-mount. A relatively compact and inexpensive choice
-        is the Star Adventurer made by Sky-Watcher.
-
-    </string>
-    <string name="equipment_info_dslr">
-        If you want to use a separate camera to photograph the eclipse, you can still use the eclipse map and countdown functions in the Megamovie Mobile app.
-
-        \n\nYou may also be interested in being an official volunteer to capture images for the Megamovie itself. To learn more, visit the <a href="https://eclipsemega.movie/">Megamovie Website</a>.
-    </string>
+    <string name="equipment_info_phone">La aplicación Megamovie Mobile está diseñada para ayudarte a usar tu teléfono con cámara para tomar las mejores imágenes posibles del eclipse solar. Le indica cuándo y dónde ver el eclipse, cómo enfocar su cámara cuando está a punto de comenzar, y controla automáticamente la configuración de la cámara y el obturador para tomar una serie de fotos durante el evento. Todo lo que tienes que hacer es estar listo y seguir unas sencillas instrucciones cuando llegue el momento. La aplicación también le brinda una forma de practicar antes del eclipse para que se sienta cómodo cuando llegue el gran día, tomando fotos de la luna o el sol. Ir al modo de práctica para probarlo.</string>
+    <string name="equipment_info_equipment">Sostener una cámara con la mano puede causar pequeñas vibraciones que borran las fotos. Esto puede ser especialmente problemático con las imágenes astronómicas. Montar su teléfono en un trípode es una manera fácil de mejorar sus fotos. Hay muchos tipos de trípodes disponibles para teléfonos celulares. Además, si bien su teléfono puede tener una gran cámara, es probable que las imágenes del sol sean pequeñas a menos que use una lente externa. Recomendamos utilizar una lente con una ampliación de al menos 20x, aunque la aplicación es compatible con cualquier lente. Lentes como estas son muy portátiles y pueden ayudarlo a tomar excelentes fotografías de muchas cosas además del eclipse. Si está utilizando un objetivo especialmente de alta potencia, podría considerar usar un montaje de seguimiento. Una vez que haya decidido el equipo que utilizará, vaya a la configuración de Mi Eclipse para ingresar su elección (puede cambiarlo en cualquier momento). Si está utilizando un objetivo especialmente de alta potencia, podría considerar usar un montaje de seguimiento.</string>
+    <string name="equipment_info_dslr">Si desea utilizar una cámara separada para fotografiar el eclipse, aún puede usar el mapa de eclipse y las funciones de cuenta atrás en la aplicación Eclipse Camera 2019. Puedes ver esas características aquí.</string>
 
 
     <!--Phases Copy-->
-    <string name="first_contact_dialog_message">This is when the edge of the moon first
-        begins to cover the sun. Even though the sun will start to get dimmer at this point,
-        it’s still not safe to look directly at the eclipse.\n</string>
-    <string name="second_contact_dialog_message">In a total solar eclipse, this is when
-        totality begins and the sun’s disk is completely covered by the moon. It is safe to remove
-        your eclipse glasses when you can no longer see the bright
-        sun through them. You can now see the sun’s hot, hazy outer atmosphere: the corona! \n</string>
-    <string name="mid_eclipse_dialog_message">
-        The sun’s corona, a halo of ionized gases, extends millions of miles into space.
-        At over 1 million degrees Fahrenheit, it is much hotter than the sun’s surface. You can only see the whole corona during a total eclipse,
-        such as this one.
-    </string>
-    <string name="third_contact_dialog_message">Third contact is the moment when totality
-        ends and the sun begins to emerge from the moon’s shadow. As soon as the bright sun appears, you must put your eclipse glasses back on.\n</string>
-    <string name="fourth_contact_dialog_message">This is the end of the eclipse.\n</string>
+    <string name="first_contact_dialog_message">Esto es cuando el borde de la luna comienza a cubrir el sol. A pesar de que el sol comenzará a oscurecerse en este punto, todavía no es seguro mirar directamente el eclipse.</string>
+    <string name="second_contact_dialog_message">En un eclipse total de sol, esto es cuando la totalidad comienza y el disco del Sol está completamente cubierto por la luna. Es seguro quitarse las gafas eclipse cuando ya no pueda ver el sol brillante a través de ellas. Ahora puedes ver la cálida y brumosa atmósfera exterior del sol: ¡la corona!</string>
+    <string name="mid_eclipse_dialog_message">La corona del sol, un halo de gases ionizados, se extiende millones de millas hacia el espacio. Con más de 1 millón de grados Fahrenheit, es mucho más caliente que la superficie del sol. Solo puedes ver toda la corona durante un eclipse total, como este.</string>
+    <string name="third_contact_dialog_message">El tercer contacto es el momento en que la totalidad termina y el sol comienza a emerger de la sombra de la luna. Tan pronto como aparezca el sol brillante, debes volver a ponerte las gafas eclipse.</string>
+    <string name="fourth_contact_dialog_message">Este es el fin del eclipse.</string>
 
 
     <!--Moon Test Copy-->
-    <string name="moon_test_intro">
-        By using the app to capture images of the moon or sun, you\'ll become familiar with how the
-        app works and be ready to use it to photograph the main event: the solar eclipse.
-        \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse. You
-        can find tutorial videos explaining how to use the equipment <a>here.</a>
-    </string>
-    <string name="remove_case">Do you use a phone case? Calibration accuracy may be improved if you remove it.</string>
+    <string name="moon_test_intro">Al utilizar la aplicación para capturar imágenes de la luna o el sol, se familiarizará con el funcionamiento de la aplicación y estará listo para usarla para fotografiar el evento principal: el eclipse solar. Esto será especialmente útil si va a utilizar una lente externa y un trípode durante el eclipse. Puede encontrar videos de tutoriales que explican cómo usar el equipo <a> aquí. </a></string>
+    <string name="remove_case">¿Utiliza una caja de teléfono? La precisión de la calibración puede mejorarse si la elimina.</string>
 
-    <string name="practice_mode_ftp_request">To help the developers of this app, you can upload practice images
-        to ftp://apollo.ssl.berkeley.edu/pub/megamovie/incoming</string>
-    <string name="practice_mode_target_selection_prompt">
-        Would you like to practice by taking pictures of the moon or sun? The conditions for these tests are quite different, so we recommend
-         practicing with both.
-    </string>
-    <string name="moon_test_select_time">
-        When would you like to start taking pictures of the moon or sun? We recommend choosing a time at least 20 minutes in the future. Note that the app will start taking pictures
-        3 minutes before your chosen time, and continue for 3 minutes afterwards.
-    </string>
+    <string name="practice_mode_ftp_request">Para ayudar a los desarrolladores de esta aplicación, puedes subir imágenes de práctica a ftp://apollo.ssl.berkeley.edu/pub/megamovie/incoming</string>
+    <string name="practice_mode_target_selection_prompt">¿Te gustaría practicar tomando fotos de la luna o el sol? Las condiciones para estas pruebas son bastante diferentes, por lo que recomendamos practicar con ambas.</string>
+    <string name="moon_test_select_time">¿Cuándo te gustaría empezar a tomar fotos de la luna o el sol? Recomendamos elegir un tiempo de al menos 20 minutos en el futuro. Tenga en cuenta que la aplicación comenzará a tomar fotografías 3 minutos antes de la hora elegida, y luego continuará durante 3 minutos.</string>
 
 
-    <string name="moon_test_calibration">
-        If you don\'t have any extra equipment like a tripod or external lens, you can now enter Capture Mode.
-        \n\nIf you have an external lens, the app can help you focus it correctly. If you are attaching your phone to
-        a tripod, the app can help you point the phone in the right direction.
-    </string>
+    <string name="moon_test_calibration">Si no tiene ningún equipo adicional como un trípode o una lente externa, ahora puede entrar en el Modo de captura. Si tienes una lente externa, la aplicación puede ayudarte a enfocarla correctamente. Si está conectando su teléfono a un trípode, la aplicación puede ayudarlo a apuntar el teléfono en la dirección correcta.</string>
 
-    <string name="moon_test_calibrate_lens_explanation">
-        If you are using an external lens, the app can help you focus it correctly.
-    </string>
+    <string name="moon_test_calibrate_lens_explanation">Si está utilizando una lente externa, la aplicación puede ayudarlo a enfocarla correctamente.</string>
 
-    <string name="moon_test_calibrate_direction_explanation">
-        If you aren\'t attaching your phone to a tripod, you can now enter Capture Mode.
-        \n\nIf you are attaching your phone to a tripod, the app can help you point the phone towards the location
-        where the sun/moon will be at the time you selected.
-    </string>
+    <string name="moon_test_calibrate_direction_explanation">Si no está conectando su teléfono a un trípode, ahora puede ingresar al modo de captura. Si está conectando su teléfono a un trípode, la aplicación puede ayudarlo a dirigir el teléfono hacia la ubicación donde estará el sol / la luna en el momento que seleccionó.</string>
 
-    <string name="moon_test_calibrate_direction">
-        Turn your phone in the direction of the red line. As you get closer to the correct direction,
-        the blue circle will get larger. The circle will turn green when your phone and tripod
-        are correctly calibrated. Then press Capture Mode.
-    </string>
-    <string name="moon_test_calibrate_lens">
-        Point the camera at an object that is more than 100 feet away, like a tree or a building.
-        Adjust the focus of the external lens until the object in the preview
-        appears crisp and in focus. You may adjust the brightness of the preview using the buttons
-        above.
-    </string>
-    <string name="moon_test_calibrate_compass_instructions">
-        Align the phone so the target appears in the center of the red crosshairs. Then press SET.
-    </string>
-    <string name="moon_test_point_phone_instructions">
-        Use the alignment guide to point the phone towards the predicted location of the moon/sun.
-        Then enter Capture Mode.
-    </string>
-    <string name="compass_calibration_intro">
-        The app will use your phone\'s compass to help point your camera in the right direction. To help
-        calibrate the compass, move your phone in a series of quick figure-eight movements until the compass
-        accuracy is high.
-    </string>
+    <string name="moon_test_calibrate_direction">Gire su teléfono en la dirección de la línea roja. A medida que te acerques a la dirección correcta, el círculo azul se agrandará. El círculo se volverá verde cuando su teléfono y trípode estén calibrados correctamente. A continuación, presione el modo de captura.</string>
+    <string name="moon_test_calibrate_lens">Apunte la cámara a un objeto que se encuentre a más de 100 pies de distancia, como un árbol o un edificio. Ajuste el enfoque de la lente externa hasta que el objeto en la vista previa aparezca nítido y enfocado. Puede ajustar el brillo de la vista previa utilizando los botones de arriba.</string>
+    <string name="moon_test_calibrate_compass_instructions">Alinee el teléfono para que el objetivo aparezca en el centro de la cruz roja. Luego presione SET.</string>
+    <string name="moon_test_point_phone_instructions">Use la guía de alineación para apuntar el teléfono hacia la ubicación prevista de la luna / sol. Luego ingrese el modo de captura.</string>
+    <string name="compass_calibration_intro">La aplicación usará la brújula de su teléfono para ayudar a apuntar su cámara en la dirección correcta. Para ayudar a calibrar la brújula, mueva su teléfono en una serie de movimientos rápidos en forma de ocho hasta que la precisión de la brújula sea alta.</string>
 
-    <string name="sun_test_warning">
-        Remember not to look directly at the sun during the test.
-        Photographing the sun requires a solar filter or eclipse glasses to cover the lens. If it is
-        a hot day, be careful not to leave your phone outside for too long.
-    </string>
+    <string name="sun_test_warning">Recuerde no mirar directamente al sol durante la prueba. Fotografiar el sol requiere un filtro solar o gafas de eclipse para cubrir la lente. Si es un día caluroso, tenga cuidado de no dejar el teléfono afuera por mucho tiempo.</string>
 
     <!--Eclipse Day-->
 
-    <string name="eclipse_day_intro_fragment_title">Eclipse Image Capture</string>
+    <string name="eclipse_day_intro_fragment_title">Captura de imagen de Eclipse</string>
 
-    <string name="eclipse_day_intro">The app can help you capture photos of the eclipse, and share them to the Megamovie Archive for scientific study.
-        \n\nThe app will capture about 1GB worth of images, so make sure you have enough storage available on your phone.\n\nOnce you have entered Capture Mode,
-    the app will give an audio alert 15 seconds before the start of totality reminding you to remove your solar filter.</string>
+    <string name="eclipse_day_intro">La aplicación puede ayudarte a capturar fotos del eclipse y compartirlas con el Archivo Megamovie para su estudio científico. La aplicación capturará aproximadamente 1 GB de imágenes, así que asegúrese de tener suficiente espacio de almacenamiento disponible en su teléfono. Una vez que haya ingresado al modo de captura, la aplicación emitirá una alerta de audio 15 segundos antes del inicio de la totalidad para recordarle que retire su filtro solar.</string>
 
-    <string name="check_for_updates">Please check you have the most recent version of the app the day before the eclipse!</string>
+    <string name="check_for_updates">¡Comprueba que tienes la versión más reciente de la aplicación el día antes del eclipse!</string>
 
-    <string name="eclipse_day_instructions">
-        The app will take pictures only during totality, when the sun is completely covered by the moon. During totality, you just not cover the
-        lens with a solar filter. However, before totality you will need a filter to protect your phone. The app will remind you with an audio
-        cue to remove the filter 15 seconds before the start of totality.
-    </string>
+    <string name="eclipse_day_instructions">La aplicación tomará fotografías solo durante la totalidad, cuando el sol esté completamente cubierto por la luna. Durante la totalidad, simplemente no cubras la lente con un filtro solar. Sin embargo, antes de la totalidad, necesitará un filtro para proteger su teléfono. La aplicación le recordará con una señal de audio para eliminar el filtro 15 segundos antes del inicio de la totalidad.</string>
 
-    <string name="equipment_intro">The app can help you set up your equipment. If you don\'t need help with this, you can go
-        directly to Capture Mode.
-        \n\nRemember to use a solar filter when pointing your lens. The app will remind you to remove it 15 seconds before the start of totality.</string>
+    <string name="equipment_intro">La aplicación puede ayudarte a configurar tu equipo. Si no necesita ayuda con esto, puede ir directamente al modo de captura. Recuerda usar un filtro solar al apuntar tu lente. La aplicación le recordará que lo retire 15 segundos antes del inicio de la totalidad.</string>
 
-    <string name="eclipse_day_skip_set_up">If you have already set up your equipment or would like to skip this step, you can go
-    directly to capture mode</string>
+    <string name="eclipse_day_skip_set_up">Si ya ha configurado su equipo o desea omitir este paso, puede ir directamente al modo de captura</string>
 
-    <string name="eclipse_day_no_equipment">
-        It looks you aren\'t using any extra equipment, so do not have to do any additional set-up.
-    </string>
+    <string name="eclipse_day_no_equipment">Parece que no está utilizando ningún equipo adicional, así que no tiene que hacer ninguna configuración adicional.</string>
 
-    <string name="eclipse_day_calibrate_direction_explanation">
-        If you are using a tripod, the app can help you point your phone towards the point
-        in the sky where the eclipse will occur.
-    </string>
+    <string name="eclipse_day_calibrate_direction_explanation">Si está utilizando un trípode, la aplicación puede ayudarlo a apuntar su teléfono hacia el punto en el cielo donde ocurrirá el eclipse.</string>
 
-    <string name="eclipse_day_calibrate_compass_instructions">
-        Align the phone so the sun appears in the center of the red crosshairs. Then press SET.
-    </string>
+    <string name="eclipse_day_calibrate_compass_instructions">Alinee el teléfono para que aparezca el sol en el centro de la cruz roja. Luego presione SET.</string>
 
     <!-- Strings related to Settings -->
-    <string name="user_mode_default">Phone only</string>
-    <string name="lens_default">No external lens</string>
-    <string name="lens_magnification_pref_key">lens magnification</string>
-    <string name="tripod_default">No tripod</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="planned_lat_key">planned latitude</string>
-    <string name="planned_lng_key">planned longitude</string>
-    <string name="timezone_id">timezone id</string>
-    <string name="phases_got_it_visible_key">got it visible</string>
-    <string name="test_time_year">test time year</string>
-    <string name="test_time_month">test time month</string>
-    <string name="test_time_day_of_month">test time day of month</string>
-    <string name="test_time_hour">moon test hour</string>
-    <string name="test_time_minute">moon test minute</string>
-    <string name="moon_test_time_mills">moon test mills</string>
-    <string name="sun_moon_test_target">sun moon test target</string>
-    <string name="calibration_method">calibration method</string>
-    <string name="camera_supported_key">camera supported key</string>
-    <string name="stored_north_key">stored north key</string>
-    <string name="stored_phone_coordinates_key">stored phone coordinates key</string>
-    <string name="stored_correction_matrix_key">stored correction matrix</string>
+    <string name="user_mode_default">Solo teléfono</string>
+    <string name="lens_default">Sin lente externa</string>
+    <string name="lens_magnification_pref_key">aumento de la lente</string>
+    <string name="tripod_default">Sin trípode</string>
+    <string name="title_activity_login" translatable="false">Sign in</string>
+    <string name="planned_lat_key" translatable="false">planned latitude</string>
+    <string name="planned_lng_key" translatable="false">planned longitude</string>
+    <string name="timezone_id" translatable="false">timezone id</string>
+    <string name="phases_got_it_visible_key" translatable="false">got it visible</string>
+    <string name="test_time_year" translatable="false">test time year</string>
+    <string name="test_time_month" translatable="false">test time month</string>
+    <string name="test_time_day_of_month" translatable="false">test time day of month</string>
+    <string name="test_time_hour" translatable="false">moon test hour</string>
+    <string name="test_time_minute" translatable="false">moon test minute</string>
+    <string name="moon_test_time_mills" translatable="false">moon test mills</string>
+    <string name="sun_moon_test_target" translatable="false">sun moon test target</string>
+    <string name="calibration_method" translatable="false">calibration method</string>
+    <string name="camera_supported_key" translatable="false">camera supported key</string>
+    <string name="stored_north_key" translatable="false">stored north key</string>
+    <string name="stored_phone_coordinates_key" translatable="false">stored phone coordinates key</string>
+    <string name="stored_correction_matrix_key" translatable="false">stored correction matrix</string>
 
-    <string name="no_tripod_warning">
-        If you plan to attach an external lens to your smartphone, you will also need to mount it
-        on a tripod to ensure it is kept steady and pointed in the right direction.
-    </string>
-    <string name="camera_not_supported_warning">Unfortunately, your phone\'s camera does not support manual control of its sensors,
-    so the app will be unable to capture images of the eclipse. You can still use the other features of the app, however, including
-    the eclipse map and eclipse timing information.</string>
+    <string name="no_tripod_warning">Si planea colocar una lente externa en su teléfono inteligente, también deberá montarla en un trípode para asegurarse de que se mantenga firme y apunte en la dirección correcta.</string>
+    <string name="camera_not_supported_warning">Desafortunadamente, la cámara de su teléfono no admite el control manual de sus sensores, por lo que la aplicación no podrá capturar imágenes del eclipse. Sin embargo, aún puede utilizar las otras funciones de la aplicación, incluido el mapa de eclipse y la información de tiempo de eclipse.</string>
 
     <!-- Strings related to login -->
-    <string name="login_rationale">
+    <string name="login_rationale" translatable="false">
         Signing in with your Google Account allows Megamovie Mobile to upload the eclipse images automatically to a server,
         to be added to the public-domain Megamovie archive. This repository, the first of its kind, will
         enable scientists and the public to make discoveries about the Moon and about the Sun.
     </string>
-    <string name="email_preference_key">email</string>
-    <string name="user_id_key">google user id</string>
+    <string name="email_preference_key" translatable="false">email</string>
+    <string name="user_id_key" translatable="false">google user id</string>
 
     <!--Shared Preferences-->
-    <string name="previously_started_key">previously started</string>
-    <string name="safety_warning_seen">safety warning seen</string>
+    <string name="previously_started_key" translatable="false">previously started</string>
+    <string name="safety_warning_seen" translatable="false">safety warning seen</string>
 
     <!--Credits-->
-    <string name="ideum_url">http://ideum.com/</string>
-    <string name="ideum_credit">
-    Ideum is a creative company focused on using emerging technologies to
-    design public installations and products that lead to meaningful and
-    compelling user experiences. We work with museums, Fortune 500 companies,
-    and other entities throughout North America and around the world. Our
-    firm provides design services, custom software development, interactive
-    displays, touch tables, and audio-visual (A/V) solutions.
-</string>
-    <string name="ssl_url">http://www.ssl.berkeley.edu/</string>
-    <string name="ssl_credit">
-        The Space Sciences Laboratory (SSL) is the UC system’s premier space sciences
-        research facility and one of the preeminent university laboratories in the country
-        for space research. Its primary goal is to foster outstanding research in space-related
-        sciences and to provide education for the next generation of space scientists.
-        Research at SSL is led by Berkeley faculty and SSL Senior Fellows, and focuses on
-        experiments and observations carried out in space, but also includes research with the
-        potential of leading to future space experiments, and the theoretical research that is
-        tied into their experimental and observational programs.
-    </string>
-    <string name="eaa_url">http://www.eclipseacrossamerica.org/</string>
-    <string name="eaa_credit">
-        Eclipse Across America, Inc. is a non-profit founded by filmmaker/director and eclipse
-        chaser Mark Bender. Its goal is to develop public awareness of the August 21, 2017 total solar eclipse,
-        from the science of how and why eclipses happen, to the different ways scientists, eclipse chasers,
-        and the general public can watch and enjoy this historic event.
-    </string>
+    <string name="ideum_url" translatable="false">http://ideum.com/</string>
+    <string name="ideum_credit">Ideum es una empresa creativa centrada en el uso de tecnologías emergentes para diseñar instalaciones y productos públicos que conducen a experiencias de usuario significativas y convincentes. Trabajamos con museos, compañías Fortune 500 y otras entidades en América del Norte y en todo el mundo. Nuestra firma ofrece servicios de diseño, desarrollo de software personalizado, pantallas interactivas, mesas táctiles y soluciones audiovisuales (A / V).</string>
+    <string name="ssl_url" translatable="false">http://www.ssl.berkeley.edu/</string>
+    <string name="ssl_credit">El Laboratorio de Ciencias Espaciales (SSL) es la principal instalación de investigación en ciencias espaciales de la UC y uno de los laboratorios universitarios más importantes del país para la investigación espacial. Su objetivo principal es fomentar la investigación sobresaliente en ciencias relacionadas con el espacio y proporcionar educación para la próxima generación de científicos espaciales. La investigación en SSL está dirigida por la facultad de Berkeley y SSL Senior Fellows, y se centra en los experimentos y observaciones realizados en el espacio, pero también incluye la investigación con el potencial de conducir a futuros experimentos espaciales, y la investigación teórica relacionada con su experiencia experimental y observacional. programas</string>
+    <string name="eaa_url" translatable="false">http://www.eclipseacrossamerica.org/</string>
+    <string name="eaa_credit" translatable="false">"         Eclipse Across America, Inc. is a non-profit founded by filmmaker/director and eclipse         chaser Mark Bender. Its goal is to develop public awareness of the August 21, 2017 total solar eclipse,         from the science of how and why eclipses happen, to the different ways scientists, eclipse chasers,         and the general public can watch and enjoy this historic event.     "</string>
 
-    <string name="pravacy_url"><a href='http://ideum.com/eclipse-megamovie-privacy-policy/'>Privacy Policy</a></string>
+    <string name="pravacy_url" translatable="false"><a href='http://ideum.com/eclipse-megamovie-privacy-policy/'>Privacy Policy</a></string>
 
-    <string name="moon">moon</string>
-    <string name="sun">sun</string>
-    <string name="eclipse_info_section_title">Where and When?</string>
+    <string name="moon">Luna</string>
+    <string name="sun">Dom</string>
+    <string name="eclipse_info_section_title">¿Donde y cuando?</string>
+    <string name="safety_warning">Incluso una breve mirada al sol puede causar daños permanentes en los ojos. Esto también es cierto durante las primeras y últimas fases de un eclipse cuando el disco solar está parcialmente cubierto. Entonces, mientras que la luz tenue de un eclipse parcial puede tentarte, la única vez que puedes ver el sol de manera segura es en el corto período llamado totalidad, cuando la luna cubre completamente el sol.</string>
 
 </resources>

@@ -78,14 +78,6 @@ implements CustomNamable{
             }
         });
 
-//        Button back = (Button) rootView.findViewById(R.id.back_button);
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainActivity mainActivity = (MainActivity) getActivity();
-//                mainActivity.loadFragment(OrientationIntroFragment.class);
-//            }
-//        });
 
         Button finish = (Button) rootView.findViewById(R.id.finish_button);
         finish.setOnClickListener(new View.OnClickListener() {

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor edit = prefs.edit();
             edit.putBoolean(getResources().getString(R.string.previously_started_key), true);
             edit.commit();
-            loadIntroActivity();
+            startActivity(new Intent(this,WelcomeActivity.class));
             finish();
             return;
         }
@@ -110,15 +110,12 @@ public class MainActivity extends AppCompatActivity
             showSafetyWarning();
         }
 
-
         getSupportFragmentManager().addOnBackStackChangedListener(this);
-
     }
 
     public void onAssistantButtonPressed(View view) {
 
         loadFragment(OrientationIntroFragment.class);
-
     }
 
     @Override
@@ -154,15 +151,9 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadIntroActivity() {
-        Intent intent = new Intent(this, IntroActivity.class);
-        startActivity(intent);
-    }
-
     private void loadAboutActivity() {
         Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -190,9 +181,6 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.upload_mode) {
             loadActivity(UploadActivity.class);
         }
-
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -222,9 +210,7 @@ public class MainActivity extends AppCompatActivity
         transaction.add(R.id.flContent, fragment, "current");
         transaction.addToBackStack(null);
         transaction.commit();
-
     }
-
 
     // When we load the initial fragment, we don't want to add the transaction to the back stack
     private void loadInitialFragment(Class c) {
@@ -284,7 +270,7 @@ public class MainActivity extends AppCompatActivity
         builder.setMessage(getResources()
                 .getString(R.string.safety_warning))
                 .setTitle(getResources().getString(R.string.safety_warning_title))
-                .setPositiveButton("Got It", null)
+                .setPositiveButton(getResources().getString(R.string.got_it), null)
                 .setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -321,8 +307,7 @@ public class MainActivity extends AppCompatActivity
 
         if (current instanceof CustomNamable) {
             CustomNamable cn = (CustomNamable) current;
-            getSupportActionBar().setTitle(getString( cn.getTitleId()));
-
+            getSupportActionBar().setTitle(getString(cn.getTitleId()));
 
         }
     }

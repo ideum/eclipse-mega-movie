@@ -5,8 +5,8 @@ public class Config {
 
     // Used in GPSFragment
     public static final boolean SHOULD_USE_DUMMY_LOCATION = true;
-    public static final double DUMMY_LATITUDE = 44.5646;// 36.209;
-    public static final double DUMMY_LONGITUDE = -123.2620;//-86.761;
+    public static final double DUMMY_LATITUDE = -35;// 44.5646;
+    public static final double DUMMY_LONGITUDE = -58;// -123.2620;
 
     //Used in EclipseTimeProvider
     public static final Boolean USE_DUMMY_TIME_C2 = true;

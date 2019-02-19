@@ -47,14 +47,13 @@ public class IntroActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         Button.OnClickListener,
         ViewPager.OnPageChangeListener,
-AlertDialog.OnDismissListener{
+        AlertDialog.OnDismissListener {
 
 
     private CameraHardwareCheckFragment mCameraHardwareCheckFragment;
 
 
     private static final int RC_SIGN_IN = 9001;
-
 
 
     /**
@@ -119,7 +118,7 @@ AlertDialog.OnDismissListener{
         signInButton.setVisibility(View.GONE);
 
         mCameraHardwareCheckFragment = new CameraHardwareCheckFragment();
-        getSupportFragmentManager().beginTransaction().add(mCameraHardwareCheckFragment,"hardwareCheckFragment").commit();
+        getSupportFragmentManager().beginTransaction().add(mCameraHardwareCheckFragment, "hardwareCheckFragment").commit();
 
     }
 
@@ -128,7 +127,7 @@ AlertDialog.OnDismissListener{
         builder.setMessage(getString(R.string.camera_not_supported_warning))
                 .setPositiveButton("Got It", null)
                 .setCancelable(false)
-        .setOnDismissListener(this);
+                .setOnDismissListener(this);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -142,7 +141,6 @@ AlertDialog.OnDismissListener{
             loadMainActivity();
         }
     }
-
 
 
     @Override
@@ -165,7 +163,6 @@ AlertDialog.OnDismissListener{
     }
 
 
-
     private void loadMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
 
@@ -173,7 +170,6 @@ AlertDialog.OnDismissListener{
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
 
 
         int currentPage = mViewPager.getCurrentItem();
@@ -245,15 +241,19 @@ AlertDialog.OnDismissListener{
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 
             TextView textView = (TextView) rootView.findViewById(R.id.section_text);
-            String[] content_strings = {"On August 21st, 2017, a solar eclipse will be visible in North America. People in the narrow <b>path of totality</b>\n" +
-                    "        will see the sun\'s disk completely covered by the moon. This app makes it easy\n" +
-                    "        to capture images of the eclipse. Your images can also become part of an exciting citizen science project.",
+            Resources res = getResources();
+            int[] textColors = {res.getColor(R.color.intro_text_color_1),
+                    res.getColor(R.color.intro_text_color_2),
+                    res.getColor(R.color.intro_text_color_3),
+                    res.getColor(R.color.intro_text_color_4)};
+
+            String[] content_strings = {getString(R.string.intro_text),
                     getString(R.string.intro_text_1),
                     getString(R.string.intro_text_2),
                     ""
             };
             textView.setText(Html.fromHtml(content_strings[sectionNumber]));
-            Resources res = getResources();
+            textView.setTextColor(textColors[sectionNumber]);
 
             TextView sectionTitle = (TextView) rootView.findViewById(R.id.section_title);
             String[] title_strings = {getString(R.string.intro_title_0),
@@ -261,19 +261,20 @@ AlertDialog.OnDismissListener{
                     getString(R.string.intro_title_2),
                     ""};
             sectionTitle.setText(title_strings[sectionNumber]);
-
+            sectionTitle.setTextColor(textColors[sectionNumber]);
             int[] colors = {res.getColor(R.color.intro_color_1),
                     res.getColor(R.color.intro_color_2),
                     res.getColor(R.color.intro_color_3),
                     res.getColor(R.color.intro_color_4)};
 
+
             rootView.setBackgroundColor(colors[sectionNumber]);
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.intro_image);
 
-            int[] images = {res.getIdentifier("megamovie_logo_padding", "drawable", getActivity().getPackageName()),
-                    res.getIdentifier("megamovie_intro_one", "drawable", getActivity().getPackageName()),
-                    res.getIdentifier("megamovie_intro_two_padding", "drawable", getActivity().getPackageName()),
+            int[] images = {res.getIdentifier("intro_1", "drawable", getActivity().getPackageName()),
+                    res.getIdentifier("intro_2", "drawable", getActivity().getPackageName()),
+                    res.getIdentifier("intro_3", "drawable", getActivity().getPackageName()),
                     0};
             imageView.setImageResource(images[sectionNumber]);
 

@@ -4,9 +4,6 @@
     android:layout_height="match_parent"
     android:background="#000"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="35dp"
-    android:paddingRight="35dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ideum.com.megamovie.Java.NewUI.IntroActivity$IntroFragment">
 
 
@@ -14,47 +11,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="110sp"
+        android:layout_marginBottom="0sp"
         android:orientation="vertical">
 
-        <FrameLayout
+        <ImageView
+            android:id="@+id/intro_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_weight="1">
-            <!--android:paddingBottom="45sp">-->
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/intro_1">
 
-            <ImageView
-                android:id="@+id/intro_image"
-                android:layout_width="match_parent"
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="35dp">
+
+            <TextView
+                android:id="@+id/section_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:src="@drawable/megamovie_intro_one">
+                android:text="Welcome to Megamovie Mobile"
+                android:textColor="#fff"
+                android:textSize="20sp" />
 
-            </ImageView>
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/section_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome to Megamovie Mobile"
-            android:textColor="#fff"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/section_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9sp"
-            android:fontFamily="Roboto"
-            android:lineSpacingExtra="4sp"
-            android:text="On August 21st, 2017, a total solar eclipse will traverse North America.
+            <TextView
+                android:id="@+id/section_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9sp"
+                android:fontFamily="Roboto"
+                android:lineSpacingExtra="4sp"
+                android:text="On August 21st, 2017, a total solar eclipse will traverse North America.
 This app allows you to capture images of the event and participate in an unprecendent citizen-science project."
-            android:textColor="#fff"
-            android:textSize="14dp" />
+                android:textColor="#fff"
+                android:textSize="14dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 

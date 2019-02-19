@@ -5,10 +5,14 @@
     <color name="colorAccent">#4285f4</color>
 
     <color name="intro_color_1">#000</color>
-    <color name="intro_color_2">#0f9D58</color>
+    <color name="intro_color_2">#E4EAF2</color>
     <color name="intro_color_3">#4481f8</color>
     <color name="intro_color_4">#fff</color>
 
+    <color name="intro_text_color_1">#fff</color>
+    <color name="intro_text_color_2">#3e3e3e</color>
+    <color name="intro_text_color_3">#fff</color>
+    <color name="intro_text_color_4">#fff</color>
     <color name="coming_soon_background">#000</color>
     <color name="centerline">#FF5478</color>
 

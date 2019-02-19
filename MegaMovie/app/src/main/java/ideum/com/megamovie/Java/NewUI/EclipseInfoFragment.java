@@ -212,11 +212,11 @@ public class EclipseInfoFragment extends Fragment
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "MAP";
+                    return getResources().getString(R.string.map);
                 case 1:
-                    return "COUNTDOWN";
+                    return getResources().getString(R.string.countdown);
                 case 2:
-                    return "PHASES";
+                    return getResources().getString(R.string.phases);
             }
             return null;
         }

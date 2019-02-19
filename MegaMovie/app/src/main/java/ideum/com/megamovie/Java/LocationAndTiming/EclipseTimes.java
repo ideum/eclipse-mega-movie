@@ -17,7 +17,7 @@ import java.util.List;
 public class EclipseTimes {
     public enum Phase {c1,c2,cm,c3,c4}
 
-    private static final String DATA_PATH = "timing_files";
+    private static final String DATA_PATH = "timing_files_argentina";
     private static final double LAT_LNG_INTERVAL = 0.01;
     public EnumMap<Phase, List<EclipseTimingPatch>> patches = new EnumMap<>(Phase.class);
 
@@ -52,8 +52,8 @@ public class EclipseTimes {
 
                 Double lngMin = -Double.valueOf(parts[1]);
                 Double lngMax = -Double.valueOf(parts[2]);
-                Double latMin = Double.valueOf(parts[3]);
-                Double latMax = Double.valueOf(parts[4]);
+                Double latMin = -Double.valueOf(parts[3]);
+                Double latMax = -Double.valueOf(parts[4]);
 
                 InputStream inputStream = assetManager.open(DATA_PATH + "/" + file);
                 int[] ints = readIntsFromStream(inputStream);
