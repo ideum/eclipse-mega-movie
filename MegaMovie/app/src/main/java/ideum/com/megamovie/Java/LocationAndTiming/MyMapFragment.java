@@ -62,7 +62,7 @@ public class MyMapFragment extends Fragment
 
 
     // Parameters for initial camera position and zoom level
-    private LatLng initialPoint = new LatLng(39.8, -102);
+    private LatLng initialPoint = new LatLng(-36, -58);
     private float initialZoom = 3.2f;
 
 

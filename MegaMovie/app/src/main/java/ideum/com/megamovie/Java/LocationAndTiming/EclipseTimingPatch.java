@@ -22,7 +22,7 @@ public class EclipseTimingPatch {
 
 
     private int numCols() {
-        return (int)((lngMax - lngMin)/latLngInterval) + 1;
+        return (int)((lngMax - lngMin)/latLngInterval);
     }
 
     public boolean contains(LatLng p) {
@@ -38,7 +38,6 @@ public class EclipseTimingPatch {
         int row = (int)((p.latitude - latMin)/latLngInterval);
         int col = (int)((p.longitude - lngMin)/latLngInterval);
         int index = (row * numCols() + col);
-       // Log.i("EclipseTimingPatch","row " + String.valueOf(row) + " col " + String.valueOf(col));
         if (index >= 0 && index < timeOffsets.length) {
             return getBaseTime() + MILLSEC_PER_TIME_UNIT * timeOffsets[index];
         } else {

@@ -5,8 +5,8 @@ public class Config {
 
     // Used in GPSFragment
     public static final boolean SHOULD_USE_DUMMY_LOCATION = true;
-    public static final double DUMMY_LATITUDE = -35;// 44.5646;
-    public static final double DUMMY_LONGITUDE = -58;// -123.2620;
+    public static final double DUMMY_LATITUDE = -35;//-34.668819;
+    public static final double DUMMY_LONGITUDE = -58;//-59.428295;
 
     //Used in EclipseTimeProvider
     public static final Boolean USE_DUMMY_TIME_C2 = true;
@@ -48,8 +48,8 @@ public class Config {
 
     // Used in EclipseTimingPatch
     public final static int ECLIPSE_BASETIME_YEAR = 2019;
-    public final static int ECLIPSE_BASETIME_MONTH = 8;
-    public final static int ECLIPSE_BASETIME_DAY = 21;
+    public final static int ECLIPSE_BASETIME_MONTH = 7;
+    public final static int ECLIPSE_BASETIME_DAY = 2;
     public final static int ECLIPSE_BASETIME_HOUR = 0;
     public final static int ECLIPSE_BASETIME_MINUTE = 0;
 
