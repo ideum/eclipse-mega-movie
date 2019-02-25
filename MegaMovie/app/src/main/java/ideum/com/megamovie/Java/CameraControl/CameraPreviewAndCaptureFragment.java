@@ -26,6 +26,7 @@ import android.location.Location;
 import android.media.ExifInterface;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaRecorder;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -33,6 +34,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -63,6 +65,7 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ideum.com.megamovie.Java.Application.Config;
 import ideum.com.megamovie.Java.LocationAndTiming.GPS;
 import ideum.com.megamovie.Java.LocationAndTiming.LocationProvider;
 import ideum.com.megamovie.R;
@@ -75,14 +78,13 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     public static final boolean ALLOWS_RAW = true;
     public static final boolean ALLOWS_JPEG = true;
     public static final String TAG = "PreviewCapture";
+    public static final String DEFAULT_DATA_DIRECTORY_NAME = "MegaMovieTestImages";
 
-    private static final String RAW_METADATA_FILENAME = "metadata_raw.txt";
-    private static final String JPEG_METADATA_FILENAME = "metadata_jpeg.txt";
-    private static final String DATA_DIRECTORY_NAME = "MegaMovie";
-    private String data_directory_name = "MegaMovieTestImages";
+    private String data_directory_name = DEFAULT_DATA_DIRECTORY_NAME;
 
+    private File mVideoFolder;
+    private String mVideoFileName;
 
-   // @Override
     public void setDirectoryName(String directoryName) {
         data_directory_name = directoryName;
     }
@@ -98,7 +100,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         return mLocationProvider.getLocation();
     }
 
-   // @Override
     public void setLocationProvider(LocationProvider provider) {
         mLocationProvider = provider;
     }
@@ -107,12 +108,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         listeners.add(listener);
     }
 
-
-    public void setCameraSettings(CaptureSequence.CaptureSettings settings) {
-        mSensorSensitivity = settings.sensitivity;
-        mFocusDistance = settings.focusDistance;
-        mDuration = settings.exposureTime;
-    }
 
     public int mSensorSensitivity = 60;
     public float mFocusDistance = 0;
@@ -131,17 +126,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         setPreviewRequest();
     }
 
-    public void incrementFocusDistance(float deltaDistance) {
-        mFocusDistance += deltaDistance;
-        setPreviewRequest();
-    }
-
-    public void decrementFocusDistance(float deltaDistance) {
-        if (mFocusDistance > 0) {
-            mFocusDistance -= deltaDistance;
-            setPreviewRequest();
-        }
-    }
 
     public void incrementSensitivity(int deltaSensitivity) {
         mSensorSensitivity += deltaSensitivity;
@@ -158,18 +142,21 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
     static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
+        ORIENTATIONS.append(Surface.ROTATION_0, 0);
+        ORIENTATIONS.append(Surface.ROTATION_90, 90);
+        ORIENTATIONS.append(Surface.ROTATION_180, 180);
+        ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
-    private int getOrientation(int rotation) {
-        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
+    private int sensorToDeviceRotations(int rotation) {
+        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 360) % 360;
     }
+
 
     private Size mPreviewSize;
-
+    private Size mVideoSize;
+    private MediaRecorder mMediaRecorder;
+    private int mTotalRotation;
     private String mCameraId;
     private TextureView mTextureView;
     private Surface mPreviewSurface;
@@ -197,6 +184,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mTextureView = (TextureView) view.findViewById(R.id.preview_texture_view);
+
     }
 
     @Override
@@ -387,9 +375,10 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         if (!hasAllPermissionsGranted()) {
             requestAllPermissions();
         }
+        createVideoFileFolder();
+
+        mMediaRecorder = new MediaRecorder();
     }
-
-
 
     private void setupCamera(int width, int height) {
         CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
@@ -403,9 +392,10 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                 StreamConfigurationMap map = cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
                 mPreviewSize = getPreferredPreviewSize(map.getOutputSizes(SurfaceTexture.class), width, height);
+                mVideoSize = getPreferredPreviewSize(map.getOutputSizes(MediaRecorder.class),width,height);
                 mCameraId = cameraID;
                 mSensorOrientation = cc.get(CameraCharacteristics.SENSOR_ORIENTATION);
-
+                mTotalRotation = sensorToDeviceRotations(mSensorOrientation);
                 List<Size> sortedSizes = Arrays.asList(map.getOutputSizes(ImageFormat.JPEG));
 
                 Collections.sort(sortedSizes, new Comparator<Size>() {
@@ -433,6 +423,10 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                             }
                     );
                 }
+
+
+
+
 
                 if (mJpegImageReader == null || mJpegImageReader.getAndRetain() == null) {
                     mJpegImageReader = new RefCountedAutoCloseable<>(
@@ -557,6 +551,12 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         }
     }
 
+    public void takePhoto() {
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true);
+        takePhotoWithSettings(settings);
+    }
+
+
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
         if(mCameraDevice == null) {
             return;
@@ -571,7 +571,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
             }
 
             int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
-            captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
+            captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, sensorToDeviceRotations(rotation));
             captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, settings.sensitivity);
             captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, settings.exposureTime);
             captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, settings.focusDistance);
@@ -603,6 +603,42 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
             e.printStackTrace();
         }
     }
+
+    private void startRecord(){
+        try {
+            setupMediaRecorder();
+            SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
+            surfaceTexture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            mPreviewSurface = new Surface(surfaceTexture);
+            Surface recordSurface = mMediaRecorder.getSurface();
+            mPreviewCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
+            mPreviewCaptureRequestBuilder.addTarget(mPreviewSurface);
+            mPreviewCaptureRequestBuilder.addTarget(recordSurface);
+
+            mCameraDevice.createCaptureSession(Arrays.asList(mPreviewSurface, recordSurface), new CameraCaptureSession.StateCallback() {
+                @Override
+                public void onConfigured(@NonNull CameraCaptureSession session) {
+                    try {
+                        session.setRepeatingRequest(
+                               mPreviewCaptureRequestBuilder.build(),null,null
+                       );
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onConfigureFailed(@NonNull CameraCaptureSession session) {
+
+                }
+            },mBackgroundHandler);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     private void createSession() {
         try {
@@ -678,6 +714,14 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         mBackgroundThread = null;
         mBackgroundHandler = null;
     }
+
+
+    private String getVideoFilePath(Context context) {
+        final File dir = context.getExternalFilesDir(null);
+        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
+                + System.currentTimeMillis() + ".mp4";
+    }
+
 
     private void dequeueAndSaveImage(TreeMap<Integer, ImageSaver.ImageSaverBuilder> pendingQueue,
                                      RefCountedAutoCloseable<ImageReader> reader) {
@@ -928,6 +972,34 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         String timeStamp = formatter.format(c.getTime()) + "_UTC";
         Log.i("timestamp",timeStamp);
         return timeStamp;
+    }
+
+    private void createVideoFileFolder() {
+        File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+        mVideoFolder = new File(movieFile,"EclipseVideos");
+        if(!mVideoFolder.exists()) {
+            mVideoFolder.mkdir();
+        }
+    }
+
+    private File createVideoFileName() throws IOException {
+        String timeStamp = generateTimeStamp();
+        String prepend = "VIDEO_" + timeStamp + "_";
+        File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder);
+        mVideoFileName = videoFile.getAbsolutePath();
+        return videoFile;
+    }
+
+    private void setupMediaRecorder() throws IOException {
+        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mMediaRecorder.setOutputFile(mVideoFileName);
+        mMediaRecorder.setVideoEncodingBitRate(1000000);
+        mMediaRecorder.setVideoFrameRate(Config.VIDEO_FRAMERATE);
+        mMediaRecorder.setVideoSize(mVideoSize.getWidth(),mVideoSize.getHeight());
+        mMediaRecorder.setVideoEncodingBitRate(MediaRecorder.VideoEncoder.H264);
+        mMediaRecorder.setOrientationHint(mTotalRotation);
+        mMediaRecorder.prepare();
     }
 
     /**

@@ -54,5 +54,8 @@ public class Config {
     public final static int ECLIPSE_BASETIME_MINUTE = 0;
 
 
+    public final static int VIDEO_FRAMERATE = 30;
+    public final static int VIDEO_ENCODING_BITRATE = 1000000;
+
 
 }
