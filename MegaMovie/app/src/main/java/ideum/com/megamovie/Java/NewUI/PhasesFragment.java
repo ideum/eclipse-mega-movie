@@ -168,23 +168,23 @@ public class PhasesFragment extends Fragment {
         switch (event) {
             case c1:
                 caption = getResources().getString(R.string.first_contact_dialog_message);
-                title = "First Contact";
+                title = getResources().getString(R.string.first_contact);
                 break;
             case c2:
                 caption = getResources().getString(R.string.second_contact_dialog_message);
-                title = "Second Contact";
+                title = getResources().getString(R.string.second_contact);
                 break;
             case cm:
                 caption = getResources().getString(R.string.mid_eclipse_dialog_message);
-                title = "Totality";
+                title = getResources().getString(R.string.mid_eclipse);
                 break;
             case c3:
                 caption = getResources().getString(R.string.third_contact_dialog_message);
-                title = "Third Contact";
+                title = getResources().getString(R.string.third_contact);
                 break;
             case c4:
                 caption = getResources().getString(R.string.fourth_contact_dialog_message);
-                title = "Fourth Contact";
+                title = getResources().getString(R.string.fourth_contact);
 
                 break;
         }
@@ -192,7 +192,7 @@ public class PhasesFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(caption)
                 .setTitle(title)
-                .setPositiveButton("Got It", null)
+                .setPositiveButton(getResources().getString(R.string.got_it), null)
                 .setCancelable(true);
 
         AlertDialog dialog = builder.create();
@@ -206,11 +206,11 @@ public class PhasesFragment extends Fragment {
         if (!isAdded()) {
             return;
         }
-        String s1 = "First Contact: " + getContactTimeString(c1Mills);
-        String s2 = "Second Contact: " + getContactTimeString(c2Mills);
-        String sm = "Mid Eclipse: " + getContactTimeString(cmMills);
-        String s3 = "Third Contact: " + getContactTimeString(c3Mills);
-        String s4 = "Fourth Contact: " + getContactTimeString(c4Mills);
+        String s1 = getResources().getString(R.string.first_contact) + ": " + getContactTimeString(c1Mills);
+        String s2 = getResources().getString(R.string.second_contact) + ": " + getContactTimeString(c2Mills);
+        String sm = getResources().getString(R.string.mid_eclipse) + ": " + getContactTimeString(cmMills);
+        String s3 = getResources().getString(R.string.third_contact) + ": " + getContactTimeString(c3Mills);
+        String s4 = getResources().getString(R.string.fourth_contact) + ": " + getContactTimeString(c4Mills);
 
 
         if (c1TextView != null) {
@@ -235,20 +235,6 @@ public class PhasesFragment extends Fragment {
         }
     }
 
-//
-//    private String timeOfDayString(Long mills) {
-//        if (mills == null) {
-//            return "";
-//        }
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(mills);
-//        DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
-//
-//        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-//
-//
-//        return formatter.format(calendar.getTime());
-//    }
 
     private String getTimeZoneId() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -267,7 +253,7 @@ public class PhasesFragment extends Fragment {
         String timeZoneDisplayName = "";
         if (timeZoneId != null) {
             formatter.setTimeZone(TimeZone.getTimeZone(timeZoneId));
-            timeZoneDisplayName = TimeZone.getTimeZone(timeZoneId).getDisplayName(true, TimeZone.SHORT, Locale.US);
+            timeZoneDisplayName = TimeZone.getTimeZone(timeZoneId).getDisplayName();// getDisplayName(true, TimeZone.SHORT, Locale.US);
         }
 
 

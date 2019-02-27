@@ -1,6 +1,6 @@
 <resources>
 
-
+    <string name="next">SIGUIENTE</string>
     <string name="map">MAPA</string>
     <string name="countdown">cuenta regresiva</string>
     <string name="phases">Las fases</string>
@@ -47,7 +47,7 @@
     <string name="settings_section_title">Mi eclipse</string>
     <string name="moon_test_section_title">Modo de práctica</string>
     <string name="calibration_section_title">Calibración</string>
-
+    <string name="upload_section_title">Carga de datos</string>
     <string name="capture_mode_section_title">Modo de captura</string>
     <string name="megamovie_section_title" translatable="false">Megamovie</string>
     <string name="credits_section_title">Creditos</string>
@@ -63,7 +63,7 @@
     <string name="welcome_title">Cámara eclipse 2019</string>
     <string name="welcome_text">Ciencia ciudadana &amp; El archivo de imágenes solares de Megamovie.</string>
     <string name="get_started">Empezar</string>
-    <string name="got_it">Lo tengo</string>
+    <string name="got_it">LO TENGO</string>
     <string name="intro_text">El 2 de julio de 2019, un eclipse solar total será visible en América del Sur. La gente en el camino estrecho de la totalidad verá el disco del sol completamente cubierto por la luna. Esta aplicación hace que sea fácil ser parte de un emocionante proyecto de ciencia ciudadana y capturar excelentes imágenes de este increíble evento.</string>
     <string name="intro_text_1">¡Todo el mundo! Esta aplicación hace todo el trabajo de controlar la cámara de su teléfono inteligente para capturar imágenes del eclipse en el momento justo. Puede usarlo solo con su teléfono o con una lente externa y un trípode para obtener imágenes aún más nítidas de este evento único en la vida.</string>
     <string name="intro_text_2">La aplicación es muy fácil de usar. Solo tienes que apuntar tu teléfono en la dirección correcta durante el eclipse y la aplicación toma las fotos por ti. Si tiene una lente externa y un trípode, la aplicación lo ayudará a configurar todo para obtener las mejores tomas posibles.</string>
@@ -80,9 +80,28 @@
     <string name="distance_to_totality_format">Estás a %1$d km de la ruta de la totalidad.</string>
     <string name="in_the_path_of_totality_string">¡Estás en el camino de la totalidad!</string>
     <string name="search_bar_hint">¿Eclipse viendo la ubicación?</string>
+    <string name="days">DIAS</string>
+    <string name="hours">HORAS</string>
+    <string name="minutes">MINUTOS</string>
+    <string name="seconds">SEGUNDOS</string>
+    <string name="right_on_time">Justo a tiempo</string>
+    <string name="phases_prompt">Recuerda cada contacto durante el eclipse.</string>
+    <string name="first_contact">Primer contacto</string>
+    <string name="first_contact_blurb">El comienzo del eclipse.</string>
+    <string name="second_contact">Segundo contacto</string>
+    <string name="second_contact_blurb">El comienzo de la totalidad.</string>
+    <string name="mid_eclipse">Totalidad: </string>
+    <string name="mid_eclipse_blurb">El medio del eclipse.</string>
+    <string name="third_contact">Tercer contacto</string>
+    <string name="third_contact_blurb">El fin de la totalidad.</string>
+    <string name="fourth_contact">Cuarto contacto</string>
+    <string name="fourth_contact_blurb">El fin del eclipse.</string>
+    <string name="learn_more">APRENDE MÁS</string>
+
     <!--About Megamovie Mobile Copy-->
     <string name="about_megamovie">La aplicación Eclipse Camera 2019 fue creada por Ideum, Inc. y el Laboratorio de Ciencias del Espacio de la Universidad de Berkeley.  Esta aplicación le permite capturar imágenes del eclipse solar el 2 de julio de 2019. La aplicación puede capturar información científica valiosa sin equipo adicional. Pero puede obtener incluso mejores resultados con una lente externa y un trípode. Si ya tiene este equipo o desea obtener más información, utilice nuestra Orientación Eclipse incorporada para personalizar la aplicación.  Si está utilizando una lente y un trípode externos, la aplicación tiene un modo de calibración que le ayudará a enfocar la lente y apuntar la cámara en la dirección correcta. Puedes practicar capturando imágenes de la luna.</string>
-
+    <string name="photo_credits">Créditos fotográficos</string>
+    <string name="photo_credits_text">Fotos en la sección de Fases de Lorenzo Comolli y Alessandro Gambaro</string>
     <!--Orientation Copy-->
     <string name="orientation_intro">El modo de orientación le ayuda a determinar la mejor manera de usar la aplicación. Responda algunas preguntas en la siguiente pantalla para optimizar su experiencia de eclipse.</string>
 
@@ -100,7 +119,8 @@
 
 
     <!--Moon Test Copy-->
-    <string name="moon_test_intro">Al utilizar la aplicación para capturar imágenes de la luna o el sol, se familiarizará con el funcionamiento de la aplicación y estará listo para usarla para fotografiar el evento principal: el eclipse solar. Esto será especialmente útil si va a utilizar una lente externa y un trípode durante el eclipse. Puede encontrar videos de tutoriales que explican cómo usar el equipo <a> aquí. </a></string>
+    <string name="optimize_your_eclipse_photography">Optimiza tu eclipse de fotografía.</string>
+    <string name="moon_test_intro">Al utilizar la aplicación para capturar imágenes de la luna o el sol, se familiarizará con el funcionamiento de la aplicación y estará listo para usarla para fotografiar el evento principal: el eclipse solar. </string>
     <string name="remove_case">¿Utiliza una caja de teléfono? La precisión de la calibración puede mejorarse si la elimina.</string>
 
     <string name="practice_mode_ftp_request">Para ayudar a los desarrolladores de esta aplicación, puedes subir imágenes de práctica a ftp://apollo.ssl.berkeley.edu/pub/megamovie/incoming</string>
@@ -187,7 +207,7 @@
     <string name="ssl_url" translatable="false">http://www.ssl.berkeley.edu/</string>
     <string name="ssl_credit">El Laboratorio de Ciencias Espaciales (SSL) es la principal instalación de investigación en ciencias espaciales de la UC y uno de los laboratorios universitarios más importantes del país para la investigación espacial. Su objetivo principal es fomentar la investigación sobresaliente en ciencias relacionadas con el espacio y proporcionar educación para la próxima generación de científicos espaciales. La investigación en SSL está dirigida por la facultad de Berkeley y SSL Senior Fellows, y se centra en los experimentos y observaciones realizados en el espacio, pero también incluye la investigación con el potencial de conducir a futuros experimentos espaciales, y la investigación teórica relacionada con su experiencia experimental y observacional. programas</string>
     <string name="eaa_url" translatable="false">http://www.eclipseacrossamerica.org/</string>
-    <string name="eaa_credit" translatable="false">"         Eclipse Across America, Inc. is a non-profit founded by filmmaker/director and eclipse         chaser Mark Bender. Its goal is to develop public awareness of the August 21, 2017 total solar eclipse,         from the science of how and why eclipses happen, to the different ways scientists, eclipse chasers,         and the general public can watch and enjoy this historic event.     "</string>
+    <string name="eaa_credit" translatable="true">"Eclipse Across America, Inc. es una organización sin fines de lucro fundada por el cineasta / director y el cazador de eclipse Mark Bender. Su objetivo es desarrollar la conciencia pública sobre el eclipse total de sol del 21 de agosto de 2017, desde la ciencia de cómo y por qué suceden los eclipses, hasta las diferentes formas en que los científicos, los cazadores de eclipse y el público en general pueden ver y disfrutar de este evento histórico. "</string>
 
     <string name="pravacy_url" translatable="false"><a href='http://ideum.com/eclipse-megamovie-privacy-policy/'>Privacy Policy</a></string>
 
@@ -195,5 +215,36 @@
     <string name="sun">Dom</string>
     <string name="eclipse_info_section_title">¿Donde y cuando?</string>
     <string name="safety_warning">Incluso una breve mirada al sol puede causar daños permanentes en los ojos. Esto también es cierto durante las primeras y últimas fases de un eclipse cuando el disco solar está parcialmente cubierto. Entonces, mientras que la luz tenue de un eclipse parcial puede tentarte, la única vez que puedes ver el sol de manera segura es en el corto período llamado totalidad, cuando la luna cubre completamente el sol.</string>
+    <string name="calibrate_your_compass">Calibre su brújula</string>
+    <string name="compass_accuracy">Precisión de la brújula</string>
+    <string name="high">alto</string>
+    <string name="low">bajo</string>
+    <string name="medium">medio</string>
+    <string name="unreliable">no fidedigno</string>
+    <string name="cant_tell_accuracy">no puedo decir la exactitud</string>
+    <string name="date">Fecha</string>
+    <string name="time">Hora</string>
+    <string name="select">Seleccionar</string>
+    <string name="test_time_not_set_alert">Por favor, establezca una hora y fecha para la prueba</string>
+    <string name="test_time_in_future_alert">Programe su prueba por lo menos 5 minutos en el futuro.</string>
+    <string name="calibrate_lens">Calibrar lente</string>
+    <string name="calibrate_direction">Calibrar la dirección</string>
+    <string name="capture_mode">Modo de captura</string>
+    <string name="dimmer">menos brillante</string>
+    <string name="done">hecho</string>
+    <string name="brighter">mas brillante</string>
+    <string name="set">establecer</string>
+    <string name="solar_filter_warning">Asegúrese de que su lente está cubierta con un filtro solar.</string>
+    <string name="images_captured">Imagen capturada</string>
+    <string name="test_congrats_message">¡Felicidades! Capturaste %d imágenes. Puedes encontrarlos en un nuevo álbum en tu aplicación de fotos.</string>
+    <string name="test_time_start">Tiempo de prueba de inicio</string>
+    <string name="test_time_alert">Su examen está programado para ocurrir en</string>
+    <string name="finish">terminar</string>
+    <string name="photographing_the_eclipse">Fotografiando el eclipse</string>
+    <string name="how_will_you_photograph_the_eclipse">¿Cómo capturarás el eclipse?</string>
+    <string name="only_my_phone">solo mi teléfono</string>
+    <string name="my_phone_with_peripheral_equipment">Mi teléfono con equipo periférico.</string>
+    <string name="a_dslr_camera">una cámara réflex digital</string>
+    <string name="what_equipment_will_you_use">¿Qué equipo utilizarás para fotografiar el eclipse?</string>
 
 </resources>

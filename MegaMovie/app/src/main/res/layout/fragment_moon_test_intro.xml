@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#70000000"
-            android:text="Optimize your eclipse photography"
+            android:text="@string/optimize_your_eclipse_photography"
             android:textSize="16sp" />
 
         <TextView
@@ -36,12 +36,7 @@
             android:text="@string/moon_test_intro"
             android:layout_marginTop="24dp"/>
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/remove_case"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:lineSpacingExtra="4dp"/>-->
+
 
         <Button
             android:id="@+id/start_moon_test"
@@ -54,20 +49,10 @@
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
             android:background="@color/colorPrimary"
-            android:text="Get Started"/>
+            android:text="@string/get_started"/>
 
     </LinearLayout>
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|center_horizontal"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:textSize="12dp"-->
-        <!--android:text="@string/practice_mode_ftp_request"-->
-        <!--/>-->
 
 
 

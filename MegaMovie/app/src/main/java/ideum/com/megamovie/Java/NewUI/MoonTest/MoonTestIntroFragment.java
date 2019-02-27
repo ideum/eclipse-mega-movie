@@ -66,10 +66,12 @@ implements CustomNamable{
         mCameraHardwareCheckFragment = new CameraHardwareCheckFragment();
         getChildFragmentManager().beginTransaction().add(mCameraHardwareCheckFragment,"hardwareCheckFragment").commit();
 
-        String bodyString ="By using the app to capture images of the moon or sun, you'll become familiar with how the\n" +
-                "        app works and be ready to use it to photograph the main event: the solar eclipse.\n" +
-                "        \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse. You\n" +
-                "        can find detailed explanations of how to use this equipment in these <a href=\"https://www.youtube.com/watch?v=VhWOx7eW-bI&feature=youtu.be\">video tutorials.</a>";
+//        String bodyString ="By using the app to capture images of the moon or sun, you'll become familiar with how the\n" +
+//                "        app works and be ready to use it to photograph the main event: the solar eclipse.\n" +
+//                "        \n\nThis will be especially helpful if you will be using an external lens and tripod during the eclipse. You\n" +
+//                "        can find detailed explanations of how to use this equipment in these <a href=\"https://www.youtube.com/watch?v=VhWOx7eW-bI&feature=youtu.be\">video tutorials.</a>";
+
+        String bodyString = getString(R.string.moon_test_intro);
 
         TextView body = rootView.findViewById(R.id.body);
         body.setText(Html.fromHtml(bodyString));

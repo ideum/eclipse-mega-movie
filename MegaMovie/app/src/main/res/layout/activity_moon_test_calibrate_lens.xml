@@ -29,13 +29,13 @@
                     android:id="@+id/set_moon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dimmer"
+                    android:text="@string/dimmer"
                     android:onClick="dim"/>
                 <Button
                     android:id="@+id/set_sun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="brighter"
+                    android:text="@string/brighter"
                     android:onClick="brighten"/>
 
 
@@ -55,7 +55,8 @@
             android:id="@+id/done_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Done"
+            android:text="@string/done"
+            android:textAllCaps="true"
             android:background="@color/colorPrimary"
             android:textColor="#fff"
             android:layout_marginBottom="24dp"

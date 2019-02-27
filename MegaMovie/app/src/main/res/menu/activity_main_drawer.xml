@@ -11,13 +11,13 @@
         <item
             android:id="@+id/eclipse_day"
             android:icon="@drawable/ic_camera_gray_24dp"
-            android:title="Eclipse Day Image Capture"
+            android:title="@string/eclipse_day_intro_fragment_title"
             />
 
         <item
             android:id="@+id/upload_mode"
             android:icon="@drawable/ic_file_upload_gray_24dp"
-            android:title="Data Upload"
+            android:title="@string/upload_section_title"
             android:enabled="true"/>
 
         <item
@@ -36,36 +36,10 @@
             android:icon="@drawable/ic_list_gray_24dp"
             android:title="@string/settings_section_title" />
 
-        <!--<item-->
-            <!--android:id="@+id/calibration_mode"-->
-            <!--android:icon="@drawable/ic_filter_center_focus_gray_24dp"-->
-            <!--android:title="@string/calibration_section_title"-->
-            <!--android:enabled="true"/>-->
-        <!--<item-->
-            <!--android:id="@+id/capture_mode"-->
-            <!--android:icon="@drawable/ic_camera_gray_24dp"-->
-            <!--android:title="@string/capture_mode_section_title"-->
-            <!--android:enabled="true"/>-->
-
-
-
         <item
             android:id="@+id/about_eclipse_app"
             android:icon="@drawable/ic_info_gray_24dp"
             android:title="@string/about_section_title" />
-        <!--<item-->
-            <!--android:id="@+id/gallery"-->
-            <!--android:icon="@drawable/ic_camera_roll_24dp"-->
-            <!--android:title="@string/gallery_section_title"-->
-            <!--app:actionLayout="@layout/coming_soon"-->
-            <!--android:enabled="false"/>-->
-        <!--<item-->
-            <!--android:id="@+id/eclipse_megamovie"-->
-            <!--android:icon="@drawable/ic_movie_gray_24dp"-->
-            <!--android:title="@string/megamovie_section_title"-->
-            <!--app:actionLayout="@layout/coming_soon"-->
-            <!--android:enabled="false"/>-->
-
 
     </group>
 

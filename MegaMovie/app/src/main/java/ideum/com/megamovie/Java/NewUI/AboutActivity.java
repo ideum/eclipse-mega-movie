@@ -27,7 +27,7 @@ public class AboutActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("About");
+        getSupportActionBar().setTitle(getString(R.string.about_section_title));
 
         TextView aboutText = (TextView) findViewById(R.id.about_text);
         aboutText.setMovementMethod(LinkMovementMethod.getInstance());

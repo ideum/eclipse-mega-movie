@@ -96,7 +96,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
         Date testTimeDate = new Date(testTime);
         SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
-        String testTimeString = "Test time start: " + timeFormatter.format(testTimeDate);
+        String testTimeString = getString(R.string.test_time_start) + ": " + timeFormatter.format(testTimeDate);
 
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd HH:mm a");
@@ -227,7 +227,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         if (progressTextView == null) {
             return;
         }
-        progressTextView.setText("Images Captured: " + String.valueOf(numCaptures) + "/" + String.valueOf(totalNumCaptures));
+        progressTextView.setText(getString(R.string.images_captured) + ": " + String.valueOf(numCaptures) + "/" + String.valueOf(totalNumCaptures));
     }
 
     @Override
@@ -253,7 +253,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         testTimeTextView.setVisibility(View.GONE);
         finishButton.setVisibility(View.VISIBLE);
 
-        String message = String.format("Congratulations! You captured %d images. You can find them in a new album in your photo app.", numCaptures);
+        String message = String.format(getString(R.string.test_congrats_message), numCaptures);
         progressTextView.setText(message);
     }
 }

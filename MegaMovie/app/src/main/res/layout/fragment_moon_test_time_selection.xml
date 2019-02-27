@@ -46,7 +46,7 @@
                     android:gravity="left"
                     android:textColor="#000"
                     android:textSize="18dp"
-                    android:text="Date" />
+                    android:text="@string/date" />
 
                 <Button
                     android:id="@+id/choose_date_button"
@@ -55,7 +55,7 @@
                     android:layout_marginTop="8dp"
                     android:background="#0000"
                     android:gravity="left"
-                    android:text="Select"
+                    android:text="@string/select"
                     android:textColor="#000"
 
                     android:textSize="18sp" />
@@ -73,7 +73,7 @@
                     android:gravity="left"
                     android:textColor="#000"
                     android:textSize="18dp"
-                    android:text="Time" />
+                    android:text="@string/time" />
 
                 <Button
                     android:id="@+id/choose_time_button"
@@ -82,7 +82,7 @@
                     android:layout_marginTop="8dp"
                     android:background="#0000"
                     android:gravity="left"
-                    android:text="Select"
+                    android:text="@string/select"
                     android:textColor="#000"
                     android:textSize="18dp" />
             </LinearLayout>
@@ -102,31 +102,6 @@
             android:text="@string/practice_mode_target_selection_prompt"
             android:textColor="#000" />
 
-
-
-        <!--<RadioGroup-->
-        <!--android:id="@+id/radio_sun_moon"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_gravity="left"-->
-        <!--android:layout_marginLeft="30dp"-->
-        <!--android:layout_marginTop="20dp">-->
-        <!--<RadioButton-->
-        <!--android:id="@+id/moon_radio_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Moon Test"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:checked="false"/>-->
-        <!--<RadioButton-->
-        <!--android:id="@+id/sun_radio_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Sun Test"-->
-        <!--android:checked="false"-->
-        <!--/>-->
-        <!--</RadioGroup>-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -143,7 +118,8 @@
                 android:background="#0598ff"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="moon"
+                android:text="@string/moon"
+                android:textAllCaps="true"
                 android:textColor="#fff"
                 android:textSize="30dp" />
 
@@ -155,7 +131,8 @@
                 android:background="#ff6b05"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="sun"
+                android:text="@string/sun"
+                android:textAllCaps="true"
                 android:textColor="#fff"
                 android:textSize="30dp" />
 

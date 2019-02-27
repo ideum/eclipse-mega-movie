@@ -23,6 +23,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:textColor="#fff"
-        android:text="next"/>
+        android:text="@string/next"/>
 
 </FrameLayout>

@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginLeft="32dp"
-                    android:text="Eclipse Orientation"
+                    android:text="@string/orientation_section_title"
                     android:textColor="#ffffff"
                     android:textSize="24dp" />
             </FrameLayout>
@@ -65,7 +65,8 @@
             android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
             android:elevation="0dp"
             android:fontFamily="Roboto"
-            android:text="NEXT"
+            android:textAllCaps="true"
+            android:text="@string/next"
             android:textColor="#6E6E6E"
             android:textSize="14sp" />
 

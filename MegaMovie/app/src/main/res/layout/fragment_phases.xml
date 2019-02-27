@@ -29,7 +29,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Right on Time"
+                    android:text="@string/right_on_time"
                     android:textColor="@color/colorPrimary"
                     android:textSize="21dp"
                     android:textStyle="bold" />
@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="9dp"
-                    android:text="Remember each contact during the eclipse"
+                    android:text="@string/phases_prompt"
                     android:textColor="#000"
                     android:textSize="12sp" />
 
@@ -49,7 +49,7 @@
                     android:layout_gravity="left"
                     android:layout_marginLeft="-21dp"
                     android:background="#0000"
-                    android:text="GOT IT"
+                    android:text="@string/got_it"
 
                     android:textColor="@color/colorPrimary" />
 
@@ -89,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="22dp"
-                            android:text="First Contact:"
+                            android:text="@string/first_contact"
                             android:textColor="#fff"
                             android:textSize="24sp" />
 
@@ -98,7 +98,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="27dp"
                             android:layout_marginLeft="16dp"
-                            android:text="The beginning of the eclipse"
+                            android:text="@string/first_contact_blurb"
                             android:textColor="#fff"
                             android:textSize="14sp" />
 
@@ -106,7 +106,7 @@
                             android:id="@+id/learn_more_c1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="LEARN MORE"
+                            android:text="@string/learn_more"
                             android:textColor="#fff"
                             android:layout_margin="16dp"
                             />
@@ -143,7 +143,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="22dp"
-                            android:text="Second Contact: "
+                            android:text="@string/second_contact"
                             android:textColor="#fff"
                             android:textSize="24sp" />
 
@@ -152,7 +152,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="27dp"
                             android:layout_marginLeft="16dp"
-                            android:text="The beginning of totality"
+                            android:text="@string/second_contact_blurb"
                             android:textColor="#fff"
                             android:textSize="14sp" />
 
@@ -160,7 +160,7 @@
                             android:id="@+id/learn_more_c2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="LEARN MORE"
+                            android:text="@string/learn_more"
                             android:textColor="#fff"
                             android:layout_margin="16dp"
                             />
@@ -196,7 +196,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="22dp"
-                            android:text="Totality: "
+                            android:text="@string/mid_eclipse"
                             android:textColor="#fff"
                             android:textSize="24sp" />
 
@@ -205,7 +205,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="27dp"
                             android:layout_marginLeft="16dp"
-                            android:text="The middle of the eclipse"
+                            android:text="@string/mid_eclipse_blurb"
                             android:textColor="#fff"
                             android:textSize="14sp" />
 
@@ -213,7 +213,7 @@
                             android:id="@+id/learn_more_cm"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="LEARN MORE"
+                            android:text="@string/learn_more"
                             android:textColor="#fff"
                             android:layout_margin="16dp"
                             />
@@ -250,7 +250,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="22dp"
-                            android:text="Third Contact:"
+                            android:text="@string/third_contact"
                             android:textColor="#fff"
                             android:textSize="24sp" />
 
@@ -259,7 +259,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="27dp"
                             android:layout_marginLeft="16dp"
-                            android:text="The end of totality"
+                            android:text="@string/third_contact_blurb"
                             android:textColor="#fff"
                             android:textSize="14sp" />
 
@@ -267,7 +267,7 @@
                             android:id="@+id/learn_more_c3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="LEARN MORE"
+                            android:text="@string/learn_more"
                             android:textColor="#fff"
                             android:layout_margin="16dp"
                             />
@@ -303,7 +303,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="22dp"
-                            android:text="Fourth Contact:"
+                            android:text="@string/fourth_contact"
                             android:textColor="#fff"
                             android:textSize="24sp" />
 
@@ -312,7 +312,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="27dp"
                             android:layout_marginLeft="16sp"
-                            android:text="The end of the eclipse"
+                            android:text="@string/fourth_contact_blurb"
                             android:textColor="#fff"
                             android:textSize="14dp" />
 
@@ -320,7 +320,7 @@
                             android:id="@+id/learn_more_c4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="LEARN MORE"
+                            android:text="@string/learn_more"
                             android:textColor="#fff"
                             android:layout_margin="16dp"
                             />

@@ -19,7 +19,7 @@
         android:fontFamily="Roboto"
         android:textSize="24dp"
         android:textColor="#000"
-        android:text="Photographing the Eclipse"
+        android:text="@string/photographing_the_eclipse"
         />
 
     <TextView
@@ -28,7 +28,7 @@
         android:fontFamily="Roboto"
         android:textSize="16sp"
         android:textColor="#7A000000"
-        android:text="How will you capture the eclipse?"
+        android:text="@string/how_will_you_photograph_the_eclipse"
 
         />
         <TextView
@@ -38,7 +38,7 @@
         android:layout_marginTop="24dp"
         android:textSize="14sp"
         android:textColor="#000"
-        android:text="What equipment will you use to photograph the eclipse?"/>
+        android:text="@string/what_equipment_will_you_use"/>
 
     <Button
         android:id="@+id/only_my_phone_button"
@@ -49,7 +49,7 @@
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
         android:background="@color/colorPrimary"
-        android:text="Only my phone"/>
+        android:text="@string/only_my_phone"/>
 
     <Button
         android:id="@+id/with_equipment_button"
@@ -60,7 +60,7 @@
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
         android:background="@color/colorPrimary"
-        android:text="My phone with peripheral equipment"/>
+        android:text="@string/my_phone_with_peripheral_equipment"/>
 
     <Button
         android:id="@+id/DSLR_camera_button"
@@ -71,7 +71,7 @@
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
         android:background="@color/colorPrimary"
-        android:text="A DSLR camera"/>
+        android:text="@string/a_dslr_camera"/>
 
     </LinearLayout>
 
@@ -81,23 +81,12 @@
         android:orientation="horizontal"
         android:layout_gravity="bottom"
         android:background="#EEEEEE">
-        <!--<Button-->
-            <!--android:id="@+id/back_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="BACK"-->
-            <!--android:textSize="14sp"-->
-            <!--android:fontFamily="Roboto"-->
-            <!--android:drawableLeft="@drawable/ic_chevron_left_gray_24dp"-->
-            <!--android:textColor="#6E6E6E"-->
-            <!--android:background="#00000000"-->
-            <!--android:elevation="0dp"-->
-            <!--android:layout_gravity="left"/>-->
+
         <Button
             android:id="@+id/finish_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FINISH"
+            android:text="@string/finish"
             android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
             android:background="#00000000"
             android:textSize="14sp"

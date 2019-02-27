@@ -20,7 +20,6 @@ public class MoonTestPointingActivity extends AppCompatActivity {
     private CalibrateDirectionFragment calibrateDirectionFragment;
 
     private Planet target;
-    private int calibrationMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +67,6 @@ public class MoonTestPointingActivity extends AppCompatActivity {
         setTarget(planet);
     }
 
-//    private void setCalibrationMethodFromSettings() {
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        int method = preferences.getInt(getString(R.string.calibration_method), 0);
-//        setCalibrationMethod(method);
-//    }
-
-//    private void setCalibrationMethod(int method) {
-//        calibrationMethod = method;
-//        calibrateDirectionFragment.useMethod(method);
-//        updateUI();
-//    }
 
     private void setTarget(Planet planet) {
         target = planet;
@@ -104,7 +92,6 @@ public class MoonTestPointingActivity extends AppCompatActivity {
                 || dayOfMonth == -1) {
             return null;
         }
-        //setTestTimeString(hours,minutes);
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);

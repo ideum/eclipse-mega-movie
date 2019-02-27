@@ -32,7 +32,7 @@
             android:paddingLeft="5dp"
             android:textAllCaps="false"
             android:textSize="20dp"
-            android:text="Calibrate Lens"/>
+            android:text="@string/calibrate_lens"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -54,7 +54,7 @@
             android:paddingLeft="5dp"
             android:textAllCaps="false"
             android:textSize="20dp"
-            android:text="Calibrate Direction"/>
+            android:text="@string/calibrate_direction"/>
 
 
 
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="@color/colorPrimary"
-            android:text="Capture Mode"
+            android:text="@string/capture_mode"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
             android:paddingLeft="5dp"

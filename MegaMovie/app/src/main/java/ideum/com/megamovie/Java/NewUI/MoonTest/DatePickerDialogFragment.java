@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import ideum.com.megamovie.R;
 
@@ -32,6 +33,8 @@ public class DatePickerDialogFragment extends DialogFragment
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Locale locale = getResources().getConfiguration().locale;
+        Locale.setDefault(locale);
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);

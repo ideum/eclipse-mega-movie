@@ -17,6 +17,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.services.securitytoken.model.GetSessionTokenRequest;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -116,10 +118,7 @@ public class MoonTestTimeSelectionFragment extends Fragment
             showTimeNotSetAlert();
             return;
         }
-        if (!checkTargetSet()) {
-            showTargetNotSetAlert();
-            return;
-        }
+
 
         if (!checkTimeGreaterThanLead()) {
             showNeedMoreLeadTimeAlert();
@@ -136,8 +135,8 @@ public class MoonTestTimeSelectionFragment extends Fragment
 
     private void showTimeNotSetAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Please set a time and date for the test")
-                .setPositiveButton("Got It", null)
+        builder.setMessage(getString(R.string.test_time_not_set_alert))
+                .setPositiveButton(getString(R.string.got_it), null)
                 .setCancelable(true);
 
         AlertDialog dialog = builder.create();
@@ -146,28 +145,20 @@ public class MoonTestTimeSelectionFragment extends Fragment
 
     private void showNeedMoreLeadTimeAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Please schedule your test at least 5 minutes in the future.")
-                .setPositiveButton("Got It", null)
+        builder.setMessage(getString(R.string.test_time_in_future_alert))
+                .setPositiveButton(getString(R.string.got_it), null)
                 .setCancelable(true);
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private void showTargetNotSetAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Please select either the sun or moon as a target.")
-                .setPositiveButton("Got It", null)
-                .setCancelable(true);
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 
     private void showSunTestAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(getString(R.string.sun_test_warning))
-                .setPositiveButton("Got It", null)
+                .setPositiveButton(getString(R.string.got_it), null)
                 .setCancelable(true);
 
         AlertDialog dialog = builder.create();
@@ -213,14 +204,14 @@ public class MoonTestTimeSelectionFragment extends Fragment
         if (dateString != null) {
             chooseDateButton.setText(dateString);
         } else {
-            chooseDateButton.setText("Select");
+            chooseDateButton.setText(getString(R.string.select));
         }
 
         String timeString = targetTimeStringFromSettings();
         if (timeString != null) {
             chooseTimeButton.setText(timeString);
         } else {
-            chooseTimeButton.setText("Select");
+            chooseTimeButton.setText(getString(R.string.select));
         }
     }
 
@@ -345,7 +336,7 @@ public class MoonTestTimeSelectionFragment extends Fragment
         updateUI();
         String timeToTest = timeToTestString();
         if (timeToTest != null) {
-            String message = "Your test is scheduled to occur in " + timeToTestString() + ".";
+            String message = getString(R.string.test_time_alert) + " " + timeToTestString() + ".";
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
     }

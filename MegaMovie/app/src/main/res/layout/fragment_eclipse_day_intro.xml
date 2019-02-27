@@ -20,16 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#000"
-            android:text="Eclipse Image Capture"
+            android:text="@string/eclipse_day_intro_fragment_title"
             android:textSize="24dp" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/subheader"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="#70000000"-->
-            <!--android:text="Capture the Eclipse"-->
-            <!--android:textSize="16dp" />-->
 
         <TextView
             android:id="@+id/body"
@@ -51,7 +44,7 @@
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
             android:background="@color/colorPrimary"
-            android:text="Get Started"/>
+            android:text="@string/get_started"/>
 
 
 

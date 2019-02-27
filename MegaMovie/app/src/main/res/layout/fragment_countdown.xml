@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="DAYS"
+                android:text="@string/days"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
                 android:textStyle="bold" />
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="HOURS"
+                android:text="@string/hours"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
                 android:textStyle="bold" />
@@ -132,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="MINUTES"
+                android:text="@string/minutes"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
                 android:textStyle="bold" />
@@ -172,7 +172,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="SECONDS"
+                android:text="@string/seconds"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12dp"
                 android:textStyle="bold" />
