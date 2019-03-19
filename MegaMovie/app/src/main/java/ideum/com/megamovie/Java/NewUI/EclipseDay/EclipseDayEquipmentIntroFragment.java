@@ -8,10 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.NewUI.MainActivity;
 import ideum.com.megamovie.R;
 
-public class EclipseDayEquipmentIntroFragment extends Fragment {
+public class EclipseDayEquipmentIntroFragment extends Fragment implements CustomNamable {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,5 +46,10 @@ public class EclipseDayEquipmentIntroFragment extends Fragment {
 
     public void goToCaptureMode() {
         ((MainActivity) getActivity()).loadActivity(EclipseDayCaptureActivity.class);
+    }
+
+    @Override
+    public int getTitleId() {
+        return R.string.eclipse_day_intro_fragment_title;
     }
 }

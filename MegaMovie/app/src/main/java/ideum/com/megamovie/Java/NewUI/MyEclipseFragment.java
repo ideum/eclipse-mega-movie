@@ -2,6 +2,7 @@ package ideum.com.megamovie.Java.NewUI;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -28,10 +29,10 @@ public class MyEclipseFragment extends PreferenceFragment {
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
             if (stringValue.equals("true")) {
-                stringValue = "yes";
+                stringValue = preference.getContext().getString(R.string.yes);
             }
             if (stringValue.equals("false")) {
-                stringValue = "no";
+                stringValue = preference.getContext().getString(R.string.no);
             }
             if(preference.equals(tripod_preference)) {
                showNoTripodWarning(preference,value);
@@ -69,7 +70,7 @@ public class MyEclipseFragment extends PreferenceFragment {
             Context context = preference.getContext();
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage(context.getResources().getString(R.string.no_tripod_warning))
-                    .setPositiveButton("Got It", null)
+                    .setPositiveButton(preference.getContext().getString(R.string.got_it), null)
                     .setCancelable(true);
             AlertDialog dialog = builder.create();
             dialog.show();

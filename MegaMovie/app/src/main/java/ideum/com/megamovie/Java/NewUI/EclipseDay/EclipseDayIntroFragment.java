@@ -45,9 +45,9 @@ implements CustomNamable {
         });
 
         if(checkIfInPath()) {
-            Toast.makeText(getActivity(),"You are in the path of totality!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getString(R.string.in_path_alert),Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity(),"You are not currently in the path of totality!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getString(R.string.not_in_path_warning),Toast.LENGTH_SHORT).show();
         }
 
         return rootView;
@@ -65,7 +65,7 @@ implements CustomNamable {
         builder.setMessage(getResources()
                 .getString(R.string.safety_warning))
                 .setTitle(getResources().getString(R.string.safety_warning_title))
-                .setPositiveButton("Got It", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getStarted();

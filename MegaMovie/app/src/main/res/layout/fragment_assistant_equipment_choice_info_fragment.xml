@@ -65,7 +65,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_gravity="center_horizontal"
                     android:visibility="gone"
-                    android:text="my eclipse"/>
+                    android:text="@string/equipment_settings"/>
 
             </LinearLayout>
 

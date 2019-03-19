@@ -74,18 +74,19 @@ public class EclipseDayCompassCalibration extends Fragment
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-        String s = "can't tell accuracy";
+        String s = getString(R.string.cant_tell_accuracy);
         if (i == mSensorManager.SENSOR_STATUS_ACCURACY_HIGH) {
-            s = "HIGH";
+            s = getString(R.string.high).toUpperCase();
         } else if (i == mSensorManager.SENSOR_STATUS_ACCURACY_LOW) {
-            s = "LOW";
+            s = getString(R.string.low).toUpperCase();
         } else if (i == mSensorManager.SENSOR_STATUS_ACCURACY_MEDIUM) {
-            s = "MEDIUM";
+            s = getString(R.string.medium).toUpperCase();
         } else if (i == mSensorManager.SENSOR_STATUS_UNRELIABLE) {
-            s = "UNRELIABLE";
+            s = getString(R.string.unreliable).toUpperCase();
         }
+        String messageStart = getString(R.string.compass_accuracy);
 
-        compassAccuracyTextView.setText("Compass Accuracy: " + s);
+        compassAccuracyTextView.setText(messageStart + ": " + s);
     }
 
 }

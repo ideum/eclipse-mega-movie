@@ -3,31 +3,21 @@
 
 
     <string-array name="assistant_headers">
-        <item>Using your smartphone</item>
-        <item>Eclipse photo gear</item>
-        <item>DSLR eclipse photography</item>
+        <item>@string/using_your_smartphone</item>
+        <item>@string/eclipse_photo_gear</item>
+        <item>@string/dslr_eclipse_photography</item>
     </string-array>
 
     <string-array name="assistant_subheaders">
-        <item>Capturing the eclipse with your phone</item>
-        <item>Equipment for eclipse photography</item>
-        <item>Capture stunning eclipse photos</item>
+        <item>@string/capturing_the_eclipse_with_your_phone</item>
+        <item>@string/equipment_for_eclipse_photography</item>
+        <item>@string/capture_stunning_eclipse_photos</item>
     </string-array>
 
     <string-array name="assistant_bodies">
-        <item>
-            The Megamovie Mobile app is designed to help you use your camera phone to take the best possible images of the solar eclipse.
-        It tells you when and where to see the eclipse, how to aim your camera when the eclipse is about to start, and automatically controls your camera’s settings
-        and shutter to take a series of photos during the event. All you’ll have to do is be ready and follow a few simple instructions when the time comes.\n\nThe
-        app also gives you a way to practice before the eclipse so you’ll feel comfortable when the big day arrives—by taking pictures of the moon. Go to Moon test to try it out.
-        </item>
-        <item>
-            Holding a camera by hand can cause tiny vibrations that blur photos.
-        This can be especially troublesome with astronomical images. Mounting your phone on a tripod is an easy way to improve your photos.
-        There are many kinds of tripods available for cell phones, including inexpensive ones made by Joby, Square Jellyfish, and Charger City.
-        \n\nAlso, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens like those made by Olloclip, Moment, Mozeat, and instaLens. Lenses like these are easy to attach to your phone and can help you take great photos of many things in addition to the eclipse.
-        \n\nGo to Calibrate your camera to set up your phone with a tripod and lens.
-        </item>
+        <item>@string/equipment_info_phone</item>
+        <item>@string/equipment_info_gear</item>
+        <item>@string/equipment_info_dslr</item>
 
     </string-array>
 
@@ -51,9 +41,9 @@
 
 
     <string-array name="user_mode_preferences_entries">
-        <item>Phone only</item>
-        <item>Phone with equipment</item>
-        <item>DSLR</item>
+        <item>@string/phone_only</item>
+        <item>@string/phone_with_equipment</item>
+        <item>@string/dslr</item>
     </string-array>
 
     <string-array name="lens_choices_entries">

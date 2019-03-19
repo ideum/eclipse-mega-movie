@@ -2,27 +2,28 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
         android:key="user_mode_preference"
-        android:title="Equipment"
+        android:title="@string/Equipment"
         android:entries="@array/user_mode_preferences_entries"
         android:entryValues="@array/user_mode_preferences_entries"
-        android:summary="How do you plan to photograph the eclipse?"
-        android:dialogTitle="How do you plan to photograph the eclipse?"
+        android:summary="@string/how_do_you_plan"
+        android:dialogTitle="@string/how_do_you_plan"
         android:defaultValue="@string/user_mode_default"
         />
     <ideum.com.megamovie.Java.NewUI.NumberPickerPreference
         android:key="@string/lens_magnification_pref_key"
-        android:title="External lens magnification"
-        android:dialogTitle="What type of external lens will you use?"
+        android:title="@string/external_lens_magnification"
+        android:dialogTitle="@string/external_lens_magnification"
+
         />
 
     <CheckBoxPreference
         android:key="checkbox_tripod_preference"
-        android:title="Tripod"
+        android:title="@string/tripod"
         android:defaultValue="true"
         />
     <CheckBoxPreference
         android:key="tracking_mount_preference"
-        android:title="Tracking mount"
+        android:title="@string/tracking_mount"
         android:defaultValue="false"
         />
 </PreferenceScreen>

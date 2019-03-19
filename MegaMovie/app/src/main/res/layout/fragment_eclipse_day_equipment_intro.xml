@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#000"
-            android:text="Equipment Setup"
+            android:text="@string/equipment_setup"
             android:textSize="24dp" />
 
 
@@ -45,7 +45,7 @@
             android:paddingRight="3dp"
             android:background="@color/colorPrimary"
             android:textSize="18dp"
-            android:text="Get Started"/>
+            android:text="@string/get_started"/>
 
 
 
@@ -79,7 +79,7 @@
             android:paddingRight="3dp"
             android:textSize="18dp"
             android:background="@color/colorPrimary"
-            android:text="Capture Mode"/>
+            android:text="@string/capture_mode"/>
 
     </LinearLayout>
 

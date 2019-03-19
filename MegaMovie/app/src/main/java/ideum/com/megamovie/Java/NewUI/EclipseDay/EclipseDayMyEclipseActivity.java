@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 
@@ -24,7 +25,7 @@ public class EclipseDayMyEclipseActivity extends Activity {
      protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eclipse_day_my_eclipse);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Button nextButton = (Button) findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

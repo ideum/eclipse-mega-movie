@@ -38,7 +38,7 @@
             android:layout_marginBottom="10dp"
             android:visibility="visible"
             android:padding="8dp"
-            android:text="Start of Totality: "
+            android:text="@string/start_of_totality"
             android:textColor="#fff"
             android:textSize="20sp" />
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="8dp"
-            android:text="Images Captured: "
+            android:text="@string/images_captured"
             android:textColor="#fff"
 
             android:textSize="30sp" />
@@ -62,7 +62,7 @@
             android:background="@color/colorPrimary"
             android:textColor="#fff"
             android:layout_marginTop="16dp"
-            android:text="Go to upload screen"
+            android:text="@string/go_to_upload_screen"
             android:visibility="gone" />
 
         <Button
@@ -74,7 +74,7 @@
             android:background="@color/colorPrimary"
             android:textColor="#fff"
             android:layout_marginTop="16dp"
-            android:text="Finish" />
+            android:text="@string/finish" />
 
 
     </LinearLayout>

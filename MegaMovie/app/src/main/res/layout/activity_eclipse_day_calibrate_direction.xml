@@ -35,34 +35,32 @@
                 android:layout_gravity="center"
                 android:background="#f00" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal|bottom"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:orientation="horizontal">-->
 
-                <Button
-                    android:id="@+id/set_sun"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:onClick="brighten"
-                    android:background="#000"
-                    android:textColor="#ddd"
-                    android:text="brighter" />
+                <!--<Button-->
+                    <!--android:id="@+id/set_sun"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:background="#000"-->
+                    <!--android:textColor="#ddd"-->
+                    <!--android:text="@string/brighter" />-->
 
-                <Button
-                    android:id="@+id/set_moon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:background="#000"
-                    android:textColor="#ddd"
-                    android:onClick="dim"
-                    android:text="dimmer" />
+                <!--<Button-->
+                    <!--android:id="@+id/set_moon"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="0dp"-->
+                    <!--android:background="#000"-->
+                    <!--android:textColor="#ddd"-->
+                    <!--android:text="@string/dimmer" />-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
         </FrameLayout>
 
@@ -100,7 +98,7 @@
                 android:textColor="#fff"
                 android:elevation="0dp"
                 android:fontFamily="Roboto"
-                android:text="set"
+                android:text="@string/set"
                 android:textSize="24dp" />
 
         </FrameLayout>

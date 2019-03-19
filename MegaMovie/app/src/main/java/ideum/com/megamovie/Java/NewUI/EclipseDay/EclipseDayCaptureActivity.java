@@ -83,7 +83,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         progressTextView = (TextView) findViewById(R.id.capture_progress_text_view);
         startTimeTextView = (TextView) findViewById(R.id.start_time_text_view);
 
-        eclipseTimeProvider = Config.USE_DUMMY_TIME_C2? new EclipseTimeProviderOffset() : new EclipseTimeProvider();
+        eclipseTimeProvider = Config.USE_DUMMY_TIME_C2 ? new EclipseTimeProviderOffset() : new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, eclipseTimeProvider).commit();
 
@@ -120,14 +120,15 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     @Override
     public void onEclipseTimesUpdated(EnumMap<EclipseTimes.Phase, Long> contactTimes) {
         if (timeRemaining() != null && timeRemaining() < Config.GPS_UPDATE_CUTOFF_TIME) {
-            if(mSession != null) {
+            if (mSession != null) {
                 return;
             }
         }
         Long c2Time = contactTimes.get(c2);
         Long c3Time = contactTimes.get(c3);
         startTime = c2Time;
-            setUpCaptureSequenceSession(c2Time,c3Time);
+        startTimeTextView.setText(getString(R.string.start_of_totality) + getStartTimeString(startTime));
+        setUpCaptureSequenceSession(c2Time, c3Time);
 
     }
 
@@ -202,8 +203,8 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
             return dummySequence();
         }
         float magnification = (float) getLensMagnificationFromPreferences();
-        return Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE? CaptureSequenceBuilderDummy.makeSequence(c2Time) :
-        CaptureSequenceBuilder.makeSequence(c2Time, c3Time, magnification);
+        return Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE ? CaptureSequenceBuilderDummy.makeSequence(c2Time) :
+                CaptureSequenceBuilder.makeSequence(c2Time, c3Time, magnification);
     }
 
 
@@ -233,8 +234,8 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
     private void showNotInPathDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You are not currently in the path of totality. The countdown and eclipse time displayed are based on the point in the path closest to your current location.")
-                .setPositiveButton("Got It", null)
+        builder.setMessage(getString(R.string.not_in_path_dialog))
+                .setPositiveButton(getString(R.string.got_it), null)
                 .setCancelable(true);
 
         AlertDialog dialog = builder.create();
@@ -283,12 +284,12 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
     @Override
     public void onSessionCompleted(CaptureSequenceSession session) {
-        Log.i("CAPTURE", "session completed");
-        Toast.makeText(this, "SessionCompleted!", Toast.LENGTH_LONG).show();
+        //   Log.i("CAPTURE", "session completed");
+        //  Toast.makeText(this, "SessionCompleted!", Toast.LENGTH_LONG).show();
         finishedButton.setVisibility(View.VISIBLE);
         uploadButton.setVisibility(View.VISIBLE);
         mTimer.cancel();
-        progressTextView.setText(String.format("Congratulations! You captured %d images of the eclipse. You can upload them now or any time later on.", numCaptures));
+        progressTextView.setText(String.format(getString(R.string.eclipse_congrats_message), numCaptures));
         startTimeTextView.setVisibility(View.GONE);
 
 
@@ -299,7 +300,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         if (progressTextView == null) {
             return;
         }
-        progressTextView.setText("Images Captured: " + String.valueOf(numCaptures) + "/" + String.valueOf(totalNumCaptures));
+        progressTextView.setText(getString(R.string.images_captured) + ": " + String.valueOf(numCaptures) + "/" + String.valueOf(totalNumCaptures));
     }
 
     private CaptureSequence dummySequence() {

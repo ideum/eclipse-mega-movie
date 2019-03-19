@@ -59,7 +59,7 @@ public class CompassCalibrationFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this,mMagneticField,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mMagneticField, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CompassCalibrationFragment extends Fragment
         } else if (i == mSensorManager.SENSOR_STATUS_UNRELIABLE) {
             s = getString(R.string.unreliable).toUpperCase();
         }
-String messageStart = getString(R.string.compass_accuracy);
+        String messageStart = getString(R.string.compass_accuracy);
 
         compassAccuracyTextView.setText(messageStart + ": " + s);
     }

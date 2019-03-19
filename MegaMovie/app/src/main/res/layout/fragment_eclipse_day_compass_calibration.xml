@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#000"
-            android:text="Calibrate your compass"
+            android:text="@string/calibrate_your_compass"
             android:textSize="24dp" />
 
         <TextView
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="24sp"
-        android:text="Compass Accuracy:"
+        android:text=""
         android:layout_marginBottom="25dp"/>
 
     <FrameLayout
@@ -56,7 +56,7 @@
             android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
             android:elevation="0dp"
             android:fontFamily="Roboto"
-            android:text="Next"
+            android:text="@string/next"
             android:textColor="#6E6E6E"
             android:textSize="14dp" />
 

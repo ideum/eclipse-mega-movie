@@ -29,8 +29,8 @@ public class OrientationIntroFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.loadFragment(AssistantFragment.class);
-                mainActivity.getSupportActionBar().show();
-                mainActivity.getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
+                 mainActivity.getSupportActionBar().show();
+                //mainActivity.getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
             }
         });
         return rootView;

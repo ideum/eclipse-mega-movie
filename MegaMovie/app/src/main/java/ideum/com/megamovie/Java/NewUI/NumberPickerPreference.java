@@ -23,8 +23,8 @@ public class NumberPickerPreference extends DialogPreference {
     public NumberPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogLayoutResource(R.layout.number_pref);
-        setPositiveButtonText("ok");
-        setNegativeButtonText("cancel");
+        setPositiveButtonText(context.getString(R.string.ok));
+        setNegativeButtonText(context.getString(R.string.cancel));
     }
 
     @Override

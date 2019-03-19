@@ -64,23 +64,9 @@ implements AdapterView.OnItemSelectedListener,
 
         String[] bodyTexts = {
                 getResources().getString(R.string.equipment_info_phone),
-                "Holding a camera by hand can cause tiny vibrations that blur photos. " +
-                        "This can be especially troublesome with astronomical images. Mounting your " +
-                        "phone on a tripod is an easy way to improve your photos. There are many kinds " +
-                        "of tripods available for cell phones, including inexpensive ones made by Joby, Square Jellyfish, and Charger City." +
-                        "<br><br>Also, while your phone may have a great camera, images of the sun are likely to " +
-                        "be small unless you use an external lens like those made by Apexel, Hsini, and Neewer. " +
-                        "We recommend using a lens with a magnification of at least 20x, although the app is compatible with any lens. " +
-                        "Lenses like these are very portable and can help you take great photos of many things in addition to the eclipse." +
-                        "<br><br>If you’re using an especially high-powered lens, you might consider using a tracking-mount. A relatively " +
-                        "compact and inexpensive choice is the Star Adventurer made by Sky-Watcher." +
-                        "<br><br>Once you’ve decided on the equipment you’ll use, go to My Eclipse settings to enter your choice (you can change it at any time). You " +
-                        "can learn more about relevant equipment and how to use it with these <a href=\"https://www.youtube.com/watch?v=VhWOx7eW-bI&feature=youtu.be\"> video tutorials </a>."
-                ,
-                " If you want to use a separate camera to photograph the eclipse, you can still use the eclipse map and countdown " +
-                        "functions in the Megamovie Mobile app." +
-                        "<br><br>You may also be interested in being an official volunteer to capture images for the Megamovie itself. " +
-                        "To learn more, visit the <a href=\"https://eclipsemega.movie/\">Megamovie Website</a>."};
+                getResources().getString(R.string.equipment_info_gear),
+                getResources().getString(R.string.equipment_info_dslr)
+                };
 
 
         headerText = getResources().getStringArray(R.array.assistant_headers)[index];
@@ -108,9 +94,9 @@ implements AdapterView.OnItemSelectedListener,
 
 
         if (isTerminal) {
-            forward.setText("finish");
+            forward.setText(getString(R.string.finish));
         } else {
-            forward.setText("next");
+            forward.setText(getString(R.string.next));
         }
 
         forward.setOnClickListener(new View.OnClickListener() {

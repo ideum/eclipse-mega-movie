@@ -70,8 +70,8 @@ public class EclipseDayCalibrateDirectionActivity extends AppCompatActivity{
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Make sure your lens is covered with a solar filter.")
-                .setPositiveButton("Got It", null)
+        builder.setMessage(getString(R.string.solar_filter_warning))
+                .setPositiveButton(getString(R.string.got_it), null)
                 .setCancelable(true);
 
         AlertDialog dialog = builder.create();

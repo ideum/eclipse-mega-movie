@@ -3,6 +3,7 @@ package ideum.com.megamovie.Java.Application;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Environment;
@@ -84,7 +85,7 @@ public class UploadActivity extends AppCompatActivity {
                 Regions.US_EAST_1);
 
         AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         transferUtility = new TransferUtility(s3, getApplicationContext());
 
         observers = new ArrayList<>();
@@ -96,7 +97,7 @@ public class UploadActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Image Upload");
+        getSupportActionBar().setTitle(getString(R.string.image_upload));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -174,8 +175,8 @@ public class UploadActivity extends AppCompatActivity {
 
     private void showNoImagesAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You do not currently have any images to upload. Please return after photographing the eclipse.")
-                .setPositiveButton("Got it", null)
+        builder.setMessage(getString(R.string.no_image_upload_warning))
+                .setPositiveButton(getString(R.string.got_it), null)
                 .setCancelable(true);
 
         AlertDialog dialog = builder.create();
@@ -185,12 +186,12 @@ public class UploadActivity extends AppCompatActivity {
 
     private void initiateUI() {
 
-        String licenseText = "I verify that I own these photos and am licensing them under the <a href=\"https://creativecommons.org/publicdomain/zero/1.0/ \">CC0 license.</a>";
-
+        //String licenseText = "I verify that I own these photos and am licensing them under the <a href=\"https://creativecommons.org/publicdomain/zero/1.0/ \">CC0 license.</a>";
+        String licenseText = getString(R.string.license) + " " + "<a href=\"https://creativecommons.org/publicdomain/zero/1.0/ \">CC0 license.</a>";
         licenseAgreementCheckBox.setText(Html.fromHtml(licenseText));
         licenseAgreementCheckBox.setMovementMethod(LinkMovementMethod.getInstance());
 
-        fileSummaryTextView.setText(String.format("You currently have %d files ready to upload to the archive.", totalFiles));
+        fileSummaryTextView.setText(String.format(getString(R.string.you_have_d_photos_to_upload), totalFiles));
 //        if (totalFiles == 0) {
 //            fileSummaryTextView.setText("You do not currently have any eclipse iamges to upload. You can return after photographing the eclipse.");
 //            //disableUploadButton();
@@ -207,10 +208,10 @@ public class UploadActivity extends AppCompatActivity {
 
     private void updateUI() {
 
-        uploadProgressTextView.setText(String.format("Files Uploaded: %d/%d", numCompleted(), totalFiles));
+        uploadProgressTextView.setText(String.format(getString(R.string.files_uploaded), numCompleted(), totalFiles));
 
         if (numErrors() > 0) {
-            uploadErrorsTextView.setText(String.format("Upload errors: %d", numErrors()));
+            uploadErrorsTextView.setText(String.format(getString(R.string.upload_errors), numErrors()));
         } else {
             uploadErrorsTextView.setText("");
         }
@@ -219,7 +220,7 @@ public class UploadActivity extends AppCompatActivity {
     private void onNetworkWaiting() {
         cancelUpload();
         clearListeners();
-        Toast.makeText(getApplicationContext(), "No network connection found", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.no_network_connection_found), Toast.LENGTH_SHORT).show();
        Log.i("upload","Canceling");
     }
 
@@ -251,7 +252,7 @@ public class UploadActivity extends AppCompatActivity {
         enableUploadButton();
         cancelButton.setVisibility(View.INVISIBLE);
         Log.i(TAG, "uploading finished");
-        Toast.makeText(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.upload_complete), Toast.LENGTH_SHORT).show();
     }
 
 //    private int numInitialized() {
