@@ -106,7 +106,7 @@
 
     <string name="equipment_info_phone">"La aplicación Eclipse Camera 2019 está diseñada para ayudarlo a usar su teléfono con cámara y capturar las mejores imágenes posibles del eclipse solar. La aplicación le indicará cuándo y dónde ver el eclipse, cómo apuntar su cámara al Sol cuando el eclipse está a punto de comenzar, y controla automáticamente la configuración de la cámara y el obturador para tomar una serie de fotos durante el evento. Todo lo que tiene que hacer es estar listo y seguir unas sencillas instrucciones cuando llegue el momento. La aplicación también le ayuda a practicar antes del eclipse tomando fotos de la Luna o el Sol, para lograr los mejores resultados el día del eclipse. "</string>
     <string name="equipment_info_equipment">"Sostener una cámara con la mano puede causar vibraciones que difuminan las fotos. Esto es especialmente problemático con las imágenes astronómicas. Usar un trípode es una manera fácil de mejorar sus fotos. Hay muchos tipos de trípodes disponibles para teléfonos celulares los cuales usted puede usar.\\n Además, si bien su teléfono puede tener una gran cámara, es probable que las imágenes del Sol sean pequeñas a menos que use una lente externa. Recomendamos utilizar una lente con una ampliación de al menos 20x, aunque la aplicación es compatible con lentes de diferente magnificación. Lentes como estas son portátiles y pueden ayudarlo a tomar excelentes fotografías de muchas cosas además del eclipse. Si está utilizando una lente de gran aumento (40x o más), podría considerar usar un sistema de seguimiento.\\n Una vez que haya decidido el equipo que utilizará, vaya a la configuración e ingrese su elección (puede cambiar la configuración en cualquier momento). "</string>
-    <string name="equipment_info_dslr">"Si usted desea usar una cámara DSLR para capturar imágenes del eclipse, usted puede usar el mapa y el conteo regresivo de la aplicación. Usted puede explorar estas funciones aquí. "</string>
+    <string name="equipment_info_dslr">Si usted desea usar una cámara DSLR para capturar imágenes del eclipse, usted puede usar el mapa y el conteo regresivo de la aplicación.</string>
 
 
     <!--Phases Copy-->
@@ -131,15 +131,14 @@
 
     <string name="moon_test_calibrate_lens_explanation">Si usted está usando una lente externa la aplicación le ayudará a encontrar el mejor foco.</string>
 
-    <string name="moon_test_calibrate_direction_explanation">"If you aren't attaching your phone to a tripod, you can now enter Capture Mode.If you are attaching your phone to a tripod, the app can help you point the phone towards the location where the sun/moon will be at the time you selected.     "</string>
+    <string name="moon_test_calibrate_direction_explanation">Si usted no está conectando su teléfono a un trípode, ingrese al modo Captura. Si está conectando su teléfono a un trípode, la aplicación puede ayudarlo a dirigir el teléfono hacia la ubicación donde estará el Sol o la Luna en la momento que usted seleccionó.</string>
 
     <string name="moon_test_calibrate_direction">Mueva su teléfono en la dirección de la línea roja. A medida que usted se acerque a la dirección correcta el círculo azul se hará más grande. El círculo se tornará verde cuando su teléfono esté apuntando el correcta. Ahora presione Modo de Captura</string>
     <string name="moon_test_calibrate_lens">"Apunte la cámara a un objeto que se encuentre a un distancia mayor a 30 metros, como un árbol, casa o edificio. Ajuste el foco de la lente hasta que el objeto se vea bien enfocado en la pantalla. Usted puede ajustar el brillo de la imagen usando los botones. "</string>
     <string name="moon_test_calibrate_compass_instructions">Apunte el teléfono hasta que el Sol aparezca en centro de la mira roja. Luego presione FIJAR.</string>
-    <string name="moon_test_point_phone_instructions">"Use the alignment guide to point the phone towards the predicted location of the moon/sun.         Then enter Capture Mode.     "</string>
     <string name="compass_calibration_intro">Esta aplicación usa la brújula de su teléfono para ayudarle apuntar la cámara en la dirección correcta. Para calibrar la brújula mueva su teléfono como lo indica la figura hasta que la precisión de la brújula sea alta.</string>
 
-    <string name="sun_test_warning">"Remember not to look directly at the sun during the test. Photographing the sun requires a solar filter or eclipse glasses to cover the lens. If it is         a hot day, be careful not to leave your phone outside for too long.     "</string>
+    <string name="sun_test_warning">Recuerde no mirar directamente al Sol durante la prueba. Fotografiar el Sol requiere un filtro solar o gafas de eclipse para cubrir la lente. Si es un día caluroso, tenga cuidado de no dejar el teléfono afuera por mucho tiempo.</string>
 
     <!--Eclipse Day-->
 
@@ -149,21 +148,21 @@
 
     <string name="check_for_updates">¡Comprueba que tienes la versión más reciente de la aplicación el día antes del eclipse!</string>
 
-    <string name="eclipse_day_instructions">"The app will take pictures only during totality, when the sun is completely covered by the moon. During totality, you just not cover the lens with a solar filter. However, before totality you will need a filter to protect your phone. The app will remind you with an audio         cue to remove the filter 15 seconds before the start of totality.     "</string>
+    <string name="eclipse_day_instructions">La aplicación tomará fotografías solo durante la totalidad, es decir, cuando el Sol esté completamente cubierto por la Luna. Durante la totalidad, simplemente no cubra la lente con el filtro solar. Sin embargo, antes y despues de la totalidad, necesitará un filtro solar para proteger su teléfono. La aplicación, 15 segundos antes del inicio de la totalidad, le recordará con una señal auditiva que se debe retirar el filtro.</string>
 
     <string name="equipment_intro">La aplicación le guiará en la configuración del teléfono y sus accesorios. Si usted no posee ninguna lente y/o trípode continúe directamente a el Modo de Captura.</string>
 
-    <string name="eclipse_day_no_equipment">"It looks you aren't using any extra equipment, so do not have to do any additional set-up.  "</string>
+    <string name="eclipse_day_no_equipment">Parece que no está utilizando ningún equipo adicional, así que no debe hacer ninguna configuración adicional.</string>
 
     <string name="eclipse_day_calibrate_direction_explanation">Si usted está usando un trípode, la aplicación le ayudará a apuntar su teléfono en la dirección donde el eclipse será visible.</string>
 
     <string name="eclipse_day_calibrate_compass_instructions">Apunte el teléfono hasta que el Sol aparezca en centro de la mira roja. Luego presione FIJAR.</string>
 
     <!-- Strings related to Settings -->
-    <string name="user_mode_default">Phone Only</string>
-    <string name="lens_default">No external lens</string>
-    <string name="lens_magnification_pref_key">lens magnification</string>
-    <string name="tripod_default">No tripod</string>
+    <string name="user_mode_default">Solo teléfono</string>
+    <string name="lens_default">Sin lente externa</string>
+    <string name="lens_magnification_pref_key">Ampliación de la lente externa</string>
+    <string name="tripod_default">Sin trípode</string>
     <string name="title_activity_login" translatable="false">Sign in</string>
     <string name="planned_lat_key" translatable="false">planned latitude</string>
     <string name="planned_lng_key" translatable="false">planned longitude</string>
@@ -182,7 +181,7 @@
     <string name="stored_phone_coordinates_key" translatable="false">stored phone coordinates key</string>
     <string name="stored_correction_matrix_key" translatable="false">stored correction matrix</string>
 
-    <string name="no_tripod_warning">"If you plan to attach an external lens to your smartphone, you will also need to mount it on a tripod to ensure it is kept steady and pointed in the right direction.     "</string>
+    <string name="no_tripod_warning">Si piensa conectar una lente externa a teléfono, también deberá usar un trípode para asegurarse de que se mantenga firme y apunte en la dirección correcta.</string>
     <string name="camera_not_supported_warning">Desafortunadamente, la cámara de su teléfono no admite el control manual de sus sensores, por lo que la aplicación no podrá capturar imágenes del eclipse. Sin embargo, aún puede utilizar las otras funciones de la aplicación, incluido el mapa de eclipse y la información de tiempo de eclipse.</string>
 
     <!-- Strings related to login -->
@@ -204,7 +203,7 @@
     <string name="ssl_url" translatable="false">http://www.ssl.berkeley.edu/</string>
     <string name="ssl_credit">"El Laboratorio de Ciencias Espaciales (SSL) es el principal instituto de investigación en ciencias espaciales del sistema de Universidades de California (UC) y uno de los laboratorios universitarios más importantes de los Estados Unidos para la investigación espacial. Su objetivo principal es fomentar la investigación en ciencias relacionadas con el espacio y proporcionar educación para la próxima generación de científicos. La investigación en el SSL es dirigida por profesores de Berkeley y científicos del SSL, y se centra en experimentos y observaciones realizados desde el espacio, pero también incluye investigaciones que pueden conducir a futuros experimentos espaciales, y la investigación teórica relacionada con sus programas experimentales y observacionales.  "</string>
     <string name="eaa_url" translatable="false">http://www.eclipseacrossamerica.org/</string>
-    <string name="eaa_credit" translatable="true">"Eclipse Across America, Inc. is a non-profit founded by filmmaker/director and eclipse         chaser Mark Bender. Its goal is to develop public awareness of the August 21, 2017 total solar eclipse,         from the science of how and why eclipses happen, to the different ways scientists, eclipse chasers,         and the general public can watch and enjoy this historic event.     "</string>
+    <string name="eaa_credit" translatable="true">Eclipse Across America, Inc. es una organización sin ánimo de lucro fundada por el cineasta / director y el cazador de eclipse Mark Bender.</string>
 
     <string name="pravacy_url" translatable="false"><a href='http://ideum.com/eclipse-megamovie-privacy-policy/'>Privacy Policy</a></string>
 
@@ -221,8 +220,8 @@
     <string name="cant_tell_accuracy">can\'t tell accuracy</string>
     <string name="date">Fecha</string>
     <string name="time">"Tiempo "</string>
-    <string name="test_time_not_set_alert">Please set a time and date for the test</string>
-    <string name="test_time_in_future_alert">Please schedule your test at least 5 minutes in the future.</string>
+    <string name="test_time_not_set_alert">Por favor, introduzca la fecha y hora para la prueba</string>
+    <string name="test_time_in_future_alert">"Por favor, planee su test por lo menos 5 minutos en el futuro. "</string>
     <string name="calibrate_lens">Calibrar la Lente</string>
     <string name="calibrate_direction">Calibrar la Dirección</string>
     <string name="capture_mode">Modo de Captura</string>
@@ -230,23 +229,23 @@
     <string name="done">HECHO</string>
     <string name="brighter">MAS BRILLANTE</string>
     <string name="set">establecer</string>
-    <string name="solar_filter_warning">Make sure your lens is covered with a solar filter.</string>
+    <string name="solar_filter_warning">Asegúrese de que su lente está cubierta con un filtro solar.</string>
     <string name="images_captured">Imágenes Capturadas</string>
     <string name="test_congrats_message">¡Felicitaciones! Usted ha capturado %d imágenes. Puede encontrarlas en nuevo álbum en la galería de imágenes de su teléfono</string>
     <string name="test_time_start">Tiempo de prueba: Comienzo</string>
-    <string name="test_time_alert">Your test is scheduled to occur in</string>
+    <string name="test_time_alert">La prueba está programada para empezar en</string>
     <string name="finish">Finalizar</string>
     <string name="photographing_the_eclipse">Fotografiando el eclipse</string>
-    <string name="how_will_you_photograph_the_eclipse">How will you capture the eclipse?</string>
+    <string name="how_will_you_photograph_the_eclipse">¿Cómo capturará el eclipse?</string>
     <string name="only_my_phone">Solo mi teléfono</string>
     <string name="my_phone_with_peripheral_equipment">Mi teléfono con lentes externas</string>
     <string name="a_dslr_camera">Una camara DSLR</string>
     <string name="what_equipment_will_you_use">What equipment will you use to photograph the eclipse?</string>
-    <string name="not_in_path_warning">You are not currently in the path of totality!</string>
+    <string name="not_in_path_warning">¡En este momento usted no se encuentra sobre el camino de la totalidad!</string>
     <string name="in_path_alert">¡Estás en el camino de la totalidad!</string>
     <string name="Equipment">Equipo</string>
-    <string name="how_do_you_plan">How will you capture the eclipse?</string>
-    <string name="external_lens_magnification">External lens magnification</string>
+    <string name="how_do_you_plan">¿Cómo capturará el eclipse?</string>
+    <string name="external_lens_magnification">Ampliación de la lente externa</string>
     <string name="tracking_mount">Montura de seguimiento</string>
     <string name="tripod">Tripode</string>
     <string name="yes">sí</string>
@@ -259,27 +258,27 @@
     <string name="equipment_setup">Configuración de los Accesorios</string>
     <string name="start_of_totality">Comienzo de la totalidad</string>
     <string name="go_to_upload_screen">Ir a la Ventana de Carga</string>
-    <string name="not_in_path_dialog">You are not currently in the path of totality. The countdown and eclipse time displayed are based on the point in the path closest to your current location.</string>
+    <string name="not_in_path_dialog">Usted no se encuentra sobre el camino de la totalidad. La cuenta regresiva y el tiempo de eclipse que se muestran estan basados en el punto mas cercano a usted sobre la franja de la totalidad.</string>
     <string name="eclipse_congrats_message">¡Felicitaciones! Usted ha capturado %d imágenes de eclipse. Usted puede subir y compartir sus imágenes ahora o más tarde.</string>
     <string name="image_upload">Subir Imagen</string>
-    <string name="no_image_upload_warning">You do not currently have any images to upload. Please return after photographing the eclipse.</string>
+    <string name="no_image_upload_warning">En este momento usted no tiene ninguna que cargar a la base de datos. Por favor regrese después de tomar las imagenes del eclipse.</string>
     <string name="license"> Verifico que poseo estas fotos y las estoy otorgando bajo el</string>
     <string name="you_have_d_photos_to_upload">"Usted tiene en este momento %d imágenes listas para subirse al archivo. "</string>
-    <string name="files_uploaded">Files Uploaded: %d/%d</string>
-    <string name="upload_errors">Upload errors: %d</string>
+    <string name="files_uploaded">Archivos subidos: %d/%d</string>
+    <string name="upload_errors">Errores de carga: %d</string>
     <string name="no_network_connection_found">No se ha encontrado conexión de red</string>
-    <string name="upload_complete">Upload Complete</string>
-    <string name="upload">upload</string>
+    <string name="upload_complete">Carga completa</string>
+    <string name="upload">Subir</string>
     <string name="using_your_smartphone">Usando su teléfono</string>
     <string name="eclipse_photo_gear">Accesorios fotográficos para el Eclipse</string>
     <string name="dslr_eclipse_photography">Fotografia con camaras DSLR</string>
     <string name="capturing_the_eclipse_with_your_phone">Capturando imágenes con su teléfono</string>
     <string name="equipment_for_eclipse_photography">Accesorios fotográficos para el Eclipse</string>
-    <string name="capture_stunning_eclipse_photos">Capture stunning eclipse photos</string>
+    <string name="capture_stunning_eclipse_photos">Capture impresionantes fotos del eclipse</string>
     <string name="equipment_info_gear">"Sostener una cámara con la mano puede causar vibraciones que difuminan las fotos. Esto es especialmente problemático con las imágenes astronómicas. Usar un trípode es una manera fácil de mejorar sus fotos. Hay muchos tipos de trípodes disponibles para teléfonos celulares los cuales usted puede usar.\\n Además, si bien su teléfono puede tener una gran cámara, es probable que las imágenes del Sol sean pequeñas a menos que use una lente externa. Recomendamos utilizar una lente con una ampliación de al menos 20x, aunque la aplicación es compatible con lentes de diferente magnificación. Lentes como estas son portátiles y pueden ayudarlo a tomar excelentes fotografías de muchas cosas además del eclipse. Si está utilizando una lente de gran aumento (40x o más), podría considerar usar un sistema de seguimiento.\\n Una vez que haya decidido el equipo que utilizará, vaya a la configuración e ingrese su elección (puede cambiar la configuración en cualquier momento). "</string>
     <string name="equipment_settings">equipment settings</string>
     <string name="privacy_agreement">Reconozco que estas fotos y sus ubicaciones serán parte de una base de datos pública.</string>
     <string name="eclipse_day_skip_set_up">If you have already set up your equipment or would like to skip this step, you can go directly to capture mode</string>
-    <string name="select">Select</string>
+    <string name="select">Seleccionar</string>
 
 </resources>
