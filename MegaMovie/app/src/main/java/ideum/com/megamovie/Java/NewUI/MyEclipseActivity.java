@@ -21,7 +21,7 @@ public class MyEclipseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("My Eclipse");
+        getSupportActionBar().setTitle(getString(R.string.settings_section_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

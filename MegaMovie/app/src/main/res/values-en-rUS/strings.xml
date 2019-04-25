@@ -7,11 +7,11 @@
     <string name="megamovie_directory_name">Eclipse_Camera_Images</string>
     <string name="upload_intro">Once you have captured images of the eclipse, you can upload them here to the Megamovie Archive.         This database will provide an invaluable tool for scientists studying our sun.</string>
     <string name="upload_notes">" Please note, it may take several seconds for the upload to start after pressing the button. Some files are large, so the upload may take a few minutes.     "</string>
-    <string name="orientation_section_title">Orientation</string>
+    <string name="orientation_section_title">How to Use this App</string>
     <string name="about_section_title">About</string>
     <string name="gallery_section_title">Image Gallery</string>
     <string name="settings_section_title">Equipment Settings</string>
-    <string name="moon_test_section_title">Practice Mode</string>
+    <string name="moon_test_section_title">Practice Image Capture</string>
     <string name="calibration_section_title">Calibration</string>
     <string name="upload_section_title">Data Upload</string>
     <string name="capture_mode_section_title">Capture Mode</string>
@@ -45,7 +45,7 @@
     <string name="intro_title_1">Who is this app for?</string>
     <string name="intro_title_2">How do I use the app?</string>
     <string name="safety_warning_title">"Safety Warning     "</string>
-    <string name="distance_to_totality_format">You are %1$d kilometers from the path of totality.</string>
+    <string name="distance_to_totality_format">You are %d kilometers from the path of totality.</string>
     <string name="in_the_path_of_totality_string">You are in the path of totality!</string>
     <string name="search_bar_hint">Eclipse viewing location?</string>
     <string name="about_megamovie">"The Eclipse Camera 2019 app was created by Ideum, Inc. and UC Berkeley’s Space Sciences Laboratory.   This app allows you to capture images of the solar eclipse on July 2, 2019. The app can capture valuable scientific information without additional equipment. But you can obtain even better results with an external lens and tripod. If you already have this equipment or want to learn more, use our built-in Eclipse Orientation to customize the app.   If you are using an external lens and tripod, the app has a Calibration mode that will help you focus the lens and point the camera in the right direction. You can practice by capturing images of the moon. "</string>
@@ -97,8 +97,8 @@
     <string name="countdown">COUNTDOWN</string>
     <string name="phases">PHASES</string>
     <string name="not_in_path_toast">This location is not within the path of totality</string>
-    <string name="not_in_path_toast_1">This location is in the path of totality!  Go to Phases to see the eclipse timing. This location is %.0f miles (%.0f km) away.</string>
-    <string name="distance_from_path_toast">You are %.0f miles (%.0f km) from the path of totality.\\n\\nGo to Phases to see the eclipse timing.</string>
+    <string name="not_in_path_toast_1">This location is in the path of totality! Go to Phases to see the eclipse timing. This location is %.0f km away.</string>
+    <string name="distance_from_path_toast">You are %.0f km from the path of totality.  Go to Phases to see the eclipse timing.</string>
     <string name="calibrate_your_compass">Calibrate your compass</string>
     <string name="compass_accuracy">Compass Accuracy</string>
     <string name="high">high</string>
@@ -147,7 +147,7 @@
     <string name="equipment_setup">Equipment Setup</string>
     <string name="start_of_totality">"Start of totality: "</string>
     <string name="go_to_upload_screen">Go to upload screen</string>
-    <string name="not_in_path_dialog">You are not currently in the path of totality. The countdown and eclipse time displayed are based on the point in the path closest to your current location.</string>
+    <string name="not_in_path_dialog">Eclipse image capture is only available within the path of totality</string>
     <string name="eclipse_congrats_message">Congratulations! You captured %d images. You can find them in a new album in your photo app.</string>
     <string name="image_upload">Image Upload</string>
     <string name="no_image_upload_warning">You do not currently have any images to upload. Please return after photographing the eclipse.</string>
@@ -166,4 +166,5 @@
     <string name="capture_stunning_eclipse_photos">Capture stunning eclipse photos</string>
     <string name="equipment_info_gear">Holding a camera by hand can cause tiny vibrations that blur photos. This can be especially troublesome with astronomical images. Mounting your phone on a tripod is an easy way to improve your photos. There are many kinds of tripods available for cell phones. \\n Also, while your phone may have a great camera, images of the sun are likely to be small unless you use an external lens. We recommend using a lens with a magnification of at least 20x, although the app is compatible with any lens. Lenses like these are very portable and can help you take great photos of many things in addition to the eclipse. If you’re using an especially high-powered lens, you might consider using a tracking mount.\\n Once you’ve decided on the equipment you’ll use, go to My Eclipse settings to enter your choice (you can change it at any time).</string>
     <string name="equipment_settings">equipment settings</string>
+    <string name="countdown_explanation">This feature shows you the time remaining before totality begins at your selected location, as marked by the red pin.</string>
 </resources>

@@ -2,11 +2,11 @@
 
     <string name="next">ADELANTE</string>
     <string name="map">MAPA</string>
-    <string name="countdown">CONTEO REGRESIVO</string>
+    <string name="countdown">CONTEO</string>
     <string name="phases">FASES</string>
     <string name="not_in_path_toast">Esta ubicación no está dentro del camino de la totalidad.</string>
-    <string name="not_in_path_toast_1">Esta ubicación está en el camino de la totalidad!\n\nVe a Fases para ver el tiempo del eclipse.\n\nEsta ubicación está a% .0f millas (% .0f km) de distancia.</string>
-    <string name="distance_from_path_toast">Usted está a %.0f kilometros (%.0f millas) de la franja de la totalidad.</string>
+    <string name="not_in_path_toast_1">Esta ubicación se encuentra en la franja de la totalidad! Vaya a Fases para observar los diferentes tiempos del eclipse.  Esta ubicación está a %.0f km de distancia.</string>
+    <string name="distance_from_path_toast">"Usted está a %.0f kilometros de la franja de la totalidad. Vaya a Fases para observar los diferentes tiempos del eclipse. "</string>
     <string name="in_path_key" translatable="false">in path of totality</string>
     <string name="c1_time_key" translatable="false">c1 time key</string>
     <string name="c2_time_key" translatable="false">c2 time key</string>
@@ -35,16 +35,16 @@
 
 
     <!--Manifest-->
-    <string name="app_name" translatable="false">Eclipse Megamovie Mobile</string>
+    <string name="app_name" translatable="false">Eclipse Camera 2019</string>
     <string name="google_maps_key" translatable="false">AIzaSyC42D-ftyRqLgCMNO3FZt7xVDxth_eSxkM</string>
 
 
     <!--Section Titles-->
-    <string name="orientation_section_title">"Tutorial "</string>
+    <string name="orientation_section_title">Cómo usar esta aplicación</string>
     <string name="about_section_title">Acerca de</string>
     <string name="gallery_section_title">Galeria de Imagenes</string>
     <string name="settings_section_title">Ajustes del equipo</string>
-    <string name="moon_test_section_title">Modo de práctica</string>
+    <string name="moon_test_section_title">Practicar la captura de imágenes</string>
     <string name="calibration_section_title">Calibración</string>
     <string name="upload_section_title">Carga de datos</string>
     <string name="capture_mode_section_title">Modo de Captura</string>
@@ -76,7 +76,7 @@
     <string name="safety_warning_title">Advertencia de seguridad</string>
 
     <!--When and Where Copy-->
-    <string name="distance_to_totality_format">Usted está a %.0f kilometros (%.0f millas) de la franja de la totalidad</string>
+    <string name="distance_to_totality_format">Usted está a %d kilometros de la franja de la totalidad</string>
     <string name="in_the_path_of_totality_string">¡Estás en el camino de la totalidad!</string>
     <string name="search_bar_hint">¿Lugar de observación?</string>
     <string name="days">DÍAS</string>
@@ -240,7 +240,7 @@
     <string name="only_my_phone">Solo mi teléfono</string>
     <string name="my_phone_with_peripheral_equipment">Mi teléfono con lentes externas</string>
     <string name="a_dslr_camera">Una camara DSLR</string>
-    <string name="what_equipment_will_you_use">What equipment will you use to photograph the eclipse?</string>
+    <string name="what_equipment_will_you_use">¿Qué equipo usted utilizará para fotografiar el eclipse?</string>
     <string name="not_in_path_warning">¡En este momento usted no se encuentra sobre el camino de la totalidad!</string>
     <string name="in_path_alert">¡Estás en el camino de la totalidad!</string>
     <string name="Equipment">Equipo</string>
@@ -258,7 +258,7 @@
     <string name="equipment_setup">Configuración de los Accesorios</string>
     <string name="start_of_totality">Comienzo de la totalidad</string>
     <string name="go_to_upload_screen">Ir a la Ventana de Carga</string>
-    <string name="not_in_path_dialog">Usted no se encuentra sobre el camino de la totalidad. La cuenta regresiva y el tiempo de eclipse que se muestran estan basados en el punto mas cercano a usted sobre la franja de la totalidad.</string>
+    <string name="not_in_path_dialog">La captura de imágenes del eclipse solo está disponible dentro de la trayectoria de la totalidad</string>
     <string name="eclipse_congrats_message">¡Felicitaciones! Usted ha capturado %d imágenes de eclipse. Usted puede subir y compartir sus imágenes ahora o más tarde.</string>
     <string name="image_upload">Subir Imagen</string>
     <string name="no_image_upload_warning">En este momento usted no tiene ninguna que cargar a la base de datos. Por favor regrese después de tomar las imagenes del eclipse.</string>
@@ -276,9 +276,10 @@
     <string name="equipment_for_eclipse_photography">Accesorios fotográficos para el Eclipse</string>
     <string name="capture_stunning_eclipse_photos">Capture impresionantes fotos del eclipse</string>
     <string name="equipment_info_gear">"Sostener una cámara con la mano puede causar vibraciones que difuminan las fotos. Esto es especialmente problemático con las imágenes astronómicas. Usar un trípode es una manera fácil de mejorar sus fotos. Hay muchos tipos de trípodes disponibles para teléfonos celulares los cuales usted puede usar.\\n Además, si bien su teléfono puede tener una gran cámara, es probable que las imágenes del Sol sean pequeñas a menos que use una lente externa. Recomendamos utilizar una lente con una ampliación de al menos 20x, aunque la aplicación es compatible con lentes de diferente magnificación. Lentes como estas son portátiles y pueden ayudarlo a tomar excelentes fotografías de muchas cosas además del eclipse. Si está utilizando una lente de gran aumento (40x o más), podría considerar usar un sistema de seguimiento.\\n Una vez que haya decidido el equipo que utilizará, vaya a la configuración e ingrese su elección (puede cambiar la configuración en cualquier momento). "</string>
-    <string name="equipment_settings">equipment settings</string>
+    <string name="equipment_settings">Ajustes del equipo</string>
     <string name="privacy_agreement">Reconozco que estas fotos y sus ubicaciones serán parte de una base de datos pública.</string>
-    <string name="eclipse_day_skip_set_up">If you have already set up your equipment or would like to skip this step, you can go directly to capture mode</string>
+    <string name="eclipse_day_skip_set_up">Si uasted ya ha configurado su equipo o desea omitir este paso, puede ir directamente al modo de captura</string>
     <string name="select">Seleccionar</string>
+    <string name="countdown_explanation">Esta función el tiempo restante antes del comienzo de la totalidad en su lugar de observación, como lo marca el pin rojo.</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package ideum.com.megamovie.Java.NewUI.EclipseDay;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -48,7 +49,8 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         CaptureSequenceSession.CameraController,
         CameraPreviewAndCaptureFragment.CameraCaptureListener,
         CaptureSequenceSession.CaptureSessionCompletionListerner,
-        EclipseTimeProvider.Listener {
+        EclipseTimeProvider.Listener,
+        DialogInterface.OnClickListener {
 
     private static final String TAG = "CaptureActivity";
 
@@ -70,7 +72,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
     Boolean audioAlertGiven = false;
     private Long startTime;
-
+private boolean inPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
                 android.R.id.content, eclipseTimeProvider).commit();
 
         eclipseTimeProvider.addListener(this);
+        inPath = eclipseTimeProvider.inPath();
 
         countdownFragment = (SmallCountdownFragment) getSupportFragmentManager().findFragmentById(R.id.countdown_fragment);
         cameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
@@ -124,6 +127,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
                 return;
             }
         }
+
         Long c2Time = contactTimes.get(c2);
         Long c3Time = contactTimes.get(c3);
         startTime = c2Time;
@@ -135,6 +139,10 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        if(!inPath) {
+            showNotInPathDialog();
+
+        }
         mTimer = new MyTimer();
         mTimer.addListener(this);
         mTimer.startTicking();
@@ -235,8 +243,8 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     private void showNotInPathDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.not_in_path_dialog))
-                .setPositiveButton(getString(R.string.got_it), null)
-                .setCancelable(true);
+                .setPositiveButton(getString(R.string.got_it), this)
+                .setCancelable(false);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -320,4 +328,8 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         return new CaptureSequence(interval);
     }
 
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        finish();
+    }
 }

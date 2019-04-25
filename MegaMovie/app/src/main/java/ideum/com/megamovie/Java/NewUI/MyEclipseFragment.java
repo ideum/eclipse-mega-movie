@@ -39,7 +39,7 @@ public class MyEclipseFragment extends PreferenceFragment {
             }
 
             if (preference.getKey().equals("user_mode_preference")) {
-                if (!stringValue.equals("Phone with equipment")) {
+                if (!stringValue.equals(preference.getContext().getString(R.string.phone_with_equipment))) {
                     lens_preference.setEnabled(false);
                     tripod_preference.setEnabled(false);
                     tracking_mount_preference.setEnabled(false);

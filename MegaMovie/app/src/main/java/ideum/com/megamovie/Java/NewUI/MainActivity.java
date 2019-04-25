@@ -8,11 +8,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,9 +24,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.Calendar;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
+
+import ideum.com.megamovie.Java.Application.Config;
 import ideum.com.megamovie.Java.Application.CustomNamable;
 import ideum.com.megamovie.Java.Application.MyApplication;
 import ideum.com.megamovie.Java.Application.UploadActivity;
+import ideum.com.megamovie.Java.LocationAndTiming.DateUtil;
 import ideum.com.megamovie.Java.LocationAndTiming.EclipseTimeProvider;
 import ideum.com.megamovie.Java.LocationAndTiming.MyTimer;
 import ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayIntroFragment;
@@ -36,10 +45,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         CalibrationFragment.OnFragmentInteractionListener,
         MyTimer.MyTimerListener,
-        FragmentManager.OnBackStackChangedListener{
+        FragmentManager.OnBackStackChangedListener {
 
     private EclipseTimeProvider eclipseTimeProvider;
-
+    private static final String TAG = "MAIN_ACTIVITY";
 
     @Override
     protected void onResume() {
@@ -61,7 +70,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor edit = prefs.edit();
             edit.putBoolean(getResources().getString(R.string.previously_started_key), true);
             edit.commit();
-            startActivity(new Intent(this,WelcomeActivity.class));
+            startActivity(new Intent(this, WelcomeActivity.class));
             finish();
             return;
         }
@@ -76,6 +85,12 @@ public class MainActivity extends AppCompatActivity
          * Get all necessary permission right away. Could wait until they are needed but this makes
          * it easier to avoid bugs the first time the app is opened
          */
+
+
+
+
+
+
         if (!hasAllPermissionsGranted()) {
             requestAllPermissions();
         }
@@ -124,7 +139,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer == null) {
             return;
-    }
+        }
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -174,11 +189,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.full_moon_test) {
             loadFragment(MoonTestIntroFragment.class);
-        }
-        else if (id == R.id.eclipse_day) {
+        } else if (id == R.id.eclipse_day) {
             loadFragment(EclipseDayIntroFragment.class);
-        }
-        else if (id == R.id.upload_mode) {
+        } else if (id == R.id.upload_mode) {
             loadActivity(UploadActivity.class);
         }
 
@@ -232,7 +245,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void loadAssistantFragment(int index) throws ClassNotFoundException {
-
         AssistantEquipmentChoiceInfoFragment fragment = AssistantEquipmentChoiceInfoFragment.newInstance(index);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -247,6 +259,28 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        Fragment current = getSupportFragmentManager().findFragmentByTag("current");
+        if (current == null) {
+            return;
+        }
+
+        if (current instanceof EclipseInfoFragment) {
+            EclipseInfoFragment eif = (EclipseInfoFragment) current;
+            eif.refresh();
+
+        }
+
+        if (current instanceof CustomNamable) {
+            CustomNamable cn = (CustomNamable) current;
+            getSupportActionBar().setTitle(getString(cn.getTitleId()));
+            getSupportActionBar().show();
+        } else {
+            getSupportActionBar().hide();
+        }
     }
 
     @Override
@@ -292,25 +326,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onBackStackChanged() {
-        Fragment current = getSupportFragmentManager().findFragmentByTag("current");
-        if (current == null) {
-            return;
-        }
 
-        if (current instanceof EclipseInfoFragment) {
-            EclipseInfoFragment eif = (EclipseInfoFragment) current;
-            eif.refresh();
-
-        }
-
-        if (current instanceof CustomNamable) {
-            CustomNamable cn = (CustomNamable) current;
-            getSupportActionBar().setTitle(getString(cn.getTitleId()));
-
-        }
-    }
 
 
 }

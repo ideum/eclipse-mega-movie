@@ -45,17 +45,6 @@ public class EclipseTimingPatch {
         }
     }
 
-    public Long timeUnitsAfterBasetime(LatLng p) {
-        long row = Math.round((p.latitude - latMin)/latLngInterval);
-        long col = Math.round((p.longitude - lngMin)/latLngInterval);
-        int index = (int)(row * numCols() + col);
-        if (index >= 0 && index < timeOffsets.length) {
-            return 1l*timeOffsets[index];
-        } else {
-            return null;
-        }
-    }
-
     public EclipseTimingPatch(double latMin, double latMax, double lngMin, double lngMax, double latLngInterval, int[] timeOffsets) {
         this.latMin = latMin;
         this.latMax = latMax;

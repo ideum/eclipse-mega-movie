@@ -84,7 +84,7 @@ implements CustomNamable{
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
+                //mainActivity.getSupportActionBar().setTitle(getString(R.string.eclipse_info_section_title));
                 mainActivity.loadFragment(EclipseInfoFragment.class);
             }
         });

@@ -4,15 +4,15 @@ public class Config {
     /* TESTING OPTIONS */
 
     // Used in GPSFragment
-    public static final boolean SHOULD_USE_DUMMY_LOCATION = true;
+    public static final boolean SHOULD_USE_DUMMY_LOCATION = false;
     public static final double DUMMY_LATITUDE = -35;//-34.668819;
     public static final double DUMMY_LONGITUDE = -58;//-59.428295;
 
     //Used in EclipseTimeProvider
-    public static final Boolean USE_DUMMY_TIME_C2 = true;
+    public static final Boolean USE_DUMMY_TIME_C2 = false;
     public static long  DUMMY_C2_LEAD_TIME = 20000;
     // Used in EclipseDayCaptureActivity
-    public static final Boolean ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE = true;
+    public static final Boolean ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE = false;
 
     /* OTHER PARAMETERS */
 
@@ -48,7 +48,7 @@ public class Config {
 
     // Used in EclipseTimingPatch
     public final static int ECLIPSE_BASETIME_YEAR = 2019;
-    public final static int ECLIPSE_BASETIME_MONTH = 7;
+    public final static int ECLIPSE_BASETIME_MONTH = 6;
     public final static int ECLIPSE_BASETIME_DAY = 2;
     public final static int ECLIPSE_BASETIME_HOUR = 0;
     public final static int ECLIPSE_BASETIME_MINUTE = 0;

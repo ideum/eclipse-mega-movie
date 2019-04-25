@@ -88,7 +88,7 @@
             android:drawableRight="@drawable/ic_chevron_right_gray_24dp"
             android:elevation="0dp"
             android:fontFamily="Roboto"
-            android:text="FINISH"
+            android:text="@string/finish"
             android:textColor="#6E6E6E"
             android:textSize="14sp" />
     </FrameLayout>

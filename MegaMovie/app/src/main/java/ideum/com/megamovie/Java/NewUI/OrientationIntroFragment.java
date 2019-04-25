@@ -21,7 +21,7 @@ public class OrientationIntroFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_orientation_intro,container,false);
          MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().hide();
+         //mainActivity.getSupportActionBar().hide();
 
         Button nextButton = (Button) rootView.findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -29,8 +29,7 @@ public class OrientationIntroFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.loadFragment(AssistantFragment.class);
-                 mainActivity.getSupportActionBar().show();
-                //mainActivity.getSupportActionBar().setTitle(getString(R.string.orientation_section_title));
+                 //mainActivity.getSupportActionBar().show();
             }
         });
         return rootView;

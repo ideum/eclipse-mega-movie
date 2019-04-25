@@ -23,12 +23,11 @@ public class EclipsePath {
     private static final double[] CENTERLINE_COEFFS = {-6.7982e+01,-1.0794e+00,-2.0007e-02,-2.5639e-04,-1.1500e-06};
     private static final double[] NORTH_BOUNDARY_COEFFS = {1.6155e+01,4.1655e+00,1.0321e-01,1.0270e-03,3.8562e-06};
 
-//    private static final double[] SOUTH_BOUNDARY_COEFFS = {209.07217, 11.207175, 0.24183656, 0.0023871380, 1.1327374e-05, 2.1152977e-08};
-//    private static final double[] CENTERLINE_COEFFS = {195.41727, 10.557370, 0.23023880, 0.0022852060, 1.0882614e-05, 2.0380168e-08};
-//    private static final double[] NORTH_BOUNDARY_COEFFS = {182.12413, 9.9208717, 0.21882740, 0.0021844822, 1.0441281e-05, 1.9610047e-08};
 
-    private static final double minLongitude = -72;//-126;//
-    private static final double maxLongitude = -57;//-78;//
+    private static final double minLongitude = -72;
+    private static final double minLongitudeUpperBoundary = - 71.339;
+    private static final double minLongitudeLowerBoundary = -71.405;
+    private static final double maxLongitude = -57.6;
 
     public static double getLatForLng(double lng,int boundary) {
        double[] coefficients = {};
@@ -57,6 +56,16 @@ public class EclipsePath {
         double lat = getLatForLng(lng,boundary);
         return new LatLng(lat,lng);
     }
+
+    public static LatLng getLandLatLngForParameter(double t,int boundary) {
+        double minLng = boundary == SOUTH_BOUNDARY? minLongitudeLowerBoundary : minLongitudeUpperBoundary;
+
+        double lng = minLng + t * (maxLongitude - minLng);
+        double lat = getLatForLng(lng,boundary);
+        return new LatLng(lat,lng);
+    }
+
+
 
     // Formula for the distance (in km) between two points on the earth's SOUTH_BOUNDARY_COEFFS surface,
     // travelling along a great circle (geodesic distance)
@@ -105,12 +114,12 @@ public class EclipsePath {
     private static LatLng closestPointOnBoundary(LatLng pos, int boundary) {
 
         double parameter = 0;
-        LatLng endpoint = getLatLngForParameter(parameter,boundary);
+        LatLng endpoint = getLandLatLngForParameter(parameter,boundary);
         double minDistance = greatCircleDistance(pos,endpoint);
         double minParameter = 0;
 
         while(parameter < 1 ) {
-            endpoint = getLatLngForParameter(parameter,boundary);
+            endpoint = getLandLatLngForParameter(parameter,boundary);
             double distance = greatCircleDistance(pos,endpoint);
             if (distance < minDistance) {
                 minDistance = distance;
@@ -119,7 +128,7 @@ public class EclipsePath {
             parameter = parameter + 1.0/NUM_SAMPLE_POINTS;
         }
 
-        return getLatLngForParameter(minParameter,boundary);
+        return getLandLatLngForParameter(minParameter,boundary);
     }
 
 }

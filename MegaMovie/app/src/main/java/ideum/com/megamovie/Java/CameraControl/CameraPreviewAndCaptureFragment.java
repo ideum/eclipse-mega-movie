@@ -30,6 +30,7 @@ import android.media.MediaRecorder;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -37,6 +38,7 @@ import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -376,7 +378,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
             requestAllPermissions();
         }
         createVideoFileFolder();
-
+        //checkWriteStoragePermission();
         mMediaRecorder = new MediaRecorder();
     }
 
@@ -604,7 +606,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         }
     }
 
-    private void startRecord(){
+    public void startRecord(){
         try {
             setupMediaRecorder();
             SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
@@ -625,6 +627,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     } catch (CameraAccessException e) {
                         e.printStackTrace();
                     }
+                    mMediaRecorder.start();
                 }
 
                 @Override
@@ -636,8 +639,14 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
             e.printStackTrace();
         }
 
+    }
+
+    public void stopRecord() {
+        mMediaRecorder.stop();
+        mMediaRecorder.reset();
 
     }
+
 
 
     private void createSession() {
@@ -990,14 +999,30 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         return videoFile;
     }
 
+//    private void checkWriteStoragePermission() {
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//
+//            } else {
+//                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+//            }
+//        } else {
+//            try {
+//                createVideoFileName();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
     private void setupMediaRecorder() throws IOException {
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mMediaRecorder.setOutputFile(mVideoFileName);
+        mMediaRecorder.setOutputFile(getVideoFilePath(getActivity()));
         mMediaRecorder.setVideoEncodingBitRate(1000000);
         mMediaRecorder.setVideoFrameRate(Config.VIDEO_FRAMERATE);
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(),mVideoSize.getHeight());
-        mMediaRecorder.setVideoEncodingBitRate(MediaRecorder.VideoEncoder.H264);
+        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         mMediaRecorder.setOrientationHint(mTotalRotation);
         mMediaRecorder.prepare();
     }
