@@ -9,11 +9,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ideum.com.megamovie.Java.PatagoniaTest.CameraTestActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.PatagoniaTest.CameraTestActivity">
 
 
 
-    <fragment android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+    <fragment android:name="ideum.com.eclipsecamera2019.Java.CameraControl.CameraPreviewAndCaptureFragment"
         android:id="@+id/camera_test_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"

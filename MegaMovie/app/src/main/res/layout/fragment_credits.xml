@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eceff1"
-    tools:context="ideum.com.megamovie.Java.NewUI.CreditsFragment">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.CreditsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

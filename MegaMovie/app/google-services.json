@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:668463149127:android:2235a77d4a7049cc",
         "android_client_info": {
-          "package_name": "ideum.com.megamovie"
+          "package_name": "ideum.com.eclipsecamera2019"
         }
       },
       "oauth_client": [
@@ -26,7 +26,7 @@
           "client_id": "668463149127-s1fhse3bdkod8sjj2i2lvsrqool6js7v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ideum.com.megamovie",
+            "package_name": "ideum.com.eclipsecamera2019",
             "certificate_hash": "863c02f229cb353f6cefdada6a3f58d74438f5f5"
           }
         },

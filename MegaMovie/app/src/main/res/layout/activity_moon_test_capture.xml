@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#000"
-    tools:context="ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestCaptureActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestCaptureActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
 
         <fragment
             android:id="@+id/camera_fragment"
-            android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+            android:name="ideum.com.eclipsecamera2019.Java.CameraControl.CameraPreviewAndCaptureFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -40,7 +40,7 @@
 
                 <fragment
                     android:id="@+id/countdown_fragment"
-                    android:name="ideum.com.megamovie.Java.LocationAndTiming.SmallCountdownFragment"
+                    android:name="ideum.com.eclipsecamera2019.Java.LocationAndTiming.SmallCountdownFragment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.MoonTest.CompassCalibrationFragment">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.CompassCalibrationFragment">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ideum.com.megamovie.Java.NewUI.EclipseInfoFragment$PlaceholderFragment">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.EclipseInfoFragment$PlaceholderFragment">
 
     <TextView
         android:id="@+id/section_text"

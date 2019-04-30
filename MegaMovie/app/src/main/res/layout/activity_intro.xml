@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:background="#ddd"
     android:animateLayoutChanges="true"
-    tools:context="ideum.com.megamovie.Java.NewUI.IntroActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.IntroActivity">
 
 
 

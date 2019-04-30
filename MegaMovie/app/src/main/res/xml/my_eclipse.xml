@@ -9,7 +9,7 @@
         android:dialogTitle="@string/how_do_you_plan"
         android:defaultValue="@string/user_mode_default"
         />
-    <ideum.com.megamovie.Java.NewUI.NumberPickerPreference
+    <ideum.com.eclipsecamera2019.Java.NewUI.NumberPickerPreference
         android:key="@string/lens_magnification_pref_key"
         android:title="@string/external_lens_magnification"
         android:dialogTitle="@string/external_lens_magnification"

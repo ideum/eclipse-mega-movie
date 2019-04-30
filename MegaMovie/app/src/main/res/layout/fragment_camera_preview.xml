@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.PatagoniaTest.CameraPreviewFragment">
+    tools:context="ideum.com.eclipsecamera2019.Java.PatagoniaTest.CameraPreviewFragment">
 
     <TextureView android:id="@+id/preview_texture_view"
         android:layout_width="match_parent"

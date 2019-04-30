@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.MyEclipseActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.MyEclipseActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/my_eclipse_fragment"
-        android:name="ideum.com.megamovie.Java.NewUI.MyEclipseFragment"
+        android:name="ideum.com.eclipsecamera2019.Java.NewUI.MyEclipseFragment"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

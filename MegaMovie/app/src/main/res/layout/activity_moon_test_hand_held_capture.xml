@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestHandHeldCaptureActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestHandHeldCaptureActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
 
         <fragment
             android:id="@+id/camera_fragment"
-            android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+            android:name="ideum.com.eclipsecamera2019.Java.CameraControl.CameraPreviewAndCaptureFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.MoonTest.MoonTestCalibrateLensActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestCalibrateLensActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:id="@+id/camera_preview_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+            android:name="ideum.com.eclipsecamera2019.Java.CameraControl.CameraPreviewAndCaptureFragment"
             />
             <LinearLayout
                 android:layout_width="wrap_content"

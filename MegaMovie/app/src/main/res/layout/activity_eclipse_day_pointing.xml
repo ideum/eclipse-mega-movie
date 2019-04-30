@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayPointingActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayPointingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
 
         <fragment
             android:id="@+id/direction_calibration_fragment"
-            android:name="ideum.com.megamovie.Java.OrientationController.CalibrateDirectionFragment"
+            android:name="ideum.com.eclipsecamera2019.Java.OrientationController.CalibrateDirectionFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3" />

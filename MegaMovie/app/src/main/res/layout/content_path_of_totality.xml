@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.MainActivity"
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="14"
-        android:name="ideum.com.megamovie.Java.NewUI.EclipseInfoFragment"
+        android:name="ideum.com.eclipsecamera2019.Java.NewUI.EclipseInfoFragment"
         android:id="@+id/tab_fragment"
         />
 

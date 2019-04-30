@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.LocationAndTiming.MyMapFragment">
+    tools:context="ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyMapFragment">
 
     <LinearLayout
         android:id="@+id/myMap_fragment_holder"

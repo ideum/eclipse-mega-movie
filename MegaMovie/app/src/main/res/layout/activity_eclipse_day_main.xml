@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayMainActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayMainActivity">
 
     <include
         layout="@layout/app_bar_main"

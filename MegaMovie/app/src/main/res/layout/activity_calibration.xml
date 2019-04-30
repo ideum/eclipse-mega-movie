@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ideum.com.megamovie.Java.PatagoniaTest.CalibrationActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.PatagoniaTest.CalibrationActivity">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="0dp"
@@ -18,7 +18,7 @@
     android:layout_marginBottom="5dp">
     <fragment
         android:id="@+id/timer_fragment"
-        android:name="ideum.com.megamovie.Java.PatagoniaTest.EclipseCountdownFragment"
+        android:name="ideum.com.eclipsecamera2019.Java.PatagoniaTest.EclipseCountdownFragment"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
@@ -27,7 +27,7 @@
 </LinearLayout>
 
     <fragment android:id="@+id/preview_fragment"
-        android:name="ideum.com.megamovie.Java.CameraControl.CameraPreviewAndCaptureFragment"
+        android:name="ideum.com.eclipsecamera2019.Java.CameraControl.CameraPreviewAndCaptureFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"

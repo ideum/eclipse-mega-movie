@@ -17,7 +17,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '28.0.3'
     defaultConfig {
-        applicationId "ideum.com.megamovie"
+        applicationId "ideum.com.eclipsecamera2019"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 9

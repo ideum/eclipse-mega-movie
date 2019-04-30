@@ -33,9 +33,9 @@
     </integer-array>
 
     <string-array name="assistant_next_classes">
-        <item>ideum.com.megamovie.Java.NewUI.EclipseInfoFragment</item>
-        <item>ideum.com.megamovie.Java.NewUI.AssistantEquipmentChoiceFragment</item>
-        <item>ideum.com.megamovie.Java.NewUI.EclipseInfoFragment</item>
+        <item>ideum.com.eclipsecamera2019.Java.NewUI.EclipseInfoFragment</item>
+        <item>ideum.com.eclipsecamera2019.Java.NewUI.AssistantEquipmentChoiceFragment</item>
+        <item>ideum.com.eclipsecamera2019.Java.NewUI.EclipseInfoFragment</item>
     </string-array>
 
 

@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.EclipseDay.EclipseDayMyEclipseActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayMyEclipseActivity">
 
 
     <fragment
         android:id="@+id/eclipse_day_my_eclipse"
-        android:name="ideum.com.megamovie.Java.NewUI.MyEclipseFragment"
+        android:name="ideum.com.eclipsecamera2019.Java.NewUI.MyEclipseFragment"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

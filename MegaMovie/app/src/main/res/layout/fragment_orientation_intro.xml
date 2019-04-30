@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ideum.com.megamovie.Java.NewUI.OrientationIntroFragment">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.OrientationIntroFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

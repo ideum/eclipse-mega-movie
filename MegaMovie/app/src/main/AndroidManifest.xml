@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="ideum.com.megamovie"
+    package="ideum.com.eclipsecamera2019"
     android:versionCode="9"
     android:versionName="3.01">
 
@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name=".Java.Application.MyApplication"
+        android:name="ideum.com.eclipsecamera2019.Java.Application.MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/app_icon_new"
         android:label="@string/app_name"
@@ -29,15 +29,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Java.VideoTestActivity">
+        <activity android:name="ideum.com.eclipsecamera2019.Java.VideoTestActivity">
 
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".Java.NewUI.WelcomeActivity" android:screenOrientation="portrait">
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.WelcomeActivity" android:screenOrientation="portrait">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -59,17 +59,17 @@
             android:value="AIzaSyB0mm9X7tEIxtV-2DAS1LRMhmhGwLQPl-8" />
 
         <activity
-            android:name=".Java.NewUI.MainActivity"
+            android:name="ideum.com.eclipsecamera2019.Java.NewUI.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".Java.NewUI.IntroActivity"
+            android:name="ideum.com.eclipsecamera2019.Java.NewUI.IntroActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
@@ -81,22 +81,22 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".Java.NewUI.AboutActivity" />
-        <activity android:name=".Java.NewUI.MyEclipseActivity" />
-        <activity android:name=".Java.NewUI.MoonTest.MoonTestCaptureActivity" />
-        <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateDirectionActivity" />
-        <activity android:name=".Java.NewUI.MoonTest.MoonTestCalibrateLensActivity" />
-        <activity android:name=".Java.NewUI.MoonTest.MoonTestHandHeldCaptureActivity" />
-        <activity android:name=".Java.NewUI.MoonTest.MoonTestPointingActivity" />
-        <activity android:name=".Java.NewUI.SensorTestActivity" />
-        <activity android:name=".Java.Application.UploadActivity" />
-        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayInstructions" />
-        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayMainActivity" />
-        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayMyEclipseActivity" />
-        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCaptureActivity" />
-        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCalibrateDirectionActivity" />
-        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayPointingActivity" />
-        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCalibrateLensActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.AboutActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.MyEclipseActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestCaptureActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestCalibrateDirectionActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestCalibrateLensActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestHandHeldCaptureActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestPointingActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.SensorTestActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.Application.UploadActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayInstructions" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayMainActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayMyEclipseActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayCaptureActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayCalibrateDirectionActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayPointingActivity" />
+        <activity android:name="ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayCalibrateLensActivity" />
     </application>
 
 </manifest>

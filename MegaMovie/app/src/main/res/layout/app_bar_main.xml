@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ideum.com.megamovie.Java.NewUI.MainActivity">
+    tools:context="ideum.com.eclipsecamera2019.Java.NewUI.MainActivity">
 
     <View
         android:layout_width="match_parent"
