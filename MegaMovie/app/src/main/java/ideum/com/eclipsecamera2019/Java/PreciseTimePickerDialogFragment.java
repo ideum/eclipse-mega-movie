@@ -18,8 +18,15 @@ import ideum.com.eclipsecamera2019.R;
 public class PreciseTimePickerDialogFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
 
-    private List<DialogInterface.OnDismissListener> listeners = new ArrayList<>();
-
+    public interface OnDismissListener {
+        void onDismiss(int hour,int minute);
+    }
+    private int hour;
+    private int minute;
+    private List<OnDismissListener> listeners = new ArrayList<>();
+    public void addDismissListener(OnDismissListener listener) {
+        listeners.add(listener);
+    }
 
     @NonNull
     @Override
@@ -27,27 +34,21 @@ public class PreciseTimePickerDialogFragment extends DialogFragment implements T
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-        int second = c.get(Calendar.SECOND);
         return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
-
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor edit = prefs.edit();
-
-        edit.putInt(getString(R.string.test_time_hour),i);
-        edit.putInt(getString(R.string.test_time_minute),i1);
-        edit.commit();
+        hour = i;
+        minute = i1;
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        for(DialogInterface.OnDismissListener listener : listeners) {
-            listener.onDismiss(dialog);
+
+        for(OnDismissListener listener : listeners) {
+            listener.onDismiss(hour,minute);
         }
     }
-
 }

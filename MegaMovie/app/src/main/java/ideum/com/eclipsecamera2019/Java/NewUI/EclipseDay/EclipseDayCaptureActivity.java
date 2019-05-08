@@ -291,8 +291,7 @@ private boolean inPath;
 
     @Override
     public void onSessionCompleted(CaptureSequenceSession session) {
-        //   Log.i("CAPTURE", "session completed");
-        //  Toast.makeText(this, "SessionCompleted!", Toast.LENGTH_LONG).show();
+
         finishedButton.setVisibility(View.VISIBLE);
         uploadButton.setVisibility(View.VISIBLE);
         mTimer.cancel();

@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -35,9 +36,20 @@ import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CaptureFailure;
 import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.CaptureResult;
+import android.hardware.camera2.DngCreator;
+import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.location.Location;
+import android.media.ExifInterface;
+import android.media.Image;
+import android.media.ImageReader;
 import android.media.MediaRecorder;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -57,27 +69,37 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ideum.com.eclipsecamera2019.Java.AutoFitTextureView;
+import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPS;
+import ideum.com.eclipsecamera2019.Java.LocationAndTiming.LocationProvider;
 import ideum.com.eclipsecamera2019.R;
 
 public class VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
-
+    private LocationProvider mLocationProvider;
     public int mSensorSensitivity = 60;
     public float mFocusDistance = 0;
-    public long mDuration = 5000000; //nanoseconds
-
+    public long mDuration = 45 * 1000000; //nanoseconds
+    private Size mJpegImageSize;
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
     private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
@@ -86,9 +108,19 @@ public class VideoFragment extends Fragment
     private static final String TAG = "VideoFragment";
     private static final int REQUEST_VIDEO_PERMISSIONS = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+    private final AtomicInteger mRequestCounter = new AtomicInteger();
 
     private File mVideoFolder;
     private String mVideoFileName;
+    private final TreeMap<Integer, ImageSaver.ImageSaverBuilder> mJpegResultQueue = new TreeMap<>();
+    private RefCountedAutoCloseable<ImageReader> mJpegImageReader;
+    private final ImageReader.OnImageAvailableListener mOnJpegImageAvailableListener =
+            new ImageReader.OnImageAvailableListener() {
+                @Override
+                public void onImageAvailable(ImageReader reader) {
+                    dequeueAndSaveImage(mJpegResultQueue, mJpegImageReader);
+                }
+            };
 
     private static final String[] VIDEO_PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -127,7 +159,7 @@ public class VideoFragment extends Fragment
      * A reference to the current {@link android.hardware.camera2.CameraCaptureSession} for
      * preview.
      */
-    private CameraCaptureSession mPreviewSession;
+    private CameraCaptureSession mSession;
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
@@ -157,6 +189,27 @@ public class VideoFragment extends Fragment
         public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
         }
 
+    };
+
+    private CameraCaptureSession.CaptureCallback mPreviewSessionCallback
+            = new CameraCaptureSession.CaptureCallback() {
+        @Override
+        public void onCaptureStarted(CameraCaptureSession session, CaptureRequest request, long timestamp, long frameNumber) {
+            super.onCaptureStarted(session, request, timestamp, frameNumber);
+        }
+
+        @Override
+        public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
+            super.onCaptureCompleted(session, request, result);
+
+        }
+
+        @Override
+        public void onCaptureFailed(CameraCaptureSession session, CaptureRequest request, CaptureFailure failure) {
+            super.onCaptureFailed(session, request, failure);
+
+         //   Toast.makeText(getActivity(), "preview session failed", Toast.LENGTH_SHORT).show();
+        }
     };
 
     /**
@@ -202,7 +255,7 @@ public class VideoFragment extends Fragment
         @Override
         public void onOpened(@NonNull CameraDevice cameraDevice) {
             mCameraDevice = cameraDevice;
-            startPreview();
+            createSession();
             mCameraOpenCloseLock.release();
             if (null != mTextureView) {
                 configureTransform(mTextureView.getWidth(), mTextureView.getHeight());
@@ -253,36 +306,63 @@ public class VideoFragment extends Fragment
         return choices[choices.length - 1];
     }
 
-    /**
-     * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest one whose
-     * width and height are at least as large as the respective requested values, and whose aspect
-     * ratio matches with the specified value.
-     *
-     * @param choices     The list of sizes that the camera supports for the intended output class
-     * @param width       The minimum desired width
-     * @param height      The minimum desired height
-     * @param aspectRatio The aspect ratio
-     * @return The optimal {@code Size}, or an arbitrary one if none were big enough
-     */
-    private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
-        // Collect the supported resolutions that are at least as big as the preview Surface
-        List<Size> bigEnough = new ArrayList<>();
-        int w = aspectRatio.getWidth();
-        int h = aspectRatio.getHeight();
-        for (Size option : choices) {
-            if (option.getHeight() == option.getWidth() * h / w &&
-                    option.getWidth() >= width && option.getHeight() >= height) {
-                bigEnough.add(option);
+//    /**
+//     * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest one whose
+//     * width and height are at least as large as the respective requested values, and whose aspect
+//     * ratio matches with the specified value.
+//     *
+//     * @param choices     The list of sizes that the camera supports for the intended output class
+//     * @param width       The minimum desired width
+//     * @param height      The minimum desired height
+//     * @param aspectRatio The aspect ratio
+//     * @return The optimal {@code Size}, or an arbitrary one if none were big enough
+//     */
+//    private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
+//        // Collect the supported resolutions that are at least as big as the preview Surface
+//        List<Size> bigEnough = new ArrayList<>();
+//        int w = aspectRatio.getWidth();
+//        int h = aspectRatio.getHeight();
+//        for (Size option : choices) {
+//            if (option.getHeight() == option.getWidth() * h / w &&
+//                    option.getWidth() >= width && option.getHeight() >= height) {
+//                bigEnough.add(option);
+//            }
+//        }
+//
+//        // Pick the smallest of those, assuming we found any
+//        if (bigEnough.size() > 0) {
+//            return Collections.min(bigEnough, new CompareSizesByArea());
+//        } else {
+//            Log.e(TAG, "Couldn't find any suitable preview size");
+//            return choices[0];
+//        }
+//    }
+
+    private Size getPreferredPreviewSize(Size[] mapSizes, int width, int height) {
+        List<Size> collectorSizes = new ArrayList<Size>();
+        for (Size option : mapSizes) {
+            //landscape
+            if (width < height) {
+                if (option.getWidth() > width && option.getHeight() > height) {
+                    collectorSizes.add(option);
+                }
+            }
+            //portrait
+            if (width < height) {
+                if (option.getWidth() > height && option.getHeight() > width) {
+                    collectorSizes.add(option);
+                }
             }
         }
-
-        // Pick the smallest of those, assuming we found any
-        if (bigEnough.size() > 0) {
-            return Collections.min(bigEnough, new CompareSizesByArea());
-        } else {
-            Log.e(TAG, "Couldn't find any suitable preview size");
-            return choices[0];
+        if (collectorSizes.size() > 0) {
+            return Collections.min(collectorSizes, new Comparator<Size>() {
+                @Override
+                public int compare(Size lhs, Size rhs) {
+                    return Long.signum(lhs.getWidth() * lhs.getHeight() - rhs.getWidth() * rhs.getHeight());
+                }
+            });
         }
+        return mapSizes[0];
     }
 
 
@@ -440,16 +520,16 @@ public class VideoFragment extends Fragment
             String cameraId = manager.getCameraIdList()[0];
 
             // Choose the sizes for camera preview and video recording
-            CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
-            StreamConfigurationMap map = characteristics
+             mCharacteristics = manager.getCameraCharacteristics(cameraId);
+            StreamConfigurationMap map = mCharacteristics
                     .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
+            mSensorOrientation = mCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
             if (map == null) {
                 throw new RuntimeException("Cannot get available preview/video sizes");
             }
             mVideoSize = chooseVideoSize(map.getOutputSizes(MediaRecorder.class));
-            mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
-                    width, height, mVideoSize);
+            mPreviewSize = getPreferredPreviewSize(map.getOutputSizes(SurfaceTexture.class),
+                    width, height);
 
             int orientation = getResources().getConfiguration().orientation;
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -458,6 +538,31 @@ public class VideoFragment extends Fragment
                 mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
             }
             configureTransform(width, height);
+
+            List<Size> sortedSizes = Arrays.asList(map.getOutputSizes(ImageFormat.JPEG));
+
+            Collections.sort(sortedSizes, new Comparator<Size>() {
+                        @Override
+                        public int compare(Size lhs, Size rhs) {
+                            return Long.signum(lhs.getWidth() * lhs.getHeight() -
+                                    rhs.getWidth() * rhs.getHeight());
+                        }
+                    }
+            );
+
+            int numberOfSizes = sortedSizes.size();
+            // Pick out the middle size
+            mJpegImageSize = sortedSizes.get(numberOfSizes / 2);
+
+            if (mJpegImageReader == null || mJpegImageReader.getAndRetain() == null) {
+                mJpegImageReader = new RefCountedAutoCloseable<>(
+                        ImageReader.newInstance(mJpegImageSize.getWidth(),
+                                mJpegImageSize.getHeight(),
+                                ImageFormat.JPEG,
+                                /*max images */5));
+
+            }
+            mJpegImageReader.get().setOnImageAvailableListener(mOnJpegImageAvailableListener, mBackgroundHandler);
             createVideoFileFolder();
             mMediaRecorder = new MediaRecorder();
             manager.openCamera(cameraId, mStateCallback, null);
@@ -496,7 +601,8 @@ public class VideoFragment extends Fragment
     /**
      * Start the camera preview.
      */
-    private void startPreview() {
+    private Surface mPreviewSurface;
+    private void createSession() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
@@ -505,18 +611,19 @@ public class VideoFragment extends Fragment
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-            mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+             mPreviewSurface = new Surface(texture);
 
-            Surface previewSurface = new Surface(texture);
-            mPreviewBuilder.addTarget(previewSurface);
+            List<Surface> surfaces = new ArrayList<>();
+            surfaces.add(mPreviewSurface);
+            surfaces.add(mJpegImageReader.get().getSurface());
 
-            mCameraDevice.createCaptureSession(Collections.singletonList(previewSurface),
+            mCameraDevice.createCaptureSession(surfaces,
                     new CameraCaptureSession.StateCallback() {
 
                         @Override
                         public void onConfigured(@NonNull CameraCaptureSession session) {
-                            mPreviewSession = session;
-                            updatePreview();
+                            mSession = session;
+                            setPreviewRequest(true);
                         }
 
                         @Override
@@ -533,17 +640,23 @@ public class VideoFragment extends Fragment
     }
 
     /**
-     * Update the camera preview. {@link #startPreview()} needs to be called in advance.
+     * Update the camera preview. {@link #createSession()} needs to be called in advance.
      */
-    private void updatePreview() {
+    private void setPreviewRequest(boolean createPreviewBuilder) {
         if (null == mCameraDevice) {
             return;
         }
         try {
+            if(createPreviewBuilder) {
+                mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            }
+
+            mPreviewBuilder.addTarget(mPreviewSurface);
             setUpCaptureRequestBuilder(mPreviewBuilder);
-            HandlerThread thread = new HandlerThread("CameraPreview");
-            thread.start();
-            mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, mBackgroundHandler);
+            //Why is this here?? What does it do???
+         //   HandlerThread thread = new HandlerThread("CameraPreview");
+          //  thread.start();
+            mSession.setRepeatingRequest(mPreviewBuilder.build(), mPreviewSessionCallback, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -619,11 +732,7 @@ public class VideoFragment extends Fragment
         mMediaRecorder.prepare();
     }
 
-    private String getVideoFilePath(Context context) {
-        final File dir = context.getExternalFilesDir(null);
-        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
-                + System.currentTimeMillis() + ".mp4";
-    }
+
 
     private void createVideoFileFolder() {
         File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
@@ -656,9 +765,9 @@ public class VideoFragment extends Fragment
             List<Surface> surfaces = new ArrayList<>();
 
             // Set up Surface for the camera preview
-            Surface previewSurface = new Surface(texture);
-            surfaces.add(previewSurface);
-            mPreviewBuilder.addTarget(previewSurface);
+             mPreviewSurface = new Surface(texture);
+            surfaces.add(mPreviewSurface);
+            mPreviewBuilder.addTarget(mPreviewSurface);
 
             // Set up Surface for the MediaRecorder
             Surface recorderSurface = mMediaRecorder.getSurface();
@@ -671,8 +780,8 @@ public class VideoFragment extends Fragment
 
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    mPreviewSession = cameraCaptureSession;
-                    updatePreview();
+                    mSession = cameraCaptureSession;
+                    setPreviewRequest(false);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -701,9 +810,9 @@ public class VideoFragment extends Fragment
     }
 
     private void closePreviewSession() {
-        if (mPreviewSession != null) {
-            mPreviewSession.close();
-            mPreviewSession = null;
+        if (mSession != null) {
+            mSession.close();
+            mSession = null;
         }
     }
 
@@ -735,12 +844,25 @@ public class VideoFragment extends Fragment
 
         Activity activity = getActivity();
         if (null != activity) {
-            Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
+//                    Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
+            MediaScannerConnection.scanFile(activity, new String[]{mNextVideoAbsolutePath},
+                    null, new MediaScannerConnection.MediaScannerConnectionClient() {
+                        @Override
+                        public void onMediaScannerConnected() {
+                            // Do nothing
+                        }
+
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.i(TAG, "Scanned" + path + ":");
+                            Log.i(TAG, "-> uri=" + uri);
+                        }
+                    });
         }
         mNextVideoAbsolutePath = null;
-        startPreview();
+        createSession();
     }
 
     private static String generateTimeStamp() {
@@ -751,7 +873,12 @@ public class VideoFragment extends Fragment
         Log.i("timestamp",timeStamp);
         return timeStamp;
     }
-
+    private Location getLocation() {
+        if (mLocationProvider == null) {
+            return null;
+        }
+        return mLocationProvider.getLocation();
+    }
     /**
      * Compares two {@code Size}s based on their areas.
      */
@@ -818,6 +945,410 @@ public class VideoFragment extends Fragment
                     .create();
         }
 
+    }
+
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 0);
+        ORIENTATIONS.append(Surface.ROTATION_90, 90);
+        ORIENTATIONS.append(Surface.ROTATION_180, 180);
+        ORIENTATIONS.append(Surface.ROTATION_270, 270);
+    }
+    private int sensorToDeviceRotations(int rotation) {
+        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 360) % 360;
+    }
+
+    CameraCharacteristics mCharacteristics;
+
+    public static final String DEFAULT_DATA_DIRECTORY_NAME = "MegaMovieTestImages";
+
+    private String data_directory_name = DEFAULT_DATA_DIRECTORY_NAME;
+
+    private CameraCaptureSession.CaptureCallback mCaptureSessionCallback =
+            new CameraCaptureSession.CaptureCallback() {
+
+                @Override
+                public void onCaptureStarted(CameraCaptureSession session, CaptureRequest request, long timestamp, long frameNumber) {
+                    super.onCaptureStarted(session, request, timestamp, frameNumber);
+                    int requestId = (int) request.getTag();
+
+                    String currentDateTime = generateTimeStamp();
+
+
+                        ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+
+                        File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
+                        if (!jpegRootPath.exists()) {
+                            jpegRootPath.mkdirs();
+                        }
+
+                        File jpegFile = new File(jpegRootPath,
+                                "JPEG_" + currentDateTime + ".jpg");
+
+                        if (jpegBuilder != null) {
+                            jpegBuilder.setFile(jpegFile);
+                        }
+
+
+                }
+
+                @Override
+                public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
+                    super.onCaptureCompleted(session, request, result);
+
+
+                    int requestId = (int) request.getTag();
+                    ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+                    if (jpegBuilder != null) {
+                        jpegBuilder.setResult(result);
+                    }
+
+                }
+            };
+    public void takePhoto() {
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true);
+        takePhotoWithSettings(settings);
+    }
+    public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
+        if(mCameraDevice == null) {
+            return;
+        }
+        try {
+            final CaptureRequest.Builder captureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
+            if (settings.shouldSaveJpeg) {
+                captureRequestBuilder.addTarget(mJpegImageReader.get().getSurface());
+            }
+
+
+            int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
+            captureRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, sensorToDeviceRotations(rotation));
+            captureRequestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY, settings.sensitivity);
+            captureRequestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, settings.exposureTime);
+            captureRequestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, settings.focusDistance);
+
+            captureRequestBuilder.setTag(mRequestCounter.getAndIncrement());
+
+            CaptureRequest request = captureRequestBuilder.build();
+
+            if (settings.shouldSaveJpeg) {
+                ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder(getActivity()).setCharacteristics(mCharacteristics);
+                mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
+            }
+
+
+//            for (CameraCaptureListener listener : listeners) {
+//                listener.onCapture();
+//            }
+
+
+            mSession.capture(request,
+                    mCaptureSessionCallback,
+                    mBackgroundHandler);
+
+
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static class RefCountedAutoCloseable<T extends AutoCloseable> implements AutoCloseable {
+        private T mObject;
+        private long mRefCount = 0;
+
+        /**
+         * Wrap the given object.
+         *
+         * @param object an object to wrap.
+         */
+        public RefCountedAutoCloseable(T object) {
+            if (object == null) throw new NullPointerException();
+            mObject = object;
+        }
+
+        /**
+         * Increment the reference count and return the wrapped object.
+         *
+         * @return the wrapped object, or null if the object has been released.
+         */
+        public synchronized T getAndRetain() {
+            if (mRefCount < 0) {
+                return null;
+            }
+            mRefCount++;
+            return mObject;
+        }
+
+        /**
+         * Return the wrapped object.
+         *
+         * @return the wrapped object, or null if the object has been released.
+         */
+        public synchronized T get() {
+            return mObject;
+        }
+
+        /**
+         * Decrement the reference count and release the wrapped object if there are no other
+         * users retaining this object.
+         */
+        @Override
+        public synchronized void close() {
+            if (mRefCount >= 0) {
+                mRefCount--;
+                if (mRefCount < 0) {
+                    try {
+                        mObject.close();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    } finally {
+                        mObject = null;
+                    }
+                }
+            }
+        }
+    }
+
+
+    private static void closeOutput(OutputStream outputStream) {
+        if (null != outputStream) {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void dequeueAndSaveImage(TreeMap<Integer, ImageSaver.ImageSaverBuilder> pendingQueue,
+                                     RefCountedAutoCloseable<ImageReader> reader) {
+        Map.Entry<Integer, ImageSaver.ImageSaverBuilder> entry = pendingQueue.firstEntry();
+        ImageSaver.ImageSaverBuilder builder = entry.getValue();
+
+        // Increment reference count to prevent ImageReader from being closed while we
+        // are saving its Images in a background thread (otherwise their resources may
+        // be freed while we are writing to a file).
+        if (reader == null || reader.getAndRetain() == null) {
+            Log.e(TAG, "Paused the activity before we could save the image," +
+                    " ImageReader already closed.");
+            pendingQueue.remove(entry.getKey());
+            return;
+        }
+
+        Image image;
+        try {
+            image = reader.get().acquireNextImage();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            return;
+        }
+        builder.setRefCountedReader(reader).setImage(image);
+
+        Location loc = getLocation();
+        if(loc != null) {
+            builder.setLocation(loc);
+        }
+        handleCompletionLocked(entry.getKey(), builder, pendingQueue);
+    }
+
+    private void handleCompletionLocked(int requestId, ImageSaver.ImageSaverBuilder builder,
+                                        TreeMap<Integer, ImageSaver.ImageSaverBuilder> queue) {
+        if (builder == null) return;
+        ImageSaver saver = builder.buildIfComplete();
+        if (saver != null) {
+            queue.remove(requestId);
+            AsyncTask.THREAD_POOL_EXECUTOR.execute(saver);
+        }
+    }
+    private static class ImageSaver implements Runnable {
+
+        private final Image mImage;
+        private final File mFile;
+        private final CaptureResult mCaptureResult;
+        private final CameraCharacteristics mCharacteristics;
+        private final Context mContext;
+        private final RefCountedAutoCloseable<ImageReader> mReader;
+        private final Location mLocation;
+
+        private ImageSaver(Location location, Image image, File file, CaptureResult captureResult,
+                           CameraCharacteristics characteristics, Context context, RefCountedAutoCloseable<ImageReader> reader) {
+            mLocation = location;
+            mImage = image;
+            mFile = file;
+            mCaptureResult = captureResult;
+            mCharacteristics = characteristics;
+            mContext = context;
+            mReader = reader;
+        }
+
+        @Override
+        public void run() {
+            boolean success = false;
+            int format = mImage.getFormat();
+            switch (format) {
+                case ImageFormat.JPEG: {
+                    ByteBuffer byteBuffer = mImage.getPlanes()[0].getBuffer();
+                    byte[] bytes = new byte[byteBuffer.remaining()];
+                    byteBuffer.get(bytes);
+
+                    FileOutputStream fileOutputStream = null;
+
+                    try {
+                        fileOutputStream = new FileOutputStream(mFile);
+                        fileOutputStream.write(bytes);
+                        success = true;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        mImage.close();
+                        closeOutput(fileOutputStream);
+                    }
+
+                    if (mLocation != null) {
+                        Location location = mLocation;
+                        try {
+
+
+                            ExifInterface exif = new ExifInterface((mFile.getAbsolutePath()));
+
+                            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, GPS.latitudeRef(location.getLatitude()));
+                            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, GPS.convert(location.getLatitude()));
+
+                            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, GPS.longitudeRef(-location.getLongitude()));
+
+                            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, GPS.convert(-location.getLongitude()));
+
+                            SimpleDateFormat fmt_Exif = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                            exif.setAttribute(ExifInterface.TAG_DATETIME,fmt_Exif.format(new Date(location.getTime())));
+
+
+
+                            exif.saveAttributes();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                break;
+                case ImageFormat.RAW_SENSOR: {
+
+
+                    DngCreator dngCreator = new DngCreator(mCharacteristics, mCaptureResult);
+                    if (mLocation != null) {
+                        dngCreator.setLocation(mLocation);
+                    }
+
+
+                    FileOutputStream output = null;
+                    try {
+                        output = new FileOutputStream(mFile);
+                        dngCreator.writeImage(output, mImage);
+                        success = true;
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        mImage.close();
+                        closeOutput(output);
+                    }
+
+
+
+                }
+                break;
+                default: {
+                    Log.e(TAG, "Cannot save image, unexpected image format:" + format);
+                    break;
+                }
+            }
+
+            if (success) {
+                MediaScannerConnection.scanFile(mContext, new String[]{mFile.getPath()},
+                        null, new MediaScannerConnection.MediaScannerConnectionClient() {
+                            @Override
+                            public void onMediaScannerConnected() {
+                                // Do nothing
+                            }
+
+                            @Override
+                            public void onScanCompleted(String path, Uri uri) {
+                                Log.i(TAG, "Scanned" + path + ":");
+                                Log.i(TAG, "-> uri=" + uri);
+                            }
+                        });
+            }
+        }
+
+        public static class ImageSaverBuilder {
+            private Image mImage;
+            private File mFile;
+            private CaptureResult mCaptureResult;
+            private CameraCharacteristics mCharacteristics;
+            private RefCountedAutoCloseable<ImageReader> mReader;
+            private Context mContext;
+            private Location mLocation;
+
+            public ImageSaverBuilder(final Context context) {
+                mContext = context;
+            }
+
+            public synchronized ImageSaver.ImageSaverBuilder setRefCountedReader(RefCountedAutoCloseable<ImageReader> reader) {
+                if (reader == null) throw new NullPointerException();
+                mReader = reader;
+                return this;
+            }
+
+            public synchronized ImageSaver.ImageSaverBuilder setLocation(final Location location) {
+                mLocation = location;
+                return this;
+            }
+
+            public synchronized ImageSaver.ImageSaverBuilder setImage(final Image image) {
+                if (image == null) throw new NullPointerException();
+                mImage = image;
+                return this;
+            }
+
+            public synchronized ImageSaver.ImageSaverBuilder setFile(final File file) {
+                if (file == null) throw new NullPointerException();
+                mFile = file;
+                return this;
+            }
+
+            public synchronized ImageSaver.ImageSaverBuilder setResult(final CaptureResult result) {
+                if (result == null) throw new NullPointerException();
+                mCaptureResult = result;
+                return this;
+            }
+
+            public synchronized ImageSaver.ImageSaverBuilder setCharacteristics(final CameraCharacteristics characteristics) {
+                if (characteristics == null) throw new NullPointerException();
+                mCharacteristics = characteristics;
+                return this;
+            }
+
+            public synchronized ImageSaver buildIfComplete() {
+                if (!isComplete()) {
+                    return null;
+                }
+                return new ImageSaver(mLocation, mImage, mFile, mCaptureResult, mCharacteristics, mContext, mReader);
+            }
+
+            public synchronized String getSaveLocation() {
+                return (mFile == null) ? "Unknown" : mFile.toString();
+            }
+
+            public synchronized String getFileName() {
+                return (mFile == null) ? "Unknown" : mFile.getName();
+            }
+
+            public boolean isComplete() {
+                return mImage != null && mFile != null && mCaptureResult != null
+                        && mCharacteristics != null;
+            }
+
+        }
     }
 
 }

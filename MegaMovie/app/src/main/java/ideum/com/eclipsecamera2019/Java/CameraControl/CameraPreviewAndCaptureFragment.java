@@ -604,48 +604,6 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         }
     }
 
-    public void startRecord(){
-        try {
-            setupMediaRecorder();
-            SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
-            surfaceTexture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-            mPreviewSurface = new Surface(surfaceTexture);
-            Surface recordSurface = mMediaRecorder.getSurface();
-            mPreviewCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
-            mPreviewCaptureRequestBuilder.addTarget(mPreviewSurface);
-            mPreviewCaptureRequestBuilder.addTarget(recordSurface);
-
-            mCameraDevice.createCaptureSession(Arrays.asList(mPreviewSurface, recordSurface), new CameraCaptureSession.StateCallback() {
-                @Override
-                public void onConfigured(@NonNull CameraCaptureSession session) {
-                    try {
-                        session.setRepeatingRequest(
-                               mPreviewCaptureRequestBuilder.build(),null,null
-                       );
-                    } catch (CameraAccessException e) {
-                        e.printStackTrace();
-                    }
-                    mMediaRecorder.start();
-                }
-
-                @Override
-                public void onConfigureFailed(@NonNull CameraCaptureSession session) {
-
-                }
-            },mBackgroundHandler);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void stopRecord() {
-        mMediaRecorder.stop();
-        mMediaRecorder.reset();
-
-    }
-
-
 
     private void createSession() {
         try {

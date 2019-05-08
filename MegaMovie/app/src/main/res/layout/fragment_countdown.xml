@@ -190,4 +190,12 @@
         android:fontFamily="roboto"
         android:text="@string/countdown_explanation"
         android:layout_marginTop="30dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="40dp"
+        android:textColor="#000"
+        android:fontFamily="roboto"
+        android:text="@string/enable_location_services"
+        android:layout_marginTop="15dp"/>
 </LinearLayout>

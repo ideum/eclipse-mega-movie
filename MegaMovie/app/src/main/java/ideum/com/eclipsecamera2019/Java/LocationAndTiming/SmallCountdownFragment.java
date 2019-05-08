@@ -18,10 +18,20 @@ implements MyTimer.MyTimerListener{
 
     private TextView countdownTextView;
     private Long targetTimeMills;
+
+
     private String countdownString;
 
     public void setTargetTimeMills(Long mills) {
         targetTimeMills = mills;
+        millsRemaining = targetTimeMills - Calendar.getInstance().getTimeInMillis();
+       // updateUI();
+    }
+
+    private long millsRemaining;
+    public void setTimeRemainingMillis(long millis) {
+        millsRemaining = millis;
+        updateUI();
     }
 
 
@@ -42,25 +52,33 @@ implements MyTimer.MyTimerListener{
         return rootView;
     }
 
-    @Override
-    public void onTick() {
+    private void updateUI() {
         String s = getNewCountdownString();
         if (s == null || s == countdownString) {
             return;
         }
         countdownTextView.setText(s);
         countdownString = s;
+        if(millsRemaining < 0) {
+            countdownTextView.setTextColor(getResources().getColor(R.color.green_text_color));
+        } else {
+            countdownTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));
+        }
+    }
+
+    @Override
+    public void onTick() {
+       updateUI();
     }
 
     private String getNewCountdownString() {
-        if (targetTimeMills == null) {
-            return null;
-        }
-        Long millsRemaining = targetTimeMills - Calendar.getInstance().getTimeInMillis();
-        String days = DateUtil.countdownDaysString(millsRemaining);
-        String hours = DateUtil.countdownHoursString(millsRemaining);
-        String minutes = DateUtil.countdownMinutesString(millsRemaining);
-        String seconds = DateUtil.countdownSecondsString(millsRemaining);
+        long millis = Math.abs( millsRemaining);
+        String days = DateUtil.countdownDaysString(millis);
+        String hours = DateUtil.countdownHoursString(millis);
+        String minutes = DateUtil.countdownMinutesString(millis);
+        String seconds = DateUtil.countdownSecondsString(millis);
         return days + ":" + hours + ":" + minutes + ":" + seconds;
     }
+
+
 }
