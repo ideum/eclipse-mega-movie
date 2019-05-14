@@ -961,7 +961,7 @@ public class VideoFragment extends Fragment
 
     CameraCharacteristics mCharacteristics;
 
-    public static final String DEFAULT_DATA_DIRECTORY_NAME = "MegaMovieTestImages";
+    public static final String DEFAULT_DATA_DIRECTORY_NAME = "Eclipse Camera Test Images";
 
     private String data_directory_name = DEFAULT_DATA_DIRECTORY_NAME;
 
@@ -1007,9 +1007,10 @@ public class VideoFragment extends Fragment
                 }
             };
     public void takePhoto() {
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true);
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true, false);
         takePhotoWithSettings(settings);
     }
+
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
         if(mCameraDevice == null) {
             return;
@@ -1035,13 +1036,6 @@ public class VideoFragment extends Fragment
                 ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder(getActivity()).setCharacteristics(mCharacteristics);
                 mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
             }
-
-
-//            for (CameraCaptureListener listener : listeners) {
-//                listener.onCapture();
-//            }
-
-
             mSession.capture(request,
                     mCaptureSessionCallback,
                     mBackgroundHandler);

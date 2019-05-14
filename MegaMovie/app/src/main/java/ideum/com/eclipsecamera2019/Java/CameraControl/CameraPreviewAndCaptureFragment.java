@@ -552,7 +552,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     }
 
     public void takePhoto() {
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true);
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true,false);
         takePhotoWithSettings(settings);
     }
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    tools:context=".Java.Prototyping.CaptureTestActivity">
+
+
+
+    <fragment
+        android:id="@+id/video_fragment"
+        android:name="ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/countdown_fragment"
+            android:name="ideum.com.eclipsecamera2019.Java.LocationAndTiming.SmallCountdownFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/start_sequence_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start sequence"
+            android:backgroundTint="#aaa"
+            android:textColor="#fff"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/photo_taken_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Photos Taken: 0/0"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="30dp"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:textSize="30dp"/>
+
+</FrameLayout>

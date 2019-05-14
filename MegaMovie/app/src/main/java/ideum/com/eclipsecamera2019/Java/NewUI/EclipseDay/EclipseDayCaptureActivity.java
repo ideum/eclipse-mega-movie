@@ -71,7 +71,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
     Boolean audioAlertGiven = false;
     private Long startTime;
-private boolean inPath;
+    private boolean inPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,7 @@ private boolean inPath;
     @Override
     protected void onResume() {
         super.onResume();
-        if(!inPath) {
+        if (!inPath) {
             showNotInPathDialog();
 
         }
@@ -297,8 +297,6 @@ private boolean inPath;
         mTimer.cancel();
         progressTextView.setText(String.format(getString(R.string.eclipse_congrats_message), numCaptures));
         startTimeTextView.setVisibility(View.GONE);
-
-
     }
 
 
@@ -316,7 +314,7 @@ private boolean inPath;
         boolean shouldUseJpeg = true;
         boolean shouldUseRaw = false;
 
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(duration, sensitivity, focusDistance, shouldUseRaw, shouldUseJpeg);
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(duration, sensitivity, focusDistance, shouldUseRaw, shouldUseJpeg,false);
 
         Long startTime = Calendar.getInstance().getTimeInMillis() + 6000;
         Long spacing = 500L;

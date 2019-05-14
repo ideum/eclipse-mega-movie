@@ -151,7 +151,8 @@ public class MoonTestHandHeldCaptureActivity extends AppCompatActivity
                 FOCUS_DISTANCE,
                 spacing,
                 shouldSaveRaw,
-                shouldSaveJpeg);
+                shouldSaveJpeg,
+                false);
 
         CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties,startTimeMills,duration);
         return new CaptureSequence(interval);

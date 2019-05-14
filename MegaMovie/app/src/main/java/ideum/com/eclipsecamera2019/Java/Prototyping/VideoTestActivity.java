@@ -1,4 +1,4 @@
-package ideum.com.eclipsecamera2019.Java;
+package ideum.com.eclipsecamera2019.Java.Prototyping;
 
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPSFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.SmallCountdownFragment;
+import ideum.com.eclipsecamera2019.Java.Prototyping.PreciseTimePickerDialogFragment;
 import ideum.com.eclipsecamera2019.R;
 
 import java.util.Calendar;

@@ -18,10 +18,11 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public interface CaptureSessionCompletionListerner {
          void onSessionCompleted(CaptureSequenceSession session);
     }
+    private boolean isRecordingVideo = false;
+    private long videoRecordingStartTime;
+
 
     private boolean inProgress = false;
-
-  //  private MyTimer mTimer;
 
     public void start() {
         inProgress = true;

@@ -1,4 +1,4 @@
-package ideum.com.eclipsecamera2019.Java;
+package ideum.com.eclipsecamera2019.Java.Prototyping;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
