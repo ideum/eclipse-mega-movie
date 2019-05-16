@@ -59,8 +59,6 @@ Temporary Items
 
 # Resources
 MegaMovie/app/src/main/res/raw/*
-MegaMovie/app/src/main/res/drawable/*
 MegaMovie/app/apks/*
-MegaMovie/app/src/main/res/values/strings.xml
 
 MegaMovie/.idea/caches/build_file_checksums.ser
