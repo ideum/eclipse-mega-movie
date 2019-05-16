@@ -2,6 +2,7 @@ package ideum.com.eclipsecamera2019.Java.Prototyping;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,23 +12,28 @@ import java.util.Calendar;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequence;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceBuilderDummy;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceSession;
+import ideum.com.eclipsecamera2019.Java.CameraControl.IVideoAndStillCamera;
 import ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment;
+import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPSFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.SmallCountdownFragment;
+import ideum.com.eclipsecamera2019.Java.LocationAndTiming.TimeProvider;
 import ideum.com.eclipsecamera2019.R;
 
 public class CaptureTestActivity extends AppCompatActivity
-        implements CaptureSequenceSession.CameraController,
+        implements CaptureSequenceSession.CaptureSessionListener,
         CaptureSequenceSession.CaptureSessionCompletionListerner,
         MyTimer.MyTimerListener {
 
-    private VideoFragment mVideoFragment;
+    private IVideoAndStillCamera mVideoFragment;
     private SmallCountdownFragment mCountdownFragment;
     private CaptureSequenceSession mSession;
     private MyTimer mTimer;
     private TextView photosTakenTextView;
     private int numCaptures = 0;
     private int totalNumCaptures = 0;
+    private GPSFragment mGPSFragment;
+    private TimeProvider timeProvider;
 
 
     @Override
@@ -35,6 +41,7 @@ public class CaptureTestActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture_test);
         mVideoFragment = (VideoFragment) getFragmentManager().findFragmentById(R.id.video_fragment);
+        mVideoFragment.setDirectoryName("eclipse camera 2019 test images");
         mCountdownFragment = (SmallCountdownFragment) getSupportFragmentManager().findFragmentById(R.id.countdown_fragment);
         photosTakenTextView = findViewById(R.id.photo_taken_textview);
         findViewById(R.id.start_sequence_btn).setOnClickListener(new View.OnClickListener() {
@@ -43,10 +50,20 @@ public class CaptureTestActivity extends AppCompatActivity
                 startSequence();
             }
         });
+        mGPSFragment = new GPSFragment();
+        timeProvider = new TimeProvider() {
+            @Override
+            public Long getCurrentTimeMillis() {
+                return Calendar.getInstance().getTimeInMillis();
+            }
+        };
+
+        getFragmentManager().beginTransaction().add(
+                android.R.id.content, mGPSFragment).commit();
     }
 
     private void startSequence() {
-        setUpCaptureSequenceSession(Calendar.getInstance().getTimeInMillis() + 1000);
+        setUpCaptureSequenceSession(timeProvider.getCurrentTimeMillis() + 1000);
         if (mTimer != null) {
             mTimer.cancel();
         }
@@ -63,7 +80,7 @@ public class CaptureTestActivity extends AppCompatActivity
         if (mSession != null) {
             mSession.stop();
         }
-        mSession = new CaptureSequenceSession(sequence, this);
+        mSession = new CaptureSequenceSession(sequence, this,timeProvider);
         totalNumCaptures = sequence.numberCapturesRemaining();
         numCaptures = 0;
         updateCaptureTextView();
@@ -79,14 +96,24 @@ public class CaptureTestActivity extends AppCompatActivity
 
     @Override
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
-        if (settings.isVideo) {
+        Log.d("CaptureTest", "take photo");
+        mVideoFragment.takePhotoWithSettings(settings);
+        numCaptures++;
+        updateCaptureTextView();
+    }
 
-        } else {
+    @Override
+    public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
+        Log.d("CaptureTest", "start video");
+        mVideoFragment.startRecordingVideo(settings);
+    }
 
-            mVideoFragment.takePhotoWithSettings(settings);
-            numCaptures++;
-            updateCaptureTextView();
-        }
+    @Override
+    public void stopRecordingVideo() {
+        Log.d("CaptureTest", "stop video");
+        mVideoFragment.stopRecordingVideo();
+        numCaptures++;
+        updateCaptureTextView();
     }
 
     @Override
@@ -95,8 +122,6 @@ public class CaptureTestActivity extends AppCompatActivity
         Toast.makeText(this, "Sequence Completed!", Toast.LENGTH_SHORT).show();
     }
 
-//
-
     @Override
     public void onTick() {
         if (mSession != null) {
@@ -104,17 +129,13 @@ public class CaptureTestActivity extends AppCompatActivity
         }
     }
 
-    //    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        mTimer = new MyTimer();
-//        mTimer.addListener(this);
-//        mTimer.startTicking();
-//    }
-//
     @Override
     protected void onPause() {
-        mTimer.cancel();
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+
         if (mSession != null) {
             mSession.stop();
             mSession = null;

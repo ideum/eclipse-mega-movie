@@ -12,15 +12,18 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
+
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
+import ideum.com.eclipsecamera2019.Java.LocationAndTiming.TimeProvider;
 
 public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public interface CaptureSessionCompletionListerner {
-         void onSessionCompleted(CaptureSequenceSession session);
+        void onSessionCompleted(CaptureSequenceSession session);
     }
+
     private boolean isRecordingVideo = false;
     private long videoRecordingStartTime;
-
+    private long videoDuration;
 
     private boolean inProgress = false;
 
@@ -36,12 +39,14 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public static final String TAG = "CaptureSequenceSession";
     private Queue<CaptureSequence.TimedCaptureRequest> requestQueue;
     private CaptureSequence.TimedCaptureRequest nextRequest;
-    private CameraController mCameraController;
+    private CaptureSessionListener mCameraController;
     private List<CaptureSessionCompletionListerner> listeners = new ArrayList<>();
+    public TimeProvider timeProvider;
 
-    public CaptureSequenceSession(CaptureSequence captureSequence, CameraController controller) {
+    public CaptureSequenceSession(CaptureSequence captureSequence, CaptureSessionListener controller,TimeProvider timeProvider) {
         requestQueue = captureSequence.getRequestQueue();
         mCameraController = controller;
+        this.timeProvider = timeProvider;
     }
 
     public void addListener(CaptureSessionCompletionListerner listener) {
@@ -49,35 +54,70 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     }
 
 
-    public interface CameraController {
+    public interface CaptureSessionListener {
         void takePhotoWithSettings(CaptureSequence.CaptureSettings settings);
+
+        void startRecordingVideo(CaptureSequence.CaptureSettings settings);
+
+        void stopRecordingVideo();
     }
 
+
     private Long getTime() {
+        if(timeProvider != null) {
+            return timeProvider.getCurrentTimeMillis();
+        }
         Calendar c = Calendar.getInstance();
         return c.getTimeInMillis();
     }
 
     @Override
     public void onTick() {
-        if(!inProgress) {
+        if (!inProgress) {
             return;
         }
         Long currentTime = getTime();
         if (currentTime == null) {
             return;
         }
+        if(isRecordingVideo) {
+            if(currentTime >= videoRecordingStartTime + videoDuration) {
+                mCameraController.stopRecordingVideo();
+                isRecordingVideo = false;
+            }
+            return;
+        }
+
+
         if (nextRequest == null) {
             seekToNextRequest();
         }
-        if (nextRequest != null) {
+        if (nextRequest == null) {
+            onCompleted();
+            return;
+        } else {
             Long requestTime = nextRequest.mTime;
 
             if (currentTime >= requestTime) {
-                mCameraController.takePhotoWithSettings(nextRequest.mSettings);
+                sendRequest(nextRequest);
                 nextRequest = null;
             }
         }
+    }
+
+    private void sendRequest(CaptureSequence.TimedCaptureRequest request) {
+        if (isRecordingVideo) {
+            return;
+        }
+        if (!request.mSettings.isVideo) {
+            mCameraController.takePhotoWithSettings(request.mSettings);
+        } else {
+            mCameraController.startRecordingVideo(request.mSettings);
+            isRecordingVideo = true;
+            videoRecordingStartTime = request.mTime;
+            videoDuration = request.mSettings.videoLengthMillis;
+        }
+
     }
 
     /**
@@ -86,8 +126,7 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     private void seekToNextRequest() {
         nextRequest = requestQueue.poll();
         if (nextRequest == null) {
-            onCompleted();
-
+            //onCompleted();
             return;
         }
         Long currentTime = getTime();

@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import ideum.com.eclipsecamera2019.Java.CameraControl.ICameraCaptureListener;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.DateUtil;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPSFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
@@ -27,8 +28,8 @@ import ideum.com.eclipsecamera2019.Java.NewUI.MainActivity;
 import ideum.com.eclipsecamera2019.R;
 
 public class MoonTestCaptureActivity extends AppCompatActivity
-        implements CaptureSequenceSession.CameraController,
-        CameraPreviewAndCaptureFragment.CameraCaptureListener,
+        implements CaptureSequenceSession.CaptureSessionListener,
+        ICameraCaptureListener,
         MyTimer.MyTimerListener,
         CaptureSequenceSession.CaptureSessionCompletionListerner {
 
@@ -151,7 +152,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         }
         totalNumCaptures = sequence.numberCapturesRemaining();
         updateCaptureTextView();
-        mSession = new CaptureSequenceSession(sequence, this);
+        mSession = new CaptureSequenceSession(sequence, this,null);
         mSession.addListener(this);
 
 
@@ -171,8 +172,8 @@ public class MoonTestCaptureActivity extends AppCompatActivity
                 FOCUS_DISTANCE,
                 spacing,
                 shouldSaveRaw,
-                shouldSaveJpeg,
-                false);
+                shouldSaveJpeg
+                );
 
         CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties, startTimeMills, duration);
         return new CaptureSequence(interval);
@@ -216,9 +217,19 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
+
+    }
 
     @Override
-    public void onCapture() {
+    public void stopRecordingVideo() {
+
+    }
+
+
+    @Override
+    public void onImageCapturedInitiated() {
         numCaptures += 1;
         updateCaptureTextView();
     }

@@ -54,7 +54,7 @@ implements MyTimer.MyTimerListener{
 
     private void updateUI() {
         String s = getNewCountdownString();
-        if (s == null || s == countdownString) {
+        if (s == null || s.equals(countdownString)) {
             return;
         }
         countdownTextView.setText(s);

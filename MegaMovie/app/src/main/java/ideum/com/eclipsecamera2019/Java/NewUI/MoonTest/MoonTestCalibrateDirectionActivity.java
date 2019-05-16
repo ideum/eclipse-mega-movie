@@ -127,8 +127,7 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
                 SENSOR_SENSITIVITY,
                 FOCUS_DISTANCE,
                 shouldSaveRaw,
-                shouldSaveJPEG,
-                false);
+                shouldSaveJPEG );
         mCameraFragment.takePhotoWithSettings(settings);
     }
 

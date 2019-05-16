@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:orientation="horizontal">
                 <Button
                     android:id="@+id/start_record_button"
@@ -104,6 +104,7 @@
             <Button
                 android:id="@+id/snap_photo_button"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 android:text="Snap"/>
@@ -115,7 +116,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:text="Choose time"
-            android:visibility="gone" />
+            android:visibility="visible" />
+        <TextView
+                android:id="@+id/calibrated_text_view"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_height="wrap_content"
+            android:text="UNCALIBRATED"/>
     </FrameLayout>
 
 </RelativeLayout>

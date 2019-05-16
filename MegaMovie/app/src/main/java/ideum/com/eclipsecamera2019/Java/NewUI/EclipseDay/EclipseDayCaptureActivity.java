@@ -31,6 +31,8 @@ import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequence;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceBuilder;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceBuilderDummy;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceSession;
+import ideum.com.eclipsecamera2019.Java.CameraControl.ICameraCaptureListener;
+import ideum.com.eclipsecamera2019.Java.CameraControl.IVideoAndStillCamera;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.EclipseTimeProviderOffset;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.EclipseTimes;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
@@ -45,8 +47,8 @@ import static ideum.com.eclipsecamera2019.Java.LocationAndTiming.EclipseTimes.Ph
 
 public class EclipseDayCaptureActivity extends AppCompatActivity
         implements MyTimer.MyTimerListener,
-        CaptureSequenceSession.CameraController,
-        CameraPreviewAndCaptureFragment.CameraCaptureListener,
+        CaptureSequenceSession.CaptureSessionListener,
+        ICameraCaptureListener,
         CaptureSequenceSession.CaptureSessionCompletionListerner,
         EclipseTimeProvider.Listener,
         DialogInterface.OnClickListener {
@@ -57,7 +59,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     private EclipseTimeProvider eclipseTimeProvider;
     private SmallCountdownFragment countdownFragment;
 
-    private CameraPreviewAndCaptureFragment cameraFragment;
+    private IVideoAndStillCamera cameraFragment;
     private CaptureSequenceSession mSession;
 
     private int numCaptures = 0;
@@ -98,7 +100,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         cameraFragment.setDirectoryName(getDirectoryNameFromPreferences());
         cameraFragment.setLocationProvider(eclipseTimeProvider);
 
-        uploadButton = (Button) findViewById(R.id.upload_button);
+        uploadButton = findViewById(R.id.upload_button);
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,7 +109,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         });
         uploadButton.setVisibility(View.INVISIBLE);
 
-        finishedButton = (Button) findViewById(R.id.finish_button);
+        finishedButton = findViewById(R.id.finish_button);
         finishedButton.setVisibility(View.INVISIBLE);
         finishedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,7 +196,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         if (mSession != null) {
             mSession.stop();
         }
-        mSession = new CaptureSequenceSession(sequence, this);
+        mSession = new CaptureSequenceSession(sequence, this,null);
         totalNumCaptures = sequence.numberCapturesRemaining();
         updateCaptureTextView();
 
@@ -284,7 +286,17 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCapture() {
+    public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
+
+    }
+
+    @Override
+    public void stopRecordingVideo() {
+
+    }
+
+    @Override
+    public void onImageCapturedInitiated() {
         numCaptures += 1;
         updateCaptureTextView();
     }
@@ -314,7 +326,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         boolean shouldUseJpeg = true;
         boolean shouldUseRaw = false;
 
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(duration, sensitivity, focusDistance, shouldUseRaw, shouldUseJpeg,false);
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(duration, sensitivity, focusDistance, shouldUseRaw, shouldUseJpeg);
 
         Long startTime = Calendar.getInstance().getTimeInMillis() + 6000;
         Long spacing = 500L;

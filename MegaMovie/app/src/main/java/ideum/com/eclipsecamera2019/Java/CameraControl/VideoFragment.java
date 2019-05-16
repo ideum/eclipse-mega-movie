@@ -51,6 +51,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -94,7 +95,9 @@ import ideum.com.eclipsecamera2019.Java.LocationAndTiming.LocationProvider;
 import ideum.com.eclipsecamera2019.R;
 
 public class VideoFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+        implements View.OnClickListener,
+        FragmentCompat.OnRequestPermissionsResultCallback,
+        IVideoAndStillCamera {
     private LocationProvider mLocationProvider;
     public int mSensorSensitivity = 60;
     public float mFocusDistance = 0;
@@ -208,7 +211,7 @@ public class VideoFragment extends Fragment
         public void onCaptureFailed(CameraCaptureSession session, CaptureRequest request, CaptureFailure failure) {
             super.onCaptureFailed(session, request, failure);
 
-         //   Toast.makeText(getActivity(), "preview session failed", Toast.LENGTH_SHORT).show();
+            //   Toast.makeText(getActivity(), "preview session failed", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -306,37 +309,22 @@ public class VideoFragment extends Fragment
         return choices[choices.length - 1];
     }
 
-//    /**
-//     * Given {@code choices} of {@code Size}s supported by a camera, chooses the smallest one whose
-//     * width and height are at least as large as the respective requested values, and whose aspect
-//     * ratio matches with the specified value.
-//     *
-//     * @param choices     The list of sizes that the camera supports for the intended output class
-//     * @param width       The minimum desired width
-//     * @param height      The minimum desired height
-//     * @param aspectRatio The aspect ratio
-//     * @return The optimal {@code Size}, or an arbitrary one if none were big enough
-//     */
-//    private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
-//        // Collect the supported resolutions that are at least as big as the preview Surface
-//        List<Size> bigEnough = new ArrayList<>();
-//        int w = aspectRatio.getWidth();
-//        int h = aspectRatio.getHeight();
-//        for (Size option : choices) {
-//            if (option.getHeight() == option.getWidth() * h / w &&
-//                    option.getWidth() >= width && option.getHeight() >= height) {
-//                bigEnough.add(option);
-//            }
-//        }
-//
-//        // Pick the smallest of those, assuming we found any
-//        if (bigEnough.size() > 0) {
-//            return Collections.min(bigEnough, new CompareSizesByArea());
-//        } else {
-//            Log.e(TAG, "Couldn't find any suitable preview size");
-//            return choices[0];
-//        }
-//    }
+    private List<ICameraCaptureListener> captureListeners = new ArrayList<>();
+
+    @Override
+    public void addCaptureListener(ICameraCaptureListener captureListener) {
+        captureListeners.add(captureListener);
+    }
+
+    @Override
+    public void setDirectoryName(String directoryName) {
+        data_directory_name = directoryName;
+    }
+
+    @Override
+    public void setLocationProvider(LocationProvider locationProvider) {
+        mLocationProvider = locationProvider;
+    }
 
     private Size getPreferredPreviewSize(Size[] mapSizes, int width, int height) {
         List<Size> collectorSizes = new ArrayList<Size>();
@@ -401,7 +389,7 @@ public class VideoFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.video: {
-               toggleRecording();
+                toggleRecording();
                 break;
             }
         }
@@ -520,7 +508,7 @@ public class VideoFragment extends Fragment
             String cameraId = manager.getCameraIdList()[0];
 
             // Choose the sizes for camera preview and video recording
-             mCharacteristics = manager.getCameraCharacteristics(cameraId);
+            mCharacteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = mCharacteristics
                     .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             mSensorOrientation = mCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
@@ -602,6 +590,7 @@ public class VideoFragment extends Fragment
      * Start the camera preview.
      */
     private Surface mPreviewSurface;
+
     private void createSession() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
@@ -611,7 +600,7 @@ public class VideoFragment extends Fragment
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-             mPreviewSurface = new Surface(texture);
+            mPreviewSurface = new Surface(texture);
 
             List<Surface> surfaces = new ArrayList<>();
             surfaces.add(mPreviewSurface);
@@ -647,15 +636,15 @@ public class VideoFragment extends Fragment
             return;
         }
         try {
-            if(createPreviewBuilder) {
+            if (createPreviewBuilder) {
                 mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             }
 
             mPreviewBuilder.addTarget(mPreviewSurface);
             setUpCaptureRequestBuilder(mPreviewBuilder);
             //Why is this here?? What does it do???
-         //   HandlerThread thread = new HandlerThread("CameraPreview");
-          //  thread.start();
+            //   HandlerThread thread = new HandlerThread("CameraPreview");
+            //  thread.start();
             mSession.setRepeatingRequest(mPreviewBuilder.build(), mPreviewSessionCallback, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -668,7 +657,7 @@ public class VideoFragment extends Fragment
         builder.set(CaptureRequest.SENSOR_EXPOSURE_TIME, mDuration);
         builder.set(CaptureRequest.SENSOR_SENSITIVITY, mSensorSensitivity);
         builder.set(CaptureRequest.LENS_FOCUS_DISTANCE, mFocusDistance);
-       //builder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
+        //builder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
     }
 
     /**
@@ -733,11 +722,10 @@ public class VideoFragment extends Fragment
     }
 
 
-
     private void createVideoFileFolder() {
-        File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-        mVideoFolder = new File(movieFile,"EclipseVideos");
-        if(!mVideoFolder.exists()) {
+        //File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+        mVideoFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
+        if (!mVideoFolder.exists()) {
             mVideoFolder.mkdir();
         }
     }
@@ -745,18 +733,26 @@ public class VideoFragment extends Fragment
     private File createVideoFileName() throws IOException {
         String timeStamp = generateTimeStamp();
         String prepend = "VIDEO_" + timeStamp + "_";
-        File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder);
+        File videoFile = File.createTempFile(prepend, ".mp4", mVideoFolder);
         mVideoFileName = videoFile.getAbsolutePath();
         return videoFile;
     }
 
-    private void startRecordingVideo() {
+    public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
+        mDuration = settings.exposureTime;
+        mSensorSensitivity = settings.sensitivity;
+        mFocusDistance = settings.focusDistance;
+        startRecordingVideo();
+    }
+
+    private long tt;
+
+    public void startRecordingVideo() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
         try {
             closePreviewSession();
-            //createVideoFileFolder();
             setUpMediaRecorder();
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
@@ -765,7 +761,7 @@ public class VideoFragment extends Fragment
             List<Surface> surfaces = new ArrayList<>();
 
             // Set up Surface for the camera preview
-             mPreviewSurface = new Surface(texture);
+            mPreviewSurface = new Surface(texture);
             surfaces.add(mPreviewSurface);
             mPreviewBuilder.addTarget(mPreviewSurface);
 
@@ -773,7 +769,8 @@ public class VideoFragment extends Fragment
             Surface recorderSurface = mMediaRecorder.getSurface();
             surfaces.add(recorderSurface);
             mPreviewBuilder.addTarget(recorderSurface);
-
+            tt = Calendar.getInstance().getTimeInMillis();
+           // Log.d("VIDEO", String.valueOf(Calendar.getInstance().getTimeInMillis()));
             // Start a capture session
             // Once the session starts, we can update the UI and start recording
             mCameraDevice.createCaptureSession(surfaces, new CameraCaptureSession.StateCallback() {
@@ -781,6 +778,7 @@ public class VideoFragment extends Fragment
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
                     mSession = cameraCaptureSession;
+                //    Log.d("VIDEO", String.valueOf(Calendar.getInstance().getTimeInMillis() - tt));
                     setPreviewRequest(false);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -817,7 +815,7 @@ public class VideoFragment extends Fragment
     }
 
     public boolean tryToStartRecording() {
-        if(mIsRecordingVideo) {
+        if (mIsRecordingVideo) {
             return false;
         } else {
             startRecordingVideo();
@@ -826,7 +824,7 @@ public class VideoFragment extends Fragment
     }
 
     public boolean tryToStopRecording() {
-        if(mIsRecordingVideo) {
+        if (mIsRecordingVideo) {
             stopRecordingVideo();
             return true;
         } else {
@@ -834,7 +832,7 @@ public class VideoFragment extends Fragment
         }
     }
 
-    private void stopRecordingVideo() {
+    public void stopRecordingVideo() {
         // UI
         mIsRecordingVideo = false;
         mButtonVideo.setText("Record");
@@ -844,9 +842,7 @@ public class VideoFragment extends Fragment
 
         Activity activity = getActivity();
         if (null != activity) {
-//            Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
-//                    Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
+
             MediaScannerConnection.scanFile(activity, new String[]{mNextVideoAbsolutePath},
                     null, new MediaScannerConnection.MediaScannerConnectionClient() {
                         @Override
@@ -856,8 +852,8 @@ public class VideoFragment extends Fragment
 
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
-                            Log.i(TAG, "Scanned" + path + ":");
-                            Log.i(TAG, "-> uri=" + uri);
+                            //   Log.i(TAG, "Scanned" + path + ":");
+                            //   Log.i(TAG, "-> uri=" + uri);
                         }
                     });
         }
@@ -870,15 +866,17 @@ public class VideoFragment extends Fragment
         Calendar c = Calendar.getInstance();
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         String timeStamp = formatter.format(c.getTime()) + "_UTC";
-        Log.i("timestamp",timeStamp);
+        Log.i("timestamp", timeStamp);
         return timeStamp;
     }
+
     private Location getLocation() {
         if (mLocationProvider == null) {
             return null;
         }
         return mLocationProvider.getLocation();
     }
+
     /**
      * Compares two {@code Size}s based on their areas.
      */
@@ -955,6 +953,7 @@ public class VideoFragment extends Fragment
         ORIENTATIONS.append(Surface.ROTATION_180, 180);
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
+
     private int sensorToDeviceRotations(int rotation) {
         return (ORIENTATIONS.get(rotation) + mSensorOrientation + 360) % 360;
     }
@@ -976,19 +975,19 @@ public class VideoFragment extends Fragment
                     String currentDateTime = generateTimeStamp();
 
 
-                        ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+                    ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
 
-                        File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
-                        if (!jpegRootPath.exists()) {
-                            jpegRootPath.mkdirs();
-                        }
+                    File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
+                    if (!jpegRootPath.exists()) {
+                        jpegRootPath.mkdirs();
+                    }
 
-                        File jpegFile = new File(jpegRootPath,
-                                "JPEG_" + currentDateTime + ".jpg");
+                    File jpegFile = new File(jpegRootPath,
+                            "JPEG_" + currentDateTime + ".jpg");
 
-                        if (jpegBuilder != null) {
-                            jpegBuilder.setFile(jpegFile);
-                        }
+                    if (jpegBuilder != null) {
+                        jpegBuilder.setFile(jpegFile);
+                    }
 
 
                 }
@@ -1006,13 +1005,15 @@ public class VideoFragment extends Fragment
 
                 }
             };
+
+
     public void takePhoto() {
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true, false);
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration, mSensorSensitivity, mFocusDistance, false, true);
         takePhotoWithSettings(settings);
     }
 
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
-        if(mCameraDevice == null) {
+        if (mCameraDevice == null) {
             return;
         }
         try {
@@ -1139,7 +1140,7 @@ public class VideoFragment extends Fragment
         builder.setRefCountedReader(reader).setImage(image);
 
         Location loc = getLocation();
-        if(loc != null) {
+        if (loc != null) {
             builder.setLocation(loc);
         }
         handleCompletionLocked(entry.getKey(), builder, pendingQueue);
@@ -1154,6 +1155,7 @@ public class VideoFragment extends Fragment
             AsyncTask.THREAD_POOL_EXECUTOR.execute(saver);
         }
     }
+
     private static class ImageSaver implements Runnable {
 
         private final Image mImage;
@@ -1213,8 +1215,7 @@ public class VideoFragment extends Fragment
                             exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, GPS.convert(-location.getLongitude()));
 
                             SimpleDateFormat fmt_Exif = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-                            exif.setAttribute(ExifInterface.TAG_DATETIME,fmt_Exif.format(new Date(location.getTime())));
-
+                            exif.setAttribute(ExifInterface.TAG_DATETIME, fmt_Exif.format(new Date(location.getTime())));
 
 
                             exif.saveAttributes();
@@ -1246,7 +1247,6 @@ public class VideoFragment extends Fragment
                         mImage.close();
                         closeOutput(output);
                     }
-
 
 
                 }

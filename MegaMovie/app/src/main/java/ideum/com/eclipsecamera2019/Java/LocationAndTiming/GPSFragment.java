@@ -1,13 +1,19 @@
 package ideum.com.eclipsecamera2019.Java.LocationAndTiming;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.GnssClock;
 import android.location.Location;
+import android.location.LocationManager;
+import android.location.OnNmeaMessageListener;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,6 +23,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.LocationSource;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import ideum.com.eclipsecamera2019.Java.Application.Config;
@@ -27,17 +34,23 @@ public class GPSFragment extends Fragment
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         LocationProvider,
-        LocationSource{
+        LocationSource,
+android.location.LocationListener,
+TimeProvider{
 
     public long gpsInterval = 1000 * 30;
     public long fastestGpsInterval = 1000 * 20;
     public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
+    private static final int MINIMUM_DISTANCE_BEFORE_UPDATE_METRES = 2000;
+    private static final int LOCATION_UPDATE_TIME_MILLISECONDS = 0;
+
     private int REQUEST_LOCATION_PERMISSIONS = 0;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private List<OnLocationChangedListener> locationListeners = new ArrayList<>();
-
+    private long timeOffset;
+    private boolean timeCalibrated  = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,47 +60,55 @@ public class GPSFragment extends Fragment
                     REQUEST_LOCATION_PERMISSIONS);
         }
 
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-        createLocationRequest();
+        LocationManager locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Criteria locationCriteria = new Criteria();
+        locationCriteria.setAccuracy(Criteria.ACCURACY_FINE );
+        String provider = locationManager.getBestProvider(locationCriteria,true);
+        locationManager.requestLocationUpdates(provider,0,0f,this);
+
+//        if (mGoogleApiClient == null) {
+//            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+//                    .addConnectionCallbacks(this)
+//                    .addOnConnectionFailedListener(this)
+//                    .addApi(LocationServices.API)
+//                    .build();
+//        }
+//        createLocationRequest();
+
     }
 
-    @Override
-    public void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
+//    @Override
+//    public void onStart() {
+//        mGoogleApiClient.connect();
+//        super.onStart();
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        mGoogleApiClient.disconnect();
+//        super.onStop();
+//    }
 
     public Location getLocation() {
-        if (mGoogleApiClient == null) {
-            return null;
-        }
-        Location lastLocation = null;
-
-        try {
-            lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-        if (lastLocation == null) {
-            return null;
-        }
-        if (Config.SHOULD_USE_DUMMY_LOCATION) {
-            lastLocation.setLatitude(Config.DUMMY_LATITUDE);
-            lastLocation.setLongitude(Config.DUMMY_LONGITUDE);
-        }
-        return lastLocation;
+        return mLocation;
+//        if (mGoogleApiClient == null) {
+//            return null;
+//        }
+//        Location lastLocation = null;
+//
+//        try {
+//            lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//        } catch (SecurityException e) {
+//            e.printStackTrace();
+//        }
+//        if (lastLocation == null) {
+//            return null;
+//        }
+//        if (Config.SHOULD_USE_DUMMY_LOCATION) {
+//            lastLocation.setLatitude(Config.DUMMY_LATITUDE);
+//            lastLocation.setLongitude(Config.DUMMY_LONGITUDE);
+//        }
+//        return lastLocation;
     }
 
     @Override
@@ -139,6 +160,29 @@ public class GPSFragment extends Fragment
         for (OnLocationChangedListener listener : locationListeners) {
             listener.onLocationChanged(getAdjustedLocation());
         }
+        long systemTime = Calendar.getInstance().getTimeInMillis();
+        long gpsTime = location.getTime();
+        // Only want to set the time correction once, to make sure time doesn't jump too much
+        // not monotonically
+        if(!timeCalibrated) {
+            timeOffset = gpsTime - systemTime;
+            timeCalibrated = true;
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     @Override
@@ -150,4 +194,14 @@ public class GPSFragment extends Fragment
     public void deactivate() {
 
     }
+
+    @Override
+    public Long getCurrentTimeMillis() {
+        return Calendar.getInstance().getTimeInMillis() + timeOffset;
+    }
+
+//    @Override
+//    public void onNmeaMessage(String message, long timestamp) {
+//        Log.d("GPSFragment",message);
+//    }
 }

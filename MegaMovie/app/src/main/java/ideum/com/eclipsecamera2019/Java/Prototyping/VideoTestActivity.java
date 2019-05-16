@@ -1,6 +1,9 @@
 package ideum.com.eclipsecamera2019.Java.Prototyping;
 
+import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
+import android.location.OnNmeaMessageListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.LocationSource;
 
@@ -18,11 +22,14 @@ import ideum.com.eclipsecamera2019.Java.LocationAndTiming.SmallCountdownFragment
 import ideum.com.eclipsecamera2019.Java.Prototyping.PreciseTimePickerDialogFragment;
 import ideum.com.eclipsecamera2019.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class VideoTestActivity extends AppCompatActivity
         implements PreciseTimePickerDialogFragment.OnDismissListener,
-        MyTimer.MyTimerListener, LocationSource.OnLocationChangedListener {
+        MyTimer.MyTimerListener, LocationSource.OnLocationChangedListener, OnNmeaMessageListener {
     private VideoFragment mVideoFragment;
     private boolean isRecording;
     private ImageView isRecordingImage;
@@ -37,6 +44,8 @@ public class VideoTestActivity extends AppCompatActivity
     private TextView recordingTextView;
     private TextView durationTextView;
     private Button snapPhotoButton;
+    private boolean calibrated = false;
+    private TextView calibratedTextView;
 
 
     @Override
@@ -44,6 +53,8 @@ public class VideoTestActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_test);
         mVideoFragment = VideoFragment.newInstance();
+        calibratedTextView = findViewById(R.id.calibrated_text_view);
+
 
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
@@ -79,22 +90,6 @@ public class VideoTestActivity extends AppCompatActivity
             }
         });
 
-//        findViewById(R.id.incremement_duration_button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                long newDuration = mVideoFragment.incrementDuration(5);
-//                durationTextView.setText(String.valueOf(newDuration) + " ms");
-//            }
-//        });
-//
-//        findViewById(R.id.decrement_duration_button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                long newDuration = mVideoFragment.decrementDuration(5);
-//                durationTextView.setText(String.valueOf(newDuration) + " ms");
-//            }
-//        });
-
         durationTextView = findViewById(R.id.duration_text_view);
         snapPhotoButton = findViewById(R.id.snap_photo_button);
         snapPhotoButton.setOnClickListener(new View.OnClickListener() {
@@ -110,11 +105,6 @@ public class VideoTestActivity extends AppCompatActivity
         dialog.addDismissListener(this);
         dialog.show(getSupportFragmentManager(), "time picker dialogue");
         stopCountdown();
-//        Calendar c = Calendar.getInstance();
-//        targetTime = c.getTimeInMillis() + 5000;
-//
-//
-//        startCountdown();
     }
 
 
@@ -157,6 +147,7 @@ public class VideoTestActivity extends AppCompatActivity
 
     private long targetTime;
     private long timeRemaining;
+
     private void startCountdown() {
         readyToRecord = true;
         mTimer = new MyTimer();
@@ -165,11 +156,11 @@ public class VideoTestActivity extends AppCompatActivity
     }
 
     private void stopCountdown() {
-        if(mTimer != null) {
+        if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
         }
-        if(isRecording) {
+        if (isRecording) {
             stopRecording();
         }
     }
@@ -182,8 +173,9 @@ public class VideoTestActivity extends AppCompatActivity
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, hour);
         c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND,0);
-        targetTime = c.getTimeInMillis();
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        targetTime = c.getTimeInMillis() + 2500;
 
 
         startCountdown();
@@ -198,12 +190,12 @@ public class VideoTestActivity extends AppCompatActivity
             startRecording();
             readyToRecord = false;
         }
-        if(isRecording) {
-           recordingElapsedTimeMillis = correctedTimeMillis() - targetTime;
-           if (recordingElapsedTimeMillis > recordingTotalTimeMillis) {
-               stopRecording();
-              stopCountdown();
-           }
+        if (isRecording) {
+            recordingElapsedTimeMillis = correctedTimeMillis() - targetTime;
+            if (recordingElapsedTimeMillis > recordingTotalTimeMillis) {
+                stopRecording();
+                stopCountdown();
+            }
         }
     }
 
@@ -217,5 +209,26 @@ public class VideoTestActivity extends AppCompatActivity
         long systemTime = Calendar.getInstance().getTimeInMillis();
         long gpsTime = location.getTime();
         timeOffset = gpsTime - systemTime;
+        if (!calibrated) {
+            calibrated = true;
+            calibratedTextView.setText("CALIBRATED");
+            Toast.makeText(this, "time calibrated!", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    private static String timeString(Long mills) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mills);
+
+        DateFormat formatter = new SimpleDateFormat("mm_ss", Locale.US);
+
+        return formatter.format(calendar.getTime());
+
+    }
+
+    @Override
+    public void onNmeaMessage(String message, long timestamp) {
+
     }
 }

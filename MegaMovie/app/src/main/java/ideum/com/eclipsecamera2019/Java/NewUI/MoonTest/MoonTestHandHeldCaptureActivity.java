@@ -15,13 +15,14 @@ import java.util.Date;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequence;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceSession;
+import ideum.com.eclipsecamera2019.Java.CameraControl.ICameraCaptureListener;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPSFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
 import ideum.com.eclipsecamera2019.R;
 
 public class MoonTestHandHeldCaptureActivity extends AppCompatActivity
-        implements CaptureSequenceSession.CameraController,
-        CameraPreviewAndCaptureFragment.CameraCaptureListener {
+        implements CaptureSequenceSession.CaptureSessionListener,
+        ICameraCaptureListener {
     private static final int CONFIG_ID = R.xml.moon_test_config;
     private CameraPreviewAndCaptureFragment cameraFragment;
     private MyTimer mTimer;
@@ -130,7 +131,7 @@ public class MoonTestHandHeldCaptureActivity extends AppCompatActivity
         }
         totalNumCaptures = sequence.numberCapturesRemaining();
         updateCaptureTextView();
-        mSession = new CaptureSequenceSession(sequence, this);
+        mSession = new CaptureSequenceSession(sequence, this,null);
 
         mTimer = new MyTimer();
         mTimer.addListener(mSession);
@@ -151,8 +152,7 @@ public class MoonTestHandHeldCaptureActivity extends AppCompatActivity
                 FOCUS_DISTANCE,
                 spacing,
                 shouldSaveRaw,
-                shouldSaveJpeg,
-                false);
+                shouldSaveJpeg );
 
         CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties,startTimeMills,duration);
         return new CaptureSequence(interval);
@@ -199,7 +199,17 @@ public class MoonTestHandHeldCaptureActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCapture() {
+    public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
+
+    }
+
+    @Override
+    public void stopRecordingVideo() {
+
+    }
+
+    @Override
+    public void onImageCapturedInitiated() {
         numCaptures += 1;
         updateCaptureTextView();
     }

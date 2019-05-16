@@ -12,18 +12,23 @@ import java.util.Locale;
 import java.util.Queue;
 
 /**
- * Classes for specifying sequence of camera captures. A sequence consists of a collection of intervals,
- * during which the camera settings and frequency of captures are fixed.
+ * Classes for specifying sequence of camera captures. A sequence consists of a collection of timed capture requests,
+ * where each request can have different settings for exposure duration etc. A convenient way to construct a CaptureSequence
+ * is from a sequence of time intervals, during each of which the camera settings and frequency of captures are fixed.
  */
 
 public class CaptureSequence {
+
+    private Queue<TimedCaptureRequest> requestQueue;
+
     public static class CaptureSettings {
             public long exposureTime;
             public int sensitivity;
             public float focusDistance;
             public boolean shouldSaveRaw;
             public boolean shouldSaveJpeg;
-            public static final String TAG = "CaptureSequence";
+            public boolean isVideo = false;
+            public long videoLengthMillis = 0;
 
         public CaptureSettings(long exposureTime, int sensitivity, float focusDistance, boolean shouldSaveRaw, boolean shouldSaveJpeg) {
             this.exposureTime = exposureTime;
@@ -157,7 +162,10 @@ public class CaptureSequence {
         }
     }
 
-    private Queue<TimedCaptureRequest> requestQueue;
+    public CaptureSequence(Queue<TimedCaptureRequest> requestQueue) {
+        this.requestQueue = requestQueue;
+    }
+
 
     public CaptureSequence(SteppedInterval[] intervals) {
         requestQueue = new LinkedList<>();

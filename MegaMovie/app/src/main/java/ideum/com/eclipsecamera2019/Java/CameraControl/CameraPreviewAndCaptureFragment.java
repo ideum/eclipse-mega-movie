@@ -72,7 +72,8 @@ import ideum.com.eclipsecamera2019.R;
 
 
 public class CameraPreviewAndCaptureFragment extends android.app.Fragment
-        implements FragmentCompat.OnRequestPermissionsResultCallback
+        implements FragmentCompat.OnRequestPermissionsResultCallback,
+        IVideoAndStillCamera
 {
 
     public static final boolean ALLOWS_RAW = true;
@@ -89,7 +90,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         data_directory_name = directoryName;
     }
 
-    private List<CameraCaptureListener> listeners = new ArrayList<>();
+    private List<ICameraCaptureListener> listeners = new ArrayList<>();
 
     private LocationProvider mLocationProvider;
 
@@ -104,7 +105,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         mLocationProvider = provider;
     }
 
-    public void addCaptureListener(CameraCaptureListener listener) {
+    public void addCaptureListener(ICameraCaptureListener listener) {
         listeners.add(listener);
     }
 
@@ -552,7 +553,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     }
 
     public void takePhoto() {
-        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true,false);
+        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(mDuration,mSensorSensitivity,mFocusDistance,false,true);
         takePhotoWithSettings(settings);
     }
 
@@ -589,8 +590,8 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                 mRawResultQueue.put((int) request.getTag(), rawBuilder);
             }
 
-            for (CameraCaptureListener listener : listeners) {
-                listener.onCapture();
+            for (ICameraCaptureListener listener : listeners) {
+                listener.onImageCapturedInitiated();
             }
 
 
@@ -602,6 +603,16 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
+
+    }
+
+    @Override
+    public void stopRecordingVideo() {
+
     }
 
 
