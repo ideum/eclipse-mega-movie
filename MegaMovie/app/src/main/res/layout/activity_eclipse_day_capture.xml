@@ -27,8 +27,8 @@
             android:name="ideum.com.eclipsecamera2019.Java.LocationAndTiming.SmallCountdownFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_gravity="bottom|center_horizontal" />
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/start_time_text_view"
@@ -36,11 +36,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
-            android:visibility="visible"
             android:padding="8dp"
             android:text="@string/start_of_totality"
             android:textColor="#fff"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="visible" />
 
 
         <TextView
@@ -59,10 +59,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary"
-            android:textColor="#fff"
             android:layout_marginTop="16dp"
+            android:background="@color/colorPrimary"
             android:text="@string/go_to_upload_screen"
+            android:textColor="#fff"
             android:visibility="gone" />
 
         <Button
@@ -70,13 +70,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:background="@color/colorPrimary"
-            android:textColor="#fff"
-            android:layout_marginTop="16dp"
-            android:text="@string/finish" />
+            android:text="@string/finish"
+            android:textColor="#fff" />
 
 
     </LinearLayout>
+<LinearLayout
+    android:id="@+id/progressBarView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal|top"
+    android:layout_marginTop="30dp">
+    <ProgressBar
+
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:textColor="@color/colorPrimary"
+        android:text="GETTING GPS SIGNAL"
+        android:layout_marginTop="20dp"
+        />
+</LinearLayout>
+
+
 
 </FrameLayout>

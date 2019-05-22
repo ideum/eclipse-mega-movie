@@ -86,13 +86,12 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               onFinishButtonPressed();
+                onFinishButtonPressed();
             }
         });
 
         countdownFragment = (SmallCountdownFragment) getSupportFragmentManager().findFragmentById(R.id.countdown_fragment);
-        countdownFragment.setTargetTimeMills(getTestTimeFromSettings());
-
+        countdownFragment.setTargetTimeMills(targetTimeMills);
         Long testTime = getTestTimeFromSettings();
 
         Date testTimeDate = new Date(testTime);
@@ -124,18 +123,19 @@ public class MoonTestCaptureActivity extends AppCompatActivity
             setUpCaptureSequenceSession();
         }
         mTimer = new MyTimer();
-        mTimer.addListener(mSession);
+       // mTimer.addListener(mSession);
+        mSession.start();
         mTimer.addListener(this);
-        mTimer.addListener(countdownFragment);
+        // mTimer.addListener(countdownFragment);
         mTimer.startTicking();
 
-        mSession.start();
+
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        if(mSession!= null) {
+        if (mSession != null) {
             mSession.stop();
         }
         if (mTimer != null) {
@@ -152,14 +152,16 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         }
         totalNumCaptures = sequence.numberCapturesRemaining();
         updateCaptureTextView();
-        mSession = new CaptureSequenceSession(sequence, this,null);
-        mSession.addListener(this);
+        mSession = new CaptureSequenceSession(sequence, this, null);
+        // mSession.addListener(this);
 
 
     }
 
+    private Long startTimeMills;
+
     private CaptureSequence createCaptureSequence() {
-        Long startTimeMills = getTestTimeFromSettings() - LEAD_TIME_SECONDS * 1000;
+        startTimeMills = getTestTimeFromSettings() - LEAD_TIME_SECONDS * 1000;
 
         boolean shouldSaveRaw = false;
         boolean shouldSaveJpeg = true;
@@ -173,7 +175,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
                 spacing,
                 shouldSaveRaw,
                 shouldSaveJpeg
-                );
+        );
 
         CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties, startTimeMills, duration);
         return new CaptureSequence(interval);
@@ -244,7 +246,15 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     @Override
     public void onTick() {
-//        countdownTextView.setText(countdownString());
+        if (countdownFragment != null) {
+            Long millsRemaining = targetTimeMills - Calendar.getInstance().getTimeInMillis();
+            countdownFragment.setTimeRemainingMillis(millsRemaining);
+            countdownFragment.onTick();
+        }
+        if (mSession != null) {
+            mSession.onTick();
+        }
+
     }
 
     private String countdownString() {

@@ -72,7 +72,7 @@ implements MyTimer.MyTimerListener{
     }
 
     private String getNewCountdownString() {
-        long millis = Math.abs( millsRemaining);
+        long millis = Math.abs(millsRemaining);
         String days = DateUtil.countdownDaysString(millis);
         String hours = DateUtil.countdownHoursString(millis);
         String minutes = DateUtil.countdownMinutesString(millis);

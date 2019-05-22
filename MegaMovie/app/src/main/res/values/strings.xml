@@ -282,5 +282,6 @@
     <string name="select">Seleccionar</string>
     <string name="countdown_explanation">Esta función el tiempo restante antes del comienzo de la totalidad en su lugar de observación, como lo marca el pin rojo.</string>
     <string name="enable_location_services">Please note: location services must be enabled on your phone in order to automatically calculate eclipse timing. Otherwise, you can choose a location manually by tapping a location in the path of totality.</string>
+    <string name="time_offset_key" translatable="false">time_offset_key</string>
 
 </resources>

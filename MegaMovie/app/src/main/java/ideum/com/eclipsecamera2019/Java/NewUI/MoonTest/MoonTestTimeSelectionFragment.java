@@ -31,7 +31,7 @@ public class MoonTestTimeSelectionFragment extends Fragment
         implements DialogInterface.OnDismissListener,
         CustomNamable {
 
-    private static final int LEAD_TIME_MINUTES = 0;
+    private static final int LEAD_TIME_MINUTES = 5;
 
     private Button chooseTimeButton;
     private Button chooseDateButton;

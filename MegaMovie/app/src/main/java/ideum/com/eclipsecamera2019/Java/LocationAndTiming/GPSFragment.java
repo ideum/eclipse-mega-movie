@@ -35,8 +35,7 @@ public class GPSFragment extends Fragment
         LocationListener,
         LocationProvider,
         LocationSource,
-android.location.LocationListener,
-TimeProvider{
+        android.location.LocationListener {
 
     public long gpsInterval = 1000 * 30;
     public long fastestGpsInterval = 1000 * 20;
@@ -65,50 +64,11 @@ TimeProvider{
         locationCriteria.setAccuracy(Criteria.ACCURACY_FINE );
         String provider = locationManager.getBestProvider(locationCriteria,true);
         locationManager.requestLocationUpdates(provider,0,0f,this);
-
-//        if (mGoogleApiClient == null) {
-//            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-//                    .addConnectionCallbacks(this)
-//                    .addOnConnectionFailedListener(this)
-//                    .addApi(LocationServices.API)
-//                    .build();
-//        }
-//        createLocationRequest();
-
     }
 
-//    @Override
-//    public void onStart() {
-//        mGoogleApiClient.connect();
-//        super.onStart();
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        mGoogleApiClient.disconnect();
-//        super.onStop();
-//    }
 
     public Location getLocation() {
         return mLocation;
-//        if (mGoogleApiClient == null) {
-//            return null;
-//        }
-//        Location lastLocation = null;
-//
-//        try {
-//            lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//        } catch (SecurityException e) {
-//            e.printStackTrace();
-//        }
-//        if (lastLocation == null) {
-//            return null;
-//        }
-//        if (Config.SHOULD_USE_DUMMY_LOCATION) {
-//            lastLocation.setLatitude(Config.DUMMY_LATITUDE);
-//            lastLocation.setLongitude(Config.DUMMY_LONGITUDE);
-//        }
-//        return lastLocation;
     }
 
     @Override
@@ -133,14 +93,6 @@ TimeProvider{
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
-    protected void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(gpsInterval);
-        mLocationRequest.setFastestInterval(fastestGpsInterval);
-        mLocationRequest.setPriority(locationRequestPriority);
-    }
-
 
     private Location mLocation;
     private Location getAdjustedLocation() {
@@ -194,14 +146,10 @@ TimeProvider{
     public void deactivate() {
 
     }
-
-    @Override
-    public Long getCurrentTimeMillis() {
-        return Calendar.getInstance().getTimeInMillis() + timeOffset;
-    }
-
+//
 //    @Override
-//    public void onNmeaMessage(String message, long timestamp) {
-//        Log.d("GPSFragment",message);
+//    public Long getCurrentTimeMillis() {
+//        return Calendar.getInstance().getTimeInMillis() + timeOffset;
 //    }
+
 }
