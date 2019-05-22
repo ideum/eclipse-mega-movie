@@ -88,7 +88,7 @@ public class DirectionCalibrationView extends View {
 
         arrowColor = Color.RED;
         unpointedColor = context.getResources().getColor(R.color.colorPrimary);
-        pointedColor = context.getResources().getColor(R.color.intro_color_2);
+        pointedColor = context.getResources().getColor(R.color.colorPointed);
         mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCirclePaint.setColor(circleColor);
 

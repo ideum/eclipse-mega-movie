@@ -51,6 +51,15 @@
         android:background="@color/colorPrimary"
         android:text="@string/only_my_phone"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="Roboto"
+            android:layout_marginTop="12dp"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:text="@string/only_phone_explanation"/>
+
     <Button
         android:id="@+id/with_equipment_button"
         android:layout_width="wrap_content"
@@ -62,6 +71,15 @@
         android:background="@color/colorPrimary"
         android:text="@string/my_phone_with_peripheral_equipment"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="Roboto"
+            android:layout_marginTop="12dp"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:text="@string/my_phone_with_peripheral_equipment_explanation"/>
+
     <Button
         android:id="@+id/DSLR_camera_button"
         android:layout_width="wrap_content"
@@ -72,6 +90,15 @@
         android:paddingRight="6dp"
         android:background="@color/colorPrimary"
         android:text="@string/a_dslr_camera"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="Roboto"
+            android:layout_marginTop="12dp"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:text="@string/a_dslr_camera_explanation"/>
 
     </LinearLayout>
 
