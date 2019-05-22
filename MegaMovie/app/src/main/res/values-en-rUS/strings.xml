@@ -168,4 +168,7 @@
     <string name="equipment_settings">equipment settings</string>
     <string name="countdown_explanation">This feature shows you the time remaining before totality begins at your selected location, as marked by the red pin.</string>
     <string name="enable_location_services">Please note: location services must be enabled on your phone in order to automatically calculate eclipse timing. Otherwise, you can choose a location manually by tapping a location in the path of totality.</string>
+    <string name="only_phone_explanation">This is the easiest way to use the app, but will likely have the worst picture quality</string>
+    <string name="my_phone_with_peripheral_equipment_explanation">A lens and a tripod will allow for higher quality photos, but takes extra setup and calibration.</string>
+    <string name="a_dslr_camera_explanation">If you are using a DSLR camera, the map and countdown features of this application can still be used.</string>
 </resources>
