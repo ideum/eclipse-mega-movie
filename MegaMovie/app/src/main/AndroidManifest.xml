@@ -76,10 +76,10 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
 
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Java.NewUI.IntroActivity"
@@ -106,12 +106,7 @@
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayInstructions" />
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayMainActivity" />
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayMyEclipseActivity" />
-        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCaptureActivity">
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCaptureActivity"/>
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCalibrateDirectionActivity" />
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayPointingActivity" />
         <activity android:name=".Java.NewUI.EclipseDay.EclipseDayCalibrateLensActivity" />
