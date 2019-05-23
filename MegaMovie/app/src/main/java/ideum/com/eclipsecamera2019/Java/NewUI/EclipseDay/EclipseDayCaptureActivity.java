@@ -68,7 +68,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     private TextView progressTextView;
     private TextView startTimeTextView;
 
-    private View progressBarView;
+   // private View progressBarView;
 
     Button uploadButton;
     Button finishedButton;
@@ -87,7 +87,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         progressTextView = findViewById(R.id.capture_progress_text_view);
         startTimeTextView = findViewById(R.id.start_time_text_view);
-        progressBarView = findViewById(R.id.progressBarView);
+     //   progressBarView = findViewById(R.id.progressBarView);
         eclipseTimeProvider = Config.USE_DUMMY_TIME_C2 ? new EclipseTimeProviderOffset() : new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, eclipseTimeProvider).commit();
@@ -130,11 +130,11 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
                 return;
             }
         }
-        progressBarView.setVisibility(View.GONE);
+       // progressBarView.setVisibility(View.GONE);
         Long c2Time = contactTimes.get(c2);
         Long c3Time = contactTimes.get(c3);
         startTime = c2Time;
-        Long current = eclipseTimeProvider.getCurrentTimeMillis();
+
         startTimeTextView.setText(getString(R.string.start_of_totality) + getStartTimeString(startTime));
         setUpCaptureSequenceSession(c2Time, c3Time);
 
@@ -167,12 +167,15 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         if (startTime == null) {
             return;
         }
+
         if (mSession != null) {
             mSession.onTick();
         }
         if (startTime != null) {
             if(countdownFragment.isAdded()) {
-                countdownFragment.setTargetTimeMills(startTime);
+                Long current = eclipseTimeProvider.getCurrentTimeMillis();
+                Long delta = startTime - current;
+                countdownFragment.setTimeRemainingMillis(delta);
                 countdownFragment.onTick();
             }
 

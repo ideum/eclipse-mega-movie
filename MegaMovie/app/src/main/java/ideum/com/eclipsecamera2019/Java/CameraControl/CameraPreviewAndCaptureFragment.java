@@ -68,6 +68,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ideum.com.eclipsecamera2019.Java.Application.Config;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPS;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.LocationProvider;
+import ideum.com.eclipsecamera2019.Java.LocationAndTiming.TimeProvider;
 import ideum.com.eclipsecamera2019.R;
 
 
@@ -93,7 +94,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     private List<ICameraCaptureListener> listeners = new ArrayList<>();
 
     private LocationProvider mLocationProvider;
-
+    private TimeProvider mTimeProvider;
     private Location getLocation() {
         if (mLocationProvider == null) {
             return null;
@@ -104,7 +105,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     public void setLocationProvider(LocationProvider provider) {
         mLocationProvider = provider;
     }
-
+    public void setTimeProvider(TimeProvider timeProvider) {
+        mTimeProvider = timeProvider;
+    }
     public void addCaptureListener(ICameraCaptureListener listener) {
         listeners.add(listener);
     }

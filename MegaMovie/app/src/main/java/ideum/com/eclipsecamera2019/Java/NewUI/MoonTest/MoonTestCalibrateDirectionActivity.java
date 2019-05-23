@@ -97,13 +97,13 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
         calibrateDirectionFragment.calibrateModelToTarget();
     }
 
-    public void resetCalibration(View view) {
-        calibrateDirectionFragment.resetModelCalibration();
-    }
-
-    public void useCurrentTime(View view) {
-        calibrateDirectionFragment.setShouldUseCurrentTime(true);
-    }
+//    public void resetCalibration(View view) {
+//        calibrateDirectionFragment.resetModelCalibration();
+//    }
+//
+//    public void useCurrentTime(View view) {
+//        calibrateDirectionFragment.setShouldUseCurrentTime(true);
+//    }
 
     private void setTargetFromSettings() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);

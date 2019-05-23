@@ -172,9 +172,6 @@ implements MyTimer.MyTimerListener,
     public void calibrateModelToTarget() {
         model.calibrate(getTargetGcc());
 
-        //storeNorthInPhoneCoordinates();
-        //storePhoneInLocalCoordinates();
-
         storeCorrectionMatrix();
 
     }

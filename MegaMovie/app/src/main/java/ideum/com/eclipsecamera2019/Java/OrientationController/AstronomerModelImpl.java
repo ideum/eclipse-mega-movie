@@ -185,38 +185,12 @@ public class AstronomerModelImpl implements AstronomerModel {
         Matrix33 A = axesMagneticCelestialMatrix.getInverse();
         Vector3 lineOfSightInPhoneCoordinates = VectorUtil.negate(matrixVectorMultiply(A, targetCoordinates));
 
-        //float nz = lineOfSightInPhoneCoordinates.x;
-
-        //Vector3 northInPhoneCoordinates_0 = findPerpendicular(nz,upPhone,0);
-        //Vector3 northInPhoneCoordinates_1 = findPerpendicular(nz,upPhone,1);
-
-        //Vector3 east_0 = VectorUtil.crossProduct(northInPhoneCoordinates_0,upPhone);
-        //Vector3 east_1 = VectorUtil.crossProduct(northInPhoneCoordinates_1,upPhone);
-
-        float eastZ = lineOfSightInPhoneCoordinates.z;
-
-        //float error_0 = Math.abs(east_0.z - eastZ);
-        //float error_1 = Math.abs(east_1.z - eastZ);
-
-//        Vector3 northInPhoneCoordinates = northInPhoneCoordinates_0;
-//        if (error_1 < error_0) {
-//            northInPhoneCoordinates = northInPhoneCoordinates_1;
-//        }
-
-       // MiscUtil.storeVector3InPreferences();
-
-        //storedNorthInPhoneCoordinates = northInPhoneCoordinates;
-        //storedPhoneInLocalCoordinates = axesPhoneInverseMatrix.clone();
-
-
-        //Vector3 eastInPhoneCoordinates = VectorUtil.crossProduct(northInPhoneCoordinates, upPhone);
         Vector3 perpInLocalCoordinates = matrixVectorMultiply(A, getPointing().getPerpendicular());
 
         perpInLocalCoordinates = VectorUtil.difference(perpInLocalCoordinates, VectorUtil.scale(lineOfSightInPhoneCoordinates, VectorUtil.dotProduct(perpInLocalCoordinates, lineOfSightInPhoneCoordinates)));
         perpInLocalCoordinates.normalize();
         Vector3 v1 = VectorUtil.crossProduct(perpInLocalCoordinates, lineOfSightInPhoneCoordinates);
         Matrix33 B = axesPhoneInverseMatrix.clone();
-       // Matrix33 B1 = new Matrix33(northInPhoneCoordinates, upPhone, eastInPhoneCoordinates, false);
         Matrix33 B2 = new Matrix33(v1, perpInLocalCoordinates, lineOfSightInPhoneCoordinates);
         correctionMatrix = matrixMultiply(B2, B.getInverse());
         isCalibrated = true;
@@ -240,24 +214,6 @@ public class AstronomerModelImpl implements AstronomerModel {
         }
     }
 
-    private Vector3 findPerpendicular(float vz,Vector3 w,int root) {
-        float vx = quadraticFormula(w.x*w.x + w.y*w.y, 2*w.x*w.z*vz, vz*vz*w.z*w.z+vz*vz*w.y*w.y-w.y*w.y, root);
-        float vy = (-vx*w.x - vz*w.z)/w.y;
-
-        return new Vector3(vx,vy,vz);
-
-    }
-
-    private void updateCorrectedPointingNew() {
-        Matrix33 calibratedAxesPhoneInverse = getCalibratedAxesPhoneInverse();
-        Matrix33 transform = matrixMultiply(axesMagneticCelestialMatrix,calibratedAxesPhoneInverse);
-        Vector3 lineOfSight = matrixVectorMultiply(transform, POINTING_DIR_IN_PHONE_COORDS);
-        Vector3 perpendicular = matrixVectorMultiply(transform, screenInPhoneCoords);
-
-        correctedPointingNew.updateLineOfSight(lineOfSight);
-        correctedPointingNew.updatePerpendicular(perpendicular);
-
-    }
 
     private void updateCorrectedPointing() {
 
@@ -276,11 +232,9 @@ public class AstronomerModelImpl implements AstronomerModel {
 
         if (isCalibrated) {
                 updateCorrectedPointing();
-            //Log.i("pointing",String.valueOf( correctedPointing.getLineOfSight().getRa()));
                 return correctedPointing;
         }
         return getPointing();
-//        return correctedPointing;
     }
 
     @Override

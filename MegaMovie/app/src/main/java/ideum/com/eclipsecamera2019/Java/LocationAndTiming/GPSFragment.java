@@ -1,6 +1,7 @@
 package ideum.com.eclipsecamera2019.Java.LocationAndTiming;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -50,6 +51,21 @@ public class GPSFragment extends Fragment
     private List<OnLocationChangedListener> locationListeners = new ArrayList<>();
     private long timeOffset;
     private boolean timeCalibrated  = false;
+    private LocationManager mLocationManager;
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onResume() {
+        super.onResume();
+//        if(mLocationManager != null) {
+//            mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//            if(mLocation != null) {
+//                for (OnLocationChangedListener listener : locationListeners) {
+//                    listener.onLocationChanged(getAdjustedLocation());
+//                }
+//            }
+//        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +75,18 @@ public class GPSFragment extends Fragment
                     REQUEST_LOCATION_PERMISSIONS);
         }
 
-        LocationManager locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-        Criteria locationCriteria = new Criteria();
-        locationCriteria.setAccuracy(Criteria.ACCURACY_FINE );
-        String provider = locationManager.getBestProvider(locationCriteria,true);
-        locationManager.requestLocationUpdates(provider,0,0f,this);
+         mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(mLocation != null) {
+            for (OnLocationChangedListener listener : locationListeners) {
+                listener.onLocationChanged(getAdjustedLocation());
+            }
+        }
+        //Criteria locationCriteria = new Criteria();
+        //locationCriteria.setAccuracy(Criteria.ACCURACY_HIGH);
+        //String provider = locationManager.getBestProvider(locationCriteria,true);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10000,0f,this);
+
     }
 
 

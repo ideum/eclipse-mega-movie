@@ -51,7 +51,7 @@ public class MyMapFragment extends Fragment
         implements OnMapReadyCallback,
         View.OnClickListener,
         PlaceSelectionListener,
-        GoogleMap.OnMarkerClickListener{
+        GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private LatLng currentLatLng;
@@ -73,16 +73,6 @@ public class MyMapFragment extends Fragment
         return fragment;
     }
 
-    public void setCurrentLatLng(LatLng latLng) {
-        currentLatLng = latLng;
-        if (!isAdded()) {
-            return;
-        }
-        LatLng plannedLatLng = getPlannedLocationFromPreferences();
-        if (plannedLatLng == null) {
-            onClick(null);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,6 +115,12 @@ public class MyMapFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        plannedLatLng= getPlannedLocationFromPreferences(context);
+        if (plannedLatLng == null && currentLatLng != null) {
+            setPlannedLocation(EclipsePath.closestPointOnPathOfTotality(currentLatLng),context);
+        }
+
+
     }
 
     @Override
@@ -151,21 +147,25 @@ public class MyMapFragment extends Fragment
 
             @Override
             public void onMapClick(LatLng latLng) {
-                if (EclipsePath.distanceToPathOfTotality(latLng) <=0) {
-                    setPlannedLocation(latLng);
+                if (EclipsePath.distanceToPathOfTotality(latLng) <= 0) {
+                    setPlannedLocation(latLng,getContext());
                     showLocationInPathSelectedToast();
+                    drawPathToPlannedLocation();
                 } else {
                     showLocationNotInPathToast();
                 }
             }
         });
 
-        setPlannedLocation(getPlannedLocationFromPreferences());
+        drawPathToPlannedLocation();
     }
 
-    private void setTimeZonePreferenceString(LatLng latLng) {
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url = String.format("https://maps.googleapis.com/maps/api/timezone/json?location=%f,%f&timestamp=1458000000&key=AIzaSyB0mm9X7tEIxtV-2DAS1LRMhmhGwLQPl-8",latLng.latitude,latLng.longitude);
+    private void setTimeZonePreferenceString(LatLng latLng,Context context) {
+        if(context == null) {
+            return;
+        }
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = String.format("https://maps.googleapis.com/maps/api/timezone/json?location=%f,%f&timestamp=1458000000&key=AIzaSyB0mm9X7tEIxtV-2DAS1LRMhmhGwLQPl-8", latLng.latitude, latLng.longitude);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -201,22 +201,30 @@ public class MyMapFragment extends Fragment
         queue.add(stringRequest);
     }
 
-    private void setPlannedLocationPreferenceValue(LatLng latLng) {
-        if (latLng == null) {
-            return;
-        }
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putFloat(getString(R.string.planned_lng_key), (float) latLng.longitude);
-        editor.putFloat(getString(R.string.planned_lat_key), (float) latLng.latitude);
-        editor.commit();
+    // called when the 'current location' button is pressed
+    @Override
+    public void onClick(View v) {
+        // refreshMarkersAndOverlay();
+        showDistanceToPathToast();
+        setPlannedLocation(EclipsePath.closestPointOnPathOfTotality(currentLatLng),getContext());
+        drawPathToPlannedLocation();
     }
 
-    private void setPlannedLocation(LatLng latLng) {
+    public void setCurrentLatLng(LatLng latLng) {
         if (latLng == null) {
             return;
         }
-         //Only allow locations within the path of totality
+        currentLatLng = latLng;
+        if(plannedLatLng == null) {
+            setPlannedLocation(EclipsePath.closestPointOnPathOfTotality(currentLatLng),getContext());
+        }
+    }
+
+    private void setPlannedLocation(LatLng latLng,Context context) {
+        if (latLng == null) {
+            return;
+        }
+        //Only allow locations within the path of totality
         if (EclipsePath.distanceToPathOfTotality(latLng) > 0.1) {
             showLocationNotInPathToast();
             return;
@@ -224,45 +232,49 @@ public class MyMapFragment extends Fragment
 
         plannedLatLng = latLng;
 
-        setPlannedLocationPreferenceValue(latLng);
-        setTimeZonePreferenceString(latLng);
-        refreshMarkersAndOverlay();
-        drawPathToPlannedLocation();
+        setPlannedLocationPreferenceValue(latLng,context);
     }
 
-    public void moveToCurrentLocation() {
-        if (currentLatLng == null || mMap == null) {
+    private void setPlannedLocationPreferenceValue(LatLng latLng,Context context) {
+        if (latLng == null || context == null) {
             return;
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putFloat(getString(R.string.planned_lng_key), (float) latLng.longitude);
+        editor.putFloat(getString(R.string.planned_lat_key), (float) latLng.latitude);
+        editor.commit();
+        setTimeZonePreferenceString(latLng,context);
     }
+
 
     private void setCurrentLocationMarker() {
         if (currentLatLng == null || mMap == null) {
             return;
         }
-
-            mMap.addMarker(new MarkerOptions().position(currentLatLng).anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
-
+        mMap.addMarker(new MarkerOptions().position(currentLatLng).anchor(0.5f, 0.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.current_location_dot)));
     }
 
     private void refreshMarkersAndOverlay() {
+        if (mMap == null) {
+            return;
+        }
         mMap.clear();
         placeMarkerAtPlannedLocation();
         setCurrentLocationMarker();
         drawEclipsePath();
     }
 
-    private LatLng getPlannedLocationFromPreferences() {
-        if (getActivity() == null) {
+    private LatLng getPlannedLocationFromPreferences(Context context) {
+        if (context == null) {
             return null;
         }
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        float lat = settings.getFloat(getString(R.string.planned_lat_key),0);
-        float lng = settings.getFloat(getString(R.string.planned_lng_key),0);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        float lat = settings.getFloat(getString(R.string.planned_lat_key), 0);
+        float lng = settings.getFloat(getString(R.string.planned_lng_key), 0);
         LatLng result = null;
         if (lat != 0 && lng != 0) {
-            result = new LatLng(lat,lng);
+            result = new LatLng(lat, lng);
         }
         return result;
     }
@@ -274,22 +286,12 @@ public class MyMapFragment extends Fragment
         mMap.addMarker(new MarkerOptions().position(plannedLatLng));
     }
 
-
-    // called when the 'current location' button is pressed
-    @Override
-    public void onClick(View v) {
-        refreshMarkersAndOverlay();
-        showDistanceToPathToast();
-        setPlannedLocation(EclipsePath.closestPointOnPathOfTotality(currentLatLng));
-    }
-
     private void showDistanceToPathToast() {
         if (currentLatLng == null) {
             return;
         }
         double distanceKm = EclipsePath.distanceToPathOfTotality(currentLatLng);
-        double distanceMiles = (0.621371) * distanceKm;
-        String toastMessage = String.format(getResources().getString(R.string.distance_from_path_toast),distanceKm);
+        String toastMessage = String.format(getResources().getString(R.string.distance_from_path_toast), distanceKm);
         Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG).show();
     }
 
@@ -297,27 +299,25 @@ public class MyMapFragment extends Fragment
         if (currentLatLng == null || plannedLatLng == null) {
             return;
         }
-        double distanceKm = EclipsePath.greatCircleDistance(currentLatLng,plannedLatLng);
-        double distanceMiles = (0.621371) * distanceKm;
+        double distanceKm = EclipsePath.greatCircleDistance(currentLatLng, plannedLatLng);
         String message = getResources().getString(R.string.not_in_path_toast_1);
         String toastMessage = String.format(message, distanceKm);
-        Toast.makeText(getContext(),toastMessage,Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG).show();
     }
 
     private void showLocationNotInPathToast() {
-        Toast.makeText(getContext(),getResources().getString(R.string.not_in_path_toast),Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getResources().getString(R.string.not_in_path_toast), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onPlaceSelected(Place place) {
-
         if (place == null) {
             return;
         }
-
         if (EclipsePath.distanceToPathOfTotality(place.getLatLng()) <= 0) {
             showLocationInPathSelectedToast();
-            setPlannedLocation(place.getLatLng());
+            setPlannedLocation(place.getLatLng(),getContext());
+            drawPathToPlannedLocation();
         }
     }
 
@@ -347,17 +347,20 @@ public class MyMapFragment extends Fragment
 
         PolylineOptions polylineOptions = new PolylineOptions().color(getResources().getColor(R.color.centerline)).width(3);
         for (int i = 0; i <= numPoints; i++) {
-            polylineOptions.add(EclipsePath.getLatLngForParameter(i * 1.0/ numPoints,EclipsePath.CENTER_LINE));
+            polylineOptions.add(EclipsePath.getLatLngForParameter(i * 1.0 / numPoints, EclipsePath.CENTER_LINE));
         }
         mMap.addPolyline(polylineOptions);
 
     }
 
     private void drawPathToPlannedLocation() {
+        if (mMap == null) {
+            return;
+        }
         if (currentLatLng == null || plannedLatLng == null) {
             return;
         }
-
+        refreshMarkersAndOverlay();
         PolylineOptions plo = new PolylineOptions();
         plo.add(currentLatLng);
         plo.add(plannedLatLng);
@@ -369,27 +372,11 @@ public class MyMapFragment extends Fragment
     }
 
 
-    private void drawShortestPathToTotality(LatLng point) {
-
-        if (point == null) {
-            return;
-        }
-
-        LatLng endpoint = EclipsePath.closestPointOnPathOfTotality(point);
-
-        PolylineOptions plo = new PolylineOptions();
-        plo.add(point);
-        plo.add(endpoint);
-        plo.geodesic(true);
-        plo.width(5);
-        plo.color(Color.RED);
-        mMap.addPolyline(plo);
-    }
 
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-       // marker.remove();
+        // marker.remove();
         return true;
     }
 }
