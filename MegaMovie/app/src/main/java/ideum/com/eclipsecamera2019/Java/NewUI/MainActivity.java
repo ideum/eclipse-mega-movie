@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import hotchemi.android.rate.OnClickButtonListener;
 import ideum.com.eclipsecamera2019.Java.Application.CustomNamable;
 import ideum.com.eclipsecamera2019.Java.Application.MyApplication;
 import ideum.com.eclipsecamera2019.Java.Application.UploadActivity;
@@ -32,6 +34,8 @@ import ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayIntroFragment
 import ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestIntroFragment;
 import ideum.com.eclipsecamera2019.Java.NewUI.Orientation.AssistantEquipmentChoiceInfoFragment;
 import ideum.com.eclipsecamera2019.R;
+
+import hotchemi.android.rate.AppRate;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -66,6 +70,21 @@ public class MainActivity extends AppCompatActivity
             finish();
             return;
         }
+
+        AppRate.with(this).setInstallDays(0)
+                .setLaunchTimes(2)
+                .setRemindInterval(2)
+                .setShowLaterButton(true)
+                .setDebug(false)
+                .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
+                    @Override
+                    public void onClickButton(int which) {
+                        Log.d(MainActivity.class.getName(), Integer.toString(which));
+                    }
+                })
+                .monitor();
+
+        AppRate.showRateDialogIfMeetsConditions(this);
 
         setContentView(R.layout.activity_main);
         /**
