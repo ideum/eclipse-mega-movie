@@ -33,6 +33,7 @@ import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceBuilderDumm
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceSession;
 import ideum.com.eclipsecamera2019.Java.CameraControl.ICameraCaptureListener;
 import ideum.com.eclipsecamera2019.Java.CameraControl.IVideoAndStillCamera;
+import ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.EclipseTimeProviderOffset;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.EclipseTimes;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
@@ -68,7 +69,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     private TextView progressTextView;
     private TextView startTimeTextView;
 
-   // private View progressBarView;
+    // private View progressBarView;
 
     Button uploadButton;
     Button finishedButton;
@@ -87,7 +88,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         progressTextView = findViewById(R.id.capture_progress_text_view);
         startTimeTextView = findViewById(R.id.start_time_text_view);
-     //   progressBarView = findViewById(R.id.progressBarView);
+        //   progressBarView = findViewById(R.id.progressBarView);
         eclipseTimeProvider = Config.USE_DUMMY_TIME_C2 ? new EclipseTimeProviderOffset() : new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, eclipseTimeProvider).commit();
@@ -96,7 +97,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         inPath = checkIfInPath();
 
         countdownFragment = (SmallCountdownFragment) getSupportFragmentManager().findFragmentById(R.id.countdown_fragment);
-        cameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
+        cameraFragment = (VideoFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
         cameraFragment.addCaptureListener(this);
         cameraFragment.setTimeProvider(eclipseTimeProvider);
         cameraFragment.setDirectoryName(getDirectoryNameFromPreferences());
@@ -130,7 +131,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
                 return;
             }
         }
-       // progressBarView.setVisibility(View.GONE);
+        // progressBarView.setVisibility(View.GONE);
         Long c2Time = contactTimes.get(c2);
         Long c3Time = contactTimes.get(c3);
         startTime = c2Time;
@@ -172,7 +173,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
             mSession.onTick();
         }
         if (startTime != null) {
-            if(countdownFragment.isAdded()) {
+            if (countdownFragment.isAdded()) {
                 Long current = eclipseTimeProvider.getTimeInMillisSinceEpoch();
                 Long delta = startTime - current;
                 countdownFragment.setTimeRemainingMillis(delta);
@@ -297,12 +298,12 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
     @Override
     public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
-
+        cameraFragment.startRecordingVideo(settings);
     }
 
     @Override
     public void stopRecordingVideo() {
-
+        cameraFragment.stopRecordingVideo();
     }
 
     @Override

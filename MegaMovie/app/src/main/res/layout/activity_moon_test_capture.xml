@@ -17,7 +17,7 @@
 
         <fragment
             android:id="@+id/camera_fragment"
-            android:name="ideum.com.eclipsecamera2019.Java.CameraControl.CameraPreviewAndCaptureFragment"
+            android:name="ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -17,6 +17,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import ideum.com.eclipsecamera2019.Java.CameraControl.ICameraCaptureListener;
+import ideum.com.eclipsecamera2019.Java.CameraControl.IVideoAndStillCamera;
+import ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.DateUtil;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPSFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
@@ -34,7 +36,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         CaptureSequenceSession.CaptureSessionCompletionListerner {
 
     private static final int CONFIG_ID = R.xml.moon_test_config;
-    private CameraPreviewAndCaptureFragment cameraFragment;
+    private IVideoAndStillCamera cameraFragment;
     private MyTimer mTimer;
     private CaptureSequenceSession mSession;
     private static final long SESSION_LENGTH_SECONDS = 360;
@@ -73,7 +75,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
 
-        cameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
+        cameraFragment = (VideoFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
 
         cameraFragment.setLocationProvider(mGPSFragment);
 
