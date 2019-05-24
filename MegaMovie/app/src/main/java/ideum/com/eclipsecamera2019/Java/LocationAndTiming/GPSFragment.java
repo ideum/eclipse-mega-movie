@@ -3,6 +3,7 @@ package ideum.com.eclipsecamera2019.Java.LocationAndTiming;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.GnssClock;
@@ -11,6 +12,7 @@ import android.location.LocationManager;
 import android.location.OnNmeaMessageListener;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +30,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import ideum.com.eclipsecamera2019.Java.Application.Config;
+import ideum.com.eclipsecamera2019.Java.OrientationController.Clock;
+import ideum.com.eclipsecamera2019.R;
 
 
 public class GPSFragment extends Fragment
@@ -36,34 +40,22 @@ public class GPSFragment extends Fragment
         LocationListener,
         LocationProvider,
         LocationSource,
+        Clock,
         android.location.LocationListener {
 
-    public long gpsInterval = 1000 * 30;
-    public long fastestGpsInterval = 1000 * 20;
-    public int locationRequestPriority = LocationRequest.PRIORITY_HIGH_ACCURACY;
-
-    private static final int MINIMUM_DISTANCE_BEFORE_UPDATE_METRES = 2000;
-    private static final int LOCATION_UPDATE_TIME_MILLISECONDS = 0;
 
     private int REQUEST_LOCATION_PERMISSIONS = 0;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private List<OnLocationChangedListener> locationListeners = new ArrayList<>();
-    private long timeOffset;
+    private long timeOffset = 0;
     private boolean timeCalibrated  = false;
     private LocationManager mLocationManager;
     @SuppressLint("MissingPermission")
     @Override
     public void onResume() {
         super.onResume();
-//        if(mLocationManager != null) {
-//            mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//            if(mLocation != null) {
-//                for (OnLocationChangedListener listener : locationListeners) {
-//                    listener.onLocationChanged(getAdjustedLocation());
-//                }
-//            }
-//        }
+
     }
 
     @Override
@@ -75,20 +67,25 @@ public class GPSFragment extends Fragment
                     REQUEST_LOCATION_PERMISSIONS);
         }
 
-         mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(mLocation != null) {
             for (OnLocationChangedListener listener : locationListeners) {
                 listener.onLocationChanged(getAdjustedLocation());
             }
         }
-        //Criteria locationCriteria = new Criteria();
-        //locationCriteria.setAccuracy(Criteria.ACCURACY_HIGH);
-        //String provider = locationManager.getBestProvider(locationCriteria,true);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10000,0f,this);
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        timeOffset = preferences.getLong(getString(R.string.time_offset_key),0);
+
+    }
 
     public Location getLocation() {
         return mLocation;
@@ -139,6 +136,7 @@ public class GPSFragment extends Fragment
         long gpsTime = location.getTime();
         // Only want to set the time correction once, to make sure time doesn't jump too much
         // not monotonically
+        storeTimeOffset(gpsTime - systemTime);
         if(!timeCalibrated) {
             timeOffset = gpsTime - systemTime;
             timeCalibrated = true;
@@ -169,10 +167,21 @@ public class GPSFragment extends Fragment
     public void deactivate() {
 
     }
-//
-//    @Override
-//    public Long getCurrentTimeMillis() {
-//        return Calendar.getInstance().getTimeInMillis() + timeOffset;
-//    }
 
+    private void storeTimeOffset(Long offset) {
+        Context c = getContext();
+        if (c == null || offset == null) {
+            return;
+        }
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(getString(R.string.time_offset_key), offset);
+        editor.commit();
+    }
+
+
+    @Override
+    public long getTimeInMillisSinceEpoch() {
+        return Calendar.getInstance().getTimeInMillis() + timeOffset;
+    }
 }

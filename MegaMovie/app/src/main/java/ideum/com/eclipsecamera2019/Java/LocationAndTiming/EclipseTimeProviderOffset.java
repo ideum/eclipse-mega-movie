@@ -13,7 +13,7 @@ public class EclipseTimeProviderOffset extends EclipseTimeProvider {
 
     @Override protected EnumMap<EclipseTimes.Phase,Long> getContactTimes() {
         if(dummyC2Time == null) {
-            dummyC2Time = getCurrentTimeMillis() + Config.DUMMY_C2_LEAD_TIME;
+            dummyC2Time = getTimeInMillisSinceEpoch() + Config.DUMMY_C2_LEAD_TIME;
         }
 
       Long offset = dummyC2Time - contactTimes.get(c2);

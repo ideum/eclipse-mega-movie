@@ -98,7 +98,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         countdownFragment = (SmallCountdownFragment) getSupportFragmentManager().findFragmentById(R.id.countdown_fragment);
         cameraFragment = (CameraPreviewAndCaptureFragment) getFragmentManager().findFragmentById(R.id.camera_fragment);
         cameraFragment.addCaptureListener(this);
-
+        cameraFragment.setTimeProvider(eclipseTimeProvider);
         cameraFragment.setDirectoryName(getDirectoryNameFromPreferences());
         cameraFragment.setLocationProvider(eclipseTimeProvider);
 
@@ -173,14 +173,14 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         }
         if (startTime != null) {
             if(countdownFragment.isAdded()) {
-                Long current = eclipseTimeProvider.getCurrentTimeMillis();
+                Long current = eclipseTimeProvider.getTimeInMillisSinceEpoch();
                 Long delta = startTime - current;
                 countdownFragment.setTimeRemainingMillis(delta);
                 countdownFragment.onTick();
             }
 
 
-            Long timeRemaining = startTime - eclipseTimeProvider.getCurrentTimeMillis();
+            Long timeRemaining = startTime - eclipseTimeProvider.getTimeInMillisSinceEpoch();
             if (timeRemaining <= Config.AUDIO_ALERT_TIME && !audioAlertGiven) {
                 giveAudioAlert();
                 audioAlertGiven = true;
@@ -192,7 +192,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         if (startTime == null) {
             return null;
         }
-        return startTime - eclipseTimeProvider.getCurrentTimeMillis();
+        return startTime - eclipseTimeProvider.getTimeInMillisSinceEpoch();
     }
 
     private void setUpCaptureSequenceSession(long c2Time, long c3Time) {
@@ -332,23 +332,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         }
         progressTextView.setText(getString(R.string.images_captured) + ": " + String.valueOf(numCaptures) + "/" + String.valueOf(totalNumCaptures));
     }
-//
-//    private CaptureSequence dummySequence() {
-//        Long duration = 5000000L;
-//        int sensitivity = 60;
-//        float focusDistance = 0f;
-//        boolean shouldUseJpeg = true;
-//        boolean shouldUseRaw = false;
-//
-//        CaptureSequence.CaptureSettings settings = new CaptureSequence.CaptureSettings(duration, sensitivity, focusDistance, shouldUseRaw, shouldUseJpeg);
-//
-//        Long startTime = eclipseTimeProvider.getCurrentTimeMillis() + 6000;
-//        Long spacing = 500L;
-//        CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(settings, spacing, startTime, 10000L);
-//
-//
-//        return new CaptureSequence(interval);
-//    }
+
 
     @Override
     public void onClick(DialogInterface dialog, int which) {

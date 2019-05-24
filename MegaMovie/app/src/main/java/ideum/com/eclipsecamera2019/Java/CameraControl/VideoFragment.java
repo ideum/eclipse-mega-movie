@@ -92,6 +92,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ideum.com.eclipsecamera2019.Java.AutoFitTextureView;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPS;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.LocationProvider;
+import ideum.com.eclipsecamera2019.Java.OrientationController.Clock;
 import ideum.com.eclipsecamera2019.R;
 
 public class VideoFragment extends Fragment
@@ -115,6 +116,11 @@ public class VideoFragment extends Fragment
 
     private File mVideoFolder;
     private String mVideoFileName;
+    private Clock mTimeProvider;
+    public void setTimeProvider(Clock timeProvider) {
+        mTimeProvider = timeProvider;
+    }
+
     private final TreeMap<Integer, ImageSaver.ImageSaverBuilder> mJpegResultQueue = new TreeMap<>();
     private RefCountedAutoCloseable<ImageReader> mJpegImageReader;
     private final ImageReader.OnImageAvailableListener mOnJpegImageAvailableListener =
@@ -731,7 +737,7 @@ public class VideoFragment extends Fragment
     }
 
     private File createVideoFileName() throws IOException {
-        String timeStamp = generateTimeStamp();
+        String timeStamp = generateTimeStamp(mTimeProvider);
         String prepend = "VIDEO_" + timeStamp + "_";
         File videoFile = File.createTempFile(prepend, ".mp4", mVideoFolder);
         mVideoFileName = videoFile.getAbsolutePath();
@@ -861,9 +867,12 @@ public class VideoFragment extends Fragment
         createSession();
     }
 
-    private static String generateTimeStamp() {
+    private static String generateTimeStamp(Clock timeProvider) {
         SimpleDateFormat formatter = new SimpleDateFormat("MMM_dd_HH_mm_ss_SSS");
         Calendar c = Calendar.getInstance();
+        if(timeProvider != null) {
+            c.setTimeInMillis(timeProvider.getTimeInMillisSinceEpoch());
+        }
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         String timeStamp = formatter.format(c.getTime()) + "_UTC";
         Log.i("timestamp", timeStamp);
@@ -972,7 +981,7 @@ public class VideoFragment extends Fragment
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
                     int requestId = (int) request.getTag();
 
-                    String currentDateTime = generateTimeStamp();
+                    String currentDateTime = generateTimeStamp(mTimeProvider);
 
 
                     ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);

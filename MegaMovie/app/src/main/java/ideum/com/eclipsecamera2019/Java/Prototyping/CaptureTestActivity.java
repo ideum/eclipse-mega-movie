@@ -17,7 +17,7 @@ import ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPSFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.SmallCountdownFragment;
-import ideum.com.eclipsecamera2019.Java.LocationAndTiming.TimeProvider;
+import ideum.com.eclipsecamera2019.Java.OrientationController.Clock;
 import ideum.com.eclipsecamera2019.R;
 
 public class CaptureTestActivity extends AppCompatActivity
@@ -33,7 +33,7 @@ public class CaptureTestActivity extends AppCompatActivity
     private int numCaptures = 0;
     private int totalNumCaptures = 0;
     private GPSFragment mGPSFragment;
-    private TimeProvider timeProvider;
+    private Clock timeProvider;
 
 
     @Override
@@ -51,9 +51,9 @@ public class CaptureTestActivity extends AppCompatActivity
             }
         });
         mGPSFragment = new GPSFragment();
-        timeProvider = new TimeProvider() {
+        timeProvider = new Clock() {
             @Override
-            public Long getCurrentTimeMillis() {
+            public long getTimeInMillisSinceEpoch() {
                 return Calendar.getInstance().getTimeInMillis();
             }
         };
@@ -63,7 +63,7 @@ public class CaptureTestActivity extends AppCompatActivity
     }
 
     private void startSequence() {
-        setUpCaptureSequenceSession(timeProvider.getCurrentTimeMillis() + 1000);
+        setUpCaptureSequenceSession(timeProvider.getTimeInMillisSinceEpoch() + 1000);
         if (mTimer != null) {
             mTimer.cancel();
         }

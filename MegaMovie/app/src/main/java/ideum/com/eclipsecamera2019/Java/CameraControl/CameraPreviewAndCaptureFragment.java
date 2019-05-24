@@ -68,7 +68,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ideum.com.eclipsecamera2019.Java.Application.Config;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPS;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.LocationProvider;
-import ideum.com.eclipsecamera2019.Java.LocationAndTiming.TimeProvider;
+import ideum.com.eclipsecamera2019.Java.OrientationController.Clock;
 import ideum.com.eclipsecamera2019.R;
 
 
@@ -94,7 +94,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     private List<ICameraCaptureListener> listeners = new ArrayList<>();
 
     private LocationProvider mLocationProvider;
-    private TimeProvider mTimeProvider;
+    private Clock mTimeProvider;
     private Location getLocation() {
         if (mLocationProvider == null) {
             return null;
@@ -105,7 +105,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
     public void setLocationProvider(LocationProvider provider) {
         mLocationProvider = provider;
     }
-    public void setTimeProvider(TimeProvider timeProvider) {
+    public void setTimeProvider(Clock timeProvider) {
         mTimeProvider = timeProvider;
     }
     public void addCaptureListener(ICameraCaptureListener listener) {
@@ -292,7 +292,7 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
                     super.onCaptureStarted(session, request, timestamp, frameNumber);
                     int requestId = (int) request.getTag();
 
-                    String currentDateTime = generateTimeStamp();
+                    String currentDateTime = generateTimeStamp(mTimeProvider);
 
                     if (ALLOWS_JPEG) {
                         ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
@@ -943,10 +943,15 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         }
     }
 
-    private static String generateTimeStamp() {
+
+
+    private static String generateTimeStamp(Clock timeProvider) {
         SimpleDateFormat formatter = new SimpleDateFormat("MMM_dd_HH_mm_ss_SSS");
 //        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyy_MM_dd_HH_mm_ss_SSS", Locale.US);
         Calendar c = Calendar.getInstance();
+        if(timeProvider != null) {
+            c.setTimeInMillis(timeProvider.getTimeInMillisSinceEpoch());
+        }
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         String timeStamp = formatter.format(c.getTime()) + "_UTC";
         Log.i("timestamp",timeStamp);
@@ -961,41 +966,9 @@ public class CameraPreviewAndCaptureFragment extends android.app.Fragment
         }
     }
 
-    private File createVideoFileName() throws IOException {
-        String timeStamp = generateTimeStamp();
-        String prepend = "VIDEO_" + timeStamp + "_";
-        File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder);
-        mVideoFileName = videoFile.getAbsolutePath();
-        return videoFile;
-    }
 
-//    private void checkWriteStoragePermission() {
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if(ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-//
-//            } else {
-//                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-//            }
-//        } else {
-//            try {
-//                createVideoFileName();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
-    private void setupMediaRecorder() throws IOException {
-        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mMediaRecorder.setOutputFile(getVideoFilePath(getActivity()));
-        mMediaRecorder.setVideoEncodingBitRate(1000000);
-        mMediaRecorder.setVideoFrameRate(Config.VIDEO_FRAMERATE);
-        mMediaRecorder.setVideoSize(mVideoSize.getWidth(),mVideoSize.getHeight());
-        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-        mMediaRecorder.setOrientationHint(mTotalRotation);
-        mMediaRecorder.prepare();
-    }
+
 
     /**
      * A wrapper for an {@link AutoCloseable} object that implements reference counting to allow

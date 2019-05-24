@@ -56,7 +56,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     private int numCaptures = 0;
     private int totalNumCaptures = 0;
-
+    private GPSFragment mGPSFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +69,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         targetTimeMills = getTestTimeFromSettings();
 
         // gps just used for image metadata in practice mode
-        GPSFragment mGPSFragment = new GPSFragment();
+         mGPSFragment = new GPSFragment();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
 
@@ -152,7 +152,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         }
         totalNumCaptures = sequence.numberCapturesRemaining();
         updateCaptureTextView();
-        mSession = new CaptureSequenceSession(sequence, this, null);
+        mSession = new CaptureSequenceSession(sequence, this, mGPSFragment);
         // mSession.addListener(this);
 
 

@@ -70,12 +70,6 @@ implements CustomNamable{
     }
 
 
-//    private boolean checkLensPreference() {
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//        int lensPref = preferences.getInt(getString(R.string.lens_magnification_pref_key),0);
-//        return lensPref != 0;
-//    }
-
     @Override
     public int getTitleId() {
         return R.string.calibration_section_title;

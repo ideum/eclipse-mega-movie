@@ -17,6 +17,7 @@ import java.util.EnumMap;
 import java.util.List;
 
 import ideum.com.eclipsecamera2019.Java.Application.MyApplication;
+import ideum.com.eclipsecamera2019.Java.OrientationController.Clock;
 import ideum.com.eclipsecamera2019.R;
 
 import static ideum.com.eclipsecamera2019.Java.LocationAndTiming.EclipseTimes.Phase.c1;
@@ -32,12 +33,14 @@ import static ideum.com.eclipsecamera2019.Java.LocationAndTiming.EclipseTimes.Ph
 public class EclipseTimeProvider extends Fragment
         implements LocationSource.OnLocationChangedListener,
         LocationProvider,
-        TimeProvider {
+        Clock {
     private long timeOffset;
     private boolean timeCalibrated = false;
 
+
+
     @Override
-    public Long getCurrentTimeMillis() {
+    public long getTimeInMillisSinceEpoch() {
         return Calendar.getInstance().getTimeInMillis() + timeOffset;
     }
 
@@ -171,7 +174,7 @@ public class EclipseTimeProvider extends Fragment
         if (contactTimes.get(c4) != null) {
             editor.putLong(getString(R.string.c4_time_key), contactTimes.get(c4));
         }
-        editor.putLong(getString(R.string.time_offset_key), timeOffset);
+//        editor.putLong(getString(R.string.time_offset_key), timeOffset);
         editor.commit();
     }
 
@@ -191,16 +194,6 @@ public class EclipseTimeProvider extends Fragment
         return inPathOfTotality;
     }
 
-    public Long getPhaseTimeMills(EclipseTimes.Phase phase) {
-
-        Long eventTime = contactTimes.get(phase);
-        if (eventTime == null) {
-            return null;
-        }
-
-
-        return eventTime;
-    }
 
     @Override
     public Location getLocation() {

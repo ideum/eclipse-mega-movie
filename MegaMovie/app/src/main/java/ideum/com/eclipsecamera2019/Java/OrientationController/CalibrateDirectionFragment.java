@@ -68,7 +68,7 @@ implements MyTimer.MyTimerListener,
 
     public void setShouldUseCurrentTime(boolean value) {
         if (value) {
-            model.setClock(new RealClock());
+
             shouldUseCurrentTime = true;
         } else {
             shouldUseCurrentTime = false;
@@ -131,7 +131,10 @@ implements MyTimer.MyTimerListener,
         getActivity().getFragmentManager().beginTransaction().add(
                 android.R.id.content, mGPSFragment).commit();
         mGPSFragment.activate(this);
-
+        if(shouldUseCurrentTime) {
+            model.setClock(mGPSFragment);
+        }
+        //model.setClock(mGPSFragment);
         mTimer = new MyTimer();
         mTimer.addListener(this);
         mTimer.TICK_INTERVAL = 30;

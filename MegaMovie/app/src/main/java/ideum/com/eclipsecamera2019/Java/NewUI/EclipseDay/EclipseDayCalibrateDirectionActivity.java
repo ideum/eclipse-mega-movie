@@ -49,6 +49,12 @@ public class EclipseDayCalibrateDirectionActivity extends AppCompatActivity{
         //showSolarFilterAlert();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        calibrateDirectionFragment.setShouldUseCurrentTime(true);
+    }
+
     private void onNextButtonPressed() {
         calibrateToTarget(null);
 
@@ -59,21 +65,7 @@ public class EclipseDayCalibrateDirectionActivity extends AppCompatActivity{
         calibrateDirectionFragment.calibrateModelToTarget();
     }
 
-    public void resetCalibration(View view) {
-        calibrateDirectionFragment.resetModelCalibration();
-    }
 
-    private void showSolarFilterAlert() {
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.solar_filter_warning))
-                .setPositiveButton(getString(R.string.got_it), null)
-                .setCancelable(true);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 
 
     public void loadPointingActivity() {

@@ -14,7 +14,7 @@ import java.util.Locale;
 import java.util.Queue;
 
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
-import ideum.com.eclipsecamera2019.Java.LocationAndTiming.TimeProvider;
+import ideum.com.eclipsecamera2019.Java.OrientationController.Clock;
 
 public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public interface CaptureSessionCompletionListerner {
@@ -41,9 +41,9 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     private CaptureSequence.TimedCaptureRequest nextRequest;
     private CaptureSessionListener mCameraController;
     private List<CaptureSessionCompletionListerner> listeners = new ArrayList<>();
-    public TimeProvider timeProvider;
+    public Clock timeProvider;
 
-    public CaptureSequenceSession(CaptureSequence captureSequence, CaptureSessionListener controller,TimeProvider timeProvider) {
+    public CaptureSequenceSession(CaptureSequence captureSequence, CaptureSessionListener controller,Clock timeProvider) {
         requestQueue = captureSequence.getRequestQueue();
         mCameraController = controller;
         this.timeProvider = timeProvider;
@@ -65,7 +65,7 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
 
     private Long getTime() {
         if(timeProvider != null) {
-            return timeProvider.getCurrentTimeMillis();
+            return timeProvider.getTimeInMillisSinceEpoch();
         }
         Calendar c = Calendar.getInstance();
         return c.getTimeInMillis();

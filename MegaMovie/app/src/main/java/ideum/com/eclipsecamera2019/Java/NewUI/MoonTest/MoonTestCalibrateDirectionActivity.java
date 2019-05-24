@@ -44,7 +44,8 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
 
         calibrateDirectionFragment = (CalibrateDirectionFragment) getSupportFragmentManager().findFragmentById(R.id.direction_calibration_fragment);
-        calibrateDirectionFragment.shouldUseCurrentTime = true;
+
+       // calibrateDirectionFragment.shouldUseCurrentTime = true;
         setTargetFromSettings();
 
         calibrateDirectionFragment.resetModelCalibration();
@@ -76,6 +77,12 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        calibrateDirectionFragment.setShouldUseCurrentTime(true);
+//    }
+
     private void showSolarFilterAlert() {
 
 
@@ -96,14 +103,6 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
     public void calibrateToTarget(View view) {
         calibrateDirectionFragment.calibrateModelToTarget();
     }
-
-//    public void resetCalibration(View view) {
-//        calibrateDirectionFragment.resetModelCalibration();
-//    }
-//
-//    public void useCurrentTime(View view) {
-//        calibrateDirectionFragment.setShouldUseCurrentTime(true);
-//    }
 
     private void setTargetFromSettings() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
