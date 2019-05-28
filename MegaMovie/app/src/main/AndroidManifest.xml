@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="ideum.com.eclipsecamera2019"
-    android:versionCode="11"
+    android:versionCode="18"
     android:versionName="3.02">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -14,7 +14,7 @@
 
     <uses-feature
         android:name="android.hardware.camera.capability.manual_sensor"
-        android:required="true" />
+        android:required="false" />
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
