@@ -118,7 +118,8 @@ public class VideoTestActivity extends AppCompatActivity
     private void changeVideoTime(long value){
         if(isRecording) return;
         recordingTotalTimeMillis = Math.max(Math.min(recordingTotalTimeMillis + (value * 1000), 360000), 0);
-        durationTextView.setText((recordingTotalTimeMillis / 1000) + " seconds");
+        String recordingString = recordingTotalTimeMillis / 1000 + " seconds";
+        durationTextView.setText(recordingString);
     }
 
     private void showTimePickerDialog() {
