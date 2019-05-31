@@ -38,7 +38,7 @@ public class VideoTestActivity extends AppCompatActivity
     private MyTimer mTimer;
     private GPSFragment mGPSFragment;
     private long recordingElapsedTimeMillis = 0;
-    private long recordingTotalTimeMillis = 5000;
+    private long recordingTotalTimeMillis = 10000;
     private long timeOffset;
 
     private TextView recordingTextView;
@@ -90,7 +90,22 @@ public class VideoTestActivity extends AppCompatActivity
             }
         });
 
+        findViewById(R.id.incremement_duration_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeVideoTime(1);
+            }
+        });
+
+        findViewById(R.id.decrement_duration_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                changeVideoTime(-1);
+            }
+        });
+
         durationTextView = findViewById(R.id.duration_text_view);
+        changeVideoTime(0);
         snapPhotoButton = findViewById(R.id.snap_photo_button);
         snapPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +113,12 @@ public class VideoTestActivity extends AppCompatActivity
                 mVideoFragment.takePhoto();
             }
         });
+    }
+
+    private void changeVideoTime(long value){
+        if(isRecording) return;
+        recordingTotalTimeMillis = Math.max(Math.min(recordingTotalTimeMillis + (value * 1000), 360000), 0);
+        durationTextView.setText((recordingTotalTimeMillis / 1000) + " seconds");
     }
 
     private void showTimePickerDialog() {

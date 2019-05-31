@@ -21,7 +21,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/texture"
+        android:layout_below="@+id/texture"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:background="#4285f4">
@@ -38,7 +38,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:orientation="vertical">
 
                 <Button
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:text="30 ms"/>
+                    android:text="10 seconds"/>
             </LinearLayout>
 
             <LinearLayout
