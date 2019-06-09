@@ -1050,6 +1050,10 @@ public class VideoFragment extends Fragment
                     mCaptureSessionCallback,
                     mBackgroundHandler);
 
+            for (ICameraCaptureListener listener : captureListeners) {
+                listener.onImageCapturedInitiated();
+            }
+
 
         } catch (CameraAccessException e) {
             e.printStackTrace();

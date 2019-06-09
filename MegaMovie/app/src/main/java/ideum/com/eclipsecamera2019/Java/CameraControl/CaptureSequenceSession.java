@@ -5,6 +5,8 @@
 
 package ideum.com.eclipsecamera2019.Java.CameraControl;
 
+import android.util.Log;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +36,10 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
     public void stop() {
         inProgress = false;
 
+    }
+
+    public boolean isRecording(){
+        return isRecordingVideo;
     }
 
     public static final String TAG = "CaptureSequenceSession";
@@ -81,6 +87,8 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
             return;
         }
         if(isRecordingVideo) {
+            float timeDelta = (videoRecordingStartTime + videoDuration) - currentTime;
+            Log.d("VIDEO", "TIME: " + timeDelta);
             if(currentTime >= videoRecordingStartTime + videoDuration) {
                 mCameraController.stopRecordingVideo();
                 isRecordingVideo = false;

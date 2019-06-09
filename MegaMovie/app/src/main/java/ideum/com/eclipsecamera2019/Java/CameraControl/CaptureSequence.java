@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
@@ -162,6 +163,8 @@ public class CaptureSequence {
         }
     }
 
+    public CaptureSequence(){ }
+
     public CaptureSequence(Queue<TimedCaptureRequest> requestQueue) {
         this.requestQueue = requestQueue;
     }
@@ -174,7 +177,6 @@ public class CaptureSequence {
         }
     }
 
-
     public CaptureSequence(CaptureInterval interval) {
         requestQueue = new LinkedList<>();
         requestQueue.addAll(interval.getTimedRequests());
@@ -184,6 +186,13 @@ public class CaptureSequence {
 
     public Queue<TimedCaptureRequest> getRequestQueue() {
         return requestQueue;
+    }
+
+    public void AddTimedCaptureRequests(Queue<TimedCaptureRequest> requests){
+        if(requestQueue == null){
+            requestQueue = new LinkedList<>();
+        }
+        requestQueue.addAll(requests);
     }
 
     public int numberCapturesRemaining() {

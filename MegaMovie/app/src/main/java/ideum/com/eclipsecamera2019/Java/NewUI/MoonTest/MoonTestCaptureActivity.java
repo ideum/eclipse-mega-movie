@@ -12,10 +12,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import ideum.com.eclipsecamera2019.Java.CameraControl.CameraHardwareCheckFragment;
+import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceBuilder;
 import ideum.com.eclipsecamera2019.Java.CameraControl.ICameraCaptureListener;
 import ideum.com.eclipsecamera2019.Java.CameraControl.IVideoAndStillCamera;
 import ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment;
@@ -53,6 +57,8 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     private TextView progressTextView;
 
+    private TextView recordingTextView;
+
     private SmallCountdownFragment countdownFragment;
     private Button finishButton;
 
@@ -82,6 +88,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         cameraFragment.addCaptureListener(this);
 
         testTimeTextView = (TextView) findViewById(R.id.test_time_text_view);
+        recordingTextView = (TextView) findViewById(R.id.capture_recording);
 
         progressTextView = (TextView) findViewById(R.id.capture_progress_text_view);
         finishButton = (Button) findViewById(R.id.finish_button);
@@ -111,6 +118,9 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         int leadTimeMinutes = LEAD_TIME_SECONDS / 60;
         int leadTimeSeconds = LEAD_TIME_SECONDS - 60 * leadTimeMinutes;
 
+        recordingTextView.setText("Not recording");
+        recordingTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));
+
     }
 
     private void onFinishButtonPressed() {
@@ -127,6 +137,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         mTimer = new MyTimer();
        // mTimer.addListener(mSession);
         mSession.start();
+        mSession.addListener(this);
         mTimer.addListener(this);
         // mTimer.addListener(countdownFragment);
         mTimer.startTicking();
@@ -163,6 +174,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
     private Long startTimeMills;
 
     private CaptureSequence createCaptureSequence() {
+
         startTimeMills = getTestTimeFromSettings() - LEAD_TIME_SECONDS * 1000;
 
         boolean shouldSaveRaw = false;
@@ -170,17 +182,32 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         Long spacing = SPACING_SECONDS * 1000L;
         Long duration = SESSION_LENGTH_SECONDS * 1000;
 
-        CaptureSequence.IntervalProperties properties = new CaptureSequence.IntervalProperties(
-                SENSOR_SENSITIVITY,
-                EXPOSURE_TIME,
-                FOCUS_DISTANCE,
-                spacing,
-                shouldSaveRaw,
-                shouldSaveJpeg
-        );
+        if(!CameraHardwareCheckFragment.isCameraSupported()){
+            return CaptureSequenceBuilder.makeSimpleVideoSequence(startTimeMills, startTimeMills + duration);
+        }
+        else {
+            float magnification = getLensMagnificationFromPreferences();
+            return CaptureSequenceBuilder.makeVideoAndImageSequence(startTimeMills, startTimeMills + duration, magnification);
+            //return CaptureSequenceBuilder.makeSequence(startTimeMills,startTimeMills + duration, magnification);
+        }
 
-        CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties, startTimeMills, duration);
-        return new CaptureSequence(interval);
+//        CaptureSequence.IntervalProperties properties = new CaptureSequence.IntervalProperties(
+//                SENSOR_SENSITIVITY,
+//                EXPOSURE_TIME,
+//                FOCUS_DISTANCE,
+//                spacing,
+//                shouldSaveRaw,
+//                shouldSaveJpeg
+//        );
+//
+//        CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties, startTimeMills, duration);
+//        return new CaptureSequence(interval);
+    }
+
+    private int getLensMagnificationFromPreferences() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int storedValue = preferences.getInt(getString(R.string.lens_magnification_pref_key), 1);
+        return Math.max(storedValue, 1);
     }
 
     private Long getTestTimeFromSettings() {
@@ -218,17 +245,30 @@ public class MoonTestCaptureActivity extends AppCompatActivity
     @Override
     public void takePhotoWithSettings(CaptureSequence.CaptureSettings settings) {
         cameraFragment.takePhotoWithSettings(settings);
-
     }
 
     @Override
     public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
-
+        //cameraFragment.startRecordingVideo(settings);
+        VideoFragment vidFrag = (VideoFragment) cameraFragment;
+        if(vidFrag != null){
+            vidFrag.tryToStartRecording();
+        }
+        recordingTextView.setText("Recording Video");
+        recordingTextView.setTextColor(getResources().getColor(R.color.green_text_color));
     }
 
     @Override
     public void stopRecordingVideo() {
-
+        //cameraFragment.stopRecordingVideo();
+        VideoFragment vidFrag = (VideoFragment) cameraFragment;
+        if(vidFrag != null){
+            vidFrag.tryToStopRecording();
+        }
+        recordingTextView.setText("Not recording");
+        recordingTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));
+        numCaptures += 1;
+        updateCaptureTextView();
     }
 
 

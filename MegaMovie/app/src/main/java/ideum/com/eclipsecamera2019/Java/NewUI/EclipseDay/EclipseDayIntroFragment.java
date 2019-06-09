@@ -55,7 +55,7 @@ implements CustomNamable {
     }
 
     private boolean checkCameraSupported()  {
-        return mCameraHardwareCheckFragment.isCameraSupported();
+        return CameraHardwareCheckFragment.isCameraSupported();
 
     }
 

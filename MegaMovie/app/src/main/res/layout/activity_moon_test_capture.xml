@@ -50,12 +50,11 @@
                     android:id="@+id/test_time_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
 
-                    android:textColor="#fff"
                     android:padding="8dp"
-                    android:textSize="30sp"
-                    android:text="Test Time: " />
+                    android:text="Test Time: "
+                    android:textColor="#fff"
+                    android:textSize="30sp" />
 
 
                 <TextView
@@ -67,6 +66,16 @@
                     android:textSize="30sp"
 
                     android:text="Images Captured: " />
+
+                <TextView
+                    android:id="@+id/capture_recording"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:padding="8dp"
+                    android:textSize="30sp"
+
+                    android:text="Not Recording"/>
 
                 <Button
                     android:id="@+id/finish_button"

@@ -133,7 +133,7 @@ public class IntroActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if (!mCameraHardwareCheckFragment.isCameraSupported()) {
+        if (CameraHardwareCheckFragment.isCameraSupported()) {
             displayCameraNotSupportedWarning();
         } else {
             loadMainActivity();

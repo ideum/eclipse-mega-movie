@@ -43,7 +43,7 @@ implements CustomNamable{
             public void onClick(View view) {
                 if(!checkCameraSupported()) {
                     displayCameraNotSupportedWarning();
-                    return;
+                    //return;
                 }
 
                 MainActivity mainActivity = (MainActivity) getActivity();
@@ -75,7 +75,7 @@ implements CustomNamable{
 
 
     private boolean checkCameraSupported()  {
-            return mCameraHardwareCheckFragment.isCameraSupported();
+            return CameraHardwareCheckFragment.isCameraSupported();
 
     }
 

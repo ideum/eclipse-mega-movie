@@ -7,6 +7,7 @@ public class Config {
     public static final boolean SHOULD_USE_DUMMY_LOCATION = false;
     public static final double DUMMY_LATITUDE = -34.657365;//-34.668819;
     public static final double DUMMY_LONGITUDE = -60.971352;//-59.428295;
+    public static final boolean TEST_NO_CAMERA_SUPPORT = false;
 
     //Used in EclipseTimeProvider
     public static final Boolean USE_DUMMY_TIME_C2 = true;
@@ -28,8 +29,8 @@ public class Config {
 
     public static final Boolean beadsShouldCaptureRaw = false;
     public static final Boolean beadsShouldCaptureJpeg = true;
-    public static final Boolean totalityShouldCaptureRaw = true;
-    public static final Boolean totalityShouldCaptureJpeg = false;
+    public static final Boolean totalityShouldCaptureRaw = false;
+    public static final Boolean totalityShouldCaptureJpeg = true;
     public static final Double[] BEADS_FRACTIONS = {1.0/16.0,1.0/4.0,1.0,4.0,16.0};
     public static final Double[] TOTALITY_FRACTIONS = {1.0,3.0,10.0,30.0,100.0,300.0};
     public static final Long BEADS_LEAD_TIME = 1000L;

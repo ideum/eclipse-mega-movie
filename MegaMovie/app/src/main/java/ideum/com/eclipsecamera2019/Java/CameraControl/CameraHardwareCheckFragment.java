@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.widget.TextView;
 
+import ideum.com.eclipsecamera2019.Java.Application.Config;
 import ideum.com.eclipsecamera2019.R;
 
 /**
@@ -26,6 +27,7 @@ public class CameraHardwareCheckFragment extends Fragment {
      * Request code for camera permissions
      */
     private static final int REQUEST_CAMERA_PERMISSIONS = 0;
+    private static boolean manualSensorSupported;
 
     /**
      * Permissions required to take a picture.
@@ -35,10 +37,11 @@ public class CameraHardwareCheckFragment extends Fragment {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
+
+
     private CameraManager mCameraManager;
     private int hardwareLevel;
     private TextView hardwareFullTextView;
-    private boolean manualSensorSupported;
 
 
     public CameraHardwareCheckFragment() {
@@ -57,7 +60,8 @@ public class CameraHardwareCheckFragment extends Fragment {
         checkHardwareLevel();
     }
 
-    public boolean isCameraSupported() {
+    public static boolean isCameraSupported() {
+        if(Config.TEST_NO_CAMERA_SUPPORT) return false;
         return manualSensorSupported;
     }
 
