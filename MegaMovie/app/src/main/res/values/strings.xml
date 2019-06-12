@@ -120,7 +120,7 @@
     <!--Moon Test Copy-->
     <string name="optimize_your_eclipse_photography">Optimización de la fotografía del eclipse.</string>
     <string name="moon_test_intro">Usando esta aplicación y capturando imágenes de la Luna y el Sol usted se familiarizará con su operación y funciones de tal forma que usted esté preparado el día del eclipse total de Sol.</string>
-    <string name="remove_case">Do you use a phone case? Calibration accuracy may be improved if you remove it.</string>
+    <string name="remove_case">¿Usas una funda o protector para teléfono? La precisión de la calibración puede mejorarse si la quitas.</string>
 
     <string name="practice_mode_ftp_request">To help the developers of this app, you can upload practice images to ftp://apollo.ssl.berkeley.edu/pub/megamovie/incoming</string>
     <string name="practice_mode_target_selection_prompt">¿Te gustaría practicar tomando fotos de la luna o el sol? Las condiciones para estas pruebas son bastante diferentes, por lo que recomendamos practicar con ambas.</string>
@@ -281,10 +281,11 @@
     <string name="eclipse_day_skip_set_up">Si uasted ya ha configurado su equipo o desea omitir este paso, puede ir directamente al modo de captura</string>
     <string name="select">Seleccionar</string>
     <string name="countdown_explanation">Esta función el tiempo restante antes del comienzo de la totalidad en su lugar de observación, como lo marca el pin rojo.</string>
-    <string name="enable_location_services">Please note: location services must be enabled on your phone in order to automatically calculate eclipse timing. Otherwise, you can choose a location manually by tapping a location in the path of totality.</string>
-    <string name="time_offset_key">Esta es la forma más fácil de usar la aplicación, pero la calidad de imagen no será tan buena</string>
+    <string name="enable_location_services">en en cuenta que: Los servicios de ubicación deben estar habilitados en tú teléfono para calcular automáticamente el tiempo del eclipse. De lo contrario, puedes introducir tú ubicación manualmente tocando tú posición sobre la franja de la totalidad en el mapa.</string>
+    <string name="time_offset_key" translatable="false">time offset</string>
     <string name="only_phone_explanation">Esta es la forma más fácil de usar la aplicación, pero la calidad de imagen no será tan buena</string>
     <string name="my_phone_with_peripheral_equipment_explanation">Una lente y un trípode permitirán fotos de mejor calidad, pero requieren una configuración y calibración adicional.</string>
     <string name="a_dslr_camera_explanation">Si está utilizando una cámara DSLR, las funciones de mapa y cuenta regresiva de esta aplicación aún pueden se usadas.</string>
+    <string name="unsupported_camera_message">Desafortunadamente, la cámara de tú teléfono no permite el control manual de sus sensores, por esto la aplicación tomará un solo video de todo el evento en lugar de una serie de imágenes.</string>
 
 </resources>

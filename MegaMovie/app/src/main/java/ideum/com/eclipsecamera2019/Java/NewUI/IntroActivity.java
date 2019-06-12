@@ -122,8 +122,8 @@ public class IntroActivity extends AppCompatActivity
 
     private void displayCameraNotSupportedWarning() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.camera_not_supported_warning))
-                .setPositiveButton("Got It", null)
+        builder.setMessage(getResources().getString(R.string.unsupported_camera_message))
+                .setPositiveButton("Ok", null)
                 .setCancelable(false)
                 .setOnDismissListener(this);
 

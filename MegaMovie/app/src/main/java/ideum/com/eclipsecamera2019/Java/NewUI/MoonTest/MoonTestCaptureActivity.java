@@ -185,23 +185,23 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         if(!CameraHardwareCheckFragment.isCameraSupported()){
             return CaptureSequenceBuilder.makeSimpleVideoSequence(startTimeMills, startTimeMills + duration);
         }
-        else {
-            float magnification = getLensMagnificationFromPreferences();
-            return CaptureSequenceBuilder.makeVideoAndImageSequence(startTimeMills, startTimeMills + duration, magnification);
-            //return CaptureSequenceBuilder.makeSequence(startTimeMills,startTimeMills + duration, magnification);
-        }
+//        else {
+//            float magnification = getLensMagnificationFromPreferences();
+//            //return CaptureSequenceBuilder.makeVideoAndImageSequence(startTimeMills, startTimeMills + duration, magnification);
+//            //return CaptureSequenceBuilder.makeSequence(startTimeMills,startTimeMills + duration, magnification);
+//        }
 
-//        CaptureSequence.IntervalProperties properties = new CaptureSequence.IntervalProperties(
-//                SENSOR_SENSITIVITY,
-//                EXPOSURE_TIME,
-//                FOCUS_DISTANCE,
-//                spacing,
-//                shouldSaveRaw,
-//                shouldSaveJpeg
-//        );
-//
-//        CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties, startTimeMills, duration);
-//        return new CaptureSequence(interval);
+        CaptureSequence.IntervalProperties properties = new CaptureSequence.IntervalProperties(
+                SENSOR_SENSITIVITY,
+                EXPOSURE_TIME,
+                FOCUS_DISTANCE,
+                spacing,
+                shouldSaveRaw,
+                shouldSaveJpeg
+        );
+
+        CaptureSequence.CaptureInterval interval = new CaptureSequence.CaptureInterval(properties, startTimeMills, duration);
+        return new CaptureSequence(interval);
     }
 
     private int getLensMagnificationFromPreferences() {

@@ -77,8 +77,8 @@ implements CustomNamable {
 
     private void displayCameraNotSupportedWarning() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Unfortunately, your phone's camera does not support manual control of its sensors, so you will be unable to take pictures with the app.")
-                .setPositiveButton("Got It", null)
+        builder.setMessage(getResources().getString(R.string.unsupported_camera_message))
+                .setPositiveButton("Ok", null)
                 .setCancelable(true);
 
         AlertDialog dialog = builder.create();

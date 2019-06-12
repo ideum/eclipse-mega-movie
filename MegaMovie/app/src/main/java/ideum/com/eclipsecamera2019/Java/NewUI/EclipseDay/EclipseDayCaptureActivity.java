@@ -26,6 +26,7 @@ import java.util.TimeZone;
 import ideum.com.eclipsecamera2019.Java.Application.Config;
 import ideum.com.eclipsecamera2019.Java.Application.MyApplication;
 import ideum.com.eclipsecamera2019.Java.Application.UploadActivity;
+import ideum.com.eclipsecamera2019.Java.CameraControl.CameraHardwareCheckFragment;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CameraPreviewAndCaptureFragment;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequence;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceBuilder;
@@ -223,6 +224,9 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 //            return dummySequence();
 //        }
         float magnification = (float) getLensMagnificationFromPreferences();
+        if(!CameraHardwareCheckFragment.isCameraSupported()){
+            return CaptureSequenceBuilder.makeSimpleVideoSequence(c2Time, c3Time);
+        }
         return Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE ? CaptureSequenceBuilderDummy.makeSequence(c2Time) :
                 CaptureSequenceBuilder.makeSequence(c2Time, c3Time, magnification);
     }
