@@ -228,10 +228,9 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
             return CaptureSequenceBuilder.makeSimpleVideoSequence(c2Time, c3Time);
         }
         return Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE ? CaptureSequenceBuilderDummy.makeSequence(c2Time) :
-                CaptureSequenceBuilder.makeSequence(c2Time, c3Time, magnification);
+                CaptureSequenceBuilder.makeVideoAndImageSequence(c2Time, c3Time, magnification);
     }
-
-
+    
     private int getLensMagnificationFromPreferences() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int storedValue = preferences.getInt(getString(R.string.lens_magnification_pref_key), 1);

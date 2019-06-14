@@ -51,7 +51,6 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -103,7 +102,10 @@ public class VideoFragment extends Fragment
     public int mSensorSensitivity = 60;
     public float mFocusDistance = 0;
     public long mDuration = 45 * 1000000; //nanoseconds
+    public boolean SupportRaw = true;
+    public boolean SupportJPEG = true;
     private Size mJpegImageSize;
+    private Size mRawImageSize;
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
     private static final SparseIntArray DEFAULT_ORIENTATIONS = new SparseIntArray();
@@ -128,6 +130,16 @@ public class VideoFragment extends Fragment
                 @Override
                 public void onImageAvailable(ImageReader reader) {
                     dequeueAndSaveImage(mJpegResultQueue, mJpegImageReader);
+                }
+            };
+
+    private final TreeMap<Integer, ImageSaver.ImageSaverBuilder> mRawResultQueue = new TreeMap<>();
+    private RefCountedAutoCloseable<ImageReader> mRawImageReader;
+    private final ImageReader.OnImageAvailableListener mOnRawImageAvailableListener =
+            new ImageReader.OnImageAvailableListener() {
+                @Override
+                public void onImageAvailable(ImageReader reader) {
+                    dequeueAndSaveImage(mRawResultQueue, mRawImageReader);
                 }
             };
 
@@ -532,31 +544,57 @@ public class VideoFragment extends Fragment
                 mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
             }
             configureTransform(width, height);
+            List<Size> sortedSizes;
+            List<Size> sortedSizesRaw;
 
-            List<Size> sortedSizes = Arrays.asList(map.getOutputSizes(ImageFormat.JPEG));
+            if(SupportJPEG){
+                sortedSizes = Arrays.asList(map.getOutputSizes(ImageFormat.JPEG));
 
-            Collections.sort(sortedSizes, new Comparator<Size>() {
-                        @Override
-                        public int compare(Size lhs, Size rhs) {
-                            return Long.signum(lhs.getWidth() * lhs.getHeight() -
-                                    rhs.getWidth() * rhs.getHeight());
+                Collections.sort(sortedSizes, new Comparator<Size>() {
+                            @Override
+                            public int compare(Size lhs, Size rhs) {
+                                return Long.signum(lhs.getWidth() * lhs.getHeight() -
+                                        rhs.getWidth() * rhs.getHeight());
+                            }
                         }
-                    }
-            );
+                );
+                int numberOfSizes = sortedSizes.size();
+                mJpegImageSize = sortedSizes.get(numberOfSizes / 2);
 
-            int numberOfSizes = sortedSizes.size();
-            // Pick out the middle size
-            mJpegImageSize = sortedSizes.get(numberOfSizes / 2);
+                if (mJpegImageReader == null || mJpegImageReader.getAndRetain() == null) {
+                    mJpegImageReader = new RefCountedAutoCloseable<>(
+                            ImageReader.newInstance(mJpegImageSize.getWidth(),
+                                    mJpegImageSize.getHeight(),
+                                    ImageFormat.JPEG,
+                                    /*max images */5));
 
-            if (mJpegImageReader == null || mJpegImageReader.getAndRetain() == null) {
-                mJpegImageReader = new RefCountedAutoCloseable<>(
-                        ImageReader.newInstance(mJpegImageSize.getWidth(),
-                                mJpegImageSize.getHeight(),
-                                ImageFormat.JPEG,
-                                /*max images */5));
-
+                }
+                mJpegImageReader.get().setOnImageAvailableListener(mOnJpegImageAvailableListener, mBackgroundHandler);
             }
-            mJpegImageReader.get().setOnImageAvailableListener(mOnJpegImageAvailableListener, mBackgroundHandler);
+            if(SupportRaw)
+            {
+                sortedSizesRaw = Arrays.asList(map.getOutputSizes(ImageFormat.RAW_SENSOR));
+                Collections.sort(sortedSizesRaw, new Comparator<Size>() {
+                            @Override
+                            public int compare(Size lhs, Size rhs) {
+                                return Long.signum(lhs.getWidth() * lhs.getHeight() -
+                                        rhs.getWidth() * rhs.getHeight());
+                            }
+                        }
+                );
+                int numberOfSizes = sortedSizesRaw.size();
+                mRawImageSize = sortedSizesRaw.get(numberOfSizes / 2);
+                if(mRawImageReader == null || mRawImageReader.getAndRetain() == null){
+                    mRawImageReader = new RefCountedAutoCloseable<>(
+                            ImageReader.newInstance(mRawImageSize.getWidth(),
+                                    mRawImageSize.getHeight(),
+                                    ImageFormat.RAW_SENSOR,
+                                    5)
+                    );
+                }
+                mRawImageReader.get().setOnImageAvailableListener(mOnRawImageAvailableListener, mBackgroundHandler);
+            }
+
             createVideoFileFolder();
             mMediaRecorder = new MediaRecorder();
             manager.openCamera(cameraId, mStateCallback, null);
@@ -610,7 +648,12 @@ public class VideoFragment extends Fragment
 
             List<Surface> surfaces = new ArrayList<>();
             surfaces.add(mPreviewSurface);
-            surfaces.add(mJpegImageReader.get().getSurface());
+            if(SupportJPEG){
+                surfaces.add(mJpegImageReader.get().getSurface());
+            }
+            if(SupportRaw){
+                surfaces.add(mRawImageReader.get().getSurface());
+            }
 
             mCameraDevice.createCaptureSession(surfaces,
                     new CameraCaptureSession.StateCallback() {
@@ -983,22 +1026,35 @@ public class VideoFragment extends Fragment
 
                     String currentDateTime = generateTimeStamp(mTimeProvider);
 
+                    if(SupportJPEG){
+                        ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
 
-                    ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+                        File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
+                        if (!jpegRootPath.exists()) {
+                            jpegRootPath.mkdirs();
+                        }
 
-                    File jpegRootPath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
-                    if (!jpegRootPath.exists()) {
-                        jpegRootPath.mkdirs();
+                        File jpegFile = new File(jpegRootPath,
+                                "JPEG_" + currentDateTime + ".jpg");
+
+                        if (jpegBuilder != null) {
+                            jpegBuilder.setFile(jpegFile);
+                        }
                     }
+                    if(SupportRaw){
+                        ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
 
-                    File jpegFile = new File(jpegRootPath,
-                            "JPEG_" + currentDateTime + ".jpg");
+                        File rawRootpath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), data_directory_name);
+                        if(!rawRootpath.exists()){
+                            rawRootpath.mkdirs();
+                        }
 
-                    if (jpegBuilder != null) {
-                        jpegBuilder.setFile(jpegFile);
+                        File rawFile = new File(rawRootpath, "RAW_" + currentDateTime + ".dng" );
+
+                        if(rawBuilder != null){
+                            rawBuilder.setFile(rawFile);
+                        }
                     }
-
-
                 }
 
                 @Override
@@ -1007,9 +1063,17 @@ public class VideoFragment extends Fragment
 
 
                     int requestId = (int) request.getTag();
-                    ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
-                    if (jpegBuilder != null) {
-                        jpegBuilder.setResult(result);
+                    if(SupportJPEG){
+                        ImageSaver.ImageSaverBuilder jpegBuilder = mJpegResultQueue.get(requestId);
+                        if (jpegBuilder != null) {
+                            jpegBuilder.setResult(result);
+                        }
+                    }
+                    if(SupportJPEG){
+                        ImageSaver.ImageSaverBuilder rawBuilder = mRawResultQueue.get(requestId);
+                        if(rawBuilder != null){
+                            rawBuilder.setResult(result);
+                        }
                     }
 
                 }
@@ -1030,6 +1094,9 @@ public class VideoFragment extends Fragment
             if (settings.shouldSaveJpeg) {
                 captureRequestBuilder.addTarget(mJpegImageReader.get().getSurface());
             }
+            if (settings.shouldSaveRaw){
+                captureRequestBuilder.addTarget(mRawImageReader.get().getSurface());
+            }
 
 
             int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
@@ -1045,6 +1112,10 @@ public class VideoFragment extends Fragment
             if (settings.shouldSaveJpeg) {
                 ImageSaver.ImageSaverBuilder jpegBuilder = new ImageSaver.ImageSaverBuilder(getActivity()).setCharacteristics(mCharacteristics);
                 mJpegResultQueue.put((int) request.getTag(), jpegBuilder);
+            }
+            if (settings.shouldSaveRaw){
+                ImageSaver.ImageSaverBuilder rawBuilder = new ImageSaver.ImageSaverBuilder(getActivity()).setCharacteristics(mCharacteristics);
+                mRawResultQueue.put((int) request.getTag(), rawBuilder);
             }
             mSession.capture(request,
                     mCaptureSessionCallback,
