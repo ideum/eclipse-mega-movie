@@ -4,9 +4,13 @@ public class Config {
     /* TESTING OPTIONS */
 
     // Used in GPSFragment
-    public static final boolean SHOULD_USE_DUMMY_LOCATION = false;
-    public static final double DUMMY_LATITUDE = -34.657365;//-34.668819;
-    public static final double DUMMY_LONGITUDE = -60.971352;//-59.428295;
+    public static final boolean SHOULD_USE_DUMMY_LOCATION = true;
+//    public static final double DUMMY_LATITUDE = -34.657365;//-34.668819;
+//    public static final double DUMMY_LONGITUDE = -60.971352;//-59.428295;
+//    public static final double DUMMY_LATITUDE = -34.991300;
+//    public static final double DUMMY_LONGITUDE = -60.010782;
+    public static final double DUMMY_LATITUDE = -34.591397;
+    public static final double DUMMY_LONGITUDE = -60.382201;
     public static final boolean TEST_NO_CAMERA_SUPPORT = false;
 
     //Used in EclipseTimeProvider
@@ -38,6 +42,8 @@ public class Config {
     public static final Long BEADS_SPACING = 200L;
     public static final Long MARGIN = 1500L;
     public static final Long minRAWMargin = 1200L;
+
+    public static final Long MIN_TOTALITY_LENGTH = 60000L;
 
     public static final Long VIDEO_LEAD_TIME = 15000L;
     public static final Long VIDEO_DURATION = 30000L;

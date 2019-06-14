@@ -224,13 +224,13 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 //            return dummySequence();
 //        }
         float magnification = (float) getLensMagnificationFromPreferences();
-        if(!CameraHardwareCheckFragment.isCameraSupported()){
+        if(!CameraHardwareCheckFragment.isCameraSupported() || isTotalityDurationTooShort(c2Time, c3Time)){
             return CaptureSequenceBuilder.makeSimpleVideoSequence(c2Time, c3Time);
         }
         return Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE ? CaptureSequenceBuilderDummy.makeSequence(c2Time) :
                 CaptureSequenceBuilder.makeVideoAndImageSequence(c2Time, c3Time, magnification);
     }
-    
+
     private int getLensMagnificationFromPreferences() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int storedValue = preferences.getInt(getString(R.string.lens_magnification_pref_key), 1);
@@ -240,6 +240,14 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     private String getDirectoryNameFromPreferences() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         return preferences.getString(getString(R.string.megamovie_directory_name), "Megamovie_Images");
+    }
+
+    private boolean isTotalityDurationTooShort(long c2Time, long c3Time){
+        long c2EndTime = (c2Time - Config.VIDEO_LEAD_TIME) + Config.VIDEO_DURATION;
+        long c3StartTime = c3Time - Config.VIDEO_LEAD_TIME;
+
+        long duration = c3StartTime - c2EndTime;
+        return duration < Config.MIN_TOTALITY_LENGTH;
     }
 
     public void goToUploadActivity() {
