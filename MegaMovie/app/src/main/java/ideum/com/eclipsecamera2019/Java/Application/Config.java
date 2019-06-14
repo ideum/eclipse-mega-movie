@@ -7,7 +7,7 @@ public class Config {
     public static final boolean SHOULD_USE_DUMMY_LOCATION = false;
     public static final double DUMMY_LATITUDE = -34.657365;//-34.668819;
     public static final double DUMMY_LONGITUDE = -60.971352;//-59.428295;
-    public static final boolean TEST_NO_CAMERA_SUPPORT = false;
+    public static final boolean TEST_NO_CAMERA_SUPPORT = true;
 
     //Used in EclipseTimeProvider
     public static final Boolean USE_DUMMY_TIME_C2 = true;
@@ -37,7 +37,10 @@ public class Config {
     public static final Long BEADS_DURATION = 10000L;
     public static final Long BEADS_SPACING = 200L;
     public static final Long MARGIN = 1500L;
-    public static final Long minRAWMargin = 1200l;
+    public static final Long minRAWMargin = 1200L;
+
+    public static final Long VIDEO_LEAD_TIME = 15000L;
+    public static final Long VIDEO_DURATION = 30000L;
 
     //estimated max size of single jpeg in megabytes
     public static final float JPEG_SIZE = 0.3f;

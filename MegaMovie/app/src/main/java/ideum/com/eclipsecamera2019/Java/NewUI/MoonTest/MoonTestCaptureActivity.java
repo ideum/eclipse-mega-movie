@@ -188,7 +188,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 //        else {
 //            float magnification = getLensMagnificationFromPreferences();
 //            //return CaptureSequenceBuilder.makeVideoAndImageSequence(startTimeMills, startTimeMills + duration, magnification);
-//            //return CaptureSequenceBuilder.makeSequence(startTimeMills,startTimeMills + duration, magnification);
+//            return CaptureSequenceBuilder.makeSequence(startTimeMills,startTimeMills + duration, magnification);
 //        }
 
         CaptureSequence.IntervalProperties properties = new CaptureSequence.IntervalProperties(
