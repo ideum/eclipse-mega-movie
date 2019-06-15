@@ -34,7 +34,7 @@ public class Config {
     public static final Boolean beadsShouldCaptureRaw = true;
     public static final Boolean beadsShouldCaptureJpeg = false;
     public static final Boolean totalityShouldCaptureRaw = true;
-    public static final Boolean totalityShouldCaptureJpeg = false;
+    public static final Boolean totalityShouldCaptureJpeg = true;
     public static final Double[] BEADS_FRACTIONS = {1.0/16.0,1.0/4.0,1.0,4.0,16.0};
     public static final Double[] TOTALITY_FRACTIONS = {1.0,3.0,10.0,30.0,100.0,300.0};
     public static final Long BEADS_LEAD_TIME = 1000L;

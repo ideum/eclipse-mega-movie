@@ -71,6 +71,11 @@ public class MoonTestCalibrateDirectionActivity extends AppCompatActivity {
 
         mCameraFragment.setDirectoryName("Megamovie practice " + dateFormatter.format(testTimeDate));
 
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        int lens = settings.getInt("lens magnification", 0);
+
+        boolean showFilterWarning = lens > 1;
+
         if (target == Planet.Sun) {
             showSolarFilterAlert();
         }
