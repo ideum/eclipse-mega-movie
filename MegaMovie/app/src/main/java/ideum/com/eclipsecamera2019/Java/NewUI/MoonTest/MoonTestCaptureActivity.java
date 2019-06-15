@@ -3,6 +3,9 @@ package ideum.com.eclipsecamera2019.Java.NewUI.MoonTest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import ideum.com.eclipsecamera2019.Java.Application.Config;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CameraHardwareCheckFragment;
 import ideum.com.eclipsecamera2019.Java.CameraControl.CaptureSequenceBuilder;
 import ideum.com.eclipsecamera2019.Java.CameraControl.ICameraCaptureListener;
@@ -58,6 +62,8 @@ public class MoonTestCaptureActivity extends AppCompatActivity
     private TextView progressTextView;
 
     private TextView recordingTextView;
+
+    private boolean audioAlertGiven = false;
 
     private SmallCountdownFragment countdownFragment;
     private Button finishButton;
@@ -237,6 +243,16 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         return c.getTimeInMillis();
     }
 
+    private void giveAudioAlert() {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private long getCurrentTimeMills() {
         return Calendar.getInstance().getTimeInMillis();
     }
@@ -292,6 +308,10 @@ public class MoonTestCaptureActivity extends AppCompatActivity
             Long millsRemaining = targetTimeMills - Calendar.getInstance().getTimeInMillis();
             countdownFragment.setTimeRemainingMillis(millsRemaining);
             countdownFragment.onTick();
+            if(millsRemaining <= Config.AUDIO_ALERT_TIME && !audioAlertGiven){
+                giveAudioAlert();
+                audioAlertGiven = true;
+            }
         }
         if (mSession != null) {
             mSession.onTick();
