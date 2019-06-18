@@ -81,7 +81,7 @@ public class UploadActivity extends AppCompatActivity {
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 getApplicationContext(),
-                getString(R.string.sw3_identity_pool_id_bc),
+                getString(R.string.sw3_identity_pool_id_js),
                 Regions.US_EAST_1);
 
         AmazonS3 s3 = new AmazonS3Client(credentialsProvider);
@@ -191,7 +191,7 @@ public class UploadActivity extends AppCompatActivity {
         licenseAgreementCheckBox.setText(Html.fromHtml(licenseText));
         licenseAgreementCheckBox.setMovementMethod(LinkMovementMethod.getInstance());
 
-        fileSummaryTextView.setText(String.format(getString(R.string.you_have_d_photos_to_upload), totalFiles));
+        fileSummaryTextView.setText((getString(R.string.you_have_d_photos_to_upload) + " " + totalFiles));
 //        if (totalFiles == 0) {
 //            fileSummaryTextView.setText("You do not currently have any eclipse iamges to upload. You can return after photographing the eclipse.");
 //            //disableUploadButton();
@@ -334,7 +334,7 @@ public class UploadActivity extends AppCompatActivity {
             File imageFile = directory.listFiles()[i];
 
             TransferObserver observer = transferUtility.upload(
-                    getString(R.string.sw_bucket_bc),
+                    getString(R.string.bucket_2019),
                     sessionId + "_" + imageFile.getName(),
                     imageFile);
             Log.i(TAG, "starting upload: " + String.valueOf(observer.getId()));

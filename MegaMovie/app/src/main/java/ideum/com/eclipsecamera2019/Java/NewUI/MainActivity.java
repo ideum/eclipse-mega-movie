@@ -97,11 +97,6 @@ public class MainActivity extends AppCompatActivity
          * it easier to avoid bugs the first time the app is opened
          */
 
-
-
-
-
-
         if (!hasAllPermissionsGranted()) {
             requestAllPermissions();
         }
@@ -135,6 +130,11 @@ public class MainActivity extends AppCompatActivity
             edit.commit();
             showSafetyWarning();
         }
+
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(getResources().getString(R.string.megamovie_directory_name), getResources().getString(R.string.megamovie_directory_name));
+        editor.commit();
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
