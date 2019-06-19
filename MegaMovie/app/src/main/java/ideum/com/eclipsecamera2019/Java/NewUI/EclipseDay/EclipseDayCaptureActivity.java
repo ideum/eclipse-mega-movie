@@ -70,6 +70,8 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     private TextView progressTextView;
     private TextView startTimeTextView;
 
+    private TextView recordingTextView;
+
     // private View progressBarView;
 
     Button uploadButton;
@@ -89,6 +91,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         progressTextView = findViewById(R.id.capture_progress_text_view);
         startTimeTextView = findViewById(R.id.start_time_text_view);
+        recordingTextView = findViewById(R.id.recording_status);
         //   progressBarView = findViewById(R.id.progressBarView);
         eclipseTimeProvider = Config.USE_DUMMY_TIME_C2 ? new EclipseTimeProviderOffset() : new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
@@ -121,6 +124,9 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
                 goToMainActivity();
             }
         });
+
+        recordingTextView.setText(R.string.not_recording);
+        recordingTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));
 
     }
 
@@ -310,11 +316,18 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     @Override
     public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
         cameraFragment.startRecordingVideo(settings);
+
+        recordingTextView.setText(R.string.recording);
+        recordingTextView.setTextColor(getResources().getColor(R.color.green_text_color));
     }
 
     @Override
     public void stopRecordingVideo() {
         cameraFragment.stopRecordingVideo();
+
+        recordingTextView.setText(R.string.not_recording);
+        recordingTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));
+        numCaptures += 1;
     }
 
     @Override

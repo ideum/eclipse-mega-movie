@@ -44,6 +44,17 @@
 
 
         <TextView
+            android:id="@+id/recording_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="@string/not_recording"
+
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <TextView
             android:id="@+id/capture_progress_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

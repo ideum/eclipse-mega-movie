@@ -288,5 +288,7 @@
     <string name="a_dslr_camera_explanation">Si está utilizando una cámara DSLR, las funciones de mapa y cuenta regresiva de esta aplicación aún pueden se usadas.</string>
     <string name="unsupported_camera_message">Desafortunadamente, la cámara de tú teléfono no permite el control manual de sus sensores, por esto la aplicación tomará un solo video de todo el evento en lugar de una serie de imágenes.</string>
     <string name="bucket_2019" translatable="false">eclipse-2019</string>
+    <string name="recording">Grabación</string>
+    <string name="not_recording">No grabar</string>
 
 </resources>

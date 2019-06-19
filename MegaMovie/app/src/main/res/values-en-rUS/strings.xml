@@ -172,4 +172,6 @@
     <string name="only_phone_explanation" translatable="false">This is the easiest way to use the application, but the image quality will not be as good.</string>
     <string name="you_have_d_photos_to_upload">You have photos to upload</string>
     <string name="unsupported_camera_message">Unfortunately, your phone\'s camera does not support manual control of its sensors, so the application will take a single video of the entire event instead of a series of images.</string>
+    <string name="recording">Recroding</string>
+    <string name="not_recording">Not recording</string>
 </resources>

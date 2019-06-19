@@ -124,7 +124,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
         int leadTimeMinutes = LEAD_TIME_SECONDS / 60;
         int leadTimeSeconds = LEAD_TIME_SECONDS - 60 * leadTimeMinutes;
 
-        recordingTextView.setText("Not recording");
+        recordingTextView.setText(getString(R.string.not_recording));
         recordingTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));
 
     }
@@ -265,23 +265,21 @@ public class MoonTestCaptureActivity extends AppCompatActivity
 
     @Override
     public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
-        //cameraFragment.startRecordingVideo(settings);
         VideoFragment vidFrag = (VideoFragment) cameraFragment;
         if(vidFrag != null){
             vidFrag.tryToStartRecording();
         }
-        recordingTextView.setText("Recording Video");
+        recordingTextView.setText(R.string.recording);
         recordingTextView.setTextColor(getResources().getColor(R.color.green_text_color));
     }
 
     @Override
     public void stopRecordingVideo() {
-        //cameraFragment.stopRecordingVideo();
         VideoFragment vidFrag = (VideoFragment) cameraFragment;
         if(vidFrag != null){
             vidFrag.tryToStopRecording();
         }
-        recordingTextView.setText("Not recording");
+        recordingTextView.setText(R.string.not_recording);
         recordingTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));
         numCaptures += 1;
         updateCaptureTextView();
