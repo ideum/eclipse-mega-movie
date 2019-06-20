@@ -127,7 +127,6 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
         recordingTextView.setText(R.string.not_recording);
         recordingTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));
-
     }
 
 
@@ -138,14 +137,12 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
                 return;
             }
         }
-        // progressBarView.setVisibility(View.GONE);
         Long c2Time = contactTimes.get(c2);
         Long c3Time = contactTimes.get(c3);
         startTime = c2Time;
 
         startTimeTextView.setText(getString(R.string.start_of_totality) + getStartTimeString(startTime));
         setUpCaptureSequenceSession(c2Time, c3Time);
-
     }
 
     @Override
@@ -219,16 +216,11 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
         if (eclipseTimeProvider.inPath()) {
             mSession.addListener(this);
-            // mSession.timeProvider = gps
             mSession.start();
         }
     }
 
     private CaptureSequence createCaptureSequence(long c2Time, long c3Time) {
-
-//        if (Config.ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE) {
-//            return dummySequence();
-//        }
         float magnification = (float) getLensMagnificationFromPreferences();
         if(!CameraHardwareCheckFragment.isCameraSupported() || isTotalityDurationTooShort(c2Time, c3Time)){
             return CaptureSequenceBuilder.makeSimpleVideoSequence(c2Time, c3Time);
@@ -315,7 +307,10 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
     @Override
     public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
-        cameraFragment.startRecordingVideo(settings);
+        VideoFragment vidFrag = (VideoFragment) cameraFragment;
+        if(vidFrag != null){
+            vidFrag.tryToStartRecording();
+        }
 
         recordingTextView.setText(R.string.recording);
         recordingTextView.setTextColor(getResources().getColor(R.color.green_text_color));
@@ -323,7 +318,10 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
 
     @Override
     public void stopRecordingVideo() {
-        cameraFragment.stopRecordingVideo();
+        VideoFragment vidFrag = (VideoFragment) cameraFragment;
+        if(vidFrag != null){
+            vidFrag.tryToStopRecording();
+        }
 
         recordingTextView.setText(R.string.not_recording);
         recordingTextView.setTextColor(getResources().getColor(R.color.intro_text_color_1));

@@ -87,8 +87,6 @@ public class CaptureSequenceSession implements MyTimer.MyTimerListener {
             return;
         }
         if(isRecordingVideo) {
-            float timeDelta = (videoRecordingStartTime + videoDuration) - currentTime;
-            Log.d("VIDEO", "TIME: " + timeDelta);
             if(currentTime >= videoRecordingStartTime + videoDuration) {
                 mCameraController.stopRecordingVideo();
                 isRecordingVideo = false;
