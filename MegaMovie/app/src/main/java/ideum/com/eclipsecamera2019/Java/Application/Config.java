@@ -15,14 +15,14 @@ public class Config {
 
     //Used in EclipseTimeProvider
     public static final Boolean USE_DUMMY_TIME_C2 = false;
-    public static long  DUMMY_C2_LEAD_TIME = 20000;
+    public static long  DUMMY_C2_LEAD_TIME = 30000;
     // Used in EclipseDayCaptureActivity
     public static final Boolean ECLIPSE_DAY_SHOULD_USE_DUMMY_SEQUENCE = false;
 
     /* OTHER PARAMETERS */
 
     // Used in EclipseDayCaptureActivity
-    public static final long GPS_UPDATE_CUTOFF_TIME = 10000L;
+    public static final long GPS_UPDATE_CUTOFF_TIME = 30000L;
     public static final long MIN_TOTALITY_DURATION = 30 * 1000L;
     public static final long AUDIO_ALERT_TIME = 18000;
 
