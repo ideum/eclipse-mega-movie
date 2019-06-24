@@ -184,7 +184,6 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
                 countdownFragment.onTick();
             }
 
-
             Long timeRemaining = startTime - eclipseTimeProvider.getTimeInMillisSinceEpoch();
             if (timeRemaining <= Config.AUDIO_ALERT_TIME && !audioAlertGiven) {
                 giveAudioAlert();
@@ -309,6 +308,7 @@ public class EclipseDayCaptureActivity extends AppCompatActivity
     public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
         VideoFragment vidFrag = (VideoFragment) cameraFragment;
         if(vidFrag != null){
+            vidFrag.mDuration = settings.exposureTime;
             vidFrag.tryToStartRecording();
         }
 

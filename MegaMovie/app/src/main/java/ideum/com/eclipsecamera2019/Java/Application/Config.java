@@ -31,6 +31,8 @@ public class Config {
     public static final Long BEADS_EXPOSURE_TIME = 10000000L; // nanoseconds
     public static final Long TOTALITY_EXPOSURE_TIME = 1000000L; // nanoseconds
 
+    public static final Long VIDEO_EXPOSURE_TIME = 30000000L; // nanoseconds
+
     public static final Boolean beadsShouldCaptureRaw = true;
     public static final Boolean beadsShouldCaptureJpeg = false;
     public static final Boolean totalityShouldCaptureRaw = true;

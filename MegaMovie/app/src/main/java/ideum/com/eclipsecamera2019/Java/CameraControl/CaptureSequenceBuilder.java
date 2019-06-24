@@ -55,7 +55,8 @@ public class CaptureSequenceBuilder {
         int sensitivity = 60;
         float focusDistance = 0f;
 
-        long c2BaseExposureTime = (long)( Config.BEADS_EXPOSURE_TIME/(magnification * magnification));
+        //long c2BaseExposureTime = (long)( Config.BEADS_EXPOSURE_TIME/(magnification * magnification));
+        long c2BaseExposureTime = Config.VIDEO_EXPOSURE_TIME;
 
         long c2StartTime = c2Time - Config.VIDEO_LEAD_TIME;
         long c2EndTime = c2StartTime + Config.VIDEO_DURATION;
@@ -66,7 +67,8 @@ public class CaptureSequenceBuilder {
         c2BaseSettings.videoLengthMillis = c2Duration;
         CaptureSequence.CaptureInterval c2Interval = new CaptureSequence.CaptureInterval(c2BaseSettings, c2Duration, c2StartTime, c2Duration);
 
-        long c3BaseExposureTime = (long)( Config.BEADS_EXPOSURE_TIME/(magnification * magnification));
+        //long c3BaseExposureTime = (long)( Config.BEADS_EXPOSURE_TIME/(magnification * magnification));
+        long c3BaseExposureTime = Config.VIDEO_EXPOSURE_TIME;
         long c3StartTime = c3Time - Config.VIDEO_LEAD_TIME;
 
         long totalityBaseExposureTime =  Config.TOTALITY_EXPOSURE_TIME;

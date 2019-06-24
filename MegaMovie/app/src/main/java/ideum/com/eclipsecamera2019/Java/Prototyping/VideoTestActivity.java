@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.LocationSource;
 
+import ideum.com.eclipsecamera2019.Java.Application.Config;
 import ideum.com.eclipsecamera2019.Java.CameraControl.VideoFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPSFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
@@ -132,6 +133,7 @@ public class VideoTestActivity extends AppCompatActivity
 
     public void startRecording() {
         if (mVideoFragment != null) {
+            mVideoFragment.mDuration = Config.VIDEO_EXPOSURE_TIME;
             mVideoFragment.tryToStartRecording();
         }
         isRecording = true;

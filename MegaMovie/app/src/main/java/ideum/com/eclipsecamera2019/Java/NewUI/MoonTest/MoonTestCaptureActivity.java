@@ -267,6 +267,7 @@ public class MoonTestCaptureActivity extends AppCompatActivity
     public void startRecordingVideo(CaptureSequence.CaptureSettings settings) {
         VideoFragment vidFrag = (VideoFragment) cameraFragment;
         if(vidFrag != null){
+            vidFrag.mDuration = settings.exposureTime;
             vidFrag.tryToStartRecording();
         }
         recordingTextView.setText(R.string.recording);
