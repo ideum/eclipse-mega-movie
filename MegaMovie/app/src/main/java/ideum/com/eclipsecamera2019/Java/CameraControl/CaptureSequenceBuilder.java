@@ -106,7 +106,7 @@ public class CaptureSequenceBuilder {
         long c3EndTime = c3StartTime + Config.VIDEO_LEAD_TIME;
         long duration = c3EndTime - c2StartTime;
 
-        CaptureSequence.CaptureSettings videoBaseSettings = new CaptureSequence.CaptureSettings(Config.BEADS_EXPOSURE_TIME, sensitivity, focusDistance, false, false);
+        CaptureSequence.CaptureSettings videoBaseSettings = new CaptureSequence.CaptureSettings(Config.VIDEO_EXPOSURE_TIME, sensitivity, focusDistance, false, false);
         videoBaseSettings.isVideo = true;
         videoBaseSettings.videoLengthMillis = duration;
         CaptureSequence.CaptureInterval videoInterval = new CaptureSequence.CaptureInterval(videoBaseSettings, duration, c2StartTime, duration);
