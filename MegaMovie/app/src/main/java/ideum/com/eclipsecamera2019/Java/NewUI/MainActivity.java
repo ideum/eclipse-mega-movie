@@ -29,6 +29,7 @@ import ideum.com.eclipsecamera2019.Java.Application.CustomNamable;
 import ideum.com.eclipsecamera2019.Java.Application.MyApplication;
 import ideum.com.eclipsecamera2019.Java.Application.UploadActivity;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.EclipseTimeProvider;
+import ideum.com.eclipsecamera2019.Java.LocationAndTiming.GPSFragment;
 import ideum.com.eclipsecamera2019.Java.LocationAndTiming.MyTimer;
 import ideum.com.eclipsecamera2019.Java.NewUI.EclipseDay.EclipseDayIntroFragment;
 import ideum.com.eclipsecamera2019.Java.NewUI.MoonTest.MoonTestIntroFragment;
@@ -99,8 +100,13 @@ public class MainActivity extends AppCompatActivity
 
         if (!hasAllPermissionsGranted()) {
             requestAllPermissions();
+        } else {
+            setup();
         }
+    }
 
+    private void setup(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         eclipseTimeProvider = new EclipseTimeProvider();
         getFragmentManager().beginTransaction().add(
                 android.R.id.content, eclipseTimeProvider).commit();
@@ -304,7 +310,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private static final int REQUEST_PERMISSIONS = 0;
+    private static final int REQUEST_PERMISSIONS = 1;
+    private static final int LOCATION_PERMISSIONS = 2;
 
     private static final String[] PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -324,7 +331,6 @@ public class MainActivity extends AppCompatActivity
 
     private void requestAllPermissions() {
         ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSIONS);
-
     }
 
     private boolean hasAllPermissionsGranted() {
@@ -337,7 +343,20 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        switch(requestCode){
+            case REQUEST_PERMISSIONS: {
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setup();
+                } else {
+                    WarningDialogFragment dialog = new WarningDialogFragment();
+                    dialog.show(getFragmentManager(), "WarningDialogFragment");
+                }
+                return;
+            }
+        }
+    }
 
 
 }

@@ -1,11 +1,15 @@
 package ideum.com.eclipsecamera2019.Java.NewUI;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,6 +45,7 @@ import ideum.com.eclipsecamera2019.R;
  * This activity is shown once, the first time the application is opened. It is launched from
  * MainActivity
  */
+
 public class IntroActivity extends AppCompatActivity
         implements ViewPager.OnTouchListener,
         GoogleApiClient.OnConnectionFailedListener,
@@ -59,7 +65,7 @@ public class IntroActivity extends AppCompatActivity
      */
 
 
-    private static final int REQUEST_PERMISSIONS = 0;
+    private static final int REQUEST_PERMISSIONS = 3;
 
     private static final String[] PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -80,6 +86,20 @@ public class IntroActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        switch(requestCode){
+            case REQUEST_PERMISSIONS: {
+                if(grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    //cool, do nothing
+                } else {
+                    WarningDialogFragment dialog = new WarningDialogFragment();
+                    dialog.show(getFragmentManager(), "WarningDialogFragment");
+                }
+                return;
+            }
+        }
+    }
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private Button signInButton;

@@ -20,8 +20,8 @@ android {
         applicationId "ideum.com.eclipsecamera2019"
         minSdkVersion 24
         targetSdkVersion 26
-        versionCode 19
-        versionName "3.02"
+        versionCode 22
+        versionName "3.05"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

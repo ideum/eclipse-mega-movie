@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -30,6 +31,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import ideum.com.eclipsecamera2019.Java.Application.Config;
+import ideum.com.eclipsecamera2019.Java.NewUI.WarningDialogFragment;
 import ideum.com.eclipsecamera2019.Java.OrientationController.Clock;
 import ideum.com.eclipsecamera2019.R;
 
@@ -44,7 +46,7 @@ public class GPSFragment extends Fragment
         android.location.LocationListener {
 
 
-    private int REQUEST_LOCATION_PERMISSIONS = 0;
+    final private int REQUEST_LOCATION_PERMISSIONS = 2;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private List<OnLocationChangedListener> locationListeners = new ArrayList<>();
@@ -62,20 +64,12 @@ public class GPSFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSIONS);
+//            ActivityCompat.requestPermissions(getActivity(),
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                    REQUEST_LOCATION_PERMISSIONS);
+        } else {
+            setup();
         }
-
-        mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-        mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(mLocation != null) {
-            for (OnLocationChangedListener listener : locationListeners) {
-                listener.onLocationChanged(getAdjustedLocation());
-            }
-        }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10000,0f,this);
-
     }
 
     @Override
@@ -112,6 +106,22 @@ public class GPSFragment extends Fragment
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    private void setup(){
+        try {
+            mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (mLocation != null) {
+                for (OnLocationChangedListener listener : locationListeners) {
+                    listener.onLocationChanged(getAdjustedLocation());
+                }
+            }
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0f, this);
+        } catch(SecurityException e){
+            Log.e("PERMISSION", "NO PERMISSION GIVEN");
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
     }
 
     private Location mLocation;

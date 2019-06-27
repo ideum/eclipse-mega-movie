@@ -174,4 +174,5 @@
     <string name="unsupported_camera_message">Unfortunately, your phone\'s camera does not support manual control of its sensors, so the application will take a single video of the entire event instead of a series of images.</string>
     <string name="recording">Recording</string>
     <string name="not_recording">Not recording</string>
+    <string name="permission_warning">This application requires your location to function. Please accept the request to continue.</string>
 </resources>
